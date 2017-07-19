@@ -1,0 +1,1 @@
+root://cmseos.fnal.gov//store/user/vhegde/myProduction_V12/Summer16.ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_ext1_10_RA2AnalysisTree.root

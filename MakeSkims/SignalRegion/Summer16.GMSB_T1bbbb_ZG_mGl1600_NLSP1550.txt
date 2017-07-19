@@ -1,0 +1,1 @@
+root://cmseos.fnal.gov//store/user/vhegde/myProduction_V12/Summer16.GMSB_T1bbbb_ZG_mGl1600_NLSP1550.root
