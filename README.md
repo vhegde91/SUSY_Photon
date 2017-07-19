@@ -33,15 +33,48 @@ outFile.root: Ouptut skimmed tree. Output file name will be addInfo_outFile.root
 addInfo: additional info about type of skimimg. For ex, LostMu for skiming lost muon studies.	
 
 #### Make skims using condor:
+
 $ ./submitMany.sh
 
 This submits jobs to condor using splitRunList.C script.
 
-splitRunList.C: 1st arguement is name of the text file in which name of ALL root files is mentioned. 2nd is number of root files to process per job. For ex:
+1)
+splitRunList.C: 
+
+Modify 3 lines in this script depending on type of skim you are making:
+`
+  string exeCondor  = "worker2.sh";//name of the shell script to run at worker node.
+  string exeAna     = "xxx";//name of the executable you created using Makefile
+  string datasetAna = "addInfo";//a name of for type of skim(ex: "CS_FR" )
+`
+``
+  string exeAna     = "xxx";//name of the executable you created using Makefile
+  string datasetAna = "addInfo";//a name of for type of skim(ex: "CS_FR" )
+``
+
+1st arguement is name of the text file in which name of ALL root files is mentioned. 2nd is number of root files to process per job. For ex:
 
 root -l -q 'splitRunList.C("Summer16.WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.txt",21)'
 
 If there are 210 file names in Summer16.WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.txt, then it submits 10 condor jobs with 21 root files to process per job.
+
+2)
+worker2.sh
+
+This is the shell script that runs at worker node. In this file, you have to metion where your condor output root files need to be written.
+
+xrdcp -f $datasetName'_'$outputFileTag root://cmseos.fnal.gov//store/user/vhegde/myLocation/
+
+3)
+findFailedJobs.C
+
+Use this script once the jobs are done. This checks if the o/p root files are good/absent/corrupted. If a job has failed or o/p file is corrupted, then you will get a command to resubmit these jobs. If all jobs are successful, then you will get an option to hadd files. !! Sometimes files may be very big, so do not hadd !!!. Also it gives a option to remove added files.
+
+Modify this line depending on type of skim and location where the o/p root files are located(location mentioned in worker2.sh)
+`
+char ofileStart[300]="/eos/uscms/store/user/vhegde/myLocation/addInfo_";
+`
+Arguement: name of the text file in which name of ALL root files is mentioned w/o .txt. For ex: root -l -q 'findFailedJobs.C("Summer16.WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8")'
 
 Inside Makeskims direcory:
 
