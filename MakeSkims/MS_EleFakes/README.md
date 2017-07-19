@@ -1,3 +1,4 @@
+##!!Needs few modifications in names, such as CS_EleFakes to this directory name
 ```
 #setup cmsenv
 #get code from git

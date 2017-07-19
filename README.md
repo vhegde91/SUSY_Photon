@@ -22,4 +22,4 @@ root://cmseos.fnal.gov//store/user/vhegde/myProduction_V12/
 Skimmed files:
 ` root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/ `
 
-More info in https://github.com/vhegde91/SUSY_Photon/tree/master/MakeSkims/README.md
+More info in https://github.com/vhegde91/SUSY_Photon/tree/master/MakeSkims#making-skims-for-susy-search-with-photon-met-jets-and-b-jets

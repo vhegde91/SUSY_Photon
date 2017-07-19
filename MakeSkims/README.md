@@ -51,22 +51,33 @@ addInfo: additional info about type of skimimg. For ex, LostMu for skiming lost 
 
 #### Make skims using condor:
 
-$ ./submitMany.sh
+To submit and get the o/p files, do:
+```
+ ./submitMany.sh
+ condor_q <usename>
+ ./Check_FailedJobsMany.sh
+ ./cleaUpBatchFiles.sh
+```
 
-This submits jobs to condor using splitRunList.C script.
+Explanation : 
+
+./submitMany.sh submits jobs to condor using splitRunList.C script.
+
+./Check_FailedJobsMany.sh checks the o/p of job using findFailedJobs.C
+
+./cleaUpBatchFiles.sh removes files related to condor job.
 
 1) splitRunList.C: 
 
 Modify 3 lines in this script depending on type of skim you are making:
 
-`  string exeCondor  = "worker2.sh";//name of the shell script to run at worker node. `
-`  string exeAna     = "skimmingxxx";//name of the executable you created using Makefile `
-`  string datasetAna = "addInfo";//a name of for type of skim(ex: "CS_FR" ) `
-
-1st arguement is name of the text file in which name of ALL root files is mentioned. 2nd is number of root files to process per job. For ex:
+```  string exeCondor  = "worker2.sh";//name of the shell script to run at worker node. ```
+```  string exeAna     = "skimmingxxx";//name of the executable you created using Makefile ```
+```  string datasetAna = "addInfo";//a name of for type of skim(ex: "CS_FR" ) ``` 
 
 root -l -q 'splitRunList.C("Summer16.WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.txt",21)'
 
+1st arguement is name of the text file in which name of ALL root files is mentioned. 2nd is number of root files to process per job. For ex:
 If there are 210 file names in Summer16.WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.txt, then it submits 10 condor jobs with 21 root files to process per job.
 
 2) worker2.sh
