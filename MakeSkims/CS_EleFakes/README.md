@@ -1,7 +1,8 @@
 ```
 #setup cmsenv
 svn checkout https://github.com/vhegde91/SUSY_Photon/trunk/MakeSkims/CS_EleFakes
-make
+cd CS_EleFakes
+make clean; make
 voms-proxy-init --voms cms
 
 #Interactive test

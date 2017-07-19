@@ -6,6 +6,7 @@ Setup CMSSW. Most of the code uses root only. So CMSSW is needed for using root.
 cmsrel CMSSW_8_0_25
 cd CMSSW_8_0_25/src/
 cmsenv
+voms-proxy-init --voms cms
 
 git clone git@github.com:vhegde91/SUSY_Photon.git
 # wget https://github.com/vhegde91/SUSY_Photon.git
@@ -17,6 +18,10 @@ Make skimmed trees from V12 RA2b trees. RA2b trees are located here:
 root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Run2ProductionV12/
 root://cmseos.fnal.gov//store/user/vhegde/myProduction_V12/
 ```
+
+Skimmed files:
+` root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/ `
+
 About skimming in general:
 Skimming parametrs are specified in XXX.cc file. Variable and functions used in XXX.cc file are defined in XXX.h file. In addition to these, two more files are needed: NtupleVariables.h and NtupleVariables.cc.
 
@@ -83,3 +88,7 @@ Name of the text file in which name of ALL root files is mentioned w/o .txt. For
 4) Check_FailedJobsMany.sh
 
 Check the o/p root files from different jobs. It just runs findFailedJobs.C many times for different i/p files.
+
+5) cleaUpBatchFiles.sh
+
+Remove files related to condor: FileList*.txt, *.jdl, *.condor, *.stderr, *.stdout
