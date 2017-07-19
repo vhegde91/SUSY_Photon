@@ -1,19 +1,18 @@
-##!!Needs few modifications in names, such as CS_EleFakes to this directory name
 ```
 #setup cmsenv
 #get code from git
-svn checkout https://github.com/vhegde91/SUSY_Photon/trunk/MakeSkims/CS_EleFakes
-cd CS_EleFakes
+svn checkout https://github.com/vhegde91/SUSY_Photon/trunk/MakeSkims/CS_GJets
+cd CS_GJets
 make clean; make
 voms-proxy-init --voms cms
 
 #Interactive test
-./skimmingFakeRate smallrunList.txt a.root CS_FR
+./skimmingGJets smallrunList.txt a.root CS_GJets
 
 #submit a job to condor
-root -l -q 'splitRunList.C("Summer16.WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.txt",21)'
+root -l -q 'splitRunList.C("Summer16.GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.txt",10)'
 #If job is finished
-root -l -q 'findFailedJobs.C("Summer16.WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8")'
+root -l -q 'findFailedJobs.C("Summer16.GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.txt")'
 
 #submit many jobs to condor
 ./submitMany.sh

@@ -1,26 +1,5 @@
-##!!Needs few modifications in names, such as CS_EleFakes to this directory name
-```
-#setup cmsenv
-#get code from git
-svn checkout https://github.com/vhegde91/SUSY_Photon/trunk/MakeSkims/CS_EleFakes
-cd CS_EleFakes
-make clean; make
-voms-proxy-init --voms cms
+This is work in progress. For the previous studies, this skimming was not done. Analysis code was run directly on RA2 trees.
 
-#Interactive test
-./skimmingFakeRate smallrunList.txt a.root CS_FR
+Trigger objects are not saved in original RA2b trees. So these trees were remade. To reduce the size of the file, skimming was done soon after RA2b trees are made. So we have only skimmed trees with trigger objects saved in them.
 
-#submit a job to condor
-root -l -q 'splitRunList.C("Summer16.WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.txt",21)'
-#If job is finished
-root -l -q 'findFailedJobs.C("Summer16.WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8")'
-
-#submit many jobs to condor
-./submitMany.sh
-condor_q <username>
-#If jobs are done
-./Check_FailedJobsMany.sh
-
-./cleaUpBatchFiles.sh
-
-```
+The skimming code implemeted is here: https://github.com/vhegde91/SUSY_Photon/tree/master/MakeSkims/DMS_EleFakes/skimOnFly_RA2TreeProd
