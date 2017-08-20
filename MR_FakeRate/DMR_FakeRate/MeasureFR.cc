@@ -250,8 +250,8 @@ void MeasureFR::EventLoop(const char *data,const char *inputFileList) {
     double zmass= -10;
     zvec =  elef + eler;
     zmass = zvec.M();
-    if(zmass > 40 && zmass < 60){ wt = wt*(-0.5); zmass = 91.0;}
-    else if(zmass > 120 && zmass < 140){ wt = wt*(-0.5); zmass = 91.0;}
+    //    if(zmass > 40 && zmass < 60){ wt = wt*(-0.5); zmass = 91.0;}//do this if you want to subtract BG using sidebands. When this is done, only h2*_ZMass_Ele, h2_*ZMass_Pho have meaning.
+    //    else if(zmass > 120 && zmass < 140){ wt = wt*(-0.5); zmass = 91.0;}//do this if you want to subtract BG using sidebands. When this is done, only h2*_ZMass_Ele, h2_*ZMass_Pho have meaning.
     if(zmass < 80 || zmass > 100) continue;
 
     //calulate ST and number of Hadronic Jets
