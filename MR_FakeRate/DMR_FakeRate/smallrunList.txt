@@ -1,0 +1,1 @@
+root://cmseos.fnal.gov//store/user/vhegde/myProduction_V12/Data/Skimmed_Run2016B-03Feb2017_ver2-v2.SingleElectron_1022_RA2AnalysisTree.root
