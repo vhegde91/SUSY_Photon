@@ -1,0 +1,1 @@
+/media/vinay/Physics/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_LostEle/CS_LostEle_Summer16.ST_s-ch_t-ch_tW_4f_5f_13TeV.root

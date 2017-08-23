@@ -1,0 +1,1 @@
+/media/vinay/Physics/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/DCS_ZGamma/DCS_ZGToLLG_Run2016H_SinglePhoton_03Feb2017.root
