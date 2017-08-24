@@ -50,31 +50,31 @@ void GetEfficiency(){
 
   //f[0] = new TFile("Run2016_MET_03Feb2017_SingEleTrg_NoIsoTightID_ST500_v2.root");
   // f[0] = new TFile("Run2016CtoH_MET_03Feb2017_Ele15_IsoVVVL_PFHT400Pho165_AtLeast1Ele.root");
-  // f[0] = new TFile("Run2016B_MET_03Feb2017_Ele15_IsoVVVL_PFHT400Pho165_AtLeast1Ele.root");
-  // f[1] = new TFile("Run2016C_MET_03Feb2017_Ele15_IsoVVVL_PFHT400Pho165_AtLeast1Ele.root");
-  // f[2] = new TFile("Run2016D_MET_03Feb2017_Ele15_IsoVVVL_PFHT400Pho165_AtLeast1Ele.root");
-  // f[3] = new TFile("Run2016E_MET_03Feb2017_Ele15_IsoVVVL_PFHT400Pho165_AtLeast1Ele.root");
-  // f[4] = new TFile("Run2016F_MET_03Feb2017_Ele15_IsoVVVL_PFHT400Pho165_AtLeast1Ele.root");
-  // f[5] = new TFile("Run2016G_MET_03Feb2017_Ele15_IsoVVVL_PFHT400Pho165_AtLeast1Ele.root");
-  // f[6] = new TFile("Run2016H_MET_03Feb2017_Ele15_IsoVVVL_PFHT400Pho165_AtLeast1Ele.root");
+  // f[0] = new TFile("Run2016B_MET_03Feb2017_SRTrig_1EleOnly.root");
+  // f[1] = new TFile("Run2016C_MET_03Feb2017_SRTrig_1EleOnly.root");
+  // f[2] = new TFile("Run2016D_MET_03Feb2017_SRTrig_1EleOnly.root");
+  // f[3] = new TFile("Run2016E_MET_03Feb2017_SRTrig_1EleOnly.root");
+  // f[4] = new TFile("Run2016F_MET_03Feb2017_SRTrig_1EleOnly.root");
+  // f[5] = new TFile("Run2016G_MET_03Feb2017_SRTrig_1EleOnly.root");
+  // f[6] = new TFile("Run2016H_MET_03Feb2017_SRTrig_1EleOnly.root");
 
-  f[0] = new TFile("Run2016_MET_03Feb2017_ElexHT_1Ele.root");
+  f[0] = new TFile("Run2016_MET_03Feb2017_Ele27_1TightEle.root");
   
   // histName1.push_back("PhotonPt_PhoPt");
   // histName2.push_back("PhotonPt_HT");
   // histName1.push_back("HT_HT");
   // histName2.push_back("HT_PhoPt");
   for(int i=0;i<nfiles;i++){
-    // histName1.push_back("HT_Req");
-    // histName2.push_back("HT");
+    // histName1.push_back("MET_Req");
+    // histName2.push_back("MET");
     // histName1.push_back("PhoPtvBin_Req");
     // histName2.push_back("PhoPtvBin");
     // histName1.push_back("STvBin_Req");
     // histName2.push_back("STvBin");
-    // histName1.push_back("Ele1PtvBin_Req");
-    // histName2.push_back("Ele1PtvBin");
-    histName1.push_back("Ele1Pt_Req");
-    histName2.push_back("Ele1Pt");
+    histName1.push_back("Ele1PtvBin_Req");
+    histName2.push_back("Ele1PtvBin");
+    // histName1.push_back("Ele1Pt_Req");
+    // histName2.push_back("Ele1Pt");
     // histName1.push_back("Ele2Pt_Req");
     // histName2.push_back("Ele2Pt");
 
