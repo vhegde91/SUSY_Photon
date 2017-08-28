@@ -30,6 +30,6 @@ echo "processed. ls"
 ls
 echo "COPYING OUTPUT"
 
-xrdcp -f $datasetName'_'$outputFileTag root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/
+xrdcp -f $datasetName'_'$outputFileTag root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/skimmed_UnsortedSignal/
 #xrdcp -f $datasetName'_'$outputFileTag root://cmseos.fnal.gov//store/user/vhegde/comp_Spring16vsSummer16/
 rm $datasetName'_'$outputFileTag

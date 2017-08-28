@@ -1,28 +1,29 @@
-Comment or uncomment Xsec and weights section in SkimmingSR.cc, depending on whether it signal sample or BG sample.
+SkimmingSR.cc can skim MC BG. It can skim signal for a given mGluino and mNLSP.
 
-```
-#setup cmsenv
-#get code from git
-svn checkout https://github.com/vhegde91/SUSY_Photon/trunk/MakeSkims/SignalRegion
-cd SignalRegion
-make clean; make
-voms-proxy-init --voms cms
+For skimming signal dataset and sort out mass points:
 
-#Interactive test
-./skimmingSR smallrunList.txt a.root SR
+1) getSignalInfo/
 
-#submit a job to condor
-root -l -q 'splitRunList.C("Summer16.WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.txt",21)'
-#If job is finished
-root -l -q 'findFailedJobs.C("Summer16.WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8")'
+This derectory is for getting a histogram file which contains different mass points for a dataset and the number of events for each of themass points.
+SigSampleInfo.cc: main code which fills mass scan histogram
 
-#submit many jobs to condor
-./submitMany.sh
-condor_q <username>
-#If jobs are done
-./Check_FailedJobsMany.sh
+2) SignalSkimming/
 
-./cleaUpBatchFiles.sh
+mGl_Xsecpb_pcUnc_absUnc.txt : Contains gluino masses, xec in pb, percent uncertainty and absolute unc on xsec in pb.
 
-```
-Waiting to process on data! ;D
+makeGlMassVsXsecHist.C : make a root file containing a histogram of xecs. X-axis: gluino mass, Y-axis: xsec in pb and ->GetBinError(i) gives abs unc on xsec.
+
+splitRunList.C : root -l -q 'splitRunList.C("unskimmed_RA2TreeFileList.txt",1)'  
+#give only one file per job. For each file listed in unskimmed_RA2TreeFileList.txt, creates a jdl file.
+
+processSigFile.C : At the worker node, this macro is executed. This takes .txt file(containing RA2Tree file name) as input and creates a job for each of the mass points present in this RA2 tree.
+
+SkimmingSR.cc : This code is for skimming the RA2 tree for a given mass point. The executable obtained from this needs 5 arguements: fileList.txt, outFile.root, datasetName, mGl, mNLSP
+
+3)  SignalSkimming/Skims_hadd/  : To hadd skimmed files based on mass points.
+
+makeJDL.C : make jdl file for each mass point and submit a job for each.
+
+worker_hadd.sh : Takes mGl and mNLSP as arguements and adds all files of eos *mGl*mNLSP*job*.root files. xrdcp to added file.
+
+numEventsComp.C : checks final skimmed file and removes haded files from eos. rm *mGl*mNLSP*job*.root from eos. It can also run interactively w/o any arguemts and checks if final skimmed files are ok.

@@ -46,6 +46,7 @@ root -l -q 'splitRunList.C("Summer16.GJets_HT-200To400_TuneCUETP8M1_13TeV-madgra
 root -l -q 'splitRunList.C("Summer16.GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.txt",10)'
 root -l -q 'splitRunList.C("Summer16.GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.txt",11)'
 
+root -l -q 'splitRunList.C("Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.txt",10)'
 
 root -l -q 'splitRunList.C("Summer16.DiPhotonJetsBox_M40_80-Sherpa.txt",10)'
 root -l -q 'splitRunList.C("Summer16.DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.txt",25)'

@@ -42,6 +42,28 @@ void SkimmingSR::EventLoop(const char *data,const char *inputFileList) {
   TTree *newtree = fChain->CloneTree(0);
 
   string s_data = data;
+  //-------------------- for signal only ---------------
+  double momMass = 1050, nlspMass = 127, nevents=0;
+  if(s_data=="Signal"){
+    TFile *f1 = new TFile("T5qqqqHg_MassScan.root");
+    TH2D *h2_mass = (TH2D*)f1->FindObjectAny("MGlMNLSP");
+    if(!h2_mass){ cout<<"AHHHHH: could not find hist"<<endl; return;}
+    int nxbins = h2_mass->GetNbinsX();
+    int nybins = h2_mass->GetNbinsY();
+    //    cout<<"Nx bins:"<<nxbins<<" Ny bins:"<<nybins<<endl;
+    for(int nx=1;nx<=nxbins;nx++){
+      if(abs(momMass - (h2_mass->GetXaxis()->GetBinCenter(nx))) > 0.1) continue;
+      if(nevents > 9.99) break;
+      for(int ny=1;ny<=nybins;ny++){
+  	if(abs(nlspMass - (h2_mass->GetYaxis()->GetBinCenter(ny))) > 0.1) continue;
+  	else{ nevents = h2_mass->GetBinContent(nx,ny); break;}
+      }
+    }
+  }
+  //  NumEvents = nevents;
+  //  CrossSection = 0.00810078;//for Gluino mass = 1600 GeV
+  cout<<"No. of entries for mGluino = "<<momMass<<" mNLSP = "<<nlspMass<<" : "<<nevents<<endl;
+  //-------------------- for signal only ends ------------------
 
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
 
@@ -57,12 +79,20 @@ void SkimmingSR::EventLoop(const char *data,const char *inputFileList) {
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
     //----------------- for signal samples --------------------
-    CrossSection = 0.00810078;//for Gluino mass = 1600 GeV
-    //    NumEvents = 33611;//for mGl1600_NLSP150
-    //    NumEvents = 33922;//for mGl1600_NLSP1000
-    NumEvents = 33743;//for mGl1600_NLSP1550
-    Weight = CrossSection/NumEvents;
-    //---------------------------------------------------------
+    if(s_data=="Signal"){
+      NumEvents = nevents;
+      CrossSection = 0.229367;//for Gluino mass = 1050 GeV
+      //      CrossSection = 0.00810078;//for Gluino mass = 1600 GeV
+      //------------ full sim T5bbbbZG private ------------------
+      //    NumEvents = 33611;//for mGl1600_NLSP150
+      //    NumEvents = 33922;//for mGl1600_NLSP1000
+      //    NumEvents = 33743;//for mGl1600_NLSP1550
+      //------------ full sim T5bbbbZG private ends ------------------
+      Weight = CrossSection/NumEvents;
+      //---------------------------------------------------------
+      if(abs(SusyMotherMass-momMass) > 0.001 || abs(SusyLSPMass-nlspMass) > 0.001) continue;
+      //      cout<<"SusyMotherMass:"<<SusyMotherMass<<" SusyLSPMass:"<<SusyLSPMass<<endl;
+    }
 
     h_selectBaselineYields_->Fill(0);
     if(s_data=="SR_madHT0to600" && madHT>600) continue;//putting a cut on madHT for SingleLept and DiLept samples of TTbar. Do not use for other samples.

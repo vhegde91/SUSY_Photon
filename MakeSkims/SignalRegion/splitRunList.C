@@ -10,7 +10,8 @@ void splitRunList(string infile,int nfPerJob){
   //------------ needed for condor files --------------
   string exeCondor  = "worker2.sh";
   string exeAna     = "skimmingSR";
-  string datasetAna = "SR";
+  string datasetAna = "Signal";
+  string filesToTransfer = "T5bbbbZg_MassScan.root,T5qqqqHg_MassScan.root";
   //---------------------------------------------------
   cout<<"executable at worker node : "<<exeCondor<<endl
       <<"Analysis executable : "<<exeAna<<endl
@@ -51,11 +52,11 @@ void splitRunList(string infile,int nfPerJob){
     outf<<"universe = vanilla"<<endl
 	<<"Executable = "<<exeCondor<<endl
 	<<"Requirements = OpSys == \"LINUX\" && (Arch != \"DUMMY\" )"<<endl
-	<<"request_disk = 10000000"<<endl
-	<<"request_memory = 10000"<<endl
+	// <<"request_disk = 10000000"<<endl
+	// <<"request_memory = 10000"<<endl
 	<<"Should_Transfer_Files = YES"<<endl
 	<<"WhenToTransferOutput = ON_EXIT_OR_EVICT"<<endl
-	<<"Transfer_Input_Files = "<<exeAna<<","<<fileListName<<endl
+	<<"Transfer_Input_Files = "<<filesToTransfer<<","<<exeAna<<","<<fileListName<<endl
       //	<<"PeriodicRemove = ( JobStatus == 2 ) && ( ( CurrentTime - EnteredCurrentStatus ) > 600 )"<<endl
 	<<"Output = "<<logFile<<".stdout"<<endl
 	<<"Error = "<<logFile<<".stderr"<<endl
