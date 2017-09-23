@@ -1,1 +1,1 @@
-/media/vinay/Physics/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_LostMu/CS_LostMu_Summer16.TGJets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8.root
+/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_LostMu/CS_LostMu_Summer16.TGJets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8.root

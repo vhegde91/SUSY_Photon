@@ -163,7 +163,7 @@ class AnalyzeLightBSM : public NtupleVariables{
   TH1D *h_temp;
 
   TH1D *h_MET_R_v2[5];
-  TH1D *h_SBins;
+  TH1D *h_SBins,*h_SBins_v1,*h_SBins_v3;
 
   TFile *oFile;
   
@@ -304,6 +304,8 @@ void AnalyzeLightBSM::BookHistogram(const char *outFileName) {
   h_MET_R_v2[4] =new TH1D("MET_R5_v2","MET for b>=2 ",METBinLowEdge2bJ.size()-1,&(METBinLowEdge2bJ[0]));
 
   h_SBins = new TH1D("AllSBins","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2)",34,0.5,34.5);
+  h_SBins_v1 = new TH1D("AllSBins_v1","search bins:(NJ=2to4) (NJ:5or6) (NJ>=7)",21,0.5,21.5);
+  h_SBins_v3 = new TH1D("AllSBins_v3","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, 1b, >=2b]",63,0.5,63.5);
 }
 
 

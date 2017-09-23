@@ -51,7 +51,7 @@ void GetFakeRate(TString iFname){
   name1.push_back("MET_Pho");         name2.push_back("MET_Ele");     rebin.push_back(10);
   name1.push_back("nHadJets_Pho");    name2.push_back("nHadJets_Ele");rebin.push_back(1);
   name1.push_back("nBTags_Pho");    name2.push_back("nBTags_Ele");rebin.push_back(1);
-  name1.push_back("BestPhotonPt");    name2.push_back("ElePt");       rebin.push_back(5);
+  name1.push_back("BestPhotonPt");    name2.push_back("ElePt");       rebin.push_back(2);
   name1.push_back("BestPhotonEta");   name2.push_back("EleEta");      rebin.push_back(5);
   name1.push_back("BestPhotonPhi");   name2.push_back("ElePhi");      rebin.push_back(2);
   name1.push_back("METvarBin_Pho");   name2.push_back("METvarBin_Ele");rebin.push_back(1);

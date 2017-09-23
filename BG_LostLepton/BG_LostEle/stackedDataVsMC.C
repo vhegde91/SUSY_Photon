@@ -73,8 +73,9 @@ void stackedDataVsMC(TString iFname){
   // name1.push_back("isoMuTrack_Ele1");   rebin.push_back(1);
   // name1.push_back("isoPiTrack_Ele1");   rebin.push_back(1);
 
-  // name1.push_back("MET_Ele1_R2");         name2.push_back("MET_Ele1_R2");rebin.push_back(1);
-  // name1.push_back("MET_Ele1_R3");         name2.push_back("MET_Ele1_R3");rebin.push_back(1);
+  name1.push_back("MET_Ele1_R1");rebin.push_back(1);
+  name1.push_back("MET_Ele1_R2");rebin.push_back(1);
+  name1.push_back("MET_Ele1_R3");rebin.push_back(1);
 
   TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
   TCanvas *c_cA[name1.size()];
@@ -87,16 +88,16 @@ void stackedDataVsMC(TString iFname){
   for(int i=0;i<name1.size();i++){
     name=name1[i];//+name2[i];
     c_cA[i]=new TCanvas(name,name,1500,800);//c_cA[i]->Divide(4,2);
-    p_top[i]=new TPad(name+"_top",name+"_top",0,0.35,1,1);
-    p_bot[i]=new TPad(name+"_bot",name+"_bot",0,0.04,1,0.35);
+    p_top[i]=new TPad(name+"_top",name+"_top",0,0.4,1,1);
+    p_bot[i]=new TPad(name+"_bot",name+"_bot",0,0.0,1,0.4);
     p_top[i]->Draw();p_top[i]->SetGridx();p_top[i]->SetGridy();p_top[i]->SetLogy();
     p_top[i]->SetBottomMargin(0);
     p_bot[i]->SetTopMargin(0);
-    p_bot[i]->SetBottomMargin(0.2);
+    p_bot[i]->SetBottomMargin(0.3);
     p_bot[i]->Draw();p_bot[i]->SetGridx();p_bot[i]->SetGridy();    
     name=name1[i]+"_Stack";
     hs_hist[i] = new THStack(name,name);
-    legend[i]=new TLegend(0.75, 0.90,  0.90, 0.55);
+    legend[i]=new TLegend(0.80, 0.90,  0.90, 0.45);
   }
   //cout<<getLegName(f[0]->GetName());
   TH1D *h_histG,*h_histE,*h_histGcopy;
@@ -146,12 +147,13 @@ void stackedDataVsMC(TString iFname){
       legend[i]->AddEntry(h_histE,getLegName(f[p]->GetName()),"f");
     }
     c_cA[i]->cd();    p_top[i]->cd();
+    hs_hist[i]->SetMinimum(0.8);
     hs_hist[i]->Draw("BAR");
     h_histG->Draw("same");
     hs_hist[i]->SetTitle(";;Events");
-    hs_hist[i]->GetYaxis()->SetTitleOffset(0.60);    
-    hs_hist[i]->GetYaxis()->SetTitleSize(0.08);
-    hs_hist[i]->GetYaxis()->SetLabelSize(0.08);
+    hs_hist[i]->GetYaxis()->SetTitleOffset(0.50);    
+    hs_hist[i]->GetYaxis()->SetTitleSize(0.09);
+    hs_hist[i]->GetYaxis()->SetLabelSize(0.09);
     
     c_cA[i]->Modified();
     c_cA[i]->Update();
@@ -164,13 +166,14 @@ void stackedDataVsMC(TString iFname){
     h_numr->SetMarkerColor(kBlack);
     h_numr->SetTitle(0); name=name1[i];
     h_numr->GetXaxis()->SetTitle(name);
-    h_numr->GetXaxis()->SetTitleOffset(0.92);
-    h_numr->GetXaxis()->SetTitleSize(0.11);
+    h_numr->GetXaxis()->SetTitleOffset(0.87);
+    h_numr->GetXaxis()->SetTitleSize(0.13);
+    h_numr->GetXaxis()->SetLabelSize(0.14);
+
     h_numr->GetYaxis()->SetTitle("#frac{Data}{MC}");
-    h_numr->GetYaxis()->SetTitleOffset(0.29);
+    h_numr->GetYaxis()->SetTitleOffset(0.35);
     h_numr->GetYaxis()->SetTitleSize(0.13);
-    h_numr->GetXaxis()->SetLabelSize(0.13);
-    h_numr->GetYaxis()->SetLabelSize(0.16);
+    h_numr->GetYaxis()->SetLabelSize(0.14);
     h_numr->GetYaxis()->SetNdivisions(505);
     h_numr->SetMaximum(2.0);
     h_numr->SetMinimum(0.01);

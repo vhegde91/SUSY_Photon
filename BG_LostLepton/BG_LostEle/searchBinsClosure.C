@@ -31,13 +31,13 @@ void searchBinsClosure(TString iFname){
   TH1D *h_intLumi=(TH1D*)f->FindObjectAny("intLumi");
   double intLumi=0;if(h_intLumi) intLumi=h_intLumi->GetMean();delete h_intLumi;
 
-  TCanvas *c_cA=new TCanvas("allSearchBins_LostEleClsr","all search bins closure for lost electron",2000,900);
-  TPad *p_top=new TPad("top","top",0,0.35,1,1);
-  TPad *p_bot=new TPad("bot","bot",0,0.04,1,0.35);
+  TCanvas *c_cA=new TCanvas("allSearchBins_LostEleClsr","all search bins closure for lost electron",1500,800);
+  TPad *p_top=new TPad("top","top",0,0.4,1,1);
+  TPad *p_bot=new TPad("bot","bot",0,0.0,1,0.4);
   p_top->Draw();p_top->SetGridx();p_top->SetGridy();p_top->SetLogy();
   p_top->SetBottomMargin(0);
   p_bot->SetTopMargin(0);
-  p_bot->SetBottomMargin(0.2);
+  p_bot->SetBottomMargin(0.3);
   p_bot->Draw();p_bot->SetGridx();p_bot->SetGridy();
 
   TH1D *h_histG,*h_histE,*h_histGcopy,*h_temp;
@@ -79,8 +79,8 @@ void searchBinsClosure(TString iFname){
       h_CR->GetYaxis()->SetLabelSize(0.09);
       h_CR->SetTitle(";;Events");
       //      h_CR->GetYaxis()->SetTitle("Events");
-      h_CR->GetYaxis()->SetTitleSize(0.07);
-      h_CR->GetYaxis()->SetTitleOffset(0.51);
+      h_CR->GetYaxis()->SetTitleSize(0.09);
+      h_CR->GetYaxis()->SetTitleOffset(0.50);
     }
   }
 
@@ -93,13 +93,14 @@ void searchBinsClosure(TString iFname){
   h_numr->SetMarkerColor(kBlack);
   //  h_numr->SetTitle(";;#frac{0#e+#gamma}{1#e+#gamma}");
   h_numr->SetTitle(";Bin Number;Exp / Pred");
-  h_numr->GetYaxis()->SetTitleOffset(0.14);
-  h_numr->GetYaxis()->SetTitleSize(0.16);
-  h_numr->GetXaxis()->SetTitleSize(0.2);
-  h_numr->GetXaxis()->SetLabelSize(0.15);
-  h_numr->GetXaxis()->SetTitleOffset(0.67);
+  h_numr->GetYaxis()->SetTitleOffset(0.23);
+  h_numr->GetYaxis()->SetTitleSize(0.14);
   h_numr->GetYaxis()->SetLabelSize(0.13);
   h_numr->GetYaxis()->SetNdivisions(505);
+
+  h_numr->GetXaxis()->SetTitleSize(0.15);
+  h_numr->GetXaxis()->SetLabelSize(0.15);
+  h_numr->GetXaxis()->SetTitleOffset(0.67);
   h_numr->SetMaximum(2.0);
   h_numr->SetMinimum(0.01);
   c_cA->cd();    p_bot->cd();
@@ -111,7 +112,7 @@ void searchBinsClosure(TString iFname){
   h_CR->Draw();
   h_SR->Draw("BAR same");
 
-  TLegend *legend=new TLegend(0.75, 0.90,  0.90, 0.75);
+  TLegend *legend=new TLegend(0.75, 0.90,  0.90, 0.7);
   legend->AddEntry(h_SR,"0e+#gamma (Exp.)","l");
   legend->AddEntry(h_CR,"1e+#gamma (Pred.)","l");
   legend->Draw();

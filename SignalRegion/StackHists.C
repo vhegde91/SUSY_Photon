@@ -48,11 +48,11 @@ void StackHists(){
   //f[8] = new TFile("HG_NLSP150.root");
   //  f[9] = new TFile("HG_NLSP1000.root");
   //  f[8] = new TFile("HG_NLSP150.root");
-  //  f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
   f[8] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
-  //  f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
-  f[9] = new TFile("a.root");
+  f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
   f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
+  //  f[10] = new TFile("T5qqqqHg_2000_127.root");
+  //  f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
   
   // gStyle->SetOptStat("nemri");
   gStyle->SetOptStat("ni");
@@ -155,18 +155,18 @@ void StackHists(){
       c_cB->cd(1); hs_STvBin->      Draw("HIST BAR");hs_STvBin->      GetXaxis()->SetTitle("ST(GeV)");              decorate(hs_STvBin,     i,f[i]->GetName()); gPad->SetTickx();gPad->SetTicky();
       c_cB->cd(2); hs_METvBin->     Draw("HIST BAR");hs_METvBin->     GetXaxis()->SetTitle("MET(GeV)");             decorate(hs_METvBin,    i,f[i]->GetName()); gPad->SetTickx();gPad->SetTicky();
       c_cB->cd(2); hs_METvBin->     Draw("HIST");//hs_METvBin->     GetXaxis()->SetTitle("MET(GeV)");             decorate(hs_METvBin,    i,f[i]->GetName());
-      c_cB->cd(3); hs_BestPhotonPtvBin->Draw("HIST BAR");hs_BestPhotonPtvBin->GetXaxis()->SetTitle("Best Photon Pt(GeV)");decorate(hs_BestPhotonPtvBin,    i,f[i]->GetName()); gPad->SetTickx();gPad->SetTicky();
+      c_cB->cd(3); hs_BestPhotonPtvBin->Draw("HISTE BAR");hs_BestPhotonPtvBin->GetXaxis()->SetTitle("Best Photon Pt(GeV)");decorate(hs_BestPhotonPtvBin,    i,f[i]->GetName()); gPad->SetTickx();gPad->SetTicky();
     }
     if(i>=nBG){
-      c_cA->cd(1); h_ST->          Draw("HIST sames");
-      c_cA->cd(2); h_MET->         Draw("HIST sames");
-      c_cA->cd(3); h_nJets->       Draw("HIST sames");
-      c_cA->cd(4); h_BTags->       Draw("HIST sames");
-      c_cA->cd(5); h_BestPhotonPt->Draw("HIST sames");
+      c_cA->cd(1); h_ST->          Draw("HISTE sames");
+      c_cA->cd(2); h_MET->         Draw("HISTE sames");
+      c_cA->cd(3); h_nJets->       Draw("HISTE sames");
+      c_cA->cd(4); h_BTags->       Draw("HISTE sames");
+      c_cA->cd(5); h_BestPhotonPt->Draw("HISTE sames");
 
-      c_cB->cd(1); h_STvBin->      Draw("HIST sames");
-      c_cB->cd(2); h_METvBin->     Draw("HIST sames");
-      c_cB->cd(3); h_BestPhotonPtvBin->     Draw("HIST sames");
+      c_cB->cd(1); h_STvBin->      Draw("HISTE sames");
+      c_cB->cd(2); h_METvBin->     Draw("HISTE sames");
+      c_cB->cd(3); h_BestPhotonPtvBin->     Draw("HISTE sames");
 
     }
 

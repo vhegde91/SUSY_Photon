@@ -46,19 +46,22 @@ void GetEfficiency(){
   TString name="PhotonPt_HT";
   //  xAxisLabel="#gamma p^{T}(GeV)";
   //  xAxisLabel="ST(GeV)";
-  xAxisLabel="e pT(GeV)";
+  //  xAxisLabel="e pT(GeV)";
+  xAxisLabel="#mu pT(GeV)";
 
   //f[0] = new TFile("Run2016_MET_03Feb2017_SingEleTrg_NoIsoTightID_ST500_v2.root");
-  // f[0] = new TFile("Run2016CtoH_MET_03Feb2017_Ele15_IsoVVVL_PFHT400Pho165_AtLeast1Ele.root");
-  // f[0] = new TFile("Run2016B_MET_03Feb2017_SRTrig_1EleOnly.root");
-  // f[1] = new TFile("Run2016C_MET_03Feb2017_SRTrig_1EleOnly.root");
-  // f[2] = new TFile("Run2016D_MET_03Feb2017_SRTrig_1EleOnly.root");
-  // f[3] = new TFile("Run2016E_MET_03Feb2017_SRTrig_1EleOnly.root");
-  // f[4] = new TFile("Run2016F_MET_03Feb2017_SRTrig_1EleOnly.root");
-  // f[5] = new TFile("Run2016G_MET_03Feb2017_SRTrig_1EleOnly.root");
-  // f[6] = new TFile("Run2016H_MET_03Feb2017_SRTrig_1EleOnly.root");
 
-  f[0] = new TFile("Run2016_MET_03Feb2017_Ele27_1TightEle.root");
+  // f[0] = new TFile("Run2016B_MET_03Feb2017_Mu50_TightID.root");
+  // f[1] = new TFile("Run2016C_MET_03Feb2017_Mu50_TightID.root");
+  // f[2] = new TFile("Run2016D_MET_03Feb2017_Mu50_TightID.root");
+  // f[3] = new TFile("Run2016E_MET_03Feb2017_Mu50_TightID.root");
+  // f[4] = new TFile("Run2016F_MET_03Feb2017_Mu50_TightID.root");
+  // f[5] = new TFile("Run2016G_MET_03Feb2017_Mu50_TightID.root");
+  // f[6] = new TFile("Run2016H_MET_03Feb2017_Mu50_TightID.root");
+
+  f[0] = new TFile("Run2016_JetHT_03Feb2017_Mu50_TightID.root");
+  //  f[0] = new TFile("Run2016_MET_03Feb2017_PhoxHT_OR_Pho165_1TightEleOnly.root");
+  //  f[0] = new TFile("Run2016_MET_03Feb2017_PhoTrgORHTPhoPtTrg_ST800.root");
   
   // histName1.push_back("PhotonPt_PhoPt");
   // histName2.push_back("PhotonPt_HT");
@@ -69,20 +72,22 @@ void GetEfficiency(){
     // histName2.push_back("MET");
     // histName1.push_back("PhoPtvBin_Req");
     // histName2.push_back("PhoPtvBin");
+    // histName1.push_back("HT_Req");
+    // histName2.push_back("HT");
     // histName1.push_back("STvBin_Req");
     // histName2.push_back("STvBin");
-    histName1.push_back("Ele1PtvBin_Req");
-    histName2.push_back("Ele1PtvBin");
+    // histName1.push_back("Ele1PtvBin_Req");
+    // histName2.push_back("Ele1PtvBin");
     // histName1.push_back("Ele1Pt_Req");
     // histName2.push_back("Ele1Pt");
-    // histName1.push_back("Ele2Pt_Req");
-    // histName2.push_back("Ele2Pt");
+    histName1.push_back("MuPt_vBin_Req");
+    histName2.push_back("MuPt_vBin");
 
   }
 
   // histName1.push_back("MET_PhoPt"); 
   // histName2.push_back("MET_HT"); 
-  rebin=1;
+  rebin=2;
   //  legName.push_back("2016C to 2016H (35.1 fb^{-1})");
   legName.push_back("2016 (35.9 fb^{-1})");
   // legName.push_back("2016B (5.78 fb^{-1})");

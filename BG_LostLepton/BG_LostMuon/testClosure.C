@@ -52,9 +52,9 @@ void testClosure(TString iFname){
   name1.push_back("MET_R4_v2_Mu0");   name2.push_back("MET_R4_v2_Mu1");  rebin.push_back(1);
   name1.push_back("MET_R5_v2_Mu0");   name2.push_back("MET_R5_v2_Mu1");  rebin.push_back(1);
   name1.push_back("AllSBins_Mu0");    name2.push_back("AllSBins_Mu1");  rebin.push_back(1);
-  // name1.push_back("MET_Mu0_R1");         name2.push_back("MET_Mu1_R1");rebin.push_back(1);
-  // name1.push_back("MET_Mu0_R2");         name2.push_back("MET_Mu1_R2");rebin.push_back(1);
-  // name1.push_back("MET_Mu0_R3");         name2.push_back("MET_Mu1_R3");rebin.push_back(1);
+  name1.push_back("MET_Mu0_R1");         name2.push_back("MET_Mu1_R1");rebin.push_back(1);
+  name1.push_back("MET_Mu0_R2");         name2.push_back("MET_Mu1_R2");rebin.push_back(1);
+  name1.push_back("MET_Mu0_R3");         name2.push_back("MET_Mu1_R3");rebin.push_back(1);
 
   TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
   TCanvas *c_cA[name1.size()];

@@ -26,6 +26,7 @@ TString name;
 bool saveCanvas=0;
 void setLastBinAsOverFlow(TH1D*);
 TString getLegName(TString);
+TString getXaxisName(TString);
 double data_Integral=0,mc_Integral=0;
 TLatex textOnTop,intLumiE;
 double intLumi=35.9;
@@ -37,9 +38,14 @@ void stackedDataVsMC(TString iFname){
   //  f[1] = new TFile("CS_TTJets_FR_NoTrgNoEleMatchbJ_v2.root");
   f[1] = new TFile("CS_QCD_FR_NoTrg_v2.root");
   f[2] = new TFile("CS_ST_FR_NoTrg_v2.root");
-  f[3] = new TFile("CS_TTJets_FR_NoTrg_v2.root");
+  //f[3] = new TFile("CS_TTJets_FR_NoTrg_v2.root");
+  f[3] = new TFile("CS_TTJets_myISRWt_FR_NoTrg_v2.root");
   f[4] = new TFile("CS_WJets_FR_NoTrg_v2.root");
-   
+
+  // f[1] = new TFile("CS_QCD_FR_v2.root");
+  // f[2] = new TFile("CS_ST_FR_v2.root");
+  // f[3] = new TFile("CS_TTJets_FR_ISRWt_v2.root");
+  // f[4] = new TFile("CS_WJets_FR_v2.root");
   vector<string> name1;
   vector<int> rebin;
   name1.push_back("ST_Ele");  rebin.push_back(10);         //name2.push_back("ST_Ele");     
@@ -47,14 +53,14 @@ void stackedDataVsMC(TString iFname){
   name1.push_back("nBTags_Ele");   rebin.push_back(1);    //name2.push_back("nBTags_Ele");     
   name1.push_back("nHadJets_Ele");  rebin.push_back(1);  //name2.push_back("nHadJets_Ele");
   name1.push_back("ElePt");   rebin.push_back(5);  //name2.push_back("BestPhotonPt_Ele");      
-  // name1.push_back("EleEta"); rebin.push_back(5);  //name2.push_back("BestPhotonEta_Ele");  
-  // name1.push_back("ElePhi"); rebin.push_back(1);  //name2.push_back("BestPhotonEta_Ele");  
-  // name1.push_back("METvarBin_Ele");  rebin.push_back(1); //name2.push_back("METvarBin_Ele");  
+  //  name1.push_back("EleEta"); rebin.push_back(2);  //name2.push_back("BestPhotonEta_Ele");  
+  //  name1.push_back("ElePhi"); rebin.push_back(1);  //name2.push_back("BestPhotonEta_Ele");  
+  name1.push_back("METvarBin_Ele");  rebin.push_back(1); //name2.push_back("METvarBin_Ele");  
   // name1.push_back("dPhi_METjet1_Ele"); rebin.push_back(2);  //name2.push_back("dPhi_METjet1_Pho_Ele");  
   // name1.push_back("dPhi_METjet2_Ele"); rebin.push_back(2);  //name2.push_back("dPhi_METjet2_Pho_Ele");  
-  name1.push_back("Qmulti_Ele"); rebin.push_back(2);
+  //  name1.push_back("Qmulti_Ele"); rebin.push_back(2);
   name1.push_back("QMult2_Ele"); rebin.push_back(2);
-  // name1.push_back("mT_Ele");   rebin.push_back(2);
+  //  name1.push_back("mT_Ele");   rebin.push_back(2);
 
   // name1.push_back("MET_R1_v2_Ele");   rebin.push_back(1);
   // name1.push_back("MET_R2_v2_Ele");   rebin.push_back(1);
@@ -95,7 +101,7 @@ void stackedDataVsMC(TString iFname){
     p_bot[i]->Draw();p_bot[i]->SetGridx();p_bot[i]->SetGridy();    
     name=name1[i]+"_Stack";
     hs_hist[i] = new THStack(name,name);
-    legend[i]=new TLegend(0.8, 0.90,  0.90, 0.65);
+    legend[i]=new TLegend(0.8, 0.90,  0.90, 0.55);
   }
   //cout<<getLegName(f[0]->GetName());
   TH1D *h_histG,*h_histE,*h_histGcopy;
@@ -161,7 +167,8 @@ void stackedDataVsMC(TString iFname){
     h_numr->Divide(h_sum[i]);
     h_numr->SetLineColor(kBlack);
     h_numr->SetMarkerColor(kBlack);
-    h_numr->SetTitle(0); name=name1[i];
+    h_numr->SetTitle(0);
+    name=getXaxisName(name1[i]);
     h_numr->GetXaxis()->SetTitle(name);
     h_numr->GetXaxis()->SetTitleOffset(0.87);
     h_numr->GetXaxis()->SetTitleSize(0.13);
@@ -196,11 +203,25 @@ void stackedDataVsMC(TString iFname){
 }
 
 TString getLegName(TString fname){
-  if(fname=="CS_TTJets_FR_v2.root" || fname=="CS_TTJets_FR_NoTrg_v2.root" ) return "t#bar{t}";
+  if(fname=="CS_TTJets_FR_v2.root" || fname=="CS_TTJets_FR_NoTrg_v2.root" || fname.Contains("TTJets")) return "t#bar{t}";
   else if(fname=="CS_WJets_FR_v2.root" || fname=="CS_WJets_FR_NoTrg_v2.root") return "W+Jets";
   else if(fname=="CS_ST_FR_v2.root" || fname=="CS_ST_FR_NoTrg_v2.root") return "Single top";
   else if(fname=="CS_QCD_FR_v2.root" || fname=="CS_QCD_FR_NoTrg_v2.root") return "QCD";
   else return fname;
+}
+
+TString getXaxisName(TString axname){
+  if(axname.Contains("nHadJets")) return "Jets";
+  else if(axname.Contains("MET")) return "MET(GeV)";
+  else if(axname.Contains("ST")) return "ST(GeV)";
+  else if(axname.Contains("BTags")) return "b-Tags";
+  else if(axname.Contains("ElePt")) return "e pT(GeV)";
+  else if(axname.Contains("PhotonPt")) return "#gamma pT(GeV)";
+  else if(axname.Contains("mT_")) return "mT(GeV)";
+  else if(axname.Contains("AllSBin")) return "Bin Number";
+  else if(axname.Contains("QMut") || axname.Contains("Qmut")) return "QMult";
+  else return axname;
+
 }
 
 

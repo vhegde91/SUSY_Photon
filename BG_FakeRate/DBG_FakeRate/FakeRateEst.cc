@@ -109,30 +109,32 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
     bool passTrig = false;
     for(int i=0;i<TriggerNames->size();i++){
       string trgName=(*TriggerNames)[i];
-      trgName.pop_back();trgName.pop_back();
-
-      if((*Electrons)[0].Pt() > 190.0){
-    	if( (trgName=="HLT_Ele27_WPTight_Gsf_v" || trgName=="HLT_Ele27_WPTight_Gsf_" || trgName=="HLT_Photon165_HE10_v" || trgName=="HLT_Photon165_HE10_" ) ){
-    	  if((*TriggerPass)[i]==1){
-    	    passTrig = true;
-    	    wt = 1.0*0.98/0.99;//0.98 for SR trig eff, 0.99 for (Ele27 || Pho165) eff
-    	    break;
-    	  }
-    	  else if((*TriggerPass)[i]==-1 || (*TriggerPrescales)[i]!=1)
-    	    cout<<"AHHHHHH TrigPass:"<<(*TriggerPass)[i]<<" PS:"<<(*TriggerPrescales)[i]<<endl;
-    	}
-      }
-      else if((*Electrons)[0].Pt() > 100){
-    	if( (trgName=="HLT_Ele27_WPTight_Gsf_v" || trgName=="HLT_Ele27_WPTight_Gsf_" ) ){
-    	  if((*TriggerPass)[i]==1){
-    	    passTrig = true;
-    	    wt = 1.0*0.98/0.87;//0.98 for SR trig eff, 0.87 for Ele27 eff.
-    	    break;
-    	  }
-    	  else if((*TriggerPass)[i]==-1 || (*TriggerPrescales)[i]!=1)
-    	    cout<<"AHHHHHH TrigPass:"<<(*TriggerPass)[i]<<" PS:"<<(*TriggerPrescales)[i]<<endl;
-    	}
-      }
+      trgName.pop_back();
+      if( trgName=="HLT_Photon90_CaloIdL_PFHT600_v" && (*TriggerPass)[i]==1 ) passTrig = true;
+      else if( trgName=="HLT_Photon165_HE10_v" && (*TriggerPass)[i]==1 ) passTrig = true;
+      wt=0.98/0.99;
+      // if((*Electrons)[0].Pt() > 190.0){
+      // 	if( (trgName=="HLT_Ele27_WPTight_Gsf_v" || trgName=="HLT_Ele27_WPTight_Gsf_" || trgName=="HLT_Photon165_HE10_v" || trgName=="HLT_Photon165_HE10_" ) ){
+      // 	  if((*TriggerPass)[i]==1){
+      // 	    passTrig = true;
+      // 	    wt = 1.0*0.98/0.99;//0.98 for SR trig eff, 0.99 for (Ele27 || Pho165) eff
+      // 	    break;
+      // 	  }
+      // 	  else if((*TriggerPass)[i]==-1 || (*TriggerPrescales)[i]!=1)
+      // 	    cout<<"AHHHHHH TrigPass:"<<(*TriggerPass)[i]<<" PS:"<<(*TriggerPrescales)[i]<<endl;
+      // 	}
+      // }
+      // else if((*Electrons)[0].Pt() > 100){
+      // 	if( (trgName=="HLT_Ele27_WPTight_Gsf_v" || trgName=="HLT_Ele27_WPTight_Gsf_" ) ){
+      // 	  if((*TriggerPass)[i]==1){
+      // 	    passTrig = true;
+      // 	    wt = 1.0*0.98/0.87;//0.98 for SR trig eff, 0.87 for Ele27 eff.
+      // 	    break;
+      // 	  }
+      // 	  else if((*TriggerPass)[i]==-1 || (*TriggerPrescales)[i]!=1)
+      // 	    cout<<"AHHHHHH TrigPass:"<<(*TriggerPass)[i]<<" PS:"<<(*TriggerPrescales)[i]<<endl;
+      // 	}
+      // }
     }
     if(!passTrig) continue;
     //++++++++++++++++++++++ data only ends +++++++++++++++++++++++
@@ -214,7 +216,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
     }
 
     process = process && ST>500 && nHadJets>=2 && MET>100 && dphi1 > 0.3 && dphi2 > 0.3 && bestEMObj.Pt()>100;
-    //    if( !((ST>800 && bestEMObj.Pt()>100) || (bestEMObj.Pt()>190)) ) continue;
+    if( !((ST>800 && bestEMObj.Pt()>100) || (bestEMObj.Pt()>190)) ) continue;
 
     if(process){
       evtSurvived++;
