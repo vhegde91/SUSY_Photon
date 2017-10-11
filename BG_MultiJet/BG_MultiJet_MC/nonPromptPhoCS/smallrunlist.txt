@@ -1,0 +1,1 @@
+/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_GJets_v2/CS_GJets_Summer16.QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root
