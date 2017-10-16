@@ -43,7 +43,9 @@ void findFailedJobs(string arg){
   char jdlStart[200];
   sprintf(jdlStart,"%s",arg.c_str());
   //  sprintf(jdlStart,"signalRegionSkim_%s_",dataset);
-  char ofileStart[300]="/eos/uscms/store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/CS_EleFakes_v3/CS_FR_";
+  //  char ofileStart[300]="/eos/uscms/store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/CS_EleFakes_v2/CS_FR_";
+  //  char ofileStart[300]="/eos/uscms/store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/CS_EleFakes_ISRWtd/CS_FR_";
+  char ofileStart[300]="CS_FR_";
   char ofileEnd[200]="_RA2AnalysisTree.root";
   char name1[200],name2[400];
   gEnv->SetValue("TFile.Recover", 0);

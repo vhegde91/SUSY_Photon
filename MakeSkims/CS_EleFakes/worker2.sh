@@ -30,5 +30,6 @@ echo "processed. ls"
 ls
 echo "COPYING OUTPUT"
 
-xrdcp -f $datasetName'_'$outputFileTag root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/CS_EleFakes_v3/
-rm $datasetName'_'$outputFileTag
+#xrdcp -f $datasetName'_'$outputFileTag root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/CS_EleFakes_v2/
+#xrdcp -f $datasetName'_'$outputFileTag root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/CS_EleFakes_ISRWtd/
+#rm $datasetName'_'$outputFileTag

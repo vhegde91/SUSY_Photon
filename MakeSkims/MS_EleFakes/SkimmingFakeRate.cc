@@ -59,14 +59,16 @@ void SkimmingFakeRate::EventLoop(const char *data,const char *inputFileList) {
     if(s_data=="MS_FR_madHT0to600" && madHT>600 ) continue;//only for TTJets_Tune*, TTJets_SingleLept*, TTJets_Dilept*
     //select skimming parameters (1 of 2)
     h_selectBaselineYields_->Fill(0);
-    if( (Muons->size()!=0) || (Electrons->size()!=1) ) continue;
+    //    if( (Muons->size()!=0) || (Electrons->size()!=1) ) continue;
+    if( (Muons->size()!=0) || (Electrons->size()==0) || (Electrons->size()>2) ) continue;
     else h_selectBaselineYields_->Fill(1);
 
     //about photons
-    TLorentzVector bestPhoton=getBestPhoton();//get bestphoton w/ or w/o pixel seed veto
-    if(bestPhoton.Pt()<100) continue;
-    if(!((*Electrons_tightID)[0])) continue;
-
+    TLorentzVector bestPhoton=getBestPhoton();
+    //    if(!((*Electrons_tightID)[0])) continue;
+    if(Electrons->size()==1 && bestPhoton.Pt() < 100) continue;
+    else if(Electrons->size()==2 && bestPhoton.Pt() > 100) continue;
+    else if(Electrons->size()==2 && (*Electrons)[0].Pt() < 100 && (*Electrons)[1].Pt() < 100) continue;
     /*
     //about electrons
     TLorentzVector ele1,ele2,bestEMObj;
@@ -127,8 +129,8 @@ void SkimmingFakeRate::EventLoop(const char *data,const char *inputFileList) {
     // else continue;
     // if( ST>500. )        h_selectBaselineYields_->Fill(4);
     // else continue;
-    // if( MET>100. )       h_selectBaselineYields_->Fill(5);
-    // else continue;
+    if( MET<100. )       h_selectBaselineYields_->Fill(5);
+    else continue;
     //end of select skimming parameters
 
     newtree->Fill();
@@ -142,8 +144,7 @@ TLorentzVector SkimmingFakeRate::getBestPhoton(){
   TLorentzVector v1;
   vector<TLorentzVector> goodPho;
   for(int iPhoton=0;iPhoton<Photons->size();iPhoton++){
-    //    if( ((*Photons_fullID)[iPhoton]) && ((*Photons_hasPixelSeed)[iPhoton]<0.001) ) goodPho.push_back( (*Photons)[iPhoton] );
-    if( ((*Photons_fullID)[iPhoton]) ) goodPho.push_back( (*Photons)[iPhoton] );
+    if( ((*Photons_fullID)[iPhoton]) && ((*Photons_hasPixelSeed)[iPhoton]<0.001) ) goodPho.push_back( (*Photons)[iPhoton] );
   }
   
   if(goodPho.size()==0) return v1;

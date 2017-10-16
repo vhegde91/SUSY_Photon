@@ -43,7 +43,7 @@ void findFailedJobs(string arg){
   char jdlStart[200];
   sprintf(jdlStart,"%s",arg.c_str());
   //  sprintf(jdlStart,"signalRegionSkim_%s_",dataset);
-  char ofileStart[300]="/eos/uscms/store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/MS_EleFakes_v2/MS_FR_";
+  char ofileStart[300]="/eos/uscms/store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/MS_EleFakes/MS_FR_";
   char ofileEnd[200]="_RA2AnalysisTree.root";
   char name1[200],name2[400];
   gEnv->SetValue("TFile.Recover", 0);
@@ -74,7 +74,7 @@ void findFailedJobs(string arg){
     cout<<"size of job0 file:";
     system(cmd0);
 
-    cout<<endl<<"hadd "<<ofileStart<<jdlStart<<".root "<<ofileStart<<jdlStart<<"_job*.root"<<endl;
+    cout<<endl<<"hadd -f "<<ofileStart<<jdlStart<<".root "<<ofileStart<<jdlStart<<"_job*.root"<<endl;
     cout<<"rm "<<ofileStart<<jdlStart<<"_job*.root"<<endl;
     int choice1=10;
     cout<<endl<<"Enter what you want to do:"<<endl
@@ -98,7 +98,7 @@ void findFailedJobs(string arg){
     }
     else if(choice1==1){
       char cmd2[1000];
-      sprintf(cmd2,"hadd %s%s.root %s%s_job*.root",ofileStart,jdlStart,ofileStart,jdlStart);
+      sprintf(cmd2,"hadd -f %s%s.root %s%s_job*.root",ofileStart,jdlStart,ofileStart,jdlStart);
       system(cmd2);
     }
 

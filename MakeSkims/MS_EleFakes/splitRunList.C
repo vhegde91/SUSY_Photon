@@ -70,7 +70,7 @@ void splitRunList(string infile,int nfPerJob){
     outf.close();
   }
   //------------------------ submit to condor --------------------------------------
-  int t1=-100;
+  int t1=100;
   cout<<"Do you want to submit "<<jobid<<" jobs? If yes enter 100"<<endl;
   //  cin>>t1;
   for(int i=0;i<jobid && t1==100;i++){

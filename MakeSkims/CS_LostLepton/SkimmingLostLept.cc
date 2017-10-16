@@ -64,12 +64,12 @@ void SkimmingLostLept::EventLoop(const char *data,const char *inputFileList) {
     h_selectBaselineYields_->Fill(0);
     //---------------------------------- For Lost Muons -----------------------------------------------
     //should not be any electron. Need muons in the sample. Do not say anything about the muons.
-    if( Electrons->size() == 0 )   h_selectBaselineYields_->Fill(1);
-    else continue;
+    // if( Electrons->size() == 0 )   h_selectBaselineYields_->Fill(1);
+    // else continue;
     //---------------------------------- For Lost Electrons -----------------------------------------------
     //should not be any Muon. Need electrons in the sample. Do not say anything about the electrons.
-    // if( Muons->size() == 0 )   h_selectBaselineYields_->Fill(1);
-    // else continue;
+    if( Muons->size() == 0 )   h_selectBaselineYields_->Fill(1);
+    else continue;
     //---------------------------------------------------------------------------------
 
     //about photons

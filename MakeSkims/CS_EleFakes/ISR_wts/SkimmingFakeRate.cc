@@ -59,13 +59,13 @@ void SkimmingFakeRate::EventLoop(const char *data,const char *inputFileList) {
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
 
-    if(s_data== "TTJets_Tune") CrossSection = 815.96;//ttbar incl
-    else if(s_data== "TTJets_HT-600to800") CrossSection = 2.61537118;//TTJets_HT600to800
-    else if(s_data== "TTJets_HT-800to1200") CrossSection = 1.07722318;//TTJets_HT800to1200
-    else if(s_data== "TTJets_HT-1200to2500") CrossSection = 0.194972521;//TTJets_HT1200to2500
-    else if(s_data== "TTJets_HT-2500toInf") CrossSection = 0.0023234211;//TTJets_HT2500toInf
+    // if(s_data== "TTJets_Tune") CrossSection = 815.96;//ttbar incl
+    // else if(s_data== "TTJets_HT-600to800") CrossSection = 2.61537118;//TTJets_HT600to800
+    // else if(s_data== "TTJets_HT-800to1200") CrossSection = 1.07722318;//TTJets_HT800to1200
+    // else if(s_data== "TTJets_HT-1200to2500") CrossSection = 0.194972521;//TTJets_HT1200to2500
+    // else if(s_data== "TTJets_HT-2500toInf") CrossSection = 0.0023234211;//TTJets_HT2500toInf
 
-    Weight = CrossSection/NumEvents;
+    //    Weight = CrossSection/NumEvents;
 
     h_MET_NoCut->Fill(MET,Weight*1000);
     h_HT_NoCut->Fill(HT,Weight*1000);
@@ -98,11 +98,11 @@ void SkimmingFakeRate::EventLoop(const char *data,const char *inputFileList) {
     if(applyISRWeights && applyD){
       double isrWt = 0.0, D_value=1.0;
       isrWt = getISRWt();
-      if(s_data== "TTJets_Tune") D_value = 1.0710;
-      else if(s_data== "TTJets_HT-600to800") D_value = 0.8394;
-      else if(s_data== "TTJets_HT-800to1200") D_value = 0.8140;
-      else if(s_data== "TTJets_HT-1200to2500") D_value = 0.7888;
-      else if(s_data== "TTJets_HT-2500toInf") D_value = 0.7769;      
+      if(s_data== "TTJets_Tune") D_value = 1.0697;//1.0710;
+      else if(s_data== "TTJets_HT-600to800") D_value = 1.0150;//0.8394;
+      else if(s_data== "TTJets_HT-800to1200") D_value = 0.9917;//0.8140;
+      else if(s_data== "TTJets_HT-1200to2500") D_value = 0.9435;//0.7888;
+      else if(s_data== "TTJets_HT-2500toInf") D_value = 0.95;//0.7769;      
     
       h_MET_NoCut_ISRWtd_D->Fill(MET,isrWt*D_value*Weight*1000);
       h_HT_NoCut_ISRWtd_D->Fill(HT,isrWt*D_value*Weight*1000);
