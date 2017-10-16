@@ -27,12 +27,12 @@ cd -
 echo "RUNNING ANALYSIS"
 pwd
 
-hadd -f T5qqqqHg_$mGl\_$mNLSP\_SkimmedSorted.root `xrdfs root://cmseos.fnal.gov ls -u /store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/skimmed_SortedSignal/ | grep 'T5qqqqHg_'$mGl'_'$mNLSP'_Spring16Fast.SMS-T5qqqqHg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job'`
-xrdcp -f T5qqqqHg_$mGl\_$mNLSP\_SkimmedSorted.root root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/skimmed_SortedSignal/
-rm T5qqqqHg_$mGl\_$mNLSP\_SkimmedSorted.root
+hadd -f TChiNG_$mGl\_$mNLSP\_SkimmedSorted.root `xrdfs root://cmseos.fnal.gov ls -u /store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/skimmed_SortedSignal/ | grep 'TChiNG_'$mGl'_'$mNLSP'_Spring16Fast.SMS-TChiNG_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job'`
+xrdcp -f TChiNG_$mGl\_$mNLSP\_SkimmedSorted.root root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/skimmed_SortedSignal/
+rm TChiNG_$mGl\_$mNLSP\_SkimmedSorted.root
 
 #goodOPFile=0
-root -l -b -q 'numEventsComp.C("root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/skimmed_SortedSignal/T5qqqqHg_'$mGl'_'$mNLSP'_SkimmedSorted.root",'$mGl','$mNLSP')'
+root -l -b -q 'numEventsComp.C("root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/skimmed_SortedSignal/TChiNG_'$mGl'_'$mNLSP'_SkimmedSorted.root",'$mGl','$mNLSP')'
 
 echo "processed. ls"
 ls

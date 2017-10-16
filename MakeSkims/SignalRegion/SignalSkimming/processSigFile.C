@@ -8,7 +8,7 @@
 
 void processSigFile(string inTxtFile,string outRootFileName){
   string exeAna = "skimmingSR";
-  string macro_datasetName = "T5qqqqHg";
+  string macro_datasetName = "TChiNG";//"T5bbbbZg";
   //  string outRootFileName = "T5qqqqHg.root";
   //////////////////////////////////////////
   ifstream infile(inTxtFile);

@@ -1,1 +1,1 @@
-root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyPhotonMET/Run2ProductionV12/Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_100_RA2AnalysisTree.root
+root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyPhotonMET/Run2ProductionV12/Spring16Fast.SMS-TChiWG_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_13_RA2AnalysisTree.root

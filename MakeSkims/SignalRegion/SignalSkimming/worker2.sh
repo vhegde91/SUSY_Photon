@@ -31,7 +31,7 @@ echo "processed. ls"
 ls
 echo "COPYING OUTPUT"
 
-rm T5bbbbZg_MassScan.root T5qqqqHg_MassScan.root T5ttttZg_MassScan.root
+rm T5bbbbZg_MassScan.root T5qqqqHg_MassScan.root T5ttttZg_MassScan.root TChiNG_MassScan.root TChiWG_MassScan.root
 for FILE in *.root
 do
     xrdcp -f ${FILE} root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/skimmed_SortedSignal/

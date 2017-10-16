@@ -1,40 +1,35 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Fri Nov  4 01:48:45 2016 by ROOT version 6.06/01
+// Wed Aug 16 01:47:14 2017 by ROOT version 6.06/01
 // from TTree PreSelection/PreSelection
-// found on file: root://cmseos.fnal.gov//store/user/vhegde/myProduction_V11/Spring16.WGToLNuG_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_96_RA2AnalysisTree.root
+// found on file: root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyPhotonMET/Run2ProductionV12/Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_100_RA2AnalysisTree.root
 //////////////////////////////////////////////////////////
-#ifndef NtupleVariables_h
-#define NtupleVariables_h
+
+#ifndef sig_h
+#define sig_h
 
 #include <TROOT.h>
 #include <TChain.h>
-#include <TLorentzVector.h>
 #include <TFile.h>
-#include <TSelector.h>
 
 // Header file for the classes stored in the TTree if any.
-#include <vector>
-#include <vector>
-#include <vector>
+#include "vector"
+#include "vector"
+#include "vector"
+#include "vector"
+#include "vector"
+
+class sig {
+public :
+   TTree          *fChain;   //!pointer to the analyzed TTree or TChain
+   Int_t           fCurrent; //!current Tree number in a TChain
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
-using namespace std;
-class NtupleVariables : public TSelector {
- public :
-  TTree          *fChain;   //!pointer to the analyzed TTree or TChain
-  Int_t           fCurrent; //!current Tree number in a TChain
-
-  // Fixed size dimensions of array or collections stored in the TTree if any.
-
-  // Declaration of leaf types
-
+   // Declaration of leaf types
    UInt_t          RunNum;
    UInt_t          LumiBlockNum;
    ULong64_t       EvtNum;
-   Bool_t          BadChargedCandidateFilter;
-   Bool_t          BadPFMuonFilter;
    Int_t           BTags;
    Int_t           BTagsclean;
    Int_t           BTagsJECdown;
@@ -50,7 +45,6 @@ class NtupleVariables : public TSelector {
    Double_t        CaloMET;
    Double_t        CaloMETPhi;
    Double_t        CrossSection;
-   Int_t           CSCTightHaloFilter;
    Double_t        DeltaPhi1;
    Double_t        DeltaPhi1clean;
    Double_t        DeltaPhi1JECdown;
@@ -75,8 +69,6 @@ class NtupleVariables : public TSelector {
    Double_t        DeltaPhi4JECup;
    Double_t        DeltaPhi4JERdown;
    Double_t        DeltaPhi4JERup;
-   Int_t           EcalDeadCellTriggerPrimitiveFilter;
-   Int_t           eeBadScFilter;
    vector<TLorentzVector> *Electrons;
    vector<int>     *Electrons_charge;
    vector<bool>    *Electrons_mediumID;
@@ -122,11 +114,12 @@ class NtupleVariables : public TSelector {
    vector<double>  *GenTaus_LeadRecoTrkIso;
    vector<TLorentzVector> *GenTaus_LeadTrk;
    vector<double>  *GenTaus_MT2Activity;
+   vector<int>     *GenTaus_NNeutralHadrons;
    vector<int>     *GenTaus_NProngs;
    vector<TLorentzVector> *GenTaus_Nu;
-   Int_t           globalTightHalo2016Filter;
-   Int_t           HBHEIsoNoiseFilter;
-   Int_t           HBHENoiseFilter;
+   vector<TLorentzVector> *GenTops;
+   Double_t        GenTopWeight;
+   Bool_t          hasGenPromptPhoton;
    Double_t        HT;
    Double_t        HTclean;
    Double_t        HTJECdown;
@@ -141,6 +134,7 @@ class NtupleVariables : public TSelector {
    Int_t           isoPionTracksclean;
    Bool_t          JetID;
    Bool_t          JetIDAK8;
+   Bool_t          JetIDAK8Clean;
    Bool_t          JetIDclean;
    Bool_t          JetIDJECdown;
    Bool_t          JetIDJECup;
@@ -189,6 +183,15 @@ class NtupleVariables : public TSelector {
    vector<int>     *JetsAK8_NumBhadrons;
    vector<int>     *JetsAK8_NumChadrons;
    vector<double>  *JetsAK8_prunedMass;
+   vector<TLorentzVector> *JetsAK8Clean;
+   vector<double>  *JetsAK8Clean_doubleBDiscriminator;
+   vector<bool>    *JetsAK8Clean_ID;
+   vector<double>  *JetsAK8Clean_NsubjettinessTau1;
+   vector<double>  *JetsAK8Clean_NsubjettinessTau2;
+   vector<double>  *JetsAK8Clean_NsubjettinessTau3;
+   vector<int>     *JetsAK8Clean_NumBhadrons;
+   vector<int>     *JetsAK8Clean_NumChadrons;
+   vector<double>  *JetsAK8Clean_prunedMass;
    vector<TLorentzVector> *Jetsclean;
    vector<double>  *Jetsclean_bDiscriminatorCSV;
    vector<double>  *Jetsclean_bDiscriminatorMVA;
@@ -303,6 +306,7 @@ class NtupleVariables : public TSelector {
    vector<double>  *PDFweights;
    Double_t        PFCaloMETRatio;
    vector<TLorentzVector> *Photons;
+   vector<bool>    *Photons_electronFakes;
    vector<bool>    *Photons_fullID;
    vector<double>  *Photons_genMatched;
    vector<double>  *Photons_hadTowOverEM;
@@ -317,7 +321,7 @@ class NtupleVariables : public TSelector {
    vector<double>  *Photons_pfNeutralIso;
    vector<double>  *Photons_pfNeutralIsoRhoCorr;
    vector<double>  *Photons_sigmaIetaIeta;
-   vector<string>  *PmssmId;
+   Double_t        PmssmId;
    Double_t        puSysDown;
    Double_t        puSysUp;
    Double_t        puWeight;
@@ -358,8 +362,6 @@ class NtupleVariables : public TSelector {
    TBranch        *b_RunNum;   //!
    TBranch        *b_LumiBlockNum;   //!
    TBranch        *b_EvtNum;   //!
-   TBranch        *b_BadChargedCandidateFilter;   //!
-   TBranch        *b_BadPFMuonFilter;   //!
    TBranch        *b_BTags;   //!
    TBranch        *b_BTagsclean;   //!
    TBranch        *b_BTagsJECdown;   //!
@@ -375,7 +377,6 @@ class NtupleVariables : public TSelector {
    TBranch        *b_CaloMET;   //!
    TBranch        *b_CaloMETPhi;   //!
    TBranch        *b_CrossSection;   //!
-   TBranch        *b_CSCTightHaloFilter;   //!
    TBranch        *b_DeltaPhi1;   //!
    TBranch        *b_DeltaPhi1clean;   //!
    TBranch        *b_DeltaPhi1JECdown;   //!
@@ -400,8 +401,6 @@ class NtupleVariables : public TSelector {
    TBranch        *b_DeltaPhi4JECup;   //!
    TBranch        *b_DeltaPhi4JERdown;   //!
    TBranch        *b_DeltaPhi4JERup;   //!
-   TBranch        *b_EcalDeadCellTriggerPrimitiveFilter;   //!
-   TBranch        *b_eeBadScFilter;   //!
    TBranch        *b_Electrons;   //!
    TBranch        *b_Electrons_charge;   //!
    TBranch        *b_Electrons_mediumID;   //!
@@ -447,11 +446,12 @@ class NtupleVariables : public TSelector {
    TBranch        *b_GenTaus_LeadRecoTrkIso;   //!
    TBranch        *b_GenTaus_LeadTrk;   //!
    TBranch        *b_GenTaus_MT2Activity;   //!
+   TBranch        *b_GenTaus_NNeutralHadrons;   //!
    TBranch        *b_GenTaus_NProngs;   //!
    TBranch        *b_GenTaus_Nu;   //!
-   TBranch        *b_globalTightHalo2016Filter;   //!
-   TBranch        *b_HBHEIsoNoiseFilter;   //!
-   TBranch        *b_HBHENoiseFilter;   //!
+   TBranch        *b_GenTops;   //!
+   TBranch        *b_GenTopWeight;   //!
+   TBranch        *b_hasGenPromptPhoton;   //!
    TBranch        *b_HT;   //!
    TBranch        *b_HTclean;   //!
    TBranch        *b_HTJECdown;   //!
@@ -466,6 +466,7 @@ class NtupleVariables : public TSelector {
    TBranch        *b_isoPionTracksclean;   //!
    TBranch        *b_JetID;   //!
    TBranch        *b_JetIDAK8;   //!
+   TBranch        *b_JetIDAK8Clean;   //!
    TBranch        *b_JetIDclean;   //!
    TBranch        *b_JetIDJECdown;   //!
    TBranch        *b_JetIDJECup;   //!
@@ -514,6 +515,15 @@ class NtupleVariables : public TSelector {
    TBranch        *b_JetsAK8_NumBhadrons;   //!
    TBranch        *b_JetsAK8_NumChadrons;   //!
    TBranch        *b_JetsAK8_prunedMass;   //!
+   TBranch        *b_JetsAK8Clean;   //!
+   TBranch        *b_JetsAK8Clean_doubleBDiscriminator;   //!
+   TBranch        *b_JetsAK8Clean_ID;   //!
+   TBranch        *b_JetsAK8Clean_NsubjettinessTau1;   //!
+   TBranch        *b_JetsAK8Clean_NsubjettinessTau2;   //!
+   TBranch        *b_JetsAK8Clean_NsubjettinessTau3;   //!
+   TBranch        *b_JetsAK8Clean_NumBhadrons;   //!
+   TBranch        *b_JetsAK8Clean_NumChadrons;   //!
+   TBranch        *b_JetsAK8Clean_prunedMass;   //!
    TBranch        *b_Jetsclean;   //!
    TBranch        *b_Jetsclean_bDiscriminatorCSV;   //!
    TBranch        *b_Jetsclean_bDiscriminatorMVA;   //!
@@ -628,6 +638,7 @@ class NtupleVariables : public TSelector {
    TBranch        *b_PDFweights;   //!
    TBranch        *b_PFCaloMETRatio;   //!
    TBranch        *b_Photons;   //!
+   TBranch        *b_Photons_electronFakes;   //!
    TBranch        *b_Photons_fullID;   //!
    TBranch        *b_Photons_genMatched;   //!
    TBranch        *b_Photons_hadTowOverEM;   //!
@@ -678,33 +689,71 @@ class NtupleVariables : public TSelector {
    TBranch        *b_TrueNumInteractions;   //!
    TBranch        *b_Weight;   //!
    TBranch        *b_ZCandidates;   //!
-   
- NtupleVariables(TTree * /*tree*/ =0) : fChain(0) { }
-   ~NtupleVariables() { }
-   void    Init(TTree *tree, string);
-   Bool_t  Notify();
-   Int_t   GetEntry(Long64_t entry, Int_t getall = 0) { return fChain ? fChain->GetTree()->GetEntry(entry, getall) : 0; }
-   double  DeltaPhi(double, double);
-   double  DeltaR(double eta1, double phi1, double eta2, double phi2);
-   
+
+   sig(TTree *tree=0);
+   virtual ~sig();
+   virtual Int_t    Cut(Long64_t entry);
+   virtual Int_t    GetEntry(Long64_t entry);
+   virtual Long64_t LoadTree(Long64_t entry);
+   virtual void     Init(TTree *tree);
+   virtual void     Loop();
+   virtual Bool_t   Notify();
+   virtual void     Show(Long64_t entry = -1);
 };
 
 #endif
-#ifdef NtupleVariables_cxx
-void NtupleVariables::Init(TTree *tree, string nameData)
+
+#ifdef sig_cxx
+sig::sig(TTree *tree) : fChain(0) 
 {
-  // The Init() function is called when the selector needs to initialize
-  // a new tree or chain. Typically here the branch addresses and branch
-  // pointers of the tree will be set.
-  // It is normally not necessary to make changes to the generated
-  // code, but the routine can be extended by the user if needed.
-  // Init() will be called many times when running on PROOF
-  // (once per file to be processed).
-  // Set branch addresses and branch pointers
-  if (!tree) return;
-  fChain = tree;
-  fCurrent = -1;
-  fChain->SetMakeClass(1);
+// if parameter tree is not specified (or zero), connect the file
+// used to generate this class and read the Tree.
+   if (tree == 0) {
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyPhotonMET/Run2ProductionV12/Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_100_RA2AnalysisTree.root");
+      if (!f || !f->IsOpen()) {
+         f = new TFile("root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyPhotonMET/Run2ProductionV12/Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_100_RA2AnalysisTree.root");
+      }
+      TDirectory * dir = (TDirectory*)f->Get("root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyPhotonMET/Run2ProductionV12/Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_100_RA2AnalysisTree.root:/TreeMaker2");
+      dir->GetObject("PreSelection",tree);
+
+   }
+   Init(tree);
+}
+
+sig::~sig()
+{
+   if (!fChain) return;
+   delete fChain->GetCurrentFile();
+}
+
+Int_t sig::GetEntry(Long64_t entry)
+{
+// Read contents of entry.
+   if (!fChain) return 0;
+   return fChain->GetEntry(entry);
+}
+Long64_t sig::LoadTree(Long64_t entry)
+{
+// Set the environment to read one entry
+   if (!fChain) return -5;
+   Long64_t centry = fChain->LoadTree(entry);
+   if (centry < 0) return centry;
+   if (fChain->GetTreeNumber() != fCurrent) {
+      fCurrent = fChain->GetTreeNumber();
+      Notify();
+   }
+   return centry;
+}
+
+void sig::Init(TTree *tree)
+{
+   // The Init() function is called when the selector needs to initialize
+   // a new tree or chain. Typically here the branch addresses and branch
+   // pointers of the tree will be set.
+   // It is normally not necessary to make changes to the generated
+   // code, but the routine can be extended by the user if needed.
+   // Init() will be called many times when running on PROOF
+   // (once per file to be processed).
 
    // Set object pointer
    Electrons = 0;
@@ -747,8 +796,10 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    GenTaus_LeadRecoTrkIso = 0;
    GenTaus_LeadTrk = 0;
    GenTaus_MT2Activity = 0;
+   GenTaus_NNeutralHadrons = 0;
    GenTaus_NProngs = 0;
    GenTaus_Nu = 0;
+   GenTops = 0;
    Jets = 0;
    Jets_bDiscriminatorCSV = 0;
    Jets_bDiscriminatorMVA = 0;
@@ -792,6 +843,15 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    JetsAK8_NumBhadrons = 0;
    JetsAK8_NumChadrons = 0;
    JetsAK8_prunedMass = 0;
+   JetsAK8Clean = 0;
+   JetsAK8Clean_doubleBDiscriminator = 0;
+   JetsAK8Clean_ID = 0;
+   JetsAK8Clean_NsubjettinessTau1 = 0;
+   JetsAK8Clean_NsubjettinessTau2 = 0;
+   JetsAK8Clean_NsubjettinessTau3 = 0;
+   JetsAK8Clean_NumBhadrons = 0;
+   JetsAK8Clean_NumChadrons = 0;
+   JetsAK8Clean_prunedMass = 0;
    Jetsclean = 0;
    Jetsclean_bDiscriminatorCSV = 0;
    Jetsclean_bDiscriminatorMVA = 0;
@@ -869,6 +929,7 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    PDFids = 0;
    PDFweights = 0;
    Photons = 0;
+   Photons_electronFakes = 0;
    Photons_fullID = 0;
    Photons_genMatched = 0;
    Photons_hadTowOverEM = 0;
@@ -883,7 +944,6 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    Photons_pfNeutralIso = 0;
    Photons_pfNeutralIsoRhoCorr = 0;
    Photons_sigmaIetaIeta = 0;
-   PmssmId = 0;
    ScaleWeights = 0;
    SoftJets = 0;
    SoftJets_bDiscriminatorCSV = 0;
@@ -921,8 +981,6 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    fChain->SetBranchAddress("RunNum", &RunNum, &b_RunNum);
    fChain->SetBranchAddress("LumiBlockNum", &LumiBlockNum, &b_LumiBlockNum);
    fChain->SetBranchAddress("EvtNum", &EvtNum, &b_EvtNum);
-   fChain->SetBranchAddress("BadChargedCandidateFilter", &BadChargedCandidateFilter, &b_BadChargedCandidateFilter);
-   fChain->SetBranchAddress("BadPFMuonFilter", &BadPFMuonFilter, &b_BadPFMuonFilter);
    fChain->SetBranchAddress("BTags", &BTags, &b_BTags);
    fChain->SetBranchAddress("BTagsclean", &BTagsclean, &b_BTagsclean);
    fChain->SetBranchAddress("BTagsJECdown", &BTagsJECdown, &b_BTagsJECdown);
@@ -938,7 +996,6 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    fChain->SetBranchAddress("CaloMET", &CaloMET, &b_CaloMET);
    fChain->SetBranchAddress("CaloMETPhi", &CaloMETPhi, &b_CaloMETPhi);
    fChain->SetBranchAddress("CrossSection", &CrossSection, &b_CrossSection);
-   fChain->SetBranchAddress("CSCTightHaloFilter", &CSCTightHaloFilter, &b_CSCTightHaloFilter);
    fChain->SetBranchAddress("DeltaPhi1", &DeltaPhi1, &b_DeltaPhi1);
    fChain->SetBranchAddress("DeltaPhi1clean", &DeltaPhi1clean, &b_DeltaPhi1clean);
    fChain->SetBranchAddress("DeltaPhi1JECdown", &DeltaPhi1JECdown, &b_DeltaPhi1JECdown);
@@ -963,8 +1020,6 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    fChain->SetBranchAddress("DeltaPhi4JECup", &DeltaPhi4JECup, &b_DeltaPhi4JECup);
    fChain->SetBranchAddress("DeltaPhi4JERdown", &DeltaPhi4JERdown, &b_DeltaPhi4JERdown);
    fChain->SetBranchAddress("DeltaPhi4JERup", &DeltaPhi4JERup, &b_DeltaPhi4JERup);
-   fChain->SetBranchAddress("EcalDeadCellTriggerPrimitiveFilter", &EcalDeadCellTriggerPrimitiveFilter, &b_EcalDeadCellTriggerPrimitiveFilter);
-   fChain->SetBranchAddress("eeBadScFilter", &eeBadScFilter, &b_eeBadScFilter);
    fChain->SetBranchAddress("Electrons", &Electrons, &b_Electrons);
    fChain->SetBranchAddress("Electrons_charge", &Electrons_charge, &b_Electrons_charge);
    fChain->SetBranchAddress("Electrons_mediumID", &Electrons_mediumID, &b_Electrons_mediumID);
@@ -1010,11 +1065,12 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    fChain->SetBranchAddress("GenTaus_LeadRecoTrkIso", &GenTaus_LeadRecoTrkIso, &b_GenTaus_LeadRecoTrkIso);
    fChain->SetBranchAddress("GenTaus_LeadTrk", &GenTaus_LeadTrk, &b_GenTaus_LeadTrk);
    fChain->SetBranchAddress("GenTaus_MT2Activity", &GenTaus_MT2Activity, &b_GenTaus_MT2Activity);
+   fChain->SetBranchAddress("GenTaus_NNeutralHadrons", &GenTaus_NNeutralHadrons, &b_GenTaus_NNeutralHadrons);
    fChain->SetBranchAddress("GenTaus_NProngs", &GenTaus_NProngs, &b_GenTaus_NProngs);
    fChain->SetBranchAddress("GenTaus_Nu", &GenTaus_Nu, &b_GenTaus_Nu);
-   fChain->SetBranchAddress("globalTightHalo2016Filter", &globalTightHalo2016Filter, &b_globalTightHalo2016Filter);
-   fChain->SetBranchAddress("HBHEIsoNoiseFilter", &HBHEIsoNoiseFilter, &b_HBHEIsoNoiseFilter);
-   fChain->SetBranchAddress("HBHENoiseFilter", &HBHENoiseFilter, &b_HBHENoiseFilter);
+   fChain->SetBranchAddress("GenTops", &GenTops, &b_GenTops);
+   fChain->SetBranchAddress("GenTopWeight", &GenTopWeight, &b_GenTopWeight);
+   fChain->SetBranchAddress("hasGenPromptPhoton", &hasGenPromptPhoton, &b_hasGenPromptPhoton);
    fChain->SetBranchAddress("HT", &HT, &b_HT);
    fChain->SetBranchAddress("HTclean", &HTclean, &b_HTclean);
    fChain->SetBranchAddress("HTJECdown", &HTJECdown, &b_HTJECdown);
@@ -1029,6 +1085,7 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    fChain->SetBranchAddress("isoPionTracksclean", &isoPionTracksclean, &b_isoPionTracksclean);
    fChain->SetBranchAddress("JetID", &JetID, &b_JetID);
    fChain->SetBranchAddress("JetIDAK8", &JetIDAK8, &b_JetIDAK8);
+   fChain->SetBranchAddress("JetIDAK8Clean", &JetIDAK8Clean, &b_JetIDAK8Clean);
    fChain->SetBranchAddress("JetIDclean", &JetIDclean, &b_JetIDclean);
    fChain->SetBranchAddress("JetIDJECdown", &JetIDJECdown, &b_JetIDJECdown);
    fChain->SetBranchAddress("JetIDJECup", &JetIDJECup, &b_JetIDJECup);
@@ -1077,6 +1134,15 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    fChain->SetBranchAddress("JetsAK8_NumBhadrons", &JetsAK8_NumBhadrons, &b_JetsAK8_NumBhadrons);
    fChain->SetBranchAddress("JetsAK8_NumChadrons", &JetsAK8_NumChadrons, &b_JetsAK8_NumChadrons);
    fChain->SetBranchAddress("JetsAK8_prunedMass", &JetsAK8_prunedMass, &b_JetsAK8_prunedMass);
+   fChain->SetBranchAddress("JetsAK8Clean", &JetsAK8Clean, &b_JetsAK8Clean);
+   fChain->SetBranchAddress("JetsAK8Clean_doubleBDiscriminator", &JetsAK8Clean_doubleBDiscriminator, &b_JetsAK8Clean_doubleBDiscriminator);
+   fChain->SetBranchAddress("JetsAK8Clean_ID", &JetsAK8Clean_ID, &b_JetsAK8Clean_ID);
+   fChain->SetBranchAddress("JetsAK8Clean_NsubjettinessTau1", &JetsAK8Clean_NsubjettinessTau1, &b_JetsAK8Clean_NsubjettinessTau1);
+   fChain->SetBranchAddress("JetsAK8Clean_NsubjettinessTau2", &JetsAK8Clean_NsubjettinessTau2, &b_JetsAK8Clean_NsubjettinessTau2);
+   fChain->SetBranchAddress("JetsAK8Clean_NsubjettinessTau3", &JetsAK8Clean_NsubjettinessTau3, &b_JetsAK8Clean_NsubjettinessTau3);
+   fChain->SetBranchAddress("JetsAK8Clean_NumBhadrons", &JetsAK8Clean_NumBhadrons, &b_JetsAK8Clean_NumBhadrons);
+   fChain->SetBranchAddress("JetsAK8Clean_NumChadrons", &JetsAK8Clean_NumChadrons, &b_JetsAK8Clean_NumChadrons);
+   fChain->SetBranchAddress("JetsAK8Clean_prunedMass", &JetsAK8Clean_prunedMass, &b_JetsAK8Clean_prunedMass);
    fChain->SetBranchAddress("Jetsclean", &Jetsclean, &b_Jetsclean);
    fChain->SetBranchAddress("Jetsclean_bDiscriminatorCSV", &Jetsclean_bDiscriminatorCSV, &b_Jetsclean_bDiscriminatorCSV);
    fChain->SetBranchAddress("Jetsclean_bDiscriminatorMVA", &Jetsclean_bDiscriminatorMVA, &b_Jetsclean_bDiscriminatorMVA);
@@ -1191,6 +1257,7 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    fChain->SetBranchAddress("PDFweights", &PDFweights, &b_PDFweights);
    fChain->SetBranchAddress("PFCaloMETRatio", &PFCaloMETRatio, &b_PFCaloMETRatio);
    fChain->SetBranchAddress("Photons", &Photons, &b_Photons);
+   fChain->SetBranchAddress("Photons_electronFakes", &Photons_electronFakes, &b_Photons_electronFakes);
    fChain->SetBranchAddress("Photons_fullID", &Photons_fullID, &b_Photons_fullID);
    fChain->SetBranchAddress("Photons_genMatched", &Photons_genMatched, &b_Photons_genMatched);
    fChain->SetBranchAddress("Photons_hadTowOverEM", &Photons_hadTowOverEM, &b_Photons_hadTowOverEM);
@@ -1244,7 +1311,7 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    Notify();
 }
 
-Bool_t NtupleVariables::Notify()
+Bool_t sig::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -1255,4 +1322,18 @@ Bool_t NtupleVariables::Notify()
    return kTRUE;
 }
 
-#endif // #ifdef temp_cxx
+void sig::Show(Long64_t entry)
+{
+// Print contents of entry.
+// If entry is not specified, print current entry
+   if (!fChain) return;
+   fChain->Show(entry);
+}
+Int_t sig::Cut(Long64_t entry)
+{
+// This function may be called from Loop.
+// returns  1 if entry is accepted.
+// returns -1 otherwise.
+   return 1;
+}
+#endif // #ifdef sig_cxx

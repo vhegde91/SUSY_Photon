@@ -47,12 +47,22 @@ void SkimmingSR::EventLoop(const char *data,const char *inputFileList,const doub
   string s_data = data;
   //-------------------- for signal only ---------------
   double momMass = mGl, nlspMass = mNLSP, nevents=0, xsec1=1.0, evtLeftAfterSkim=0;
-  TFile *f1 = new TFile("T5qqqqHg_MassScan.root");
-  TH1D *h1_xsechist = (TH1D*)f1->FindObjectAny("mGlXsec");
+  //------------------------ for strong production models ------------------------
+  //  TFile *f1 = new TFile("T5bbbbZg_MassScan.root");
+  // TH1D *h1_xsechist = (TH1D*)f1->FindObjectAny("mGlXsec");
+  // TH2D *h2_mass = (TH2D*)f1->FindObjectAny("MGlMNLSP");
+  // if(!h1_xsechist){ cout<<"AHHHHH: could not find xsec hist"<<endl; return;}
+  // if(!h2_mass){ cout<<"AHHHHH: could not find no. of events hist"<<endl; return;}
+  // xsec1 = h1_xsechist->GetBinContent(h1_xsechist->FindBin(momMass));
+  //------------------------ for EW production models ------------------------
+  TFile *f1 = new TFile("TChiNG_MassScan.root");
+  //  TH1D *h1_xsechist = (TH1D*)f1->FindObjectAny("mEWeakino_N2C1Xsec");//N2C1 for TChiWG
+  TH1D *h1_xsechist = (TH1D*)f1->FindObjectAny("mEWeakino_SumN2C1_C1C1Xsec");//N2C1 for TChiNG
   TH2D *h2_mass = (TH2D*)f1->FindObjectAny("MGlMNLSP");
   if(!h1_xsechist){ cout<<"AHHHHH: could not find xsec hist"<<endl; return;}
   if(!h2_mass){ cout<<"AHHHHH: could not find no. of events hist"<<endl; return;}
-  xsec1 = h1_xsechist->GetBinContent(h1_xsechist->FindBin(momMass));
+  xsec1 = h1_xsechist->GetBinContent(h1_xsechist->FindBin(nlspMass));
+
   //------ get number of events ---------------
   int nxbins = h2_mass->GetNbinsX();
   int nybins = h2_mass->GetNbinsY();

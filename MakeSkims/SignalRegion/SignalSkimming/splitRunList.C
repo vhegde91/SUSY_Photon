@@ -11,10 +11,12 @@ void splitRunList(string infile,int nfPerJob){
   string exeCondor  = "worker2.sh";
   string exeAna     = "skimmingSR";
   //  string datasetAna = "Signal";
-  string filesToTransfer = "processSigFile.C,T5bbbbZg_MassScan.root,T5qqqqHg_MassScan.root,T5ttttZg_MassScan.root";
+  string filesToTransfer = "processSigFile.C,T5bbbbZg_MassScan.root,T5qqqqHg_MassScan.root,T5ttttZg_MassScan.root,TChiNG_MassScan.root,TChiWG_MassScan.root";
   //---------------------------------------------------
-  cout<<"executable at worker node : "<<exeCondor<<endl;
-    //      <<"Analysis executable : "<<exeAna<<endl
+  nfPerJob = 1;
+  cout<<"executable at worker node : "<<exeCondor<<endl
+      <<"Analysis executable : "<<exeAna<<endl
+      <<"Number of files per job is set to 1"<<endl;
     //      <<"dataset name for analysis : "<<datasetAna<<endl;
   //----------------- split the input files into smaller ones ------------------
   ifstream file(infile);

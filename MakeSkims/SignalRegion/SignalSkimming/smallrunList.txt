@@ -1,1 +1,1 @@
-root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/skimmed_UnsortedSignal/SR_Spring16Fast.SMS-T5qqqqHg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job32.root
+root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyPhotonMET/Run2ProductionV12/Spring16Fast.SMS-TChiWG_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_37_RA2AnalysisTree.root

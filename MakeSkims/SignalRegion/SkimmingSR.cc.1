@@ -59,10 +59,10 @@ void SkimmingSR::EventLoop(const char *data,const char *inputFileList) {
   	else{ nevents = h2_mass->GetBinContent(nx,ny); break;}
       }
     }
-    cout<<"No. of entries for mGluino = "<<momMass<<" mNLSP = "<<nlspMass<<" : "<<nevents<<endl;
   }
   //  NumEvents = nevents;
   //  CrossSection = 0.00810078;//for Gluino mass = 1600 GeV
+  cout<<"No. of entries for mGluino = "<<momMass<<" mNLSP = "<<nlspMass<<" : "<<nevents<<endl;
   //-------------------- for signal only ends ------------------
 
   for (Long64_t jentry=0; jentry<nentries;jentry++) {

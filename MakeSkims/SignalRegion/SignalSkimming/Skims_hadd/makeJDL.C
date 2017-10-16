@@ -12,8 +12,8 @@ using namespace std;
 void makeJDL(){
   //------------ needed for condor files --------------
   string exeCondor  = "worker_hadd.sh";
-  string filesToTransfer = "numEventsComp.C,T5bbbbZg_MassScan.root,T5qqqqHg_MassScan.root,T5ttttZg_MassScan.root";
-  string dataset="T5qqqqHg";
+  string filesToTransfer = "numEventsComp.C,T5bbbbZg_MassScan.root,T5qqqqHg_MassScan.root,T5ttttZg_MassScan.root,TChiNG_MassScan.root,TChiWG_MassScan.root";
+  string dataset="TChiNG";
 
   int jobid=0,nfPerJob=1;
   char name[200];
@@ -29,21 +29,21 @@ void makeJDL(){
   //   jobid++;
   //   outf.close();
   // }
-  TFile *f1 = new TFile("T5qqqqHg_MassScan.root");
+  TFile *f1 = new TFile("TChiNG_MassScan.root");
   TH2D *h2_mass = (TH2D*)f1->FindObjectAny("MGlMNLSP");
   int nxbins = h2_mass->GetNbinsX();
   int nybins = h2_mass->GetNbinsY();
   double entries=-100;
   for(int nx=1;nx<=nxbins;nx++){
     //    if(h2_mass->GetXaxis()->GetBinCenter(nx)>1001) continue;
-    if(h2_mass->GetXaxis()->GetBinCenter(nx)<1001) continue;
+    //    if(h2_mass->GetXaxis()->GetBinCenter(nx)>1001) continue;
     //    if(h2_mass->GetXaxis()->GetBinCenter(nx)>1501) break;
     for(int ny=1;ny<=nybins;ny++){
       double mgl=h2_mass->GetXaxis()->GetBinCenter(nx);
       double mnlsp=h2_mass->GetYaxis()->GetBinCenter(ny);
       int mGl1=mgl,mNLSP1=mnlsp;
       if(h2_mass->GetBinContent(nx,ny) < 0.1) continue;
-      if(mnlsp==127 && mGl1==1050) continue;
+      //      if(mnlsp==127 && mGl1==1050) continue;
       sprintf(name,"%s_job_%i_%i.jdl",dataset.c_str(),mGl1,mNLSP1);
       //sprintf(fileListName,"FileList_%s_job%i.txt",dataset.c_str(),mGl1,mNLSP1);
       sprintf(logFile,"%s_job_%i_%i",dataset.c_str(),mGl1,mNLSP1);

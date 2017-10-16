@@ -1,28 +1,26 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Fri Nov  4 01:48:45 2016 by ROOT version 6.06/01
+// Wed Aug 16 01:47:14 2017 by ROOT version 6.06/01
 // from TTree PreSelection/PreSelection
-// found on file: root://cmseos.fnal.gov//store/user/vhegde/myProduction_V11/Spring16.WGToLNuG_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_96_RA2AnalysisTree.root
+// found on file: root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyPhotonMET/Run2ProductionV12/Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_100_RA2AnalysisTree.root
 //////////////////////////////////////////////////////////
-#ifndef NtupleVariables_h
-#define NtupleVariables_h
+
+#ifndef sig_h
+#define sig_h
 
 #include <TROOT.h>
 #include <TChain.h>
-#include <TLorentzVector.h>
 #include <TFile.h>
-#include <TSelector.h>
 
 // Header file for the classes stored in the TTree if any.
-#include <vector>
-#include <vector>
-#include <vector>
+#include "vector"
+#include "vector"
+#include "vector"
+#include "vector"
+#include "vector"
 
-// Fixed size dimensions of array or collections stored in the TTree if any.
-
-using namespace std;
-class NtupleVariables : public TSelector {
- public :
+class sig {
+public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
 
@@ -32,12 +30,6 @@ class NtupleVariables : public TSelector {
    UInt_t          RunNum;
    UInt_t          LumiBlockNum;
    ULong64_t       EvtNum;
-   Bool_t          BadChargedCandidateFilter;
-   Bool_t          BadGlobalMuon;
-   Double_t        BadGlobalMuonLeadPt;
-   Bool_t          BadPFMuonFilter;
-   Bool_t          BadTrkGlobalMuon;
-   Double_t        BadTrkGlobalMuonLeadPt;
    Int_t           BTags;
    Int_t           BTagsclean;
    Int_t           BTagsJECdown;
@@ -53,7 +45,6 @@ class NtupleVariables : public TSelector {
    Double_t        CaloMET;
    Double_t        CaloMETPhi;
    Double_t        CrossSection;
-   Int_t           CSCTightHaloFilter;
    Double_t        DeltaPhi1;
    Double_t        DeltaPhi1clean;
    Double_t        DeltaPhi1JECdown;
@@ -78,10 +69,6 @@ class NtupleVariables : public TSelector {
    Double_t        DeltaPhi4JECup;
    Double_t        DeltaPhi4JERdown;
    Double_t        DeltaPhi4JERup;
-   Bool_t          DupGlobalMuon;
-   Double_t        DupGlobalMuonLeadPt;
-   Int_t           EcalDeadCellTriggerPrimitiveFilter;
-   Int_t           eeBadScFilter;
    vector<TLorentzVector> *Electrons;
    vector<int>     *Electrons_charge;
    vector<bool>    *Electrons_mediumID;
@@ -132,10 +119,7 @@ class NtupleVariables : public TSelector {
    vector<TLorentzVector> *GenTaus_Nu;
    vector<TLorentzVector> *GenTops;
    Double_t        GenTopWeight;
-   Int_t           globalTightHalo2016Filter;
    Bool_t          hasGenPromptPhoton;
-   Int_t           HBHEIsoNoiseFilter;
-   Int_t           HBHENoiseFilter;
    Double_t        HT;
    Double_t        HTclean;
    Double_t        HTJECdown;
@@ -378,12 +362,6 @@ class NtupleVariables : public TSelector {
    TBranch        *b_RunNum;   //!
    TBranch        *b_LumiBlockNum;   //!
    TBranch        *b_EvtNum;   //!
-   TBranch        *b_BadChargedCandidateFilter;   //!
-   TBranch        *b_BadGlobalMuon;   //!
-   TBranch        *b_BadGlobalMuonLeadPt;   //!
-   TBranch        *b_BadPFMuonFilter;   //!
-   TBranch        *b_BadTrkGlobalMuon;   //!
-   TBranch        *b_BadTrkGlobalMuonLeadPt;   //!
    TBranch        *b_BTags;   //!
    TBranch        *b_BTagsclean;   //!
    TBranch        *b_BTagsJECdown;   //!
@@ -399,7 +377,6 @@ class NtupleVariables : public TSelector {
    TBranch        *b_CaloMET;   //!
    TBranch        *b_CaloMETPhi;   //!
    TBranch        *b_CrossSection;   //!
-   TBranch        *b_CSCTightHaloFilter;   //!
    TBranch        *b_DeltaPhi1;   //!
    TBranch        *b_DeltaPhi1clean;   //!
    TBranch        *b_DeltaPhi1JECdown;   //!
@@ -424,10 +401,6 @@ class NtupleVariables : public TSelector {
    TBranch        *b_DeltaPhi4JECup;   //!
    TBranch        *b_DeltaPhi4JERdown;   //!
    TBranch        *b_DeltaPhi4JERup;   //!
-   TBranch        *b_DupGlobalMuon;   //!
-   TBranch        *b_DupGlobalMuonLeadPt;   //!
-   TBranch        *b_EcalDeadCellTriggerPrimitiveFilter;   //!
-   TBranch        *b_eeBadScFilter;   //!
    TBranch        *b_Electrons;   //!
    TBranch        *b_Electrons_charge;   //!
    TBranch        *b_Electrons_mediumID;   //!
@@ -478,10 +451,7 @@ class NtupleVariables : public TSelector {
    TBranch        *b_GenTaus_Nu;   //!
    TBranch        *b_GenTops;   //!
    TBranch        *b_GenTopWeight;   //!
-   TBranch        *b_globalTightHalo2016Filter;   //!
    TBranch        *b_hasGenPromptPhoton;   //!
-   TBranch        *b_HBHEIsoNoiseFilter;   //!
-   TBranch        *b_HBHENoiseFilter;   //!
    TBranch        *b_HT;   //!
    TBranch        *b_HTclean;   //!
    TBranch        *b_HTJECdown;   //!
@@ -719,33 +689,71 @@ class NtupleVariables : public TSelector {
    TBranch        *b_TrueNumInteractions;   //!
    TBranch        *b_Weight;   //!
    TBranch        *b_ZCandidates;   //!
-   
- NtupleVariables(TTree * /*tree*/ =0) : fChain(0) { }
-   ~NtupleVariables() { }
-   void    Init(TTree *tree, string);
-   Bool_t  Notify();
-   Int_t   GetEntry(Long64_t entry, Int_t getall = 0) { return fChain ? fChain->GetTree()->GetEntry(entry, getall) : 0; }
-   double  DeltaPhi(double, double);
-   double  DeltaR(double eta1, double phi1, double eta2, double phi2);
-   
+
+   sig(TTree *tree=0);
+   virtual ~sig();
+   virtual Int_t    Cut(Long64_t entry);
+   virtual Int_t    GetEntry(Long64_t entry);
+   virtual Long64_t LoadTree(Long64_t entry);
+   virtual void     Init(TTree *tree);
+   virtual void     Loop();
+   virtual Bool_t   Notify();
+   virtual void     Show(Long64_t entry = -1);
 };
 
 #endif
-#ifdef NtupleVariables_cxx
-void NtupleVariables::Init(TTree *tree, string nameData)
+
+#ifdef sig_cxx
+sig::sig(TTree *tree) : fChain(0) 
 {
-  // The Init() function is called when the selector needs to initialize
-  // a new tree or chain. Typically here the branch addresses and branch
-  // pointers of the tree will be set.
-  // It is normally not necessary to make changes to the generated
-  // code, but the routine can be extended by the user if needed.
-  // Init() will be called many times when running on PROOF
-  // (once per file to be processed).
-  // Set branch addresses and branch pointers
-  if (!tree) return;
-  fChain = tree;
-  fCurrent = -1;
-  fChain->SetMakeClass(1);
+// if parameter tree is not specified (or zero), connect the file
+// used to generate this class and read the Tree.
+   if (tree == 0) {
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyPhotonMET/Run2ProductionV12/Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_100_RA2AnalysisTree.root");
+      if (!f || !f->IsOpen()) {
+         f = new TFile("root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyPhotonMET/Run2ProductionV12/Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_100_RA2AnalysisTree.root");
+      }
+      TDirectory * dir = (TDirectory*)f->Get("root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyPhotonMET/Run2ProductionV12/Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_100_RA2AnalysisTree.root:/TreeMaker2");
+      dir->GetObject("PreSelection",tree);
+
+   }
+   Init(tree);
+}
+
+sig::~sig()
+{
+   if (!fChain) return;
+   delete fChain->GetCurrentFile();
+}
+
+Int_t sig::GetEntry(Long64_t entry)
+{
+// Read contents of entry.
+   if (!fChain) return 0;
+   return fChain->GetEntry(entry);
+}
+Long64_t sig::LoadTree(Long64_t entry)
+{
+// Set the environment to read one entry
+   if (!fChain) return -5;
+   Long64_t centry = fChain->LoadTree(entry);
+   if (centry < 0) return centry;
+   if (fChain->GetTreeNumber() != fCurrent) {
+      fCurrent = fChain->GetTreeNumber();
+      Notify();
+   }
+   return centry;
+}
+
+void sig::Init(TTree *tree)
+{
+   // The Init() function is called when the selector needs to initialize
+   // a new tree or chain. Typically here the branch addresses and branch
+   // pointers of the tree will be set.
+   // It is normally not necessary to make changes to the generated
+   // code, but the routine can be extended by the user if needed.
+   // Init() will be called many times when running on PROOF
+   // (once per file to be processed).
 
    // Set object pointer
    Electrons = 0;
@@ -973,12 +981,6 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    fChain->SetBranchAddress("RunNum", &RunNum, &b_RunNum);
    fChain->SetBranchAddress("LumiBlockNum", &LumiBlockNum, &b_LumiBlockNum);
    fChain->SetBranchAddress("EvtNum", &EvtNum, &b_EvtNum);
-   fChain->SetBranchAddress("BadChargedCandidateFilter", &BadChargedCandidateFilter, &b_BadChargedCandidateFilter);
-   fChain->SetBranchAddress("BadGlobalMuon", &BadGlobalMuon, &b_BadGlobalMuon);
-   fChain->SetBranchAddress("BadGlobalMuonLeadPt", &BadGlobalMuonLeadPt, &b_BadGlobalMuonLeadPt);
-   fChain->SetBranchAddress("BadPFMuonFilter", &BadPFMuonFilter, &b_BadPFMuonFilter);
-   fChain->SetBranchAddress("BadTrkGlobalMuon", &BadTrkGlobalMuon, &b_BadTrkGlobalMuon);
-   fChain->SetBranchAddress("BadTrkGlobalMuonLeadPt", &BadTrkGlobalMuonLeadPt, &b_BadTrkGlobalMuonLeadPt);
    fChain->SetBranchAddress("BTags", &BTags, &b_BTags);
    fChain->SetBranchAddress("BTagsclean", &BTagsclean, &b_BTagsclean);
    fChain->SetBranchAddress("BTagsJECdown", &BTagsJECdown, &b_BTagsJECdown);
@@ -994,7 +996,6 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    fChain->SetBranchAddress("CaloMET", &CaloMET, &b_CaloMET);
    fChain->SetBranchAddress("CaloMETPhi", &CaloMETPhi, &b_CaloMETPhi);
    fChain->SetBranchAddress("CrossSection", &CrossSection, &b_CrossSection);
-   fChain->SetBranchAddress("CSCTightHaloFilter", &CSCTightHaloFilter, &b_CSCTightHaloFilter);
    fChain->SetBranchAddress("DeltaPhi1", &DeltaPhi1, &b_DeltaPhi1);
    fChain->SetBranchAddress("DeltaPhi1clean", &DeltaPhi1clean, &b_DeltaPhi1clean);
    fChain->SetBranchAddress("DeltaPhi1JECdown", &DeltaPhi1JECdown, &b_DeltaPhi1JECdown);
@@ -1019,10 +1020,6 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    fChain->SetBranchAddress("DeltaPhi4JECup", &DeltaPhi4JECup, &b_DeltaPhi4JECup);
    fChain->SetBranchAddress("DeltaPhi4JERdown", &DeltaPhi4JERdown, &b_DeltaPhi4JERdown);
    fChain->SetBranchAddress("DeltaPhi4JERup", &DeltaPhi4JERup, &b_DeltaPhi4JERup);
-   fChain->SetBranchAddress("DupGlobalMuon", &DupGlobalMuon, &b_DupGlobalMuon);
-   fChain->SetBranchAddress("DupGlobalMuonLeadPt", &DupGlobalMuonLeadPt, &b_DupGlobalMuonLeadPt);
-   fChain->SetBranchAddress("EcalDeadCellTriggerPrimitiveFilter", &EcalDeadCellTriggerPrimitiveFilter, &b_EcalDeadCellTriggerPrimitiveFilter);
-   fChain->SetBranchAddress("eeBadScFilter", &eeBadScFilter, &b_eeBadScFilter);
    fChain->SetBranchAddress("Electrons", &Electrons, &b_Electrons);
    fChain->SetBranchAddress("Electrons_charge", &Electrons_charge, &b_Electrons_charge);
    fChain->SetBranchAddress("Electrons_mediumID", &Electrons_mediumID, &b_Electrons_mediumID);
@@ -1073,10 +1070,7 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    fChain->SetBranchAddress("GenTaus_Nu", &GenTaus_Nu, &b_GenTaus_Nu);
    fChain->SetBranchAddress("GenTops", &GenTops, &b_GenTops);
    fChain->SetBranchAddress("GenTopWeight", &GenTopWeight, &b_GenTopWeight);
-   fChain->SetBranchAddress("globalTightHalo2016Filter", &globalTightHalo2016Filter, &b_globalTightHalo2016Filter);
    fChain->SetBranchAddress("hasGenPromptPhoton", &hasGenPromptPhoton, &b_hasGenPromptPhoton);
-   fChain->SetBranchAddress("HBHEIsoNoiseFilter", &HBHEIsoNoiseFilter, &b_HBHEIsoNoiseFilter);
-   fChain->SetBranchAddress("HBHENoiseFilter", &HBHENoiseFilter, &b_HBHENoiseFilter);
    fChain->SetBranchAddress("HT", &HT, &b_HT);
    fChain->SetBranchAddress("HTclean", &HTclean, &b_HTclean);
    fChain->SetBranchAddress("HTJECdown", &HTJECdown, &b_HTJECdown);
@@ -1317,7 +1311,7 @@ void NtupleVariables::Init(TTree *tree, string nameData)
    Notify();
 }
 
-Bool_t NtupleVariables::Notify()
+Bool_t sig::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -1328,4 +1322,18 @@ Bool_t NtupleVariables::Notify()
    return kTRUE;
 }
 
-#endif // #ifdef temp_cxx
+void sig::Show(Long64_t entry)
+{
+// Print contents of entry.
+// If entry is not specified, print current entry
+   if (!fChain) return;
+   fChain->Show(entry);
+}
+Int_t sig::Cut(Long64_t entry)
+{
+// This function may be called from Loop.
+// returns  1 if entry is accepted.
+// returns -1 otherwise.
+   return 1;
+}
+#endif // #ifdef sig_cxx

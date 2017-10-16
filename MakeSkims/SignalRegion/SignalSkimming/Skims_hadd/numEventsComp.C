@@ -7,9 +7,9 @@
 #include "TH1.h"
 void numEventsComp(){
   //  TFile *f1= TFile::Open(inFile);
-  TString fName1,fName="root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/skimmed_SortedSignal/T5qqqqHg_";
+  TString fName1,fName="root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/skimmed_SortedSignal/TChiNG_";
   TFile *f1;
-  TFile *f2= TFile::Open("T5qqqqHg_MassScan.root");
+  TFile *f2= TFile::Open("TChiNG_MassScan.root");
   TH1D *h1;
   TH2D *h2_mass = (TH2D*)f2->FindObjectAny("MGlMNLSP");
 
@@ -33,17 +33,17 @@ void numEventsComp(){
       totEvents2+=entries2;
       if(abs(entries2-entries1) > 0.1){
       	cout<<"mismatch in num events for (mGl,mNLSP)."<<h2_mass->GetXaxis()->GetBinCenter(i)<<","<<h2_mass->GetYaxis()->GetBinCenter(j)<<endl
-      	    <<"# of produced evenets:"<<entries2<<endl
-      	    <<"# of processed events:"<<entries1<<endl;
+      	    <<"# of produced evenets:"<<setprecision(9)<<entries2<<endl
+      	    <<"# of processed events:"<<setprecision(9)<<entries1<<endl;
       }
     }
   }
-  cout<<"Total events:"<<totEvents1<<" Dataset has "<<totEvents2<<" events"<<endl;
+  cout<<"Total events:"<<setprecision(9)<<totEvents1<<" Dataset has "<<setprecision(9)<<totEvents2<<" events"<<endl;
 }
 void numEventsComp(TString inFile,double mp,double md){
 //bool numEventsComp(TString inFile,double mp,double md){
   TFile *f1= TFile::Open(inFile);
-  TFile *f2= TFile::Open("T5qqqqHg_MassScan.root");
+  TFile *f2= TFile::Open("TChiNG_MassScan.root");
   TH1D *h1=(TH1D*)f1->FindObjectAny("selectBaselineYields_");
   TH2D *h2_mass = (TH2D*)f2->FindObjectAny("MGlMNLSP");
   double entries1=h1->GetBinContent(1),entries2=0;
@@ -53,10 +53,10 @@ void numEventsComp(TString inFile,double mp,double md){
   cout<<"org events:"<<entries2<<" processed events:"<<entries1<<endl;
   if(abs(entries2-entries1) < 0.1){
     cout<<"yyyy"<<endl;
-    sprintf(cmd1,"rm /eos/uscms/store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/skimmed_SortedSignal/T5qqqqHg_%.0f_%.0f_*pythia8_job*.root",mp,md);
+    sprintf(cmd1,"rm /eos/uscms/store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/skimmed_SortedSignal/TChiNG_%.0f_%.0f_*pythia8_job*.root",mp,md);
     cout<<cmd1<<endl;
     // sprintf(cmd1,"goodOPFile=1");
-    //system(cmd1);
+    system(cmd1);
     // sprintf(cmd1,"echo OP $goodOPFile");
     // system(cmd1);
     // return true;
