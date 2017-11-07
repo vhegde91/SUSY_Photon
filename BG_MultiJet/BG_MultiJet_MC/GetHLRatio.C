@@ -39,7 +39,7 @@ void GetHLRatio(TString inFname){
   vector<string> name1,name2,name1_2d,name2_2d;
   vector<int> rebin;
   name1.push_back("ST_C");          name2.push_back("ST_A");      rebin.push_back(10);
-  //  name1.push_back("myHT_C");          name2.push_back("myHT_A");      rebin.push_back(25);
+  name1.push_back("myHT_C");          name2.push_back("myHT_A");      rebin.push_back(25);
   name1.push_back("STvarBin_C");          name2.push_back("STvarBin_A");      rebin.push_back(1);
   name1.push_back("MET_CD");         name2.push_back("MET_AB");     rebin.push_back(5);
   //  name1.push_back("GenMET_C");         name2.push_back("GenMET_A");     rebin.push_back(2);

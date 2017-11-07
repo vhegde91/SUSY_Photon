@@ -27,6 +27,7 @@ class MultiJet : public NtupleVariables{
   bool check_eMatchedtoGamma();
   void print(Long64_t);
   int findObjMatchedtoG(TLorentzVector);
+  double getGendRLepPho();
   //Variables defined
   int bestPhotonIndxAmongPhotons=-100, idFailPhoIndx = -100;
   float HT_PtCut=30;
@@ -43,8 +44,11 @@ class MultiJet : public NtupleVariables{
   vector<double> STBinLowEdge ={0,300,360,420,500,600,700,850,1000,1200,1500,2000,2500,3000};
   vector<double> METBinLowEdge={0,20,40,60,80,100,120,160,200,270,350,450,600,750,900,1200};
   vector<double> METBinLowEdge2={0,20,40,60,80,100,120,160,200,270,350,450,500};
+  vector<double> METBinLowEdgeV4_njLow={0,100,200,270,350,450,750,900};
+  vector<double> METBinLowEdgeV4={0,100,200,270,350,450,750};
   vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,180,200,220,250,280,320,380,450,550,650,750};
   //vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,200,250,300,350,400,500,600};
+  vector<double> METLowSimple={0,100,200,15000};
   vector<double> nJBinLow={0,1,2,3,4,5,6,7,20};
   vector<double> STBinLow2={0,400,500,600,700,800,950,1200,1500,1800,2400,3000,4000,15000};
   vector<double> dPhiBinLow={0,0.3,0.6,2,2.3,2.6,2.9,3.15};
@@ -69,6 +73,7 @@ class MultiJet : public NtupleVariables{
   TH1D *h_STvBin_AB,*h_STvBin_CD,*h_STvBin_[4];
   TH1D *h_METvBin_AB,*h_METvBin_CD,*h_METvBin_[4];
   TH1D *h_SBins_v1_AB,*h_SBins_v1_CD,*h_SBins_v1_[4];
+  TH1D *h_SBins_v4_AB,*h_SBins_v4_CD,*h_SBins_v4_[4];
 
   TH1D *h_jet1Pt_AB,*h_jet1Pt_CD,*h_jet1Pt_[4];
   TH1D *h_jet2Pt_AB,*h_jet2Pt_CD,*h_jet2Pt_[4];
@@ -90,6 +95,8 @@ class MultiJet : public NtupleVariables{
   TH1D *h_QIsoRhoCorrEE_AB,*h_QIsoRhoCorrEE_CD,*h_QIsoRhoCorrEE_[4];
   TH1D *h_sieieEE_AB,*h_sieieEE_CD,*h_sieieEE_[4];
   TH1D *h_NuEMFracPhoJet_AB,*h_NuEMFracPhoJet_CD,*h_NuEMFracPhoJet_[4];
+  TH1D *h_mTPho_AB,*h_mTPho_CD,*h_mTPho_[4];
+  TH1D *h_PhoHoverE_AB,*h_PhoHoverE_CD,*h_PhoHoverE_[4];
 
   TH2D *h2_PtPhotonvsMET_AB,*h2_PtPhotonvsMET_CD,*h2_PtPhotonvsMET_[4];
   TH2D *h2_dPhi1dPhi2_AB,*h2_dPhi1dPhi2_CD,*h2_dPhi1dPhi2_[4];
@@ -98,6 +105,8 @@ class MultiJet : public NtupleVariables{
   TH2D *h2_PhoPtPhoJetPt_AB,*h2_PhoPtPhoJetPt_CD,*h2_PhoPtPhoJetPt_[4];
   TH2D *h2_QIsoSieieEB_AB,*h2_QIsoSieieEB_CD,*h2_QIsoSieieEB_[4];
   TH2D *h2_QIsoSieieEE_AB,*h2_QIsoSieieEE_CD,*h2_QIsoSieieEE_[4];
+  TH2D *h2_METnHadJ_0b_AB,*h2_METnHadJ_0b_CD;
+  TH2D *h2_METnHadJ_min1b_AB,*h2_METnHadJ_min1b_CD;
 
   TH1D *h_nBestPho;
   TH1D *h_BestPho2Pt;
@@ -164,6 +173,8 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h2_PhoPtPhoJetPt_AB=new TH2D("PhoPtPhoJetPt_AB","x:Photon Pt vs matching Jet Pt_AB",200,0,2000,200,0,2000);
   h2_QIsoSieieEB_AB=new TH2D("QIsoSieieEB_AB","x:Q Isolatoin Rho Corrected vs #sigma_{i#etai#eta} for Barrel photon_AB",200,0,100,50,0,0.05);
   h2_QIsoSieieEE_AB=new TH2D("QIsoSieieEE_AB","x:Q Isolatoin Rho Corrected vs #sigma_{i#etai#eta} for Endcap photon_AB",200,0,100,50,0,0.05);
+  h2_METnHadJ_0b_AB=new TH2D("METnHadJ_0b_AB","x:MET vs nHadJets_0b_AB",METLowSimple.size()-1,&(METLowSimple[0]),nJBinLow.size()-1,&(nJBinLow[0]));
+  h2_METnHadJ_min1b_AB=new TH2D("METnHadJ_min1b_AB","x:MET vs nHadJets_min1b_AB",METLowSimple.size()-1,&(METLowSimple[0]),nJBinLow.size()-1,&(nJBinLow[0]));
 
   h_BestPhotonPt_AB=new TH1D("BestPhotonPt_AB","Pt of the Best Photon_AB",150,0,1500);
   h_BestPhotonPtvBin_AB=new TH1D("BestPhotonPtvarBin_AB","BestPhotonPt with variable bin size_AB",BestPhotonPtBinLowEdge.size()-1,&(BestPhotonPtBinLowEdge[0]));
@@ -171,6 +182,8 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_BestG_Phi_AB=new TH1D("BestG_Phi_AB","Best Photon Phi_AB",80,-4,4);
   h_dPhi_METBestPhoton_AB=new TH1D("dPhi_METBestPhoton_AB","dphi between MET and BestPhoton_AB",40,0,4);
   h_NuEMFracPhoJet_AB=new TH1D("NuEMFracPhoJet_AB","Nuetral EM energy Fracction in jet matched to photon_AB",15,0,1.5);
+  h_mTPho_AB=new TH1D("mTPho_AB","mT(#gamma,MET)_AB",150,0,1500);
+  h_PhoHoverE_AB=new TH1D("PhoHoverE_AB","Photon H/E_AB",60,0,0.06);
 
   h_HT_AB=new TH1D("HT_AB","HT_AB",400,0,4000);
   h_MHT_AB=new TH1D("MHT_AB","MHT_AB",200,0,2000);
@@ -211,6 +224,8 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_QIsoRhoCorrEE_CD=new TH1D("QIsoRhoCorrEE_CD","Endcap Photon Q Isolatoin Rho Corrected_CD",200,0,100);
   h_sieieEE_CD=new TH1D("sieieEE_CD","#sigma_{i#etai#eta} for Endcap photon_CD",50,0,0.05);
   h_NuEMFracPhoJet_CD=new TH1D("NuEMFracPhoJet_CD","Nuetral EM energy Fracction in jet matched to photon_CD",15,0,1.5);
+  h_mTPho_CD=new TH1D("mTPho_CD","mT(#gamma,MET)_CD",150,0,1500);
+  h_PhoHoverE_CD=new TH1D("PhoHoverE_CD","Photon H/E_CD",60,0,0.06);
 
   h2_PtPhotonvsMET_CD=new TH2D("BestPhotonPtvsMET_CD","Best photon Pt vs MET_CD",150,0,1500,200,0,2000);
   h2_dPhi1dPhi2_CD=new TH2D("dPhi1dPhi2_CD","x:dPhi1 vs dPhi2_CD",40,0,4,40,0,4);
@@ -219,6 +234,8 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h2_PhoPtPhoJetPt_CD=new TH2D("PhoPtPhoJetPt_CD","x:Photon Pt vs matching Jet Pt_CD",200,0,2000,200,0,2000);
   h2_QIsoSieieEB_CD=new TH2D("QIsoSieieEB_CD","x:Q Isolatoin Rho Corrected vs #sigma_{i#etai#eta} for Barrel photon_CD",200,0,100,50,0,0.05);
   h2_QIsoSieieEE_CD=new TH2D("QIsoSieieEE_CD","x:Q Isolatoin Rho Corrected vs #sigma_{i#etai#eta} for Endcap photon_CD",200,0,100,50,0,0.05);
+  h2_METnHadJ_0b_CD=new TH2D("METnHadJ_0b_CD","x:MET vs nHadJets_0b_CD",METLowSimple.size()-1,&(METLowSimple[0]),nJBinLow.size()-1,&(nJBinLow[0]));
+  h2_METnHadJ_min1b_CD=new TH2D("METnHadJ_min1b_CD","x:MET vs nHadJets_min1b_CD",METLowSimple.size()-1,&(METLowSimple[0]),nJBinLow.size()-1,&(nJBinLow[0]));
 
   h_HT_CD=new TH1D("HT_CD","HT_CD",400,0,4000);
   h_MHT_CD=new TH1D("MHT_CD","MHT_CD",200,0,2000);
@@ -263,10 +280,14 @@ void MultiJet::BookHistogram(const char *outFileName) {
     h_dPhiPhotonJet1_[i]=new TH1D("dPhiPhotonJet1_"+regName,"dphi(jet1,photon)_"+regName,40,0,4);
 
     h_SBins_v1_[i] = new TH1D("AllSBins_v1_"+regName,"search bins:(NJ=2to4) (NJ:5or6) (NJ>=7)_"+regName,21,0.5,21.5);
+    h_SBins_v4_[i] = new TH1D("AllSBins_v4_"+regName,"search bins:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_"+regName,31,0.5,31.5);
+
     h_QIsoRhoCorrEB_[i]=new TH1D("QIsoRhoCorrEB_"+regName,"Barrel Photon Q Isolatoin Rho Corrected_"+regName,200,0,100);
     h_sieieEB_[i]=new TH1D("sieieEB_"+regName,"#sigma_{i#etai#eta} for Barrel photon_"+regName,50,0,0.05);
     h_QIsoRhoCorrEE_[i]=new TH1D("QIsoRhoCorrEE_"+regName,"Endcap Photon Q Isolatoin Rho Corrected_"+regName,200,0,100);
     h_sieieEE_[i]=new TH1D("sieieEE_"+regName,"#sigma_{i#etai#eta} for Endcap photon_"+regName,50,0,0.05);
+    h_mTPho_[i]=new TH1D("mTPho_"+regName,"mT(#gamma,MET)_"+regName,150,0,1500);
+    h_PhoHoverE_[i]=new TH1D("PhoHoverE_"+regName,"Photon H/E_"+regName,60,0,0.06);
   
     h2_PtPhotonvsMET_[i]=new TH2D("BestPhotonPtvsMET_"+regName,"Best photon Pt vs MET_"+regName,150,0,1500,200,0,2000);
     h2_dPhi1dPhi2_[i]=new TH2D("dPhi1dPhi2_"+regName,"x:dPhi1 vs dPhi2_"+regName,40,0,4,40,0,4);
@@ -325,7 +346,8 @@ void MultiJet::BookHistogram(const char *outFileName) {
   //---------------Search Bins ----------------------------
   h_SBins_v1_AB = new TH1D("AllSBins_v1_AB","search bins:(NJ=2to4) (NJ:5or6) (NJ>=7)_AB",21,0.5,21.5);
   h_SBins_v1_CD = new TH1D("AllSBins_v1_CD","search bins:(NJ=2to4) (NJ:5or6) (NJ>=7)_CD",21,0.5,21.5);
-
+  h_SBins_v4_AB = new TH1D("AllSBins_v4_AB","search bins:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_AB",31,0.5,31.5);
+  h_SBins_v4_CD = new TH1D("AllSBins_v4_CD","search bins:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
 }
 
 
