@@ -22,10 +22,10 @@ char name[100];
 char name2[100];
 TString name3;
 TLatex textOnTop,intLumiE;
-const int nfiles=11,nBG=8;    //Specify no. of files
+const int nfiles=10,nBG=8;    //Specify no. of files
 TFile *f[nfiles];
 //int col[11]={kPink+1,kTeal+9,kOrange,kYellow,kBlue,kCyan,kGreen,kMagenta+2,kRed,kMagenta,kBlue+2};  //Specify Colors
-int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kMagenta+2,kCyan,kBlue,kRed,kBlue+2,kMagenta};  //Specify Colors b's
+int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kMagenta+2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
 //char name[100],name2[100];
 TCanvas *c_cA=new TCanvas("MET_incl","MET for NJ>=2",1500,850);
 TCanvas *c_cB=new TCanvas("MET_SBins","MET for all search bins",1500,850);
@@ -49,16 +49,15 @@ void searchBinsStack(){
   f[3] = new TFile("WJetsToLNu.root");
   f[4] = new TFile("ZJetsToNuNu.root");
   f[5] = new TFile("ZGJetsToNuNuG.root");
-  f[6] = new TFile("GJets.root");
-  f[7] = new TFile("QCD.root");
+  f[6] = new TFile("QCD.root");
+  f[7] = new TFile("GJets.root");
   //FastSim_T5qqqqHg_1600_1000.root  FastSim_T5qqqqHg_1600_150.root  FastSim_T5ttttZg_1600_1000.root  FastSim_T5ttttZg_1600_150.roo
-  // f[8] = new TFile("T5qqqqHg_1600_150_FastSim.root");
-  // f[9] = new TFile("T5qqqqHg_1600_1000_FastSim.root");
-  //f[9] = new TFile("HG_NLSP150.root");
-  f[8] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
-  f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
-  //  f[10] = new TFile("T5qqqqHg_2000_127.root");
-  f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
+  f[8] = new TFile("T5qqqqHg_1600_150_FastSim.root");
+  //  f[9] = new TFile("T5qqqqHg_1600_1000_FastSim.root");
+  f[9] = new TFile("T5qqqqHg_1600_1550_FastSim.root");
+  //  f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
+  // f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
+  // f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
 
 
   gStyle->SetTextSize(2);
@@ -85,6 +84,7 @@ void searchBinsStack(){
     }
     
     TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("AllSBins_v3");//MET_R1
+    //TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("mTPhoMET");
     decorate(h_MET,i,f[i]->GetName());
     
     if(i<=(nBG-1))  hs_MET->Add(h_MET);
@@ -117,8 +117,8 @@ void searchBinsStack(){
     if(i<=(nBG-1))  hs_MET_SB->Add(h_MET_R[i]);
     if(i==nBG-1) {
       c_cB->cd(); 
-      hs_MET_SB->Draw("BAR HIST");
-      hs_MET_SB->Draw("HIST");
+      hs_MET_SB->Draw("BAR HISTE");
+      hs_MET_SB->Draw("HISTE");
       decorate(hs_MET_SB,i,f[i]->GetName()); 
     }
     if(i>=nBG){ 
@@ -141,16 +141,16 @@ void searchBinsStack(){
   sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.73,0.91,name2);
 
-  TPaveText *text1 = new TPaveText(0.55,0.035,7.45,0.07,"NB");
-  text1->AddText("0b, NJ:2to4");   text1->Draw();
-  TPaveText *text2 = new TPaveText(7.55,0.035,14.45,0.07,"NB"); 
-  text2->AddText("0b, NJ:>=5");  text2->Draw();
-  TPaveText *text3 = new TPaveText(14.55,0.035,21.45,0.07,"NB"); 
-  text3->AddText("1b, NJ:2to4");  text3->Draw();
-  TPaveText *text4 = new TPaveText(21.55,0.035,28.45,0.07,"NB"); 
-  text4->AddText("1b, NJ:>=5");  text4->Draw();
-  TPaveText *text5 = new TPaveText(28.55,0.035,34.45,0.07,"NB"); 
-  text5->AddText(">=2b, NJ:>=2");  text5->Draw();
+  // TPaveText *text1 = new TPaveText(0.55,0.035,7.45,0.07,"NB");
+  // text1->AddText("0b, NJ:2to4");   text1->Draw();
+  // TPaveText *text2 = new TPaveText(7.55,0.035,14.45,0.07,"NB"); 
+  // text2->AddText("0b, NJ:>=5");  text2->Draw();
+  // TPaveText *text3 = new TPaveText(14.55,0.035,21.45,0.07,"NB"); 
+  // text3->AddText("1b, NJ:2to4");  text3->Draw();
+  // TPaveText *text4 = new TPaveText(21.55,0.035,28.45,0.07,"NB"); 
+  // text4->AddText("1b, NJ:>=5");  text4->Draw();
+  // TPaveText *text5 = new TPaveText(28.55,0.035,34.45,0.07,"NB"); 
+  // text5->AddText(">=2b, NJ:>=2");  text5->Draw();
   c_cA->SaveAs("met_inclusive.png");
   //----------------------all search bins---------------------------- 
   c_cB->cd(); gPad->SetLogy();legend1->Draw();legend2->Draw();

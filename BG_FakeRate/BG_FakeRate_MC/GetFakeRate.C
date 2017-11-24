@@ -62,19 +62,19 @@ void GetFakeRate(TString iFname){
   //  name1.push_back("RemJetPtNearPhoton");name2.push_back("RemJetPtNearEle");rebin.push_back(2);
   // name1.push_back("dR_GptJptRatio");name2.push_back("dR_EleptJptRatio");rebin.push_back(5);
   // name1.push_back("JptGptRatio");name2.push_back("JptEleptRatio");rebin.push_back(1);
-  name1.push_back("minDR_Pho_Jet");name2.push_back("minDR_Ele_Jet");rebin.push_back(2);
+  //  name1.push_back("minDR_Pho_Jet");name2.push_back("minDR_Ele_Jet");rebin.push_back(2);
   //name1.push_back("minDR_Pho_HadJet");name2.push_back("minDR_Ele_HadJet");rebin.push_back(4);
   // name1.push_back("dPhi_METjet1_Pho");name2.push_back("dPhi_METjet1_Ele");rebin.push_back(4);
   name1.push_back("Qmulti_Pho");name2.push_back("Qmulti_Ele");rebin.push_back(2);
-  name1.push_back("nEleTrks_Pho");name2.push_back("nEleTrks_Ele");rebin.push_back(1);
-  name1.push_back("nEMuPiTrks_Pho");name2.push_back("nEMuPiTrks_Ele");rebin.push_back(1);
+  // name1.push_back("nEleTrks_Pho");name2.push_back("nEleTrks_Ele");rebin.push_back(1);
+  // name1.push_back("nEMuPiTrks_Pho");name2.push_back("nEMuPiTrks_Ele");rebin.push_back(1);
   //  name1.push_back("");name2.push_back("");rebin.push_back(1);
-  name1.push_back("nEleTracks_Pho");name2.push_back("nEleTracks_Ele");rebin.push_back(1);
-  name1.push_back("nMuTracks_Pho");name2.push_back("nMuTracks_Ele");rebin.push_back(1);
-  name1.push_back("nPiTracks_Pho");name2.push_back("nPiTracks_Ele");rebin.push_back(1);
-  name1.push_back("nTracks_Pho");name2.push_back("nTracks_Ele");rebin.push_back(5);
-  name1.push_back("nTracks0p3_Pho");name2.push_back("nTracks0p3_Ele");rebin.push_back(1);
-  name1.push_back("bin1_Pho");          name2.push_back("bin1_Ele");      rebin.push_back(1);
+  // name1.push_back("nEleTracks_Pho");name2.push_back("nEleTracks_Ele");rebin.push_back(1);
+  // name1.push_back("nMuTracks_Pho");name2.push_back("nMuTracks_Ele");rebin.push_back(1);
+  // name1.push_back("nPiTracks_Pho");name2.push_back("nPiTracks_Ele");rebin.push_back(1);
+  // name1.push_back("nTracks_Pho");name2.push_back("nTracks_Ele");rebin.push_back(5);
+  // name1.push_back("nTracks0p3_Pho");name2.push_back("nTracks0p3_Ele");rebin.push_back(1);
+  name1.push_back("AllSBins_v4_Pho");          name2.push_back("AllSBins_v4_Ele");      rebin.push_back(1);
   // name1.push_back("QEMFrac_Pho");name2.push_back("QEMFrac_Ele");rebin.push_back(2);
   // name1.push_back("QHadFrac_Pho");name2.push_back("QHadFrac_Ele");rebin.push_back(5);
   // name1.push_back("NeuEMFrac_Pho");name2.push_back("NeuEMFrac_Ele");rebin.push_back(2);
@@ -164,6 +164,7 @@ void GetFakeRate(TString iFname){
   gStyle->SetTextSize(2);
   fout->cd();
   if(h2_histGcopy) h2_histGcopy->Write();
+  
   for(int i=1;i<=h2_histGcopy->GetXaxis()->GetNbins();i++){
     for(int j=1;j<=h2_histGcopy->GetYaxis()->GetNbins();j++){
       cout<<h2_histGcopy->GetXaxis()->GetBinLowEdge(i)<<"\t"<<h2_histGcopy->GetYaxis()->GetBinLowEdge(j)<<"\t"<<h2_histGcopy->GetBinContent(i,j)<<"\t"<<h2_histGcopy->GetBinError(i,j)<<"\t"<<h2_histGcopy->GetBinError(i,j)*100/h2_histGcopy->GetBinContent(i,j)<<endl;

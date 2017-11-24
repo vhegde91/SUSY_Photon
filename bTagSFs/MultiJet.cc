@@ -76,9 +76,19 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 
     if( (Electrons->size() !=0) || (Muons->size() !=0) ) continue;   
     if(isoElectronTracks!=0 || isoMuonTracks!=0 || isoPionTracks!=0) continue;
+
     vector<double> prob = btagcorr.GetCorrections(Jets,Jets_hadronFlavor,Jets_HTMask);
-    if(BTags>=3) wt = wt*prob[3];
-    else wt = wt*prob[BTags];
+    double corr = btagcorr.GetSimpleCorrection(Jets,Jets_hadronFlavor,Jets_HTMask,Jets_bDiscriminatorCSV);
+    wt = wt*corr;
+    // if(BTags){
+    //   for(int i=0;i<prob.size();i++){
+    // 	cout<<i<<" prob: "<<prob[i]<<endl;
+    //   }
+    //   cout<<"nbTags:"<<BTags<<endl<<endl;
+    // }
+    // if(BTags>=3) wt = wt*prob[3];
+    // else wt = wt*prob[BTags];
+
     TLorentzVector bestPhoton=getBestPhoton();
     bool eMatchedG=check_eMatchedtoGamma();//this may not be necessary since e veto is there.
     if(bestPhoton.Pt()<0.1) continue;
@@ -252,6 +262,11 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_MET_AB->Fill(MET,wt);
 	  h_nHadJets_AB->Fill(nHadJets,wt);
 	  h_BTags_AB->Fill(BTags,wt);
+	  // h_BTags_AB->Fill(0.,wt*prob[0]);
+	  // h_BTags_AB->Fill(1.,wt*prob[1]);
+	  // h_BTags_AB->Fill(2.,wt*prob[2]);
+	  // h_BTags_AB->Fill(3.,wt*prob[3]);
+
 	  h_GenMET_AB->Fill(GenMET,wt);
 	  h_METPhi_AB->Fill(METPhi,wt);
 	  h_myHT_AB->Fill(myHT,wt);

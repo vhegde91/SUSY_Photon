@@ -53,12 +53,13 @@ class LostMuon : public NtupleVariables{
   vector<double> METBinLowEdge2bJ={0,20,40,60,80,100,125,160,200,270,350,500};
   //  vector<double> METBinLowEdgeMidNJ={0,20,40,60,80,100,120,160,200,270,350};
   //  vector<double> METBinLowEdgeHighNJ={0,20,40,60,80,100,120,160,200,250};
-
+  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900};
+  vector<double> METBinLowEdgeV4={0,100,125,160,200,270,350,450,750};
   vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,180,200,220,250,280,320,380,450,550,650,750};
   //vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,200,250,300,350,400,500,600};
-  vector<double> nHadJLow0b={0,2,3,4,5,15};//0b
-  vector<double> nHadJLow1b={0,2,5,15};//=1b
-  vector<double> nHadJLowm2b={0,2,15};//>=2b
+  vector<double> nHadJLow0b={0,2,3,4,5,7,15};//0b
+  vector<double> nHadJLow1b={0,2,5,7,15};//>=1b
+
   vector<double> METBinLowEdge5={0,100,150,5000};//0b,1b,>=2b
   /* vector<double> nHadJLow2={0,2,4,15}; */
   /* vector<double> METBinLowEdge5={0,100,150,5000}; */ //ob
@@ -247,8 +248,8 @@ class LostMuon : public NtupleVariables{
   TH1D *h_MET_Mu1_R[3];
   TH1D *h_MET_R_v2_Mu0[5];
   TH1D *h_MET_R_v2_Mu1[5];
-  TH1D *h_SBins_Mu0;
-  TH1D *h_SBins_Mu1;
+  TH1D *h_SBins_Mu0,*h_SBins_v4_Mu0;
+  TH1D *h_SBins_Mu1,*h_SBins_v4_Mu1;
   TFile *oFile;
  
 };
@@ -291,7 +292,7 @@ void LostMuon::BookHistogram(const char *outFileName) {
   h_BestPhotonPt_Mu0=new TH1D("BestPhotonPt_Mu0","Pt of the best photon for 0 Muon events",150,0,1500);
   h_BestPhotonEta_Mu0=new TH1D("BestPhotonEta_Mu0","Eta of the best photon for 0 Muon events",120,-6,6);
   h_BestPhotonPhi_Mu0=new TH1D("BestPhotonPhi_Mu0","Phi of the best photon for 0 Muon events",80,-4,4);
-  h_mTpho_Mu0=new TH1D("mTPho_Mu0","mT b/w photon and MET for 0 Muon events",500,0,500);
+  h_mTpho_Mu0=new TH1D("mTPho_Mu0","mT b/w photon and MET for 0 Muon events",150,0,1500);
 
   h_isoMuonTracks_Mu0=new TH1D("nIsoMuonTracks_Mu0","no. of isolated muon tracks for 0 Mu events",20,0,20);
   h_MuMultInJets_Mu0=new TH1D("MuMultInJets_Mu0","Muon multiplicity in jets for 0 Mu events",20,0,20);
@@ -342,7 +343,7 @@ void LostMuon::BookHistogram(const char *outFileName) {
 
   h2_METNJ_0b_Mu0=new TH2D("METNJ_Mu0_R0","x:MET vs NJets for 0 b for 0 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLow0b.size()-1,&(nHadJLow0b[0]));
   h2_METNJ_1b_Mu0=new TH2D("METNJ_Mu0_R1","x:MET vs NJets for 1 b for 0 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLow1b.size()-1,&(nHadJLow1b[0]));
-  h2_METNJ_m2b_Mu0=new TH2D("METNJ_Mu0_R2","x:MET vs NJets for >=2 b for 0 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
+  //  h2_METNJ_m2b_Mu0=new TH2D("METNJ_Mu0_R2","x:MET vs NJets for >=2 b for 0 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
 
   h2_R_PhoPtJetPtVsDR_Mu0=new TH2D("R_PhoPtJetPtVsDR_Mu0","y:Ratio of closest jet Pt to Photon Pt vs x: dR with closest jet for 0 Mu events",100,0,10,100,0,10);
   //****************************************************
@@ -355,7 +356,7 @@ void LostMuon::BookHistogram(const char *outFileName) {
   h_BestPhotonPt_Mu1=new TH1D("BestPhotonPt_Mu1","Pt of the best photon for 1 Muon events",150,0,1500);
   h_BestPhotonEta_Mu1=new TH1D("BestPhotonEta_Mu1","Eta of the best photon for 1 Muon events",120,-6,6);
   h_BestPhotonPhi_Mu1=new TH1D("BestPhotonPhi_Mu1","Phi of the best photon for 1 Muon events",80,-4,4);
-  h_mTpho_Mu1=new TH1D("mTPho_Mu1","mT b/w photon and MET for 1 Muon events",500,0,500);
+  h_mTpho_Mu1=new TH1D("mTPho_Mu1","mT b/w photon and MET for 1 Muon events",150,0,1500);
 
   h_GenMuons_MT2Activity_Mu1=new TH1D("GenMuons_MT2Activity_Mu1","Gen MT2 activity for 1 Mu events",100,0,0.5);
   h_MuPt=new TH1D("MuPt","Muon Pt",150,0,1500);
@@ -427,7 +428,7 @@ void LostMuon::BookHistogram(const char *outFileName) {
 
   h2_METNJ_0b_Mu1=new TH2D("METNJ_Mu1_R0","x:MET vs NJets for 0 b for 1 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLow0b.size()-1,&(nHadJLow0b[0]));
   h2_METNJ_1b_Mu1=new TH2D("METNJ_Mu1_R1","x:MET vs NJets for 1 b for 1 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLow1b.size()-1,&(nHadJLow1b[0]));
-  h2_METNJ_m2b_Mu1=new TH2D("METNJ_Mu1_R2","x:MET vs NJets for >=2 b for 1 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
+  //  h2_METNJ_m2b_Mu1=new TH2D("METNJ_Mu1_R2","x:MET vs NJets for >=2 b for 1 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
 
   h2_R_MuPtJetPtVsDR=new TH2D("R_MuPtJetPtVsDR","y:Ratio of closest jet Pt to Mu Pt vs x: dR with closest jet",100,0,10,100,0,10);
 
@@ -456,6 +457,9 @@ void LostMuon::BookHistogram(const char *outFileName) {
 
   h_SBins_Mu0 = new TH1D("AllSBins_Mu0","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2) for 0 Mu events",34,0.5,34.5);
   h_SBins_Mu1 = new TH1D("AllSBins_Mu1","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2) for 1 Mu events",34,0.5,34.5);
+
+  h_SBins_v4_Mu0 = new TH1D("AllSBins_v4_Mu0","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for 0 Mu events",43,0.5,43.5);
+  h_SBins_v4_Mu1 = new TH1D("AllSBins_v4_Mu1","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for 1 Mu events",43,0.5,43.5);
 }
 
 

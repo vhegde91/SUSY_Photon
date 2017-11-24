@@ -51,27 +51,32 @@ void GetLostMuProb(TString iFname){
   name1.push_back("MET_Mu0");         name2.push_back("MET_Mu1");      rebin.push_back(5);
   name1.push_back("METvarBin_Mu0");   name2.push_back("METvarBin_Mu1");rebin.push_back(1);
   name1.push_back("nHadJets_Mu0");    name2.push_back("nHadJets_Mu1");  rebin.push_back(1);
-  name1.push_back("BestPhotonPt_Mu0");name2.push_back("BestPhotonPt_Mu1");  rebin.push_back(10);
+  name1.push_back("BestPhotonPt_Mu0");name2.push_back("BestPhotonPt_Mu1");  rebin.push_back(5);
   name1.push_back("nBTags_Mu0");       name2.push_back("nBTags_Mu1");     rebin.push_back(1);
-  name1.push_back("GenMuons_MT2Activity_Mu0");  name2.push_back("GenMuons_MT2Activity_Mu1"); rebin.push_back(5);
-  name1.push_back("GenMuPt_Mu0");  name2.push_back("GenMuPt_Mu1"); rebin.push_back(1);
-  name1.push_back("nIsoMuonTracks_Mu0");  name2.push_back("nIsoMuonTracks_Mu1");rebin.push_back(1);
-  name1.push_back("MuMultInJets_Mu0");  name2.push_back("MuMultInJets_Mu1");rebin.push_back(1);
+  // name1.push_back("GenMuons_MT2Activity_Mu0");  name2.push_back("GenMuons_MT2Activity_Mu1"); rebin.push_back(5);
+  // name1.push_back("GenMuPt_Mu0");  name2.push_back("GenMuPt_Mu1"); rebin.push_back(1);
+  // name1.push_back("nIsoMuonTracks_Mu0");  name2.push_back("nIsoMuonTracks_Mu1");rebin.push_back(1);
+  // name1.push_back("MuMultInJets_Mu0");  name2.push_back("MuMultInJets_Mu1");rebin.push_back(1);
   name1.push_back("dPhi_METjet1_Pho_Mu0");   name2.push_back("dPhi_METjet1_Pho_Mu1");  rebin.push_back(5);
   name1.push_back("dPhi_METjet2_Pho_Mu0");   name2.push_back("dPhi_METjet2_Pho_Mu1");  rebin.push_back(5);
   name1.push_back("dPhi_METBestPhoton_Mu0");   name2.push_back("dPhi_METBestPhoton_Mu1");  rebin.push_back(5);
-  name1.push_back("jet1Pt_Mu0");   name2.push_back("jet1Pt_Mu1");  rebin.push_back(10);
-  name1.push_back("jet2Pt_Mu0");   name2.push_back("jet2Pt_Mu1");  rebin.push_back(10);
+  // name1.push_back("jet1Pt_Mu0");   name2.push_back("jet1Pt_Mu1");  rebin.push_back(10);
+  // name1.push_back("jet2Pt_Mu0");   name2.push_back("jet2Pt_Mu1");  rebin.push_back(10);
+  // name1.push_back("gendRLepPho_Mu0");   name2.push_back("gendRLepPho_Mu1");  rebin.push_back(5);
+  // name1.push_back("madMinPhotonDeltaR_Mu0");   name2.push_back("madMinPhotonDeltaR_Mu1");  rebin.push_back(5);
 
   name1.push_back("MET_Mu0_R1");         name2.push_back("MET_Mu1_R1");rebin.push_back(1);
   name1.push_back("MET_Mu0_R2");         name2.push_back("MET_Mu1_R2");rebin.push_back(1);
   name1.push_back("MET_Mu0_R3");         name2.push_back("MET_Mu1_R3");rebin.push_back(1);
-
+  name1.push_back("AllSBins_v4_Mu0");    name2.push_back("AllSBins_v4_Mu1");  rebin.push_back(1);
   //  name1_2d.push_back("METnHadJ_Mu0");   name2_2d.push_back("METnHadJ_Mu1");newName.push_back("1");
+  name1_2d.push_back("METNJ_Mu0_R0");   name2_2d.push_back("METNJ_Mu1_R0");newName.push_back("0");
+  name1_2d.push_back("METNJ_Mu0_R1");   name2_2d.push_back("METNJ_Mu1_R1");newName.push_back("1");
+  //  name1_2d.push_back("METNJ_Mu0_R2");   name2_2d.push_back("METNJ_Mu1_R2");newName.push_back("2");
   //  name1_2d.push_back("STMET_Mu0");   name2_2d.push_back("STMET_Mu1");newName.push_back("A");
   //  name1_2d.push_back("STMET_2to3HadJ_Mu0");   name2_2d.push_back("STMET_2to3HadJ_Mu1");newName.push_back("1");
   for(int i=1;i<=4;i++){
-    name1_2d.push_back("STMET_Mu0_R"+to_string(i));   name2_2d.push_back("STMET_Mu1_R"+to_string(i));newName.push_back(to_string(i));
+    //    name1_2d.push_back("STMET_Mu0_R"+to_string(i));   name2_2d.push_back("STMET_Mu1_R"+to_string(i));newName.push_back(to_string(i));
   }
   // name1_2d.push_back("STMET_min4HadJ_Mu0");   name2_2d.push_back("STMET_min4HadJ_Mu1");newName.push_back("7");
   //  name1_2d.push_back("STHadJ_Mu0");   name2_2d.push_back("STHadJ_Mu1");newName.push_back("2");
@@ -105,7 +110,7 @@ void GetLostMuProb(TString iFname){
 	h_histGcopy->Divide(h_histE);
 	h_histGcopy->SetLineWidth(2);
 
-	if(name1[i]=="nHadJets_Mu0"){fout->cd(); h_histGcopy->Write();}
+	if(name1[i]=="nHadJets_Mu0"){fout->cd();} //h_histGcopy->Write();}
 	/*	for(int k=1;k<=h_histGcopy->GetNbinsX();k++){
 	  if(name1[i]=="ST_Mu0")  cout<<h_histGcopy->GetBinLowEdge(k)<<",";
 	  }*/
@@ -139,6 +144,11 @@ void GetLostMuProb(TString iFname){
 	//h2_hsum->Add(h2_histGcopy,h2_histE);
 	//	h2_histGcopy->Divide(h2_hsum);
 	h2_histGcopy->Draw("colz texte");
+	for(int xi=1;xi<=h2_histGcopy->GetNbinsX();xi++){
+	  for(int yi=1;yi<=h2_histGcopy->GetNbinsY();yi++){
+	    cout<<h2_histGcopy->GetXaxis()->GetBinLowEdge(xi)<<" "<<h2_histGcopy->GetYaxis()->GetBinLowEdge(yi)<<" "<<h2_histGcopy->GetBinContent(xi,yi)<<"\t"<<h2_histGcopy->GetBinError(xi,yi)<<endl;
+	  }
+	}
 	//	h2_histGcopy->SetMaximum(0.02);
 	gPad->Update();
 	if(h2_histGcopy) h2_histGcopy->Write();

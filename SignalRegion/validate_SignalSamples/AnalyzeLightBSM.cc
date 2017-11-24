@@ -60,7 +60,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     print(jentry);    
     wt=Weight*1000.0*lumiInfb;
     h2_mGlmNLSP->Fill(SusyMotherMass,SusyLSPMass);
-    //    cout<<"Mom:"<<SusyMotherMass<<" LSP:"<<SusyLSPMass<<endl;
+    cout<<"Mom:"<<SusyMotherMass<<" LSP:"<<SusyLSPMass<<endl;
     //    continue;
     //===============================================================
     int gl1Idx=-100,gl2Idx=-100,nGl=0,nPhoFmLSP=0,nZFmLSP=0,nZKids=0;

@@ -53,13 +53,14 @@ class LostEle : public NtupleVariables{
   vector<double> METBinLowEdge2bJ={0,20,40,60,80,100,125,150,200,250,350,500};
   //  vector<double> METBinLowEdgeMidNJ={0,20,40,60,80,100,120,160,200,270,350};
   //  vector<double> METBinLowEdgeHighNJ={0,20,40,60,80,100,120,160,200,250};
-
+  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900};                                                       
+  vector<double> METBinLowEdgeV4={0,100,125,160,200,270,350,450,750};
   vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,180,200,220,250,280,320,380,450,550,650,750};
   //vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,200,250,300,350,400,500,600};
-  vector<double> nHadJLow0b={0,2,3,4,5,15};//0b                                                                                               
-  vector<double> nHadJLow1b={0,2,5,15};//=1b                                                                                                  
-  vector<double> nHadJLowm2b={0,2,15};//>=2b                                                                                                  
-  vector<double> METBinLowEdge5={0,100,150,5000};//0b,1b,>=2b                                                                                 
+  vector<double> nHadJLow0b={0,2,3,4,5,7,15};//0b                                                                                               
+  vector<double> nHadJLow1b={0,2,5,7,15};//>=1b                                                                                                  
+
+  vector<double> METBinLowEdge5={0,100,150,5000};//0b,>=1b
  
   vector<double> nHadJLow={0,2,4,6,15};
   //  vector<double> nHadJLow={0,2,3,4,6,15};
@@ -152,7 +153,7 @@ class LostEle : public NtupleVariables{
 
   TH2D *h2_METNJ_0b_Ele0;
   TH2D *h2_METNJ_1b_Ele0;
-  TH2D *h2_METNJ_m2b_Ele0;
+  //  TH2D *h2_METNJ_m2b_Ele0;
   TH2D *h2_R_PhoPtJetPtVsDR_Ele0;
   //-----------------------------------------
   TH1D *h_nVtx_Ele1;
@@ -229,7 +230,7 @@ class LostEle : public NtupleVariables{
 
   TH2D *h2_METNJ_0b_Ele1;
   TH2D *h2_METNJ_1b_Ele1;
-  TH2D *h2_METNJ_m2b_Ele1;
+  //  TH2D *h2_METNJ_m2b_Ele1;
 
   TH2D *h2_R_PhoPtJetPtVsDR_Ele1;
   TH2D *h2_R_ElePtJetPtVsDR;
@@ -239,8 +240,9 @@ class LostEle : public NtupleVariables{
   TH1D *h_MET_Ele1_R[3];
   TH1D *h_MET_R_v2_Ele0[5];
   TH1D *h_MET_R_v2_Ele1[5];
-  TH1D *h_SBins_Ele0;
-  TH1D *h_SBins_Ele1;
+  TH1D *h_SBins_Ele0,*h_SBins_v1_Ele0,*h_SBins_v3_Ele0,*h_SBins_v4_Ele0;
+  TH1D *h_SBins_Ele1,*h_SBins_v1_Ele1,*h_SBins_v3_Ele1,*h_SBins_v4_Ele1;
+  TH1D *h_HTgammaSB;
   TFile *oFile;
  
 };
@@ -329,7 +331,7 @@ void LostEle::BookHistogram(const char *outFileName) {
 
   h2_METNJ_0b_Ele0=new TH2D("METNJ_Ele0_R0","x:MET vs NJets for 0 b for 0 Ele events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLow0b.size()-1,&(nHadJLow0b[0]));
   h2_METNJ_1b_Ele0=new TH2D("METNJ_Ele0_R1","x:MET vs NJets for 1 b for 0 Ele events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLow1b.size()-1,&(nHadJLow1b[0]));
-  h2_METNJ_m2b_Ele0=new TH2D("METNJ_Ele0_R2","x:MET vs NJets for >=2 b for 0 Ele events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
+  //  h2_METNJ_m2b_Ele0=new TH2D("METNJ_Ele0_R2","x:MET vs NJets for >=2 b for 0 Ele events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
 
   h2_R_PhoPtJetPtVsDR_Ele0=new TH2D("R_PhoPtJetPtVsDR_Ele0","y:Ratio of closest jet Pt to Photon Pt vs x: dR with closest jet for 0 Ele events",100,0,10,100,0,10);
   //****************************************************
@@ -413,20 +415,20 @@ void LostEle::BookHistogram(const char *outFileName) {
 
   h2_METNJ_0b_Ele1=new TH2D("METNJ_Ele1_R0","x:MET vs NJets for 0 b for 1 Ele events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLow0b.size()-1,&(nHadJLow0b[0]));
   h2_METNJ_1b_Ele1=new TH2D("METNJ_Ele1_R1","x:MET vs NJets for 1 b for 1 Ele events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLow1b.size()-1,&(nHadJLow1b[0]));
-  h2_METNJ_m2b_Ele1=new TH2D("METNJ_Ele1_R2","x:MET vs NJets for >=2 b for 1 Ele events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
+  //  h2_METNJ_m2b_Ele1=new TH2D("METNJ_Ele1_R2","x:MET vs NJets for >=2 b for 1 Ele events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
 
   h2_R_ElePtJetPtVsDR=new TH2D("R_ElePtJetPtVsDR","y:Ratio of closest jet Pt to Ele Pt vs x: dR with closest jet",100,0,10,100,0,10);
 
   h_temp=new TH1D("temp","temp",200,0,2000);
 
   //---------------- search bins -----------------------
-  h_MET_Ele0_R[0] = new TH1D("MET_Ele0_R1","MET: NJ=2to4, ST=500to1500 for 0 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
-  h_MET_Ele0_R[1] = new TH1D("MET_Ele0_R2","MET: NJ=5or6, ST=500to1500 for 0 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
-  h_MET_Ele0_R[2] = new TH1D("MET_Ele0_R3","MET: NJ>=7,   ST=500to1500 for 0 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_MET_Ele0_R[0] = new TH1D("MET_Ele0_R1","MET: NJ=2to4, for 0 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_MET_Ele0_R[1] = new TH1D("MET_Ele0_R2","MET: NJ=5or6, for 0 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_MET_Ele0_R[2] = new TH1D("MET_Ele0_R3","MET: NJ>=7,   for 0 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   
-  h_MET_Ele1_R[0] = new TH1D("MET_Ele1_R1","MET: NJ=2to4, ST=500to1500 for 1 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
-  h_MET_Ele1_R[1] = new TH1D("MET_Ele1_R2","MET: NJ=5or6, ST=500to1500 for 1 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
-  h_MET_Ele1_R[2] = new TH1D("MET_Ele1_R3","MET: NJ>=7,   ST=500to1500 for 1 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_MET_Ele1_R[0] = new TH1D("MET_Ele1_R1","MET: NJ=2to4, for 1 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_MET_Ele1_R[1] = new TH1D("MET_Ele1_R2","MET: NJ=5or6, for 1 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_MET_Ele1_R[2] = new TH1D("MET_Ele1_R3","MET: NJ>=7,   for 1 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
 
   h_MET_R_v2_Ele0[0] =new TH1D("MET_R1_v2_Ele0","MET for 0b, NJ=2to4 for 0 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_MET_R_v2_Ele0[1] =new TH1D("MET_R2_v2_Ele0","MET for 0b, NJ>=5 for 0 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
@@ -441,7 +443,17 @@ void LostEle::BookHistogram(const char *outFileName) {
   h_MET_R_v2_Ele1[4] =new TH1D("MET_R5_v2_Ele1","MET for b>=2 for 1 Ele events",METBinLowEdge2bJ.size()-1,&(METBinLowEdge2bJ[0]));  
   
   h_SBins_Ele0 = new TH1D("AllSBins_Ele0","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2) for 0 Ele events",34,0.5,34.5);
+  h_SBins_v1_Ele0 = new TH1D("AllSBins_v1_Ele0","search bins:(NJ=2to4) (NJ:5or6) (NJ>=7) for 0 Ele events",21,0.5,21.5);
+  h_SBins_v3_Ele0 = new TH1D("AllSBins_v3_Ele0","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, 1b, >=2b] for 0 Ele events",63,0.5,63.5);
+
   h_SBins_Ele1 = new TH1D("AllSBins_Ele1","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2) for 1 Ele events",34,0.5,34.5);
+  h_SBins_v1_Ele1 = new TH1D("AllSBins_v1_Ele1","search bins:(NJ=2to4) (NJ:5or6) (NJ>=7) for 1 Ele events",21,0.5,21.5);
+  h_SBins_v3_Ele1 = new TH1D("AllSBins_v3_Ele1","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, 1b, >=2b] for 1 Ele events",63,0.5,63.5);
+
+  h_SBins_v4_Ele0 = new TH1D("AllSBins_v4_Ele0","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for 0 Ele events",43,0.5,43.5);
+  h_SBins_v4_Ele1 = new TH1D("AllSBins_v4_Ele1","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for 1 Ele events",43,0.5,43.5);
+
+  h_HTgammaSB = new TH1D("HTgammaSB","Search bins used in HT+gamma analysis",6,0.5,6.5);
 }
 
 

@@ -66,6 +66,12 @@ class AnalyzeLightBSM : public NtupleVariables{
   TH2D *h2_PtPhotonvsMET;
   TH2D *h2_1G_PtPhotonvsMET;
   TH2D *h2_More2G_PtPhotonvsMET;
+  TH2D *h2_METvsnHadJets;
+  TH2D *h2_METvBinvsnHadJets;
+  TH2D *h2_METvsdPhi1;
+  TH2D *h2_METvsdPhi2;
+  TH2D *h2_METvsMindPhi1dPhi2;
+  TH2D *h2_dPhi1dPhi2;
   
   TH1D *h_STvBin;
   TH1D *h_METvBin;
@@ -98,6 +104,7 @@ class AnalyzeLightBSM : public NtupleVariables{
   TH1D *h_dPhi_METjet2;
   TH1D *h_dPhi_METjet3;
   TH1D *h_dPhi_METjet4;
+  TH1D *h_mindPhi1dPhi2;
   TH1D *h_dPhi_MET_jets;
 	
   TH1D *h_minDR_phoJet;
@@ -198,6 +205,12 @@ void AnalyzeLightBSM::BookHistogram(const char *outFileName) {
   h2_1G_PtPhotonvsMET=new TH2D("1G_PtPhotonvsMET","Best photon Pt vs MET for 1Photon events Only",150,0,1500,200,0,2000);
   h2_More2G_PtPhotonvsMET=new TH2D("More2G_PtPhotonvsMET","Best photon Pt vs MET for More than 1 Photons events",150,0,1500,200,0,2000);
   h2_mH_HKids=new TH2D("mH_HKids","mH and Higgs Kids",2000,0,200,10,0,10);  
+  h2_METvsnHadJets=new TH2D("METvsnHadJets","x:MET vs nHadJets",200,0,2000,25,0,25);
+  h2_METvBinvsnHadJets=new TH2D("METvBinvsnHadJets","x:MEt in vbins vs nHadJets",METBinLowEdge2.size()-1,&(METBinLowEdge2[0]),25,0,25);
+  h2_METvsdPhi1=new TH2D("METvsdPhi1","x:MET vs #Delta #Phi1",200,0,2000,40,0,4);
+  h2_METvsdPhi2=new TH2D("METvsdPhi2","x:MET vs #Delta #Phi2",200,0,2000,40,0,4);
+  h2_METvsMindPhi1dPhi2=new TH2D("METvsMindPhi1dPhi2","x:MET vs Min(#Delta#Phi1,#Delta#Phi2)",200,0,2000,40,0,4);
+  h2_dPhi1dPhi2=new TH2D("dPhi1dPhi2","x:#Delta#Phi1 vs #Delta#Phi2",40,0,4,40,0,4);
 
   h_STvBin = new TH1D("STvarBin","STvarBin",STBinLowEdge.size()-1,&(STBinLowEdge[0]));
   h_METvBin=new TH1D("METvarBin","MET with variable bin size",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
@@ -274,6 +287,7 @@ void AnalyzeLightBSM::BookHistogram(const char *outFileName) {
   h_dPhi_METjet2=new TH1D("dPhi_METjet2","dphi between MET Vec and Jet2",40,0,4);
   h_dPhi_METjet3=new TH1D("dPhi_METjet3","dphi between MET Vec and Jet3",40,0,4);
   h_dPhi_METjet4=new TH1D("dPhi_METjet4","dphi between MET Vec and Jet4",40,0,4);
+  h_mindPhi1dPhi2=new TH1D("mindPhi1dPhi2","min(#Delta#Phi1,#Delta#Phi2)",400,0,4);
   h_dPhi_MET_jets=new TH1D("dPhi_MET_jets","dphi between MET Vec and hadronic jets",40,0,4);
 
   h_minDR_phoJet=new TH1D("minDR_phoJet","min dR b/w best photon and jet",200,0,2);

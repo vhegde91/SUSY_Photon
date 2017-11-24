@@ -26,8 +26,6 @@ class FakeRateEst : public NtupleVariables{
   TLorentzVector getBestPhoton();
   bool check_eMatchedtoGamma();
   void print(Long64_t);
-  void findObjMatchedtoG(TLorentzVector);
-  double dR_PtEtaPhi(double,double,double,double,double,double);
   //Variables defined
   int bestPhotonIndxAmongPhotons=-100;
   float HT_PtCut=30;
@@ -45,6 +43,8 @@ class FakeRateEst : public NtupleVariables{
   vector<double> STBinLowEdge ={0,300,360,420,500,600,700,850,1000,1200,1500,2000,2500,3000};
   //  vector<double> METBinLowEdge={0,20,40,60,80,100,120,160,200,270,350,450,600,750,900,1200};
   vector<double> METBinLowEdge={0,20,40,60,80,100,125,160,200,270,350,500,600};
+  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900};                                                       
+  vector<double> METBinLowEdgeV4={0,100,125,160,200,270,350,450,750};
   //  vector<double> METBinLowEdge2={0,20,40,60,80,100,120,160,200,270,350,450,500};//org
   vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,180,200,220,250,280,320,380,450,550,650,750};
   //vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,200,250,300,350,400,500,600};
@@ -118,11 +118,16 @@ class FakeRateEst : public NtupleVariables{
   TH2D *h2_PhoEtaPhi,*h2_EleEtaPhi;
   TH2D *h2_minHadDR_QMult_Pho,*h2_minHadDR_QMult_Ele;
 
+  TH2D *h2_LeadJetPt_QMult_Ele;
   TH2D *h2_nVtx_EleMT2Act;
   TH2D *h2_RecoPhoPt_GenEPt,*h2_RecoElePt_GenEPt;
   TH2D *h2_JptGptRatiovsDR,*h2_JptEleptRatiovsDR;
   TH2D *h2_HadDRJptGptRatio_Vtx,*h2_HadDRJptEptRatio_Vtx;
   TH2D *h2_PhoPtVtx,*h2_ElePtVtx;
+  TH2D *h2_QMult_MinDRbJ_Pho,*h2_QMult_MinDRbJ_Ele;
+  TH2D *h2_QMult_CSV_MatchJet_Pho,*h2_QMult_CSV_MatchJet_Ele;
+  TH2D *h2_QMult_CSV_NearestNoMatchJet_Pho,*h2_QMult_CSV_NearestNoMatchJet_Ele;
+  TH1D *h_MatchNonbJPt_Ele,*h_MatchbJPt_Ele,*h_NonMatchNonbJPt_Ele,*h_NonMatchbJPt_Ele;
 
   TH3D *h3_PhotonPtEtaNJ,*h3_ElePtEtaNJ;
   TH3D *h3_PhoPtEtaVtx,*h3_ElePtEtaVtx;
@@ -168,14 +173,19 @@ class FakeRateEst : public NtupleVariables{
 
   TH1D *h_MET_R_v2_Ele[5];
   TH1D *h_MET_R_v2_Pho[5];
-  TH1D *h_SBins_Ele;
-  TH1D *h_SBins_Pho;
+  TH1D *h_SBins_Ele,*h_SBins_v4_Ele;
+  TH1D *h_SBins_Pho,*h_SBins_v4_Pho;
 
   //ele and pho type events
   TH1D *h_nConsti;
   TH1D *h_NM;
   TH1D *h_NMEta3;
   TH1D *h_NMHF;
+  TH1D *h_MatchJetCSV_Ele,*h_MatchJetCSV_Pho;
+  TH1D *h_MatchJetMVA_Ele,*h_MatchJetMVA_Pho;
+  TH1D *h_CM_bJ_Pho,*h_CM_bJ_Ele;
+  TH1D *h_CM_NotbJ_Pho,*h_CM_NotbJ_Ele;
+
   TH1D *h_CM,*h_CM_Pho,*h_CM_Ele;
   TH1D *h_NHF,*h_NHF_Pho,*h_NHF_Ele;
   TH1D *h_NEMF,*h_NEMF_Pho,*h_NEMF_Ele;
@@ -236,7 +246,7 @@ void FakeRateEst::BookHistogram(const char *outFileName) {
   h_MET_Pho_R[0] = new TH1D("MET_Pho_R1","MET: NJ=2to4 for photon like events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_MET_Pho_R[1] = new TH1D("MET_Pho_R2","MET: NJ=5or6 for photon like events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_MET_Pho_R[2] = new TH1D("MET_Pho_R3","MET: NJ>=7 for photon like events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
-  h_mT_Pho = new TH1D("mT_Pho","mT(MET, photon)",200,0,2000);
+  h_mT_Pho = new TH1D("mT_Pho","mT(MET, photon)",150,0,1500);
   h_MET_Pho_Rall = new TH1D("MET_Pho_Rall","MET: NJets>=2 for photon like events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_HT_Pho=new TH1D("HT_Pho","HT_Pho",400,0,4000);
   h_MHT_Pho=new TH1D("MHT_Pho","MHT_Pho",200,0,2000);
@@ -291,6 +301,9 @@ void FakeRateEst::BookHistogram(const char *outFileName) {
   h2_RecoPhoPt_GenEPt=new TH2D("RecoPhoPt_GenEPt","x:Pt of Gen Electron matching RECO photon vs RECO photon Pt",150,0,1500,150,0,1500);
   h2_HadDRJptGptRatio_Vtx=new TH2D("HadDRJptGptRatio_Vtx","x:HadDR*JetPt/PhotonPt vs NVtx",sizeof(minDR_RatioLow)/sizeof(double)-1,minDR_RatioLow,nVtxLow.size()-1,&(nVtxLow[0]));
   h2_minHadDR_QMult_Pho=new TH2D("minHadDR_QMult_Pho","x:minHad DR vs Qmult in a jet closest to the photon",1000,0,10,50,0,50);
+  h2_QMult_MinDRbJ_Pho=new TH2D("QMult_MinDRbJ_Pho","x:charge multiplicity in matching jet vs dR(pho,nearest b-jet)",50,0,50,60,0,3);
+  h2_QMult_CSV_MatchJet_Pho=new TH2D("QMult_CSV_MatchJet_Pho","x: charge multiplicity in matching jet vs CSV of the matching jet Pho",50,0,50,100,0,1);
+  h2_QMult_CSV_NearestNoMatchJet_Pho=new TH2D("QMult_CSV_NearestNoMatchJet_Pho","x: Q mult in nearest-nonmatched jet(mindR(e,jet)>0.3) vs CSV of the nonmathched jet Pho",50,0,50,100,0,1);
 
   h3_PhotonPtEtaNJ=new TH3D("PhotonPtEtaNJ","x:Photon |Eta|, y:nHadJets, z: photon Pt",5,etaLow,8,nJEtaYLow,7,ptLow2);
   h3_PhoPtEtaVtx=new TH3D("PhoPtEtaVtx","x:Photon |Eta|, y:nVtx, z: Photon Pt",5,etaLow,nVtxLow.size()-1,&(nVtxLow[0]),7,ptLow2);
@@ -308,7 +321,7 @@ void FakeRateEst::BookHistogram(const char *outFileName) {
   h_MET_Ele=new TH1D("MET_Ele","MET_Ele",200,0,2000);
   h_nHadJets_Ele=new TH1D("nHadJets_Ele","no. of jets(only hadronic jets,not counting photon)_Ele",25,0,25);
   h_BTags_Ele=new TH1D("nBTags_Ele","no. of B tags_Ele",10,0,10);
-  h_mT_Ele = new TH1D("mT_Ele","mT(MET, electron)",200,0,2000);
+  h_mT_Ele = new TH1D("mT_Ele","mT(MET, electron)",150,0,1500);
   h_METvBin_Ele=new TH1D("METvarBin_Ele","MET with variable bin size_Ele",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_MET_Ele_R[0] = new TH1D("MET_Ele_R1","MET: NJ=2to4 for electron events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_MET_Ele_R[1] = new TH1D("MET_Ele_R2","MET: NJ=5or6 for electron events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
@@ -338,8 +351,8 @@ void FakeRateEst::BookHistogram(const char *outFileName) {
   h_HadDR_EleptJptRatio=new TH1D("HadDR_EleptJptRatio","dR(HadJet,elctron) * electronPt/jetPt",1000,0,1);
   h_minDRHadJ_Ele_HadJet=new TH1D("minDR_Ele_HadJet","minDR b/w electron and a HadJet",1000,0,10);
   h_dRGenJet2_Ele=new TH1D("dRGenJet2_Ele","mindR b/w gen jet and electron. Do not consider GenJet that's matched to electron",1000,1,10);
-  h_QMult2_Ele=new TH1D("QMult2_Ele","Qmult in jet matched to e",16,0,16);
-  
+
+  h_QMult2_Ele=new TH1D("QMult2_Ele","Qmult in jet matched to e",16,0,16);  
   h2_JetPtNearEleMinDRHadJ=new TH2D("JetPtNearEleMinDRHadJ","x:minDR b/w a HadJet and electron vs JetPt",sizeof(minDRLow)/sizeof(double)-1,minDRLow,7,ptLow2);
   h2_ElePtMinDRHadJ=new TH2D("ElePtMinDRHadJ","x:minDR b/w a HadJet and electron vs ElePt",sizeof(minDRLow)/sizeof(double)-1,minDRLow,7,ptLow2);
   h2_PtEleQHadFracJet=new TH2D("PtEleQHadFracJet","x:Electron Pt vs charged hadron frac of the matching jet",7,ptLow2,sizeof(QHadFracLow)/sizeof(double)-1,QHadFracLow);
@@ -368,7 +381,15 @@ void FakeRateEst::BookHistogram(const char *outFileName) {
   h2_RecoElePt_GenEPt=new TH2D("RecoElePt_GenEPt","x:Pt of Gen Electron matching RECO electron vs RECO electron Pt",150,0,1500,150,0,1500);
   h2_HadDRJptEptRatio_Vtx=new TH2D("HadDRJptEptRatio_Vtx","x:dR*JetPt/ElectronPt vs NVtx",sizeof(minDR_RatioLow)/sizeof(double)-1,minDR_RatioLow,nVtxLow.size()-1,&(nVtxLow[0]));
   h2_minHadDR_QMult_Ele=new TH2D("minHadDR_QMult_Ele","x:minHad DR vs Qmult in a jet closest to the electron",1000,0,10,50,0,50);
+  h2_QMult_MinDRbJ_Ele=new TH2D("QMult_MinDRbJ_Ele","x:charge multiplicity in matching jet vs dR(Ele,nearest b-jet)",50,0,50,60,0,3);
+  h2_QMult_CSV_MatchJet_Ele=new TH2D("QMult_CSV_MatchJet_Ele","x: charge multiplicity in matching jet vs CSV of the matching jet Pho",50,0,50,100,0,1);
+  h2_QMult_CSV_NearestNoMatchJet_Ele=new TH2D("QMult_CSV_NearestNoMatchJet_Ele","x: Q mult in nearest-nonmatched jet(mindR(e,jet)>0.3) vs CSV of the nonmathched jet Pho",50,0,50,100,0,1);
+  h_MatchNonbJPt_Ele=new TH1D("MatchNonbJPt_Ele","Pt of jet mathced to e but not tagged as b",200,0,2000);
+  h_MatchbJPt_Ele=new TH1D("MatchbJPt_Ele","Pt of jet matched to e and b-tagged",200,0,2000);
+  h_NonMatchNonbJPt_Ele=new TH1D("NonMatchNonbJPt_Ele","Pt of jet not mathced to e(dR>0.3) but not tagged as b",200,0,2000);
+  h_NonMatchbJPt_Ele=new TH1D("NonMatchbJPt_Ele","Pt of jet not matched to e(dR>0.3) and b-tagged",200,0,2000);
 
+  h2_LeadJetPt_QMult_Ele=new TH2D("LeadJetPt_QMult_Ele","x:Leading jet Pt vs Q Mult in leading jet Ele",200,0,2000,50,0,50);
   h3_ElePtEtaNJ=new TH3D("ElePtEtaNJ","x:Electron |Eta|, y:nHadJets, z: Electron Pt",5,etaLow,8,nJEtaYLow,7,ptLow2);
   h3_ElePtEtaVtx=new TH3D("ElePtEtaVtx","x:Electron |Eta|, y:nVtx, z: Electron Pt",5,etaLow,nVtxLow.size()-1,&(nVtxLow[0]),7,ptLow2);
   h3_JetPtEleEtaMinHadDR=new TH3D("JetPtEleEtaMinHadDR","x:Electron |Eta|, y:matching JetPt, z:MinHadDR",5,etaLow,7,ptLow2,sizeof(minDRLow)/sizeof(double)-1,minDRLow);
@@ -409,12 +430,22 @@ void FakeRateEst::BookHistogram(const char *outFileName) {
   h_PhoMult=new TH1D("Phomulti","photon multiplicity",50,0,50);
   h_PhoFrac=new TH1D("PhoFrac","Photon Frac",220,0,1.1);
 
+  h_MatchJetCSV_Pho=new TH1D("MatchJetCSV_Pho","bDiscriminatorCSV for the jet matching Pho",100,0,1);
+  h_MatchJetMVA_Pho=new TH1D("MatchJetMVA_Pho","bDiscriminatorMVA for the jet matching Pho",100,0,1);
+  h_CM_bJ_Pho=new TH1D("QMulti_bJ_Pho","charge multiplicity in b-tagged jet Pho",50,0,50);
+  h_CM_NotbJ_Pho=new TH1D("QMulti_NotbJ_Pho","charge multiplicity in non b-tagged jets Ele",50,0,50);
+
   h_CM_Pho=new TH1D("Qmulti_Pho","charged multiplicity in jet matching Pho",50,0,50);
   h_NHF_Pho=new TH1D("NeuHadFrac_Pho","neutral hadron Frac in jet matching Pho",220,0,1.1);
   h_NEMF_Pho=new TH1D("NeuEMFrac_Pho","neutral EM Frac in jet matching Pho",220,0,1.1);
   h_CHF_Pho=new TH1D("QHadFrac_Pho","charged hadron Frac in jet matching Pho",220,0,1.1);
   h_CEMF_Pho=new TH1D("QEMFrac_Pho","charged EM Frac in jet matching Pho",220,0,1.1);
   h_PhoFrac_Pho=new TH1D("PhoFrac_Pho","Photon Frac in jet matching Pho",220,0,1.1);
+
+  h_MatchJetCSV_Ele=new TH1D("MatchJetCSV_Ele","bDiscriminatorCSV for the jet matching Ele",100,0,1);
+  h_MatchJetMVA_Ele=new TH1D("MatchJetMVA_Ele","bDiscriminatorMVA for the jet matching Ele",100,0,1);
+  h_CM_bJ_Ele=new TH1D("QMulti_bJ_Ele","charge multiplicity in b-tagged jet Ele",50,0,50);
+  h_CM_NotbJ_Ele=new TH1D("QMulti_NotbJ_Ele","charge multiplicity in non b-tagged jets Ele",50,0,50);
 
   h_CM_Ele=new TH1D("Qmulti_Ele","charged multiplicity in jet matching Ele",50,0,50);
   h_NHF_Ele=new TH1D("NeuHadFrac_Ele","neutral hadron Frac in jet matching Ele",220,0,1.1);
@@ -438,6 +469,9 @@ void FakeRateEst::BookHistogram(const char *outFileName) {
 
   h_SBins_Ele = new TH1D("AllSBins_Ele","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2) for electron events",34,0.5,34.5);
   h_SBins_Pho = new TH1D("AllSBins_Pho","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2) for photon like events",34,0.5,34.5);
+  h_SBins_v4_Ele = new TH1D("AllSBins_v4_Ele","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for electron events",43,0.5,43.5);
+  h_SBins_v4_Pho = new TH1D("AllSBins_v4_Pho","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for photon like events",43,0.5,43.5);
+
   h_temp=new TH1D("temp","temp",200,0,2000);
 }
 

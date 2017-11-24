@@ -45,28 +45,37 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   //TFile *f_FR=new TFile("FR_Hist_MS_FR_DYJetsToLL_Truth.root");
-  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_v2.root");
+
+  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_ISRWt_v2.root");
+  //TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_ISRWt_LowDphi_v2.root");
   //  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_NoTrgPuWt.root");
   //  TFile *f_FR=new TFile("FR_Hist_MS_FR_DYJetsToLL_v2.root");
+  // TFile* NLOWeightFile = new TFile("kfactors.root");
+  // TH1F* WJets_NLO = (TH1F*) NLOWeightFile->Get("WJets_012j_NLO/nominal");
+  // TH1F* WJets_LO = (TH1F*) NLOWeightFile->Get("WJets_LO/inv_pt");
+
   TH2D *h2_FR;
   if(f_FR) h2_FR=(TH2D*)f_FR->FindObjectAny("FakeRate");
 
-  bool do_prediction=0;
+  bool do_prediction=1;
+  // bool applISRWtsTottbar=1,applWPtWts=0;
   cout<<"Doing prediction from file |"<<f_FR->GetName()<<"|? "<<do_prediction<<endl;
   //---------------------- MC only -------------------------
-  // TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
-  // //choose central, up, or down
-  // TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
-  // // int promptFiles=1;
-  // // if(s_data=="CS_FR") promptFiles=3;
-  // // else if(s_data=="CS_FR_WG") promptFiles=2;
-  // // else if(s_data=="CS_FR_TTG") promptFiles=1;
-  // // cout<<"Doing prediction from file |"<<f_FR->GetName()<<"|? "<<do_prediction<<endl;
-  // // cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
-  // // cout<<"Only events with "<<endl
-  // //     <<"prompt best photon from first "<<promptFiles<<" line(s) in input runlist"<<endl
-  // //     <<"non-prompt best photon from remaining files"<<endl
-  // //     <<"will be read."<<endl;
+  // cout<<"Applying ISR Weights to ttbar? "<<applISRWtsTottbar<<endl;
+  // cout<<"Applying WPt Weights to WJets? "<<applWPtWts<<endl;
+  //TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
+  //choose central, up, or down
+  //TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
+  // int promptFiles=1;
+  // if(s_data=="CS_FR") promptFiles=3;
+  // else if(s_data=="CS_FR_WG") promptFiles=2;
+  // else if(s_data=="CS_FR_TTG") promptFiles=1;
+  // cout<<"Doing prediction from file |"<<f_FR->GetName()<<"|? "<<do_prediction<<endl;
+  // cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
+  // cout<<"Only events with "<<endl
+  //     <<"prompt best photon from first "<<promptFiles<<" line(s) in input runlist"<<endl
+  //     <<"non-prompt best photon from remaining files"<<endl
+  //     <<"will be read."<<endl;
   //---------------------- MC only ends-------------------------
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
 
@@ -83,7 +92,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
     nb = fChain->GetEntry(jentry);   nbytes += nb;
     if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;  
     bool process=true;
-
+    wt = 1.0;
     if( Electrons->size()>1 || Muons->size()!=0 ) continue;
     if(isoMuonTracks!=0 || isoPionTracks!=0) continue;   
     //about electrons
@@ -108,10 +117,9 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
     //++++++++++++++++++++++ data only +++++++++++++++++++++++
     bool passTrig = false;
     for(int i=0;i<TriggerNames->size();i++){
-      string trgName=(*TriggerNames)[i];
-      trgName.pop_back();
-      if( trgName=="HLT_Photon90_CaloIdL_PFHT600_v" && (*TriggerPass)[i]==1 ) passTrig = true;
-      else if( trgName=="HLT_Photon165_HE10_v" && (*TriggerPass)[i]==1 ) passTrig = true;
+      TString trgName=(*TriggerNames)[i];
+      if( trgName.Contains("HLT_Photon90_CaloIdL_PFHT600_v") && (*TriggerPass)[i]==1 ) passTrig = true;
+      else if( trgName.Contains("HLT_Photon165_HE10_v") && (*TriggerPass)[i]==1 ) passTrig = true;
       wt=0.98/0.99;
       // if((*Electrons)[0].Pt() > 190.0){
       // 	if( (trgName=="HLT_Ele27_WPTight_Gsf_v" || trgName=="HLT_Ele27_WPTight_Gsf_" || trgName=="HLT_Photon165_HE10_v" || trgName=="HLT_Photon165_HE10_" ) ){
@@ -139,10 +147,41 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
     if(!passTrig) continue;
     //++++++++++++++++++++++ data only ends +++++++++++++++++++++++
     //---------------------- MC only -------------------------
-    // wt=Weight*lumiInfb*1000.0*0.98*(puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(TrueNumInteractions,puhist->GetBinLowEdge(puhist->GetNbinsX()+1)))));  
+    //wt=Weight*lumiInfb*1000.0*0.98*(puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(TrueNumInteractions,puhist->GetBinLowEdge(puhist->GetNbinsX()+1)))));  
     // //    wt=Weight*1000.0*lumiInfb;  
     // if(s_data=="madHT0to600" && madHT > 600) continue;
+    // if(applISRWtsTottbar && s_data=="TTJets"){
+    //   double isrWt = 0;
+    //   vector<double> D_values={1.0697, 1.0150, 0.9917, 0.9435, 0.95};
+    //   //      vector<double> D_values={1.071, 0.7838, 0.7600, 0.7365, 0.7254};
+    //   vector<double> isrwt_arr={1., 0.920, 0.821, 0.715, 0.662, 0.561, 0.511};
+    //   if(NJetsISR>=6) isrWt = isrwt_arr[6];
+    //   else isrWt = isrwt_arr[NJetsISR];
 
+    //   if(madHT<600) isrWt = isrWt*D_values[0];
+    //   else if(madHT < 800) isrWt = isrWt*D_values[1];
+    //   else if(madHT < 1200) isrWt = isrWt*D_values[2];
+    //   else if(madHT < 2500) isrWt = isrWt*D_values[3];
+    //   else isrWt = isrWt*D_values[4];
+    //   wt = wt*isrWt;
+    // }
+
+    // else if(applWPtWts){
+    //   double Wpt=-999., wptWt=0;
+    //   for( unsigned int p = 0 ; p < GenParticles->size() ; p++ ){
+    // 	if( abs(GenParticles_PdgId->at(p)) == 24 )
+    // 	  Wpt = GenParticles->at(p).Pt();
+    //   }
+    //   if( Wpt>150. ){
+    // 	double LO = WJets_LO->GetBinContent( WJets_LO->FindBin(Wpt) );
+    // 	double NLO = WJets_NLO->GetBinContent( WJets_NLO->FindBin(Wpt) );
+    // 	if(LO==0) wptWt = 0;
+    // 	else wptWt = NLO/(1.21*LO);
+    //   }
+    //   else
+    //     wptWt =  (WJets_NLO->GetBinContent(1)/(1.21*WJets_LO->GetBinContent(1)));
+    //   wt = wt*wptWt;
+    // }
     // bool fakePhoton=0,showEnt=0;
     // if(!bestEMObjIsEle){
     //   double minDR_Pho_GenObj=1000;
@@ -214,10 +253,9 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
     for(int i=0;i<hadJets.size();i++){
       if(minDRHadJ > bestEMObj.DeltaR((hadJets)[i])) minDRHadJ=bestEMObj.DeltaR(hadJets[i]);
     }
-
+    //    if(MET>200) continue;
     process = process && ST>500 && nHadJets>=2 && MET>100 && dphi1 > 0.3 && dphi2 > 0.3 && bestEMObj.Pt()>100;
     if( !((ST>800 && bestEMObj.Pt()>100) || (bestEMObj.Pt()>190)) ) continue;
-
     if(process){
       evtSurvived++;
       double wt_org=wt;
@@ -242,6 +280,34 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	else if(MET>=METBinLowEdge[METBinLowEdge.size()-1]){ sBin2 = sBin2+7  ;break; }
       }
 
+      int sBin4=-100,m_i4=0;
+      if(BTags==0){
+        if(nHadJets>=2 && nHadJets<=4)     { sBin4=0;}
+        else if(nHadJets==5 || nHadJets==6){ sBin4=8;}
+        else if(nHadJets>=7)               { sBin4=15;}
+      }
+      else{
+        if(nHadJets>=2 && nHadJets<=4)     { sBin4=22;}
+        else if(nHadJets==5 || nHadJets==6){ sBin4=29;}
+        else if(nHadJets>=7)               { sBin4=36;}
+      }
+      if(sBin4==0){
+        for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
+          if(METBinLowEdgeV4_njLow[i]<99.99) continue;
+          m_i4++;
+          if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin4 = sBin4+m_i4;break; }
+          else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin4 = 8         ;break; }
+        }
+      }
+      else{
+        for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
+          if(METBinLowEdgeV4[i]<99.99) continue;
+          m_i4++;
+          if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin4 = sBin4+m_i4;break; }
+          else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin4 = sBin4+7   ;break; }
+        }
+      }
+      
       int nTracksNearEM = 0;
       for(int i=0;i<TAPElectronTracks->size();i++){
 	if(bestEMObj.DeltaR((*TAPElectronTracks)[i]) < 0.3) nTracksNearEM++;
@@ -254,48 +320,20 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
       }
       
       if(hadJetID){
-	//---------------------- MC only -------------------------
-	// double genElePt=0;
-	// for(int i=0;i<GenParticles->size();i++){
-	//   if((*GenParticles)[i].Pt()!=0){
-	//     double dr1=bestEMObj.DeltaR((*GenParticles)[i]);
-	//     if(dr1 < 0.2 && (abs((*GenParticles_PdgId)[i])==11) && (abs((*GenParticles_ParentId)[i])<=24) ) {
-	//       genElePt=(*GenParticles)[i].Pt();
-	//     }
-	//   }
-	// }
-	
-	// double min_1=1000,genEleMT2Act=-100;
-	// for(int i=0;i<GenElectrons->size();i++){
-	//   if(min_1>bestEMObj.DeltaR((*GenElectrons)[i])){
-	//     min_1=bestEMObj.DeltaR((*GenElectrons)[i]);
-	//     genEleMT2Act=(*GenElectrons_MT2Activity)[i];
-	//   }
-	// }
-	// //	cout<<endl;print(jentry);
-	
-	// double minGenDR=1000,minGenDR2=1000;
-	// int minGenDRIndx=-100;
-	// for(int i=0;i<GenJets->size();i++){
-	//   if(minGenDR>bestEMObj.DeltaR((*GenJets)[i])) {minGenDR=bestEMObj.DeltaR((*GenJets)[i]); minGenDRIndx=i;}
-	// }
-	// for(int i=0;i<GenJets->size();i++){
-	//   if(i!=minGenDRIndx && minGenDR2>bestEMObj.DeltaR((*GenJets)[i])) minGenDR2=bestEMObj.DeltaR((*GenJets)[i]);
-	// }
-	
-      	// if(bestEMObjIsEle){
-	//   if(do_prediction){
-	//     //
-	//     double parX=bestEMObj.Pt(),parY=qMultMatchJet;
-	//     //	    double parX=bestEMObj.Pt(),parY=NVtx;
-	//     double fakerate=0;
-	//     if(h2_FR) fakerate=h2_FR->GetBinContent(h2_FR->FindBin(parX,parY));
-	//     else{ cout<<"hist not found"<<endl; return;}
-	//     //	    wt=(fakerate/(1-fakerate))*wt;
-	//     wt=fakerate*wt;
-	//   }
+	if(bestEMObjIsEle){
+	  //---------------------- MC only -------------------------
+	  // if(do_prediction){
+	  //   //
+	  //   double parX=bestEMObj.Pt(),parY=qMultMatchJet;
+	  //   //	    double parX=bestEMObj.Pt(),parY=NVtx;
+	  //   double fakerate=0;
+	  //   if(h2_FR) fakerate=h2_FR->GetBinContent(h2_FR->FindBin(parX,parY));
+	  //   else{ cout<<"hist not found"<<endl; return;}
+	  //   //	    wt=(fakerate/(1-fakerate))*wt;
+	  //   wt=fakerate*wt;
+	  // }
 	  //---------------------- MC only ends-------------------------
-	if(bestEMObjIsEle){ //+++++ Data only +++++
+	  //if((*Jets_bDiscriminatorCSV)[minDRindx] > 0.8484){continue;}
 	  h_ST_Ele->Fill(ST,wt);
 	  h_MET_Ele->Fill(MET,wt);
 	  h_nHadJets_Ele->Fill(nHadJets,wt);
@@ -306,18 +344,19 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  h_METvBin_Ele->Fill(MET,wt);
 	  h_MET_Ele_Rall->Fill(MET,wt);
 	  h_mT_Ele->Fill(mT_EMObj,wt);
-
+	  
 	  if( searchRegion > 0 && searchRegion < 4){
 	    h_MET_Ele_R[searchRegion-1]->Fill(MET,wt);
 	  }
 	  else cout<<"Event outside search region! ";
-
+	  
 	  if(nHadJets >= 2 && nHadJets <= 4 && BTags==0)      h_MET_R_v2_Ele[0]->Fill(MET,wt);
 	  else if(nHadJets >= 5 && BTags==0)                  h_MET_R_v2_Ele[1]->Fill(MET,wt);
 	  else if(nHadJets >= 2 && nHadJets <= 4 && BTags==1) h_MET_R_v2_Ele[2]->Fill(MET,wt);
 	  else if(nHadJets >= 5 && BTags==1)                  h_MET_R_v2_Ele[3]->Fill(MET,wt);
 	  else if(BTags>=2)                                   h_MET_R_v2_Ele[4]->Fill(MET,wt);
 	  h_SBins_Ele->Fill(sBin2,wt);
+	  h_SBins_v4_Ele->Fill(sBin4,wt);
 
 	  //	  h_madHT_Ele->Fill(madHT,wt);//------ MC only --------------
 	  h_nVtx_Ele->Fill(NVtx,wt);
@@ -327,7 +366,6 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  h_ElePhi->Fill(bestEMObj.Phi(),wt);
 	  h_ElePtvBin->Fill(bestEMObj.Pt(),wt);
 
-	  h_QMult2_Ele->Fill(qMultMatchJet,wt);
 	  h_EleTracks_Ele->Fill(TAPElectronTracks->size(),wt);
 	  h_MuTracks_Ele->Fill(TAPMuonTracks->size(),wt);
 	  h_PiTracks_Ele->Fill(TAPPionTracks->size(),wt);
@@ -341,6 +379,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  h_PtJetNearEle->Fill((*Jets)[minDRindx].Pt(),wt);
 	  h_JptEleptRatio->Fill( ((*Jets)[minDRindx].Pt())/(bestEMObj.Pt()),wt );
 	  h_HadDR_EleptJptRatio->Fill( minDRHadJ*bestEMObj.Pt()/((*Jets)[minDRindx].Pt()),wt );
+	  h_QMult2_Ele->Fill(qMultMatchJet,wt);
 
 	  h2_ElePtST->Fill(bestEMObj.Pt(),ST,wt);
 	  h2_ElePtEta->Fill(abs(bestEMObj.Eta()),bestEMObj.Pt(),wt);
@@ -360,6 +399,8 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  //	  h2_RecoElePt_GenEPt->Fill(genElePt,bestEMObj.Pt(),wt);//------ MC only --------------
 	  h2_JptEleptRatiovsDR->Fill(minDR,((*Jets)[minDRindx].Pt())/(bestEMObj.Pt()),wt);
 	  h2_HadDRJptEptRatio_Vtx->Fill( minDRHadJ*(((*Jets)[minDRindx].Pt())/(bestEMObj.Pt())),NVtx,wt);
+	  if((*Jets)[0].Pt() > 30 && abs((*Jets)[0].Eta()) < 2.4 )
+	    h2_LeadJetPt_QMult_Ele->Fill((*Jets)[0].Pt(),(*Jets_chargedMultiplicity)[0],wt);
 
 	  h3_ElePtEtaNJ->Fill(abs(bestEMObj.Eta()),nHadJets,bestEMObj.Pt(),wt);
 	  h3_ElePtEtaVtx->Fill(abs(bestEMObj.Eta()),NVtx,bestEMObj.Pt(),wt);
@@ -394,6 +435,27 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  h_EleMT2Activity->Fill(eleMT2Act,wt);
 	  h2_nVtx_EleMT2Act->Fill(NVtx,eleMT2Act,wt);
 	  //	  h_genEleMT2Act_Ele->Fill(genEleMT2Act,wt);//------ MC only --------------
+	  
+	  h_MatchJetCSV_Ele->Fill((*Jets_bDiscriminatorCSV)[minDRindx],wt);
+	  h_MatchJetMVA_Ele->Fill((*Jets_bDiscriminatorMVA)[minDRindx],wt);
+	  if     (minDR<0.3 && (*Jets_bDiscriminatorCSV)[minDRindx] <= 0.8484) h_MatchNonbJPt_Ele->Fill((*Jets)[minDRindx].Pt(),wt);
+	  else if(minDR<0.3 && (*Jets_bDiscriminatorCSV)[minDRindx] > 0.8484) h_MatchbJPt_Ele->Fill((*Jets)[minDRindx].Pt(),wt);
+	  else if(minDR>0.3 && (*Jets_bDiscriminatorCSV)[minDRindx] <= 0.8484) h_NonMatchNonbJPt_Ele->Fill((*Jets)[minDRindx].Pt(),wt);
+	  else if(minDR>0.3 && (*Jets_bDiscriminatorCSV)[minDRindx] > 0.8484) h_NonMatchbJPt_Ele->Fill((*Jets)[minDRindx].Pt(),wt);
+	  int minDR_bJIndx=-100;
+	  double minDR_bJ=10000;
+	  for(int i=0;i<Jets->size();i++){
+	    if((*Jets)[i].Pt()>30 && abs((*Jets)[i].Eta()) < 2.4){
+	      if((*Jets_bDiscriminatorCSV)[i] > 0.8484){
+		h_CM_bJ_Ele->Fill((*Jets_chargedMultiplicity)[i],wt);
+		if( bestEMObj.DeltaR((*Jets)[i]) < minDR_bJ ){ minDR_bJ = bestEMObj.DeltaR((*Jets)[i]); minDR_bJIndx=i; }
+	      }
+	      else h_CM_NotbJ_Ele->Fill((*Jets_chargedMultiplicity)[i],wt);
+	    }
+	  }
+	  h2_QMult_MinDRbJ_Ele->Fill(qMultMatchJet,minDR_bJ,wt);
+	  if(minDR < 0.3) h2_QMult_CSV_MatchJet_Ele->Fill((*Jets_chargedMultiplicity)[minDRindx],(*Jets_bDiscriminatorCSV)[minDRindx],wt);
+	  else h2_QMult_CSV_NearestNoMatchJet_Ele->Fill((*Jets_chargedMultiplicity)[minDRindx],(*Jets_bDiscriminatorCSV)[minDRindx],wt);
 
 	  h_CM_Ele->Fill(qMultMatchJet,wt);
 	  h_NHF_Ele->Fill((*Jets_neutralHadronEnergyFraction)[minDRindx],wt);
@@ -401,7 +463,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  h_CHF_Ele->Fill((*Jets_chargedHadronEnergyFraction)[minDRindx],wt);
 	  h_CEMF_Ele->Fill((*Jets_chargedEmEnergyFraction)[minDRindx],wt);
 	  h_PhoFrac_Ele->Fill((*Jets_photonEnergyFraction)[minDRindx],wt);
-
+	  
 	  wt=wt_org;
 	}//end of ele like
 	//photon like
@@ -409,13 +471,15 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	//+++++++++++++++++++++++++ data only +++++++++++++++++++++++++++++
       	if(bestEMObjIsEle){//get prediction from single e-CS
 	  if(do_prediction){
-	    //
-	    double parX=bestEMObj.Pt(),parY=qMultMatchJet;
-	    //	    double parX=bestEMObj.Pt(),parY=NVtx;
+	  //
+	  double parX=bestEMObj.Pt(),parY=qMultMatchJet;
+	  //	    double parX=bestEMObj.Pt(),parY=NVtx;
 	    double fakerate=0;
 	    if(h2_FR) fakerate=h2_FR->GetBinContent(h2_FR->FindBin(parX,parY));
 	    else{ cout<<"hist not found"<<endl; return;}
 	    //	    wt=(fakerate/(1-fakerate))*wt;
+	    if(qMultMatchJet<=1) fakerate = fakerate*0.95;
+	    else fakerate = fakerate*1.67;
 	    wt=fakerate*wt;
 	  }
 	  //++++++++++++++++++++++ data only ends +++++++++++++++++++++++++++
@@ -441,13 +505,14 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  else if(nHadJets >= 5 && BTags==1)                  h_MET_R_v2_Pho[3]->Fill(MET,wt);
 	  else if(BTags>=2)                                   h_MET_R_v2_Pho[4]->Fill(MET,wt);
 	  h_SBins_Pho->Fill(sBin2,wt);
+	  h_SBins_v4_Pho->Fill(sBin4,wt);
 
 	  //	  h_madHT_Pho->Fill(madHT,wt);//------ MC only --------------
 	  h_nVtx_Pho->Fill(NVtx,wt);
 
-	  h_BestPhotonPt->Fill(bestPhoton.Pt(),wt);
-	  h_BestPhotonEta->Fill(bestPhoton.Eta(),wt);
-	  h_BestPhotonPhi->Fill(bestPhoton.Phi(),wt);
+	  h_BestPhotonPt->Fill(bestEMObj.Pt(),wt);
+	  h_BestPhotonEta->Fill(bestEMObj.Eta(),wt);
+	  h_BestPhotonPhi->Fill(bestEMObj.Phi(),wt);
 	  h_PhoPtvBin->Fill(bestEMObj.Pt(),wt);
 
 	  h_EleTracks_Pho->Fill(TAPElectronTracks->size(),wt);
@@ -456,16 +521,16 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  h_nTracks_Pho->Fill(TAPElectronTracks->size()+TAPMuonTracks->size()+TAPPionTracks->size(),wt);
 	  h_nTracks0p3_Pho->Fill(nTracksNearEM,wt);
 
-	  h_QMult2_Pho->Fill(qMultMatchJet,wt);
 	  h_minDR_Pho_Jet->Fill(minDR,wt);
 	  h_minDRHadJ_Pho_HadJet->Fill(minDRHadJ,wt);
 	  //	  h_dRGenJet2_Pho->Fill(minGenDR2,wt);//------ MC only --------------
-	  
+
 	  h_PtJetNearPho->Fill((*Jets)[minDRindx].Pt(),wt);
 	  h_JptGptRatio->Fill( ((*Jets)[minDRindx].Pt())/(bestEMObj.Pt()),wt );
 	  h_HadDR_GptJptRatio->Fill( minDRHadJ*bestEMObj.Pt()/((*Jets)[minDRindx].Pt()),wt );
 
 	  //	  h_genEleMT2Act_Pho->Fill(genEleMT2Act,wt);//------ MC only --------------
+	  h_QMult2_Pho->Fill(qMultMatchJet,wt);
 
           h2_PhoPtST->Fill(bestEMObj.Pt(),ST,wt);
 	  h2_PhotonPtEta->Fill(abs(bestEMObj.Eta()),bestEMObj.Pt(),wt);
@@ -480,8 +545,8 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 
 	  h2_PhoPtVtx->Fill(bestEMObj.Pt(),NVtx,wt);
 	  h2_PhoEtaPhi->Fill(bestEMObj.Eta(),bestEMObj.Phi(),wt);
-	  
-	  h2_PtGvsMET->Fill( bestPhoton.Pt(),MET,wt);
+
+	  h2_PtGvsMET->Fill( bestEMObj.Pt(),MET,wt);
 	  //	  h2_RecoPhoPt_GenEPt->Fill(genElePt,bestEMObj.Pt(),wt);//------ MC only --------------
 	  h2_JptGptRatiovsDR->Fill(minDR,((*Jets)[minDRindx].Pt())/(bestEMObj.Pt()),wt);
 	  h2_HadDRJptGptRatio_Vtx->Fill( minDRHadJ*(((*Jets)[minDRindx].Pt())/(bestEMObj.Pt())),NVtx,wt);
@@ -495,7 +560,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  h3_PhoPtEtaMinDRHadJ->Fill( bestEMObj.Pt(),abs(bestEMObj.Eta()),minDRHadJ,wt );//
 	  
 	  if(remJetPt>0.1) h_RemjetPtNearPhoton->Fill(remJetPt,wt);
-	  
+
 	  h_dPhi_METG->Fill(dphiEM_MET,wt);
 	  if(hadJets.size() > 0 ) h_dPhi_METjet1_Pho->Fill( dphi1,wt );
 	  if(hadJets.size() > 1 ) h_dPhi_METjet2_Pho->Fill( dphi2,wt );
@@ -508,13 +573,29 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	    h_jetPhi_Pho[i]->Fill(hadJets[i].Phi(),wt);
 	    h_dPhi_jet_Pho[i]->Fill(abs(bestEMObj.DeltaPhi(hadJets[i])),wt);
 	  }
+	  h_MatchJetCSV_Pho->Fill((*Jets_bDiscriminatorCSV)[minDRindx],wt);
+	  h_MatchJetMVA_Pho->Fill((*Jets_bDiscriminatorMVA)[minDRindx],wt);
+	  int minDR_bJIndx=-100;
+	  double minDR_bJ=10000;
+	  for(int i=0;i<Jets->size();i++){
+	    if((*Jets)[i].Pt()>30 && abs((*Jets)[i].Eta()) < 2.4){
+	      if((*Jets_bDiscriminatorCSV)[i] > 0.8484){
+		h_CM_bJ_Pho->Fill((*Jets_chargedMultiplicity)[i],wt);
+		if( bestEMObj.DeltaR((*Jets)[i]) < minDR_bJ ){ minDR_bJ = bestEMObj.DeltaR((*Jets)[i]); minDR_bJIndx=i; }
+	      }
+	      else h_CM_NotbJ_Pho->Fill((*Jets_chargedMultiplicity)[i],wt);
+	    }
+	  }
+	  h2_QMult_MinDRbJ_Pho->Fill(qMultMatchJet,minDR_bJ,wt);
+	  if(minDR < 0.3) h2_QMult_CSV_MatchJet_Pho->Fill((*Jets_chargedMultiplicity)[minDRindx],(*Jets_bDiscriminatorCSV)[minDRindx],wt);
+	  else h2_QMult_CSV_NearestNoMatchJet_Pho->Fill((*Jets_chargedMultiplicity)[minDRindx],(*Jets_bDiscriminatorCSV)[minDRindx],wt);
 	  h_CM_Pho->Fill(qMultMatchJet,wt);
 	  h_NHF_Pho->Fill((*Jets_neutralHadronEnergyFraction)[minDRindx],wt);
 	  h_NEMF_Pho->Fill((*Jets_neutralEmEnergyFraction)[minDRindx],wt);
 	  h_CHF_Pho->Fill((*Jets_chargedHadronEnergyFraction)[minDRindx],wt);
 	  h_CEMF_Pho->Fill((*Jets_chargedEmEnergyFraction)[minDRindx],wt);
 	  h_PhoFrac_Pho->Fill((*Jets_photonEnergyFraction)[minDRindx],wt);
-
+	  
 	  // h_photon_pfQIsoRhoCorr->Fill( (*Photons_pfChargedIsoRhoCorr)[bestPhotonIndxAmongPhotons],wt);
 	  // h_photon_pfNutIsoRhoCorr->Fill( (*Photons_pfNeutralIsoRhoCorr)[bestPhotonIndxAmongPhotons],wt);
 	  
@@ -524,7 +605,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  // print(jentry);
 	  wt=wt_org;
 	}
-		
+	
 	h_ST->Fill(ST,wt);
 	h_MET->Fill(MET,wt);
 	h_nHadJets->Fill(nHadJets,wt);
@@ -566,10 +647,10 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  h_NEMF->Fill((*Jets_neutralEmEnergyFraction)[i],wt);
 	  h_CHF->Fill((*Jets_chargedHadronEnergyFraction)[i],wt);
 	  h_CEMF->Fill((*Jets_chargedEmEnergyFraction)[i],wt);
-
+	    
 	  h_PhoMult->Fill((*Jets_photonMultiplicity)[i],wt);
 	  h_PhoFrac->Fill((*Jets_photonEnergyFraction)[i],wt);
-	  }
+	}
       }      
     }//process
     //}
@@ -620,39 +701,9 @@ bool FakeRateEst::check_eMatchedtoGamma(){
     return false;
 }
 
-void  FakeRateEst::findObjMatchedtoG(TLorentzVector bestPhoton){
-  // double dR=100,mindr=1000;
-  // int match=-100;
-  // for(int i=0;i<GenParticles->size();i++){
-  //   if((*GenParticles)[i].Pt()!=0){
-  //     if(dR > (bestPhoton.DeltaR((*GenParticles)[i])) && ( (bestPhoton.Pt()/(*GenParticles)[i].Pt() > 0.5) && (bestPhoton.Pt()/(*GenParticles)[i].Pt()<1.5)) ){
-  // 	dR=bestPhoton.DeltaR((*GenParticles)[i]);
-  // 	match=i;
-  //     }
-  //   }
-  // }
-  // //cout<<"Pt: "<<bestPhoton.Pt()<<" Eta:"<<bestPhoton.Eta()<<" Phi:"<<bestPhoton.Phi()<<" PdgID:"<<(*GenParticles_PdgId)[match]<<" Pt:"<<(*GenParticles)[match].Pt()<<" Eta:"<<(*GenParticles)[match].Eta()<<" Phi:"<<(*GenParticles)[match].Phi()<<" parentId:"<<(*GenParticles_ParentId)[match]<<endl;
-  // if(dR<0.2){
-  //   h_GmatchedObj->Fill(abs((*GenParticles_PdgId)[match]),wt);
-  //   if(abs((*GenParticles_PdgId)[match])==22)  h_PdgIdPhoParent->Fill(abs((*GenParticles_ParentId)[match]),wt);
-  // }
-  // else{
-  //   h_GmatchedObj->Fill(0.0,wt);
-  //   h_PdgIdPhoParent->Fill(0.0,wt);
-  // }
-}
-
 void FakeRateEst::print(Long64_t jentry){
   //cout<<endl;
   TLorentzVector v1,photo;
-  // for(int i=0;i<GenParticles->size();i++){
-  //   cout<<EvtNum<<" "<<jentry<<" "<<GenParticles->size()<<" "<<i<<" PdgId:"<<(*GenParticles_PdgId)[i]<<" parentId:"<<(*GenParticles_ParentId)[i]<<" parentIndx:"<<(*GenParticles_ParentIdx)[i]<<" Status:"<<(*GenParticles_Status)[i]<</*"\tPx:"<<(*GenParticles)[i].Px()<<" Py:"<<(*GenParticles)[i].Py()<<" Pz:"<<(*GenParticles)[i].Pz()<<*/"\tPt:"<<(*GenParticles)[i].Pt()<<" Eta:"<<(*GenParticles)[i].Eta()<<" Phi:"<<(*GenParticles)[i].Phi()<<" E:"<<(*GenParticles)[i].Energy()<<endl;
-  // }
-
-  // for(int i=0;i<GenJets->size();i++){
-  //   if(i==0) cout<<"-------------------------------- GenJets -------------------------------------------"<<endl;
-  //   cout<<"GenJetsPt:"<<(*GenJets)[i].Pt()<<" eta:"<<(*GenJets)[i].Eta()<<" phi:"<<(*GenJets)[i].Phi()<<endl;
-  // }
   
   for(int i=0;i<Photons->size();i++){
     if(i==0) cout<<"-------------------------------- Photons -------------------------------------------"<<endl;
@@ -661,19 +712,19 @@ void FakeRateEst::print(Long64_t jentry){
     cout<<"Photon Pt:"<<(*Photons)[i].Pt()<<" eta:"<<(*Photons)[i].Eta()<<" phi:"<<(*Photons)[i].Phi()<<" E:"<<(*Photons)[i].Energy()<<" FullID:"<<(*Photons_fullID)[i]<<" Pixel Seed:"<<(*Photons_hasPixelSeed)[i]<<endl;
   }
   
-  for(int i=0;i<TAPElectronTracks->size();i++){
-    cout<<"Ele Track Pt:"<<(*TAPElectronTracks)[i].Pt()<<" Eta:"<<(*TAPElectronTracks)[i].Eta()<<" Phi:"<<(*TAPElectronTracks)[i].Phi()<<endl;
-  }
-  for(int i=0;i<TAPMuonTracks->size();i++){
-    cout<<"Mu Track Pt:"<<(*TAPMuonTracks)[i].Pt()<<" Eta:"<<(*TAPMuonTracks)[i].Eta()<<" Phi:"<<(*TAPMuonTracks)[i].Phi()<<endl;
-  }
-  for(int i=0;i<TAPPionTracks->size();i++){
-    cout<<"Pi Track Pt:"<<(*TAPPionTracks)[i].Pt()<<" Eta:"<<(*TAPPionTracks)[i].Eta()<<" Phi:"<<(*TAPPionTracks)[i].Phi()<<endl;
-  }
+  // for(int i=0;i<TAPElectronTracks->size();i++){
+  //   cout<<"Ele Track Pt:"<<(*TAPElectronTracks)[i].Pt()<<" Eta:"<<(*TAPElectronTracks)[i].Eta()<<" Phi:"<<(*TAPElectronTracks)[i].Phi()<<endl;
+  // }
+  // for(int i=0;i<TAPMuonTracks->size();i++){
+  //   cout<<"Mu Track Pt:"<<(*TAPMuonTracks)[i].Pt()<<" Eta:"<<(*TAPMuonTracks)[i].Eta()<<" Phi:"<<(*TAPMuonTracks)[i].Phi()<<endl;
+  // }
+  // for(int i=0;i<TAPPionTracks->size();i++){
+  //   cout<<"Pi Track Pt:"<<(*TAPPionTracks)[i].Pt()<<" Eta:"<<(*TAPPionTracks)[i].Eta()<<" Phi:"<<(*TAPPionTracks)[i].Phi()<<endl;
+  // }
 
   for(int i=0;i<Jets->size();i++){
     //  if( ((*Jets)[i].Pt() > MHT_PtCut) && (abs((*Jets)[i].Eta()) <= MHT_EtaCut) ){
-    cout<<"JetPt:"<<(*Jets)[i].Pt()<<" JetEta:"<<(*Jets)[i].Eta()<<" JetPhi:"<<(*Jets)[i].Phi()<<" energy:"<<(*Jets)[i].Energy()<<" QMult:"<<(*Jets_chargedMultiplicity)[i]<<endl;
+    cout<<"JetPt:"<<(*Jets)[i].Pt()<<" JetEta:"<<(*Jets)[i].Eta()<<" JetPhi:"<<(*Jets)[i].Phi()<<" energy:"<<(*Jets)[i].Energy()<<" QMult:"<<(*Jets_chargedMultiplicity)[i]<<" CSV:"<<(*Jets_bDiscriminatorCSV)[i]<<endl;
   }
   
   for(int i=0;i<Muons->size();i++){

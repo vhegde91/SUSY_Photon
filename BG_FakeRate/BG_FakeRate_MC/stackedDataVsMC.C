@@ -36,16 +36,16 @@ void stackedDataVsMC(TString iFname){
   //  gStyle->SetOptStat("nemri"); 
   f[0] = new TFile(iFname);
   //  f[1] = new TFile("CS_TTJets_FR_NoTrgNoEleMatchbJ_v2.root");
-  f[1] = new TFile("CS_QCD_FR_NoTrg_v2.root");
-  f[2] = new TFile("CS_ST_FR_NoTrg_v2.root");
-  //f[3] = new TFile("CS_TTJets_FR_NoTrg_v2.root");
-  f[3] = new TFile("CS_TTJets_myISRWt_FR_NoTrg_v2.root");
-  f[4] = new TFile("CS_WJets_FR_NoTrg_v2.root");
+  // f[1] = new TFile("CS_QCD_FR_NoTrg_v2.root");
+  // f[2] = new TFile("CS_ST_FR_NoTrg_v2.root");
+  // //f[3] = new TFile("CS_TTJets_FR_NoTrg_v2.root");
+  // f[3] = new TFile("CS_TTJets_myISRWt_FR_NoTrg_v2.root");
+  // f[4] = new TFile("CS_WJets_FR_NoTrg_v2.root");
 
-  // f[1] = new TFile("CS_QCD_FR_v2.root");
-  // f[2] = new TFile("CS_ST_FR_v2.root");
-  // f[3] = new TFile("CS_TTJets_FR_ISRWt_v2.root");
-  // f[4] = new TFile("CS_WJets_FR_v2.root");
+  f[1] = new TFile("CS_QCD_FR_v2.root");
+  f[2] = new TFile("CS_ST_FR_v2.root");
+  f[3] = new TFile("CS_TTJets_FR_ISRWt_v2.root");
+  f[4] = new TFile("CS_WJets_FR_v2.root");
   vector<string> name1;
   vector<int> rebin;
   name1.push_back("ST_Ele");  rebin.push_back(10);         //name2.push_back("ST_Ele");     
@@ -61,6 +61,7 @@ void stackedDataVsMC(TString iFname){
   //  name1.push_back("Qmulti_Ele"); rebin.push_back(2);
   name1.push_back("QMult2_Ele"); rebin.push_back(2);
   //  name1.push_back("mT_Ele");   rebin.push_back(2);
+  name1.push_back("PtJetNearEle");   rebin.push_back(5);
 
   // name1.push_back("MET_R1_v2_Ele");   rebin.push_back(1);
   // name1.push_back("MET_R2_v2_Ele");   rebin.push_back(1);

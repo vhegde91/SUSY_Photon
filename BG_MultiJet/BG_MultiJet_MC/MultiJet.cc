@@ -47,6 +47,13 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
   // TH1D *h_HLratio=(TH1D*)f_HLR->Get("HLratio_1D");
   TH2D *h2_HLRatio;
 
+  TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
+  //choose central, up, or down
+  TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
+
+  // TFile *fSF = TFile::Open("Multijet_SF.root");
+  // TH1D *h_SF = (TH1D*)fSF->Get("nHadJets_AB");
+
   cout<<"************* Applying weights for AB? "<<do_AB_reweighting<<endl;
 
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
@@ -63,7 +70,9 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
     
-    wt=Weight*1000.0*lumiInfb;
+    //    wt=Weight*1000.0*lumiInfb;
+    wt=Weight*1000.0*lumiInfb*(puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(TrueNumInteractions,puhist->GetBinLowEdge(puhist->GetNbinsX()+1)))));
+
     if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;  
 
     if( (Electrons->size() !=0) || (Muons->size() !=0) ) continue;   
@@ -88,7 +97,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 
     bool hadJetID=true;
     int minDRindx=-100,photonMatchingJetIndx=-100,nHadJets=0;
-    double minDR=99999,ST=0,myHT=0;
+    double minDR=99999,ST=0,myHT=0,mtPho=0;
     vector<TLorentzVector> hadJets;
 
     for(int i=0;i<Jets->size();i++){
@@ -123,16 +132,18 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     if(hadJets.size() > 1 ) dphi2 = abs(DeltaPhi(METPhi,(hadJets)[1].Phi()));
     if(hadJets.size() > 2 ) dphi3 = abs(DeltaPhi(METPhi,(hadJets)[2].Phi()));
     if(hadJets.size() > 3 ) dphi4 = abs(DeltaPhi(METPhi,(hadJets)[3].Phi()));
-
+    mtPho = sqrt(2*bestPhoton.Pt()*MET*(1-cos(DeltaPhi(METPhi,bestPhoton.Phi()))));
     if     (MET <  200 && !(dphi1 > 0.3 && dphi2 > 0.3)) regType = 'A';
     else if(MET >= 200 && !(dphi1 > 0.3 && dphi2 > 0.3)) regType = 'B';
     else if(MET <  200 &&  (dphi1 > 0.3 && dphi2 > 0.3)) regType = 'C';
     else if(MET >= 200 &&  (dphi1 > 0.3 && dphi2 > 0.3)) regType = 'D';
     else cout<<"AHHHH:Cannot assign region!!!"<<endl;
-    
-    //  if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
-    process = process && !eMatchedG && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100;
 
+    //    if(abs(dphiG_MET) < 0.5) continue;    
+    //    if(mtPho<100) continue;
+    if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
+    process = process && !eMatchedG && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100;
+    
     if(process){
       evtSurvived++;
       h_RunNum->Fill(RunNum);
@@ -151,32 +162,33 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	}
       }
       else cout<<"Event outside search region! ";
-      int sBin4=-100,m_i4=0;
+      //-------------------------- Sbins 4p1 -------------------------
+      int sBin4p1=-100,m_i4=0,sBin4=-100;
       if(BTags==0){
-	if(nHadJets>=2 && nHadJets<=4)     { sBin4=0;}
-	else if(nHadJets==5 || nHadJets==6){ sBin4=6;}
-	else if(nHadJets>=7)               { sBin4=11;}
+        if(nHadJets>=2 && nHadJets<=4)     { sBin4=0;}
+        else if(nHadJets==5 || nHadJets==6){ sBin4=8;}
+        else if(nHadJets>=7)               { sBin4=15;}
       }
       else{
-	if(nHadJets>=2 && nHadJets<=4)     { sBin4=16;}
-	else if(nHadJets==5 || nHadJets==6){ sBin4=21;}
-	else if(nHadJets>=7)               { sBin4=26;}
+        if(nHadJets>=2 && nHadJets<=4)     { sBin4=22;}
+        else if(nHadJets==5 || nHadJets==6){ sBin4=29;}
+        else if(nHadJets>=7)               { sBin4=36;}
       }
       if(sBin4==0){
-	for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
-	  if(METBinLowEdgeV4_njLow[i]<99.99) continue;
-	  m_i4++;
-	  if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin4 = sBin4+m_i4;break; }
-	  else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin4 = sBin4+6   ;break; }
-	}
+        for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
+          if(METBinLowEdgeV4_njLow[i]<99.99) continue;
+          m_i4++;
+          if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin4 = sBin4+m_i4;break; }
+          else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin4 = 8         ;break; }
+        }
       }
       else{
-	for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
-	  if(METBinLowEdgeV4[i]<99.99) continue;
-	  m_i4++;
-	  if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin4 = sBin4+m_i4;break; }
-	  else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin4 = sBin4+5   ;break; }
-	}
+        for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
+          if(METBinLowEdgeV4[i]<99.99) continue;
+          m_i4++;
+          if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin4 = sBin4+m_i4;break; }
+          else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin4 = sBin4+7   ;break; }
+        }
       }
       //------------------------ Sbins----------------------------
       if(do_AB_reweighting && (regType=='A' || regType=='B')){
@@ -203,6 +215,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	h_MET_[r_i]->Fill(MET,wt);
 	h_nHadJets_[r_i]->Fill(nHadJets,wt);
 	h_BTags_[r_i]->Fill(BTags,wt);
+	h_nVtx_[r_i]->Fill(NVtx,wt);
 	h_GenMET_[r_i]->Fill(GenMET,wt);
 	h_METPhi_[r_i]->Fill(METPhi,wt);
 	h_myHT_[r_i]->Fill(myHT,wt);
@@ -211,8 +224,9 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 
 	h_BestPhotonPt_[r_i]->Fill( bestPhoton.Pt(),wt );	
 	h_BestPhotonPtvBin_[r_i]->Fill(bestPhoton.Pt(),wt);
-	h_BestG_Eta_[r_i]->Fill(bestPhoton.Eta(),wt);
-	h_BestG_Phi_[r_i]->Fill(bestPhoton.Phi(),wt);
+	h_BestPhotonEta_[r_i]->Fill(bestPhoton.Eta(),wt);
+	h_BestPhotonPhi_[r_i]->Fill(bestPhoton.Phi(),wt);
+	h_mTPho_[r_i]->Fill(mtPho,wt);
 	h_dPhi_METBestPhoton_[r_i]->Fill(dphiG_MET,wt);
 	h_dPhiPhotonJet1_[r_i]->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
 
@@ -242,6 +256,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_MET_AB->Fill(MET,wt);
 	  h_nHadJets_AB->Fill(nHadJets,wt);
 	  h_BTags_AB->Fill(BTags,wt);
+	  h_nVtx_AB->Fill(NVtx,wt);
 	  h_GenMET_AB->Fill(GenMET,wt);
 	  h_METPhi_AB->Fill(METPhi,wt);
 	  h_myHT_AB->Fill(myHT,wt);
@@ -250,8 +265,9 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 
 	  h_BestPhotonPt_AB->Fill( bestPhoton.Pt(),wt );	
 	  h_BestPhotonPtvBin_AB->Fill(bestPhoton.Pt(),wt);
-	  h_BestG_Eta_AB->Fill(bestPhoton.Eta(),wt);
-	  h_BestG_Phi_AB->Fill(bestPhoton.Phi(),wt);
+	  h_BestPhotonEta_AB->Fill(bestPhoton.Eta(),wt);
+	  h_BestPhotonPhi_AB->Fill(bestPhoton.Phi(),wt);
+	  h_mTPho_AB->Fill(mtPho,wt);
 	  h_dPhi_METBestPhoton_AB->Fill(dphiG_MET,wt);
 	  h_dPhiPhotonJet1_AB->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
 
@@ -285,6 +301,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_MET_CD->Fill(MET,wt);
 	  h_nHadJets_CD->Fill(nHadJets,wt);
 	  h_BTags_CD->Fill(BTags,wt);
+	  h_nVtx_CD->Fill(NVtx,wt);
 	  h_GenMET_CD->Fill(GenMET,wt);
 	  h_METPhi_CD->Fill(METPhi,wt);
 	  h_myHT_CD->Fill(myHT,wt);
@@ -293,8 +310,9 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 
 	  h_BestPhotonPt_CD->Fill( bestPhoton.Pt(),wt );	
 	  h_BestPhotonPtvBin_CD->Fill(bestPhoton.Pt(),wt);
-	  h_BestG_Eta_CD->Fill(bestPhoton.Eta(),wt);
-	  h_BestG_Phi_CD->Fill(bestPhoton.Phi(),wt);
+	  h_BestPhotonEta_CD->Fill(bestPhoton.Eta(),wt);
+	  h_BestPhotonPhi_CD->Fill(bestPhoton.Phi(),wt);
+	  h_mTPho_CD->Fill(mtPho,wt);
 	  h_dPhi_METBestPhoton_CD->Fill(dphiG_MET,wt);
 	  h_dPhiPhotonJet1_CD->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
 
@@ -476,3 +494,33 @@ void MultiJet::print(Long64_t jentry){
   cout<<"MET:"<<MET<<" METPhi:"<<METPhi<<endl;
   cout<<"^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^"<<endl<<endl;
 }
+
+
+/*
+      if(BTags==0){
+	if(nHadJets>=2 && nHadJets<=4)     { sBin4=0;}
+	else if(nHadJets==5 || nHadJets==6){ sBin4=6;}
+	else if(nHadJets>=7)               { sBin4=11;}
+      }
+      else{
+	if(nHadJets>=2 && nHadJets<=4)     { sBin4=16;}
+	else if(nHadJets==5 || nHadJets==6){ sBin4=21;}
+	else if(nHadJets>=7)               { sBin4=26;}
+      }
+      if(sBin4==0){
+	for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
+	  if(METBinLowEdgeV4_njLow[i]<99.99) continue;
+	  m_i4++;
+	  if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin4 = sBin4+m_i4;break; }
+	  else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin4 = sBin4+6   ;break; }
+	}
+      }
+      else{
+	for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
+	  if(METBinLowEdgeV4[i]<99.99) continue;
+	  m_i4++;
+	  if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin4 = sBin4+m_i4;break; }
+	  else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin4 = sBin4+5   ;break; }
+	}
+      }
+*/

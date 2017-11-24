@@ -22,19 +22,19 @@ char name[100];
 char name2[100];
 TString name3;
 TLatex textOnTop,intLumiE;
-const int nfiles=2,nBG=2;    //Specify no. of files
+const int nfiles=6,nBG=5;    //Specify no. of files
 TFile *f[nfiles];
-//int col[11]={kPink+1,kTeal+9,kOrange,kYellow,kBlue,kCyan,kGreen,kMagenta+2,kRed,kMagenta,kBlue+2};  //Specify Colors
-int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kMagenta+2,kCyan,kBlue,kRed,kMagenta,kBlue+2};  //Specify Colors b's
+int col[11]={kMagenta+2,kTeal+9,kGreen,kOrange,kCyan,kBlack,kYellow,kPink+1,kBlue,kRed,kMagenta};  //Specify Colors
+//int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kMagenta+2,kCyan,kBlue,kRed,kMagenta,kBlue+2};  //Specify Colors b's
 //char name[100],name2[100];
 TCanvas *c_cA=new TCanvas("MET_incl","MET for NJ>=2",1500,850);
-TCanvas *c_cB=new TCanvas("MET_SBins","MET for all search bins",1500,850);
+//TCanvas *c_cB=new TCanvas("MET_SBins","MET for all search bins",1500,850);
 
 void decorate(TH1D*,int,const char*);
 void decorate(THStack*,int,const char*);
 void drawlegend(TH1D*,int,const char*);
 void printInt(TH1D*,int,const char*);
-TLegend *legend1=new TLegend(0.50, 0.9,  0.7, 0.70);
+TLegend *legend1=new TLegend(0.50, 0.9,  0.7, 0.65);
 TLegend *legend2=new TLegend(0.7, 0.9,  0.90, 0.65);
 //TLegend *legend2=new TLegend(0.6, 0.90,  0.98, 0.45);
 void setLastBinAsOverFlow(TH1D*);
@@ -43,18 +43,25 @@ void searchBinsStack(){
   TH1::SetDefaultSumw2(1);
   gStyle->SetOptStat(0);
 
-  f[0] = new TFile("DCS_Run2016_LostEle_v2.root");
-  f[1] = new TFile("DCS_Run2016_LostMuHadTau_v2.root");
-  // f[2] = new TFile("");
-  // f[3] = new TFile("");
-  // f[4] = new TFile("");
-  //f[8] = new TFile("HG_NLSP150.root");
-  //  f[9] = new TFile("HG_NLSP1000.root");
-  //  f[8] = new TFile("HG_NLSP150.root");
-  //  f[8] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
-  //  f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
-  //  f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
+  f[0] = new TFile("CS_LDP_ZGZJToNuNuG.root");
+  f[1] = new TFile("DCS_LDP_Run2016_LostEle_v2.root");
+  f[2] = new TFile("DCS_LDP_Run2016_LostMuHadTau_v2.root");
+  f[3] = new TFile("DCS_LDP_Run2016_SingleEle_v2.root");
+  f[4] = new TFile("gjets_qcd.root");
+  f[5] = new TFile("DCS_LDP_Run2016_Multijet_v2.root");
 
+  // f[0] = new TFile("CS_ZGZJToNuNuG.root");
+  // f[1] = new TFile("DCS_Run2016_LostEle_v2.root");
+  // f[2] = new TFile("DCS_Run2016_LostMuHadTau_v2.root");
+  // f[3] = new TFile("DCS_Run2016_SingleEle_v2.root");
+  // f[4] = new TFile("gjets_qcd.root");
+  // f[5] = new TFile("DCS_LDP_Run2016_Multijet_v2.root");
+
+  //vector<TString> histName = {"AllSBins_v4","AllSBins_v4_Ele0","AllSBins_v4_Mu0","AllSBins_v4_Pho","AllSBins_v4_AB","AllSBins_v4_AB"};
+  //  vector<TString> histName = {"ST","ST_Ele0","ST_Mu0","ST_Pho","ST_AB","ST_AB"};
+  vector<TString> histName = {"BestPhotonPt","BestPhotonPt_Ele0","BestPhotonPt_Mu0","BestPhotonPt","BestPhotonPt_AB","BestPhotonPt_AB"};
+  //vector<TString> histName = {"AllSBins_v4","AllSBins_v4_Ele0","AllSBins_v4_Mu0","AllSBins_v4_Pho","AllSBins_v4_CD","AllSBins_v4_CD"};
+  int rebin = 1;
 
   gStyle->SetTextSize(2);
   THStack *hs_MET=new THStack("MET_Stack","MET Stacked");
@@ -81,58 +88,30 @@ void searchBinsStack(){
     }
     
     TH1D *h_MET;
-    if(fName=="DCS_Run2016_LostEle_v2.root") h_MET=(TH1D*)f[i]->FindObjectAny("AllSBins_Ele0");//MET_R1
-    else if(fName=="DCS_Run2016_LostMuHadTau_v2.root") h_MET=(TH1D*)f[i]->FindObjectAny("AllSBins_Mu0");//MET_R1
-    else{ cout<<"Don't know which hist to get from "<<f[i]->GetName()<<endl;break;}
+    // if(fName=="DCS_Run2016_LostEle_v2.root") h_MET=(TH1D*)f[i]->FindObjectAny("AllSBins_Ele0");//MET_R1
+    // else if(fName=="DCS_Run2016_LostMuHadTau_v2.root") h_MET=(TH1D*)f[i]->FindObjectAny("AllSBins_Mu0");//MET_R1
+    // else{ cout<<"Don't know which hist to get from "<<f[i]->GetName()<<endl;break;}
+    h_MET=(TH1D*)f[i]->FindObjectAny(histName[i]);
+    h_MET->Rebin(rebin);
     decorate(h_MET,i,f[i]->GetName());
     
     if(i<=(nBG-1))  hs_MET->Add(h_MET);
     if(i==nBG-1) {
       c_cA->cd(); 
-      hs_MET->Draw("BAR HISTE");
+      //      hs_MET->Draw("BAR");
+      hs_MET->Draw("HIST");
+      hs_MET->Draw("e0 sames");
       decorate(hs_MET,i,f[i]->GetName()); 
     }
     if(i>=nBG){ 
       c_cA->cd(); 
-      h_MET->Draw("HISTE sames");
+      h_MET->Draw("e0 sames");
     }
     drawlegend(h_MET,i,f[i]->GetName());
     if(i==nfiles-1) hs_MET->SetTitle(";Bin No.;Events");
 
-    //----------------------all search bins----------------------------
-    for(int j=1;j<=3;j++){
-      TH1D *h_R;
-      if(fName=="DCS_Run2016_LostEle_v2.root") name3="MET_Ele0_R"+to_string(j);
-      else if(fName=="DCS_Run2016_LostMuHadTau_v2.root")  name3="MET_Mu0_R"+to_string(j);
-      else{ cout<<"Don't know which hist to get from "<<f[i]->GetName()<<endl;break;}
-      h_R = (TH1D*)f[i]->FindObjectAny(name3);
-      setLastBinAsOverFlow(h_R);
-      //sr_Integral+=h_R->Integral();
-      for(int k=6;k<=h_R->GetNbinsX();k++){
-  	h_MET_R[i]->SetBinContent( ((j-1)*7)+k-5,h_R->GetBinContent(k) );
-  	h_MET_R[i]->SetBinError  ( ((j-1)*7)+k-5,h_R->GetBinError(k) );
-      }
-    }
-    decorate(h_MET_R[i],i,f[i]->GetName());
-    
-    if(i<=(nBG-1))  hs_MET_SB->Add(h_MET_R[i]);
-    if(i==nBG-1) {
-      c_cB->cd(); 
-      hs_MET_SB->Draw("BAR HIST");
-      hs_MET_SB->Draw("HISTE");
-      decorate(hs_MET_SB,i,f[i]->GetName()); 
-    }
-    if(i>=nBG){ 
-      c_cB->cd(); 
-      h_MET_R[i]->Draw("HISTE sames");
-    }
-    if(i==nfiles-1) hs_MET_SB->SetTitle(";Bin No.;Events");
-    cout<<f[i]->GetName()<<"\t";
-    for(int j=1;j<=h_MET_R[i]->GetNbinsX();j++){
-      cout<<h_MET_R[i]->GetBinContent(j)<<"\t";
-    }cout<<endl;
   }
-  c_cA->cd(); gPad->SetLogy();legend1->Draw();legend2->Draw();
+  c_cA->cd(); gPad->SetLogy();legend1->Draw();//legend2->Draw();
   gPad->RedrawAxis();
 
   textOnTop.SetTextSize(0.05);
@@ -143,14 +122,6 @@ void searchBinsStack(){
   intLumiE.DrawLatexNDC(0.73,0.91,name2);
   c_cA->SaveAs("met_inclusive.png");
   //----------------------all search bins---------------------------- 
-  c_cB->cd(); gPad->SetLogy();legend1->Draw();legend2->Draw();
-  textOnTop.SetTextSize(0.05);
-  intLumiE.SetTextSize(0.05);
-  textOnTop.DrawLatexNDC(0.1,0.91,"CMS #it{#bf{Preliminary}}");
-  intLumiE.SetTextSize(0.05);
-  sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
-  intLumiE.DrawLatexNDC(0.73,0.91,name2);
-  c_cB->SaveAs("searchBins.png");
   cout<<"*****************************************************"<<endl;
   cout<<"Int Lumi(inv.fb) for file1:"<<setprecision(4)<<intLumi<<endl;
     
@@ -158,6 +129,7 @@ void searchBinsStack(){
 
 void decorate(THStack *hs,int i,const char* fname){
   hs->SetMinimum(0.1);
+  hs->SetMaximum(100000);
   hs->SetTitle(0);
   hs->GetXaxis()->SetLabelSize(.04);
   hs->GetYaxis()->SetLabelSize(.05);
@@ -172,8 +144,12 @@ void decorate(TH1D* hist,int i,const char* fname){
   if(i<nBG) {
     hist->SetFillColor(col[i]);
     hist->SetLineColor(kBlack);
+    hist->SetLineWidth(1);
   }
-  else hist->SetLineWidth(2);
+  else{
+    hist->SetLineWidth(2);
+    hist->SetMarkerStyle(20);
+  }
   hist->SetTitle(0);
   hist->GetXaxis()->SetLabelSize(.04);
   hist->GetYaxis()->SetLabelSize(.05);
@@ -218,32 +194,32 @@ void drawlegend(TH1D *hist,int i,const char* fname){
   */
   //legend=new TLegend(0.55, 0.90-i*0.05,  0.98, 0.85-i*0.05);
   
-  string lName=fname;
-  lName.pop_back();lName.pop_back();lName.pop_back();lName.pop_back();lName.pop_back();
+  TString lName=fname;
   
-  if(lName=="ZJetsToNuNu"){lName="Z( #rightarrow #nu #bar{#nu})+jets";}
-  else if(lName=="DCS_Run2016_LostEle_v2"){lName="Lost e";}
-  else if(lName=="DCS_Run2016_LostMuHadTau_v2"){lName="Lost #mu+had #tau";}
-  // else if(lName=="RareProcess"){}
-  // else if(lName=="TTJetsHT"){lName="t #bar{t}";}
-  // else if(lName=="QCD"){lName="QCD";}
-  // else if(lName=="GJets"){lName="#gamma +jets";}
-  // else if(lName=="WGJetsToLNuG"){lName="W(#rightarrow l #nu)+ #gamma";}
-  // else if(lName=="ZGJetsToNuNuG"){lName="Z(#rightarrow #nu #bar{#nu})+ #gamma";}
-  // else if(lName=="TTGJets"){lName="t #bar{t}+ #gamma";}
-  else if(lName=="T1bbbb_ZG_mGl1600_NLSP150"){lName="T5bbbb_ZG_150";}
-  else if(lName=="T1bbbb_ZG_mGl1600_NLSP1000"){lName="T5bbbb_ZG_1000";}
-  else if(lName=="T1bbbb_ZG_mGl1600_NLSP1550"){lName="T5bbbb_ZG_1550";}
+  if(lName.Contains("ToNuNu")){lName="Z( #rightarrow #nu #bar{#nu})#gamma+jets";}
+  else if(lName.Contains("LostEle")){lName="Lost e";}
+  else if(lName.Contains("LostMuHadTau")){lName="Lost #mu+had #tau";}
+  else if(lName.Contains("SingleEle")){lName="e #rightarrow #gamma";}
+  // else if(lName.Contains("TTJetsHT")){lName="t #bar{t}";}
+  // else if(lName.Contains("QCD")){lName="QCD";}
+  else if(lName.Contains("GJets") || lName.Contains("gjets")  ){lName="#gamma +jets";}
+  else if(lName.Contains("Run2016_Multijet") ){lName="Data";}
+  // else if(lName.Contains("WGJetsToLNuG")){lName="W(#rightarrow l #nu)+ #gamma";}
+  // else if(lName.Contains("ZGJetsToNuNuG")){lName="Z(#rightarrow #nu #bar{#nu})+ #gamma";}
+  // else if(lName.Contains("TTGJets")){lName="t #bar{t}+ #gamma";}
+  else if(lName.Contains("T1bbbb_ZG_mGl1600_NLSP150")){lName="T5bbbb_ZG_150";}
+  else if(lName.Contains("T1bbbb_ZG_mGl1600_NLSP1000")){lName="T5bbbb_ZG_1000";}
+  else if(lName.Contains("T1bbbb_ZG_mGl1600_NLSP1550")){lName="T5bbbb_ZG_1550";}
 
-  const char *l_name=lName.c_str();
-  if(i<5){
-    if(i<nBG)legend1->AddEntry(hist,l_name,"f");
-    else legend1->AddEntry(hist,l_name,"l");
+  //  const char *l_name=lName.c_str();
+  if(i<6){
+    if(i<nBG)legend1->AddEntry(hist,lName,"f");
+    else legend1->AddEntry(hist,lName,"lp");
     legend1->SetTextSize(0.04);
   }
   else{
-    if(i<nBG)legend2->AddEntry(hist,l_name,"f");
-    else legend2->AddEntry(hist,l_name,"l");
+    if(i<nBG)legend2->AddEntry(hist,lName,"f");
+    else legend2->AddEntry(hist,lName,"lp");
     legend2->SetTextSize(0.04);
   }
   // legend->SetTextColor(col[i]);

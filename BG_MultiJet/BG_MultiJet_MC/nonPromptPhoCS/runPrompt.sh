@@ -14,5 +14,8 @@
 ./multijet VS_runListT5bbbbZg_1600_150.txt T5bbbbZg_1600_150_prompt.root FastSim
 ./multijet VS_runListT5bbbbZg_1600_1550.txt T5bbbbZg_1600_1550_prompt.root FastSim
 
+./multijet SR_runListT5bbbbZg_1800_150.txt T5bbbbZg_1800_150_prompt.root FastSim
+./multijet SR_runListT5bbbbZg_1800_1750.txt T5bbbbZg_1800_1750_prompt.root FastSim
+
 hadd -f GJetsQCD_prompt.root QCD_prompt.root GJets_prompt.root
 hadd -f EW_ZWTT_prompt.root ZJetsToNuNu_prompt.root ZGJetsToNuNuG_prompt.root WJetsToLNu_prompt.root WGJetsToLNuG_prompt.root TTJets_prompt.root TTGJets_prompt.root

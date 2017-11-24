@@ -104,7 +104,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
       zvec =  ((*Muons)[0] + (*Electrons)[0]);
       zmass = zvec.M();
     }
-    //    if(zvec.M() < 80 || zvec.M() > 100) continue;
+    if(zvec.M() < 80 || zvec.M() > 100) continue;
     // if(Muons->size()==1){
     //   print(0);
     //   cout<<zmass<<endl;
@@ -444,7 +444,7 @@ TLorentzVector ZGamma::getBestPhoton(){
 bool ZGamma::check_eMatchedtoGamma(){
   if(bestPhotonIndxAmongPhotons>=0){
     for(int i=0;i<Electrons->size();i++){
-      if( (*Photons)[bestPhotonIndxAmongPhotons].DeltaR( (*Electrons)[i] ) < 0.1){
+      if( (*Photons)[bestPhotonIndxAmongPhotons].DeltaR( (*Electrons)[i] ) < 0.4){
 	//	cout<<(*Electrons)[i].Pt()<<" "<<(*Electrons)[i].Eta()<<" "<<(*Electrons)[i].Phi()<<" "<<(*Photons)[bestPhotonIndxAmongPhotons].Pt()<<" "<<(*Photons)[bestPhotonIndxAmongPhotons].Eta()<<" "<<(*Photons)[bestPhotonIndxAmongPhotons].Phi()<<" dR:"<<(*Photons)[bestPhotonIndxAmongPhotons].DeltaR( (*Electrons)[i])<<endl;
 	return true;
       }
@@ -457,7 +457,7 @@ bool ZGamma::check_eMatchedtoGamma(){
 bool ZGamma::check_muMatchedtoGamma(){
   if(bestPhotonIndxAmongPhotons>=0){
     for(int i=0;i<Muons->size();i++){
-      if( (*Photons)[bestPhotonIndxAmongPhotons].DeltaR( (*Muons)[i] ) < 0.1){
+      if( (*Photons)[bestPhotonIndxAmongPhotons].DeltaR( (*Muons)[i] ) < 0.4){
 	return true;
       }
     }

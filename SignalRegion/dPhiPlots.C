@@ -26,18 +26,18 @@ char name[100];
 
 void dPhiPlots(){
 
-  // f[0] = new TFile("ZJetsToNuNu.root");
-  // f[1] = new TFile("ZGJetsToNuNuG.root");
-  f[2] = new TFile("WJetsToLNu.root");
-  f[3] = new TFile("WGJetsToLNuG.root");
-  f[4] = new TFile("TTJetsHT.root");
-  f[5] = new TFile("TTGJets.root");
-  //  f[6] = new TFile("QCD.root");
-  f[7] = new TFile("GJets.root");
+  //f[0] = new TFile("ZJetsToNuNu.root");
+  f[0] = new TFile("ZGJetsToNuNuG.root");
+  f[1] = new TFile("WJetsToLNu.root");
+  f[2] = new TFile("WGJetsToLNuG.root");
+  f[3] = new TFile("TTJetsHT.root");
+  f[4] = new TFile("TTGJets.root");
+  //  f[5] = new TFile("QCD.root");
+  f[5] = new TFile("GJets.root");
 
-  f[0] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
-  f[1] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
-  f[6] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
+  f[6] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
+  //  f[1] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
+  f[7] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
  
   // f[7] = new TFile("HG_NLSP150.root");
   //  f[8] = new TFile("HG_NLSP1000.root");
@@ -75,7 +75,7 @@ void dPhiPlots(){
   name1.push_back("BestPho2Pt");
   // name1[3]="jetsPt");
   // name1[4]="temp");
-  // name1[0]="jet1Pt");
+  //  name1.push_back("jet1Pt");
   // name1[1]="jet2Pt");
   // name1[2]="jet3Pt");
   // name1[3]="temp");

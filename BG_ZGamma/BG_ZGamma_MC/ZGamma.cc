@@ -46,7 +46,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   TFile *f_TF = new TFile("TF_CS_ZDYToLLG.root");
   TH1D *h_TF=(TH1D*)f_TF->FindObjectAny("Ratio_NuNuToLL");
-  bool do_prediction=1;
+  bool do_prediction=0;
   cout<<"Doing prediction from ZToLL sample from file |"<<f_TF->GetName()<<"|?"<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
@@ -172,7 +172,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
     //calulate ST and HadJets by cleaning the matching jet.
     bool hadJetID=true;
     int minDRindx=-100,phoMatchingJetIndx=-100,nHadJets=0, minDRindxl1=-100, minDRindxl2=-100;
-    double minDR=99999, ST=0, remJetPt=0, minDRl1=10000, minDRl2=10000;
+    double minDR=99999, ST=0, remJetPt=0, minDRl1=10000, minDRl2=10000,mt_Pho=0.;
     vector<TLorentzVector> hadJets;
 
     for(int i=0;i<Jets->size();i++){
@@ -233,6 +233,8 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
     if(hadJets.size() > 1 ) dphi2 = abs(DeltaPhi(metstar.Phi(),(hadJets)[1].Phi()));
     if(hadJets.size() > 2 ) dphi3 = abs(DeltaPhi(metstar.Phi(),(hadJets)[2].Phi()));
     if(hadJets.size() > 3 ) dphi4 = abs(DeltaPhi(metstar.Phi(),(hadJets)[3].Phi()));
+    mt_Pho = sqrt(2*bestPhoton.Pt()*metstar.Pt()*(1-cos(DeltaPhi(metstar.Phi(),bestPhoton.Phi()))));
+
     if(Muons->size()==2) { 
       dphi_PhoLep1 = abs(bestPhoton.DeltaPhi((*Muons)[0]));
       dphi_PhoLep2 = abs(bestPhoton.DeltaPhi((*Muons)[1]));
@@ -253,6 +255,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
     //apply baseline selections
     //    process = process && ST>500 && MET > 100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
     //process = process && ST>500 &&  nHadJets >=2 && bestPhoton.Pt() > 100;//&& metstar.Pt() > 100 && dphi1 > 0.3 && dphi2 > 0.3 ;
+    //    if(MET>200) continue;
     process = process && ST>500 && metstar.Pt()>100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
     //process = process && ST>500 && nHadJets >=2 && bestPhoton.Pt() > 100;
 
@@ -294,6 +297,33 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
         else if(metstar.Pt()>=METBinLowEdge[METBinLowEdge.size()-1]){ sBin2 = sBin2+7  ;break; }
       }
       if(BTags>=2 && sBin2==35) sBin2=34;
+      int sBin4=-100,m_i4=0;
+      if(BTags==0){
+        if(nHadJets>=2 && nHadJets<=4)     { sBin4=0;}
+	else if(nHadJets==5 || nHadJets==6){ sBin4=8;}
+        else if(nHadJets>=7)               { sBin4=15;}
+      }
+      else{
+        if(nHadJets>=2 && nHadJets<=4)     { sBin4=22;}
+        else if(nHadJets==5 || nHadJets==6){ sBin4=29;}
+        else if(nHadJets>=7)               { sBin4=36;}
+      }
+      if(sBin4==0){
+        for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
+          if(METBinLowEdgeV4_njLow[i]<99.99) continue;
+          m_i4++;
+          if(metstar.Pt() >= METBinLowEdgeV4_njLow[i] && metstar.Pt() < METBinLowEdgeV4_njLow[i+1]){ sBin4 = sBin4+m_i4;break; }
+          else if(metstar.Pt() >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin4 = 8         ;break; }
+	}
+      }
+      else{
+        for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
+          if(METBinLowEdgeV4[i]<99.99) continue;
+          m_i4++;
+          if(metstar.Pt() >= METBinLowEdgeV4[i] && metstar.Pt()< METBinLowEdgeV4[i+1]){ sBin4 = sBin4+m_i4;break; }
+          else if(metstar.Pt() >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin4 = sBin4+7   ;break; }
+	}
+      }
 
       h_ST->Fill(ST,wt);
       h_MET->Fill(metstar.Pt(),wt);
@@ -326,6 +356,8 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
 
       h_dR_PhoClstLep->Fill(dRphoClstLep,wt);
       h_dPhi_PhoMET->Fill(dphiPho_MET,wt);
+      h_mTPho->Fill(mt_Pho,wt);
+
       h_dphi_METjet1->Fill(dphi1,wt);
       h_dphi_METjet2->Fill(dphi2,wt);
       h_dphi_PhoLep1->Fill(dphi_PhoLep1,wt);
@@ -353,6 +385,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
       else if(nHadJets >= 5 && BTags==1)                  h_MET_R_v2[3]->Fill(metstar.Pt(),wt);
       else if(BTags>=2)                                   h_MET_R_v2[4]->Fill(metstar.Pt(),wt);
       h_SBins->Fill(sBin2,wt);
+      h_SBins_v4->Fill(sBin4,wt);
       //    if(Muons->size()==0){
 
       if(Muons->size()==2){
@@ -387,6 +420,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
 	h_dphi_METjet2_2Mu->Fill(dphi2,wt);
 	h_dphi_PhoMu1->Fill(dphi_PhoLep1,wt);
 	h_dphi_PhoMu2->Fill(dphi_PhoLep2,wt);
+	h_mTPho_2Mu->Fill(mt_Pho,wt);
       
 	h_Jet1Pt_2Mu->Fill(hadJets[0].Pt(),wt);
 	h_Jet2Pt_2Mu->Fill(hadJets[1].Pt(),wt);
@@ -419,6 +453,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
         else if(nHadJets >= 5 && BTags==1)                  h_MET_R_v2_2Mu[3]->Fill(metstar.Pt(),wt);
         else if(BTags>=2)                                   h_MET_R_v2_2Mu[4]->Fill(metstar.Pt(),wt);
         h_SBins_2Mu->Fill(sBin2,wt);
+	h_SBins_v4_2Mu->Fill(sBin4,wt);
       }
       else if(Electrons->size()==2){
 	h_ST_2Ele->Fill(ST,wt);
@@ -452,6 +487,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
 	h_dphi_METjet2_2Ele->Fill(dphi2,wt);
 	h_dphi_PhoEle1->Fill(dphi_PhoLep1,wt);
 	h_dphi_PhoEle2->Fill(dphi_PhoLep2,wt);
+	h_mTPho_2Ele->Fill(mt_Pho,wt);
       	 
 	h_Jet1Pt_2Ele->Fill(hadJets[0].Pt(),wt);	
 	h_Jet2Pt_2Ele->Fill(hadJets[1].Pt(),wt);	
@@ -483,6 +519,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
         else if(nHadJets >= 5 && BTags==1)                  h_MET_R_v2_2Ele[3]->Fill(metstar.Pt(),wt);
         else if(BTags>=2)                                   h_MET_R_v2_2Ele[4]->Fill(metstar.Pt(),wt);
         h_SBins_2Ele->Fill(sBin2,wt);
+	h_SBins_v4_2Ele->Fill(sBin4,wt);
       }//e-e + photon events
     }
   } // loop over entries

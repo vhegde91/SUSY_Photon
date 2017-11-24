@@ -34,18 +34,18 @@ void compFakeRates(TString iFname){
   gStyle->SetOptStat(0);
   //  gStyle->SetOptStat("nemri"); 
   f[0] = new TFile(iFname);
-  f[1] = new TFile("FR_Hist_MS_FR_DYJetsToLL_v2.root");
-  // f[1] = new TFile("FR_Hist_MS_FR_DYJetsToLL_ST200_v2.root");
+  //f[1] = new TFile("FR_Hist_MS_FR_DYJetsToLL_v2.root");
+  f[1] = new TFile("FR_Hist_MS_FR_DYJetsToLL_ST200_v2.root");
 
   vector<string> name1,name2;
   vector<int> rebin;
   name1.push_back("FakeRate_ST_Pho");  rebin.push_back(1);         name2.push_back("FakeRate_ST_Pho");     
   //  name1.push_back("FakeRate_MET_Pho");    rebin.push_back(1);     name2.push_back("FakeRate_MET_Pho");
   name1.push_back("FakeRate_nHadJets_Pho");    rebin.push_back(1);     name2.push_back("FakeRate_nHadJets_Pho");
-  name1.push_back("FakeRate_nBTags_Pho");    rebin.push_back(1);     name2.push_back("FakeRate_nBTags_Pho");
-  name1.push_back("FakeRate_BestPhotonPt");    rebin.push_back(1);     name2.push_back("FakeRate_F_ElePt_Pho");
-  name1.push_back("FakeRate_BestPhotonEta");    rebin.push_back(1);     name2.push_back("FakeRate_F_Eleeta_Pho");
-  name1.push_back("FakeRate_Qmulti_Pho");    rebin.push_back(1);     name2.push_back("FakeRate_QMultJetElef_Pho");
+  //  name1.push_back("FakeRate_nBTags_Pho");    rebin.push_back(1);     name2.push_back("FakeRate_nBTags_Pho");
+  //  name1.push_back("FakeRate_BestPhotonPt");    rebin.push_back(1);     name2.push_back("FakeRate_F_ElePt_Pho");
+  //  name1.push_back("FakeRate_BestPhotonEta");    rebin.push_back(1);     name2.push_back("FakeRate_F_Eleeta_Pho");
+  name1.push_back("FakeRate_QMultJetElef_Pho");    rebin.push_back(1);     name2.push_back("FakeRate_QMultJetElef_Pho");
   //  name1.push_back("FakeRate_nVtx_Pho");    rebin.push_back(1);     name2.push_back("FakeRate_nVtx_Pho");
   // name1.push_back("nBTags_Mu1");   rebin.push_back(1);    //name2.push_back("nBTags_Mu1");     
   // name1.push_back("nHadJets_Mu1");  rebin.push_back(1);  //name2.push_back("nHadJets_Mu1");
@@ -155,7 +155,7 @@ void compFakeRates(TString iFname){
     c_cA[i]->cd();    p_bot[i]->cd();
     p_bot[i]->SetTickx();p_bot[i]->SetTicky();
     //    c_cB->cd(i+1);    p_bot[i]->cd();
-    h_numr->Draw("e0");
+    h_numr->Draw("e0 text");
 
     c_cA[i]->cd();    p_top[i]->cd();
     char name2[100];

@@ -44,7 +44,7 @@ void getExclusion(TString fName){
   gr2dXsec->GetYaxis()->SetLabelSize(0.05);
   //  c3->SetLogz();
   //gr2dXsec->GetXaxis()->SetLabelSize(0.4);
-  gr2dXsec->SetMaximum(1.0);
+  //  gr2dXsec->SetMaximum(1.0);
   gr2dXsec->SetMinimum(0.0);
   gr2dXsec->Draw("COLZ");
   gr1d->Draw("C");
@@ -72,6 +72,7 @@ void getExclusion(TString fName){
   c3->Update();
   fout->cd();
   gr2dXsec->Write();
-  gr1d->Write();
+  TGraph *gr1d_cp=(TGraph*)gr1d->Clone("exp");
+  gr1d_cp->Write();
   
 }

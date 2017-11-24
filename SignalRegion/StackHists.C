@@ -23,7 +23,7 @@ TFile *f[nfiles];
 //int col[10]={kOrange,kBlue,kTeal+9,kGray+1,kCyan,kOrange-9,kYellow+2,kRed,kMagenta+2,kMagenta};  //Specify Colors
 //int col[11]={kOrange,kBlue,kTeal+9,kOrange-9,kGray+1,kCyan,kMagenta+2,kPink+1,kRed,kMagenta,kBlue+2};  //Specify Colors
 //int col[11]={kPink+1,kTeal+9,kOrange,kYellow,kBlue,kCyan,kGreen,kMagenta+2,kRed,kMagenta,kBlue+2};  //Specify Colors
-int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kMagenta+2,kCyan,kBlue,kRed,kBlue+2,kMagenta};  //Specify Colors b's
+int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kMagenta+2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
 
 char name[100],name2[100];
 TObjArray Hlist(0);
@@ -43,8 +43,8 @@ void StackHists(){
   f[3] = new TFile("WJetsToLNu.root");
   f[4] = new TFile("ZJetsToNuNu.root");
   f[5] = new TFile("ZGJetsToNuNuG.root");
-  f[6] = new TFile("GJets.root");
-  f[7] = new TFile("QCD.root");
+  f[6] = new TFile("QCD.root");
+  f[7] = new TFile("GJets.root");
   //f[8] = new TFile("HG_NLSP150.root");
   //  f[9] = new TFile("HG_NLSP1000.root");
   //  f[8] = new TFile("HG_NLSP150.root");
@@ -109,6 +109,7 @@ void StackHists(){
     TH1D *h_nJets=(TH1D*)f[i]->FindObjectAny("nHadJets");
     TH1D *h_BTags=(TH1D*)f[i]->FindObjectAny("nBTags");
     TH1D *h_BestPhotonPt=(TH1D*)f[i]->FindObjectAny("BestPhotonPt");
+    //    TH1D *h_BestPhotonPt=(TH1D*)f[i]->FindObjectAny("mTPhoMET");
     TH2D *h2_PhotonPtvsMET=(TH2D*)f[i]->FindObjectAny("BestPhotonPtvsMET");
    
     // TH1D *h_STvBin=(TH1D*)f[i]->FindObjectAny("MET_Rall");

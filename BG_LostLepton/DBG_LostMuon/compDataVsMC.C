@@ -37,7 +37,7 @@ void compDataVsMC(TString iFname){
   
   vector<string> name1;
   vector<int> rebin;
-  name1.push_back("ST_Mu1");  rebin.push_back(5);         //name2.push_back("ST_Mu1");     
+  name1.push_back("ST_Mu1");  rebin.push_back(10);         //name2.push_back("ST_Mu1");     
   name1.push_back("MET_Mu1");    rebin.push_back(1);     //name2.push_back("MET_Mu1");     
   name1.push_back("nBTags_Mu1");   rebin.push_back(1);    //name2.push_back("nBTags_Mu1");     
   name1.push_back("nHadJets_Mu1");  rebin.push_back(1);  //name2.push_back("nHadJets_Mu1");

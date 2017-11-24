@@ -18,53 +18,61 @@
 #include"THStack.h"
 #include"TStyle.h"
 
-const int nfiles=2;    //Specify no. of files
+const int nfiles=6;    //Specify no. of files
 TFile *f[nfiles];
 //int col[10]={kOrange,kTeal+9,kBlue,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
-int col[10]={kBlack,kMagenta+2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed};  //Specify Colors 
+int col[11]={kBlack,kMagenta+2,kTeal+9,kGreen,kOrange,kCyan,kYellow,kPink+1,kBlue,kRed,kMagenta};  //Specify Colors
+//int col[10]={kBlack,kMagenta+2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed};  //Specify Colors
 TString name;
-bool saveCanvas=0;
+bool saveCanvas=0,saveFile=1;
 void setLastBinAsOverFlow(TH1D*);
 TString getLegName(TString);
+TString getXaxisName(TString);
 double data_Integral=0,mc_Integral=0;
 TLatex textOnTop,intLumiE;
 double intLumi=35.9;
 void stackedDataVsMC(TString iFname){
   TH1::SetDefaultSumw2(1);
   gStyle->SetOptStat(0);
-  //  gStyle->SetOptStat("nemri"); 
-  f[0] = new TFile(iFname);
-  f[1] = new TFile("CS_ZGZJToNuNuG.root");
-  // f[1] = new TFile("CS_TGZGDY_LostEle_v2.root");
-  // f[2] = new TFile("CS_WJets_LostEle_v2.root");
-  // f[3] = new TFile("CS_TTJets_LostEle_v2.root");
-  // f[4] = new TFile("CS_TTG_LostEle_v2.root");
-  // f[5] = new TFile("CS_WG_LostEle_v2.root");
-  
+  //  gStyle->SetOptStat("nemri");
+  vector<TString> suffixHist; 
+  //  f[0] = new TFile(iFname);                                          suffixHist.push_back("_AB");
+  // f[1] = new TFile("CS_LDP_ZGZJToNuNuG.root");                       suffixHist.push_back("");
+  // f[2] = new TFile("DCS_LDP_Run2016_LostEle_v2.root");               suffixHist.push_back("_Ele0");
+  // f[3] = new TFile("DCS_LDP_Run2016_LostMuHadTau_v2.root");          suffixHist.push_back("_Mu0");
+  // f[4] = new TFile("DCS_LDP_Run2016_SingleEle_v2.root");             suffixHist.push_back("_Pho");
+  // f[5] = new TFile("gjets_qcd.root");                                suffixHist.push_back("_AB");
+
+  f[0] = new TFile(iFname);                                          suffixHist.push_back("_C");
+  f[1] = new TFile("CS_c_ZGZJToNuNuG.root");                       suffixHist.push_back("");
+  f[2] = new TFile("DCS_c_Run2016_LostEle_v2.root");               suffixHist.push_back("_Ele0");
+  f[3] = new TFile("DCS_c_Run2016_LostMuHadTau_v2.root");          suffixHist.push_back("_Mu0");
+  f[4] = new TFile("DCS_c_Run2016_SingleEle_v2.root");             suffixHist.push_back("_Pho");
+  f[5] = new TFile("gjets_qcd.root");                                suffixHist.push_back("_C");
+
+  //f[5] = new TFile("GJetsQCD_LDPSFs.root");                          suffixHist.push_back("_AB");
+
+  TFile *fout;
   vector<string> name1;
   vector<int> rebin;
-  // name1.push_back("ST_Ele0");  rebin.push_back(10);         //name2.push_back("ST_Ele0");     
-  // name1.push_back("MET_Ele0");    rebin.push_back(5);     //name2.push_back("MET_Ele0");     
-  // name1.push_back("nBTags_Ele0");   rebin.push_back(1);    //name2.push_back("nBTags_Ele0");     
-  // name1.push_back("nHadJets_Ele0");  rebin.push_back(1);  //name2.push_back("nHadJets_Ele0");
-  // name1.push_back("METvarBin_Ele0");  rebin.push_back(1); //name2.push_back("METvarBin_Ele0");
-  // name1.push_back("BestPhotonPt_Ele0");  rebin.push_back(5); //name2.push_back("METvarBin_Ele0");  
+  name1.push_back("ST");  rebin.push_back(10);         //name2.push_back("ST_Mu1");     
+  name1.push_back("MET");    rebin.push_back(1);     //name2.push_back("MET_Mu1");     
+  //  name1.push_back("METPhi");    rebin.push_back(1);     //name2.push_back("MET_Mu1");     
+  name1.push_back("nBTags");   rebin.push_back(1);    //name2.push_back("nBTags_Mu1");     
+  name1.push_back("nHadJets");  rebin.push_back(1);  //name2.push_back("nHadJets_Mu1");
+  //name1.push_back("AllSBins_v4");  rebin.push_back(1);  //name2.push_back("nHadJets_Mu1");
+  name1.push_back("BestPhotonPt");   rebin.push_back(5);  //name2.push_back("BestPhotonPt_Mu1");      
+  name1.push_back("BestPhotonEta");   rebin.push_back(2);
+  name1.push_back("BestPhotonPhi");   rebin.push_back(2);
+  name1.push_back("nVtx");   rebin.push_back(2);
+  //name1.push_back("METvarBin");  rebin.push_back(1); //name2.push_back("METvarBin_Mu1");  
+  //name1.push_back("dPhi_METjet1_Pho_Mu1"); rebin.push_back(2);  //name2.push_back("dPhi_METjet1_Pho_Mu1");  
+  // name1.push_back("dPhi_METjet2_Pho_Mu1"); rebin.push_back(2);  //name2.push_back("dPhi_METjet2_Pho_Mu1");  
+  // name1.push_back("dPhi_METBestPhoton_Mu1"); rebin.push_back(2);   //name2.push_back("dPhi_METBestPhoton_Mu1");  
+  name1.push_back("mTPho");   rebin.push_back(2);
+  name1.push_back("dPhi_METBestPhoton");   rebin.push_back(2);
+  // name1.push_back("AllSBins_Mu1");   rebin.push_back(1);
 
-  // name1.push_back("MET_R1_v2_Ele0");   rebin.push_back(1);
-  // name1.push_back("MET_R2_v2_Ele0");   rebin.push_back(1);
-  // name1.push_back("MET_R3_v2_Ele0");   rebin.push_back(1);
-  // name1.push_back("MET_R4_v2_Ele0");   rebin.push_back(1);
-  // name1.push_back("MET_R5_v2_Ele0");   rebin.push_back(1);
-  name1.push_back("AllSBins_ZG");   rebin.push_back(1);
-
-  //  name1.push_back("nVtx_Ele0");   rebin.push_back(5);
-  // name1.push_back("nEleTracks_Ele");   rebin.push_back(1);
-  // name1.push_back("nMuTracks_Ele");   rebin.push_back(1);
-  // name1.push_back("nPiTracks_Ele");   rebin.push_back(1);
-  // name1.push_back("nTracks_Ele");   rebin.push_back(1);
-
-  // name1.push_back("MET_Ele_R2");         name2.push_back("MET_Ele_R2");rebin.push_back(1);
-  // name1.push_back("MET_Ele_R3");         name2.push_back("MET_Ele_R3");rebin.push_back(1);
 
   TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
   TCanvas *c_cA[name1.size()];
@@ -77,30 +85,30 @@ void stackedDataVsMC(TString iFname){
   for(int i=0;i<name1.size();i++){
     name=name1[i];//+name2[i];
     c_cA[i]=new TCanvas(name,name,1500,800);//c_cA[i]->Divide(4,2);
-    p_top[i]=new TPad(name+"_top",name+"_top",0,0.35,1,1);
-    p_bot[i]=new TPad(name+"_bot",name+"_bot",0,0.04,1,0.35);
+    p_top[i]=new TPad(name+"_top",name+"_top",0,0.4,1,1);
+    p_bot[i]=new TPad(name+"_bot",name+"_bot",0,0.0,1,0.4);
     p_top[i]->Draw();p_top[i]->SetGridx();p_top[i]->SetGridy();p_top[i]->SetLogy();
     p_top[i]->SetBottomMargin(0);
     p_bot[i]->SetTopMargin(0);
-    p_bot[i]->SetBottomMargin(0.2);
+    p_bot[i]->SetBottomMargin(0.3);
     p_bot[i]->Draw();p_bot[i]->SetGridx();p_bot[i]->SetGridy();    
     name=name1[i]+"_Stack";
     hs_hist[i] = new THStack(name,name);
-    legend[i]=new TLegend(0.8, 0.90,  0.90, 0.54);
+    legend[i]=new TLegend(0.7, 0.88,  0.86, 0.45);
   }
   //cout<<getLegName(f[0]->GetName());
   TH1D *h_histG,*h_histE,*h_histGcopy;
   for(int i=0;i<name1.size();i++){
     c_cA[i]->cd();
-    name=name1[i];
+    name=name1[i]+suffixHist[0];
     h_histG=(TH1D*)f[0]->FindObjectAny(name);
+    if(!h_histG) cout<<"Hist Not Found: "<<name<<" in file "<<f[0]->GetName()<<endl;
     h_histG->Rebin(rebin[i]);
     setLastBinAsOverFlow(h_histG);
-    if(name1[i]=="nHadJets_Ele") data_Integral=h_histG->Integral();
+    if(name.Contains("nHadJets")) data_Integral=h_histG->Integral();
     c_cA[i]->cd();p_top[i]->cd();
     p_top[i]->SetTickx();p_top[i]->SetTicky();
-    //    h_histG->SetLineColor(kBlack);
-    h_histG->SetLineColor(kBlue);
+    h_histG->SetLineColor(kBlack);
     h_histG->SetLineWidth(2);
     h_histG->SetMarkerStyle(20);
     h_histG->SetMarkerColor(h_histG->GetLineColor());
@@ -109,16 +117,23 @@ void stackedDataVsMC(TString iFname){
     // h_histG->GetYaxis()->SetTitleSize(0.08);
     // h_histG->GetYaxis()->SetLabelSize(0.08);
     //h_histG->Draw();
-    legend[i]->AddEntry(h_histG,"Pred","lep");
+    legend[i]->AddEntry(h_histG,"Data","lep");
     //gPad->Update();
     // gPad->BuildLegend(0.75,0.75,0.95,0.95,"");
       
     for(int p=1;p<nfiles;p++){  
-      name=name1[i];
+      name=name1[i]+suffixHist[p];
+      if(name=="BestPhotonPt_Pho" && p==4) name = "BestPhotonPt";
+      if(name=="BestPhotonEta_Pho" && p==4) name = "BestPhotonEta";
+      if(name=="BestPhotonPhi_Pho" && p==4) name = "BestPhotonPhi";
+      if(name=="dPhi_METBestPhoton_Pho" && p==4) name = "dPhi_METBestPhoton";
+      if(name=="mTPho_Pho" && p==4) name = "mT_Pho";
+
       h_histE=(TH1D*)f[p]->FindObjectAny(name);
+      if(!h_histE) cout<<"Hist Not Found: "<<name<<" in file "<<f[p]->GetName()<<endl;
       h_histE->Rebin(rebin[i]);
       setLastBinAsOverFlow(h_histE);
-      if(name1[i]=="nHadJets_Ele"){
+      if(name.Contains("nHadJets")){
         mc_Integral+=h_histE->Integral();
         cout<<f[p]->GetName()<<" # events "<<h_histE->Integral()<<endl;
       }
@@ -127,6 +142,7 @@ void stackedDataVsMC(TString iFname){
       h_histE->SetMarkerStyle(21);
       h_histE->SetMarkerColor(h_histE->GetLineColor());
       h_histE->SetFillColor(h_histE->GetLineColor());
+     
       hs_hist[i]->Add(h_histE);
       if(p==1){
 	name=name1[i]+"_Sum";
@@ -140,9 +156,9 @@ void stackedDataVsMC(TString iFname){
     hs_hist[i]->Draw("BAR");
     h_histG->Draw("same");
     hs_hist[i]->SetTitle(";;Events");
-    hs_hist[i]->GetYaxis()->SetTitleOffset(0.60);    
-    hs_hist[i]->GetYaxis()->SetTitleSize(0.08);
-    hs_hist[i]->GetYaxis()->SetLabelSize(0.08);
+    hs_hist[i]->GetYaxis()->SetTitleOffset(0.50);    
+    hs_hist[i]->GetYaxis()->SetTitleSize(0.09);
+    hs_hist[i]->GetYaxis()->SetLabelSize(0.09);
     
     c_cA[i]->Modified();
     c_cA[i]->Update();
@@ -154,32 +170,40 @@ void stackedDataVsMC(TString iFname){
     h_numr->SetLineColor(kBlack);
     h_numr->SetMarkerColor(kBlack);
     h_numr->SetTitle(0); name=name1[i];
-    h_numr->GetXaxis()->SetTitle(name);
-    h_numr->GetXaxis()->SetTitleOffset(0.92);
-    h_numr->GetXaxis()->SetTitleSize(0.11);
-    h_numr->GetYaxis()->SetTitle("#frac{Pred}{MC}");
-    h_numr->GetYaxis()->SetTitleOffset(0.29);
-    h_numr->GetYaxis()->SetTitleSize(0.13);
+    h_numr->GetXaxis()->SetTitle(getXaxisName(name));
+    h_numr->GetXaxis()->SetTitleOffset(0.87);
+    h_numr->GetXaxis()->SetTitleSize(0.13);
     h_numr->GetXaxis()->SetLabelSize(0.14);
-    h_numr->GetYaxis()->SetLabelSize(0.16);
+
+    h_numr->GetYaxis()->SetTitle("#frac{Data}{MC}");
+    h_numr->GetYaxis()->SetTitleOffset(0.35);
+    h_numr->GetYaxis()->SetTitleSize(0.13);
+    h_numr->GetYaxis()->SetLabelSize(0.14);
     h_numr->GetYaxis()->SetNdivisions(505);
-    h_numr->SetMaximum(2.0);
+    //    h_numr->SetMaximum(1.99);
     h_numr->SetMinimum(0.01);
     c_cA[i]->cd();    p_bot[i]->cd();
     p_bot[i]->SetTickx();p_bot[i]->SetTicky();
     //    c_cB->cd(i+1);    p_bot[i]->cd();
     h_numr->Draw("e0");
-
+    cout<<h_numr->GetName()<<endl;;
     c_cA[i]->cd();    p_top[i]->cd();
+    gPad->RedrawAxis();
     char name2[100];
     textOnTop.SetTextSize(0.06);
     intLumiE.SetTextSize(0.06);
-    textOnTop.DrawLatexNDC(0.1,0.91,"CMS #it{#bf{Preliminary}}");
+    textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
     intLumiE.SetTextSize(0.06);
     sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
     intLumiE.DrawLatexNDC(0.73,0.91,name2);
     if(saveCanvas){name="c_"+name1[i]+".png";c_cA[i]->SaveAs(name);}
-    
+    if(saveFile){
+      name = h_numr->GetName();
+      if(name.Contains("nHadJets")){
+	fout = new TFile("Multijet_SF.root","recreate");
+	fout->cd(); h_numr->Write();
+      }
+    }    
   }
   
   cout<<"Integral in Data "<<data_Integral<<endl
@@ -187,25 +211,30 @@ void stackedDataVsMC(TString iFname){
 }
 
 TString getLegName(TString fname){
-  if(fname=="CS_TTG_LostMuHadTau_v2.root") return "t#bar{t}+#gamma";
-  else if(fname=="CS_TTJets_LostMuHadTau_v2.root") return "t#bar{t}";
-  else if(fname=="CS_WG_LostMuHadTau_v2.root") return "W#gamma";
-  else if(fname=="CS_WJets_LostMuHadTau_v2.root") return "W+Jets";
-  else if(fname=="CS_TG_LostMuHadTau_v2.root") return "t+#gamma";
-  else if(fname=="CS_TGZGDY_LostMuHadTau_v2.root") return "Rare";
-
-  else if(fname=="CS_TTG_LostEle_v2.root") return "t#bar{t}+#gamma";
-  else if(fname=="CS_TTJets_LostEle_v2.root") return "t#bar{t}";
-  else if(fname=="CS_WG_LostEle_v2.root") return "W#gamma";
-  else if(fname=="CS_WJets_LostEle_v2.root") return "W+Jets";
-  else if(fname=="CS_TG_LostEle_v2.root") return "t+#gamma";
-  else if(fname=="CS_TGZGDY_LostEle_v2.root") return "Rare";
-
-  else if(fname=="CS_ZDYToLLG_AppTF.root") return "Z#nu#bar{#nu}+#gamma";
-  else if(fname=="CS_ZGZJToNuNuG.root") return "Z#nu#bar{#nu}+#gamma";
+  if(fname.Contains("ToNuNu")){return "Z( #rightarrow #nu #bar{#nu})#gamma+jets";}
+  else if(fname.Contains("LostEle")){return "Lost e";}
+  else if(fname.Contains("LostMuHadTau")){return "Lost #mu+had #tau";}
+  else if(fname.Contains("SingleEle")){return "e #rightarrow #gamma";}
+  else if(fname.Contains("GJets") || fname.Contains("gjets")  ){return "#gamma +jets";}
+  else if(fname.Contains("Run2016_Multijet") ){return "Data";}
   else return fname;
 }
+TString getXaxisName(TString axname){
+  if(axname.Contains("nHadJets")) return "Jets";
+  else if(axname.Contains("ST")) return "ST(GeV)";
+  else if(axname.Contains("BTags")) return "b-Tags";
+  else if(axname.Contains("ElePt")) return "e pT(GeV)";
+  else if(axname.Contains("PhotonPt")) return "#gamma pT(GeV)";
+  else if(axname.Contains("mT")) return "mT_{#gamma,MET}(GeV)";
+  else if(axname.Contains("AllSBin")) return "Bin Number";
+  else if(axname.Contains("dPhi_METjet1") || axname.Contains("dphi1_METjet1")) return "#Delta#Phi_{1}";
+  else if(axname.Contains("dPhi_METjet2") || axname.Contains("dphi2_METjet2")) return "#Delta#Phi_{2}";
+  else if(axname.Contains("dPhi_METBestPhoton") ) return "#Delta#Phi(MET,#gamma)";
+  else if(axname.Contains("QMut") || axname.Contains("Qmut")) return "QMult";
+  else if(axname.Contains("MET")) return "MET(GeV)";
+  else return axname;
 
+}
 
 void setLastBinAsOverFlow(TH1D* h_hist){
   double lastBinCt =h_hist->GetBinContent(h_hist->GetNbinsX()),overflCt =h_hist->GetBinContent(h_hist->GetNbinsX()+1);

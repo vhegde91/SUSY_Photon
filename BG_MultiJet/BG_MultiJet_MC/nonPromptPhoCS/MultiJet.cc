@@ -41,7 +41,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
  
   Long64_t nbytes = 0, nb = 0;
   int decade = 0;
-  bool do_AB_reweighting=1,useValRegion=0;
+  bool do_AB_reweighting=0,useValRegion=0;
   int evtSurvived=0;
   TFile *f_HLR;
   if(useValRegion)  f_HLR = TFile::Open("HLR_GJetsQCD_idFail.root");
@@ -160,14 +160,14 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     else myHT=ST;
     sortTLorVec(&hadJets);
     mtPho = sqrt(2*bestPhoton.Pt()*MET*(1-cos(DeltaPhi(METPhi,bestPhoton.Phi()))));
-
+    //if(mtPho<100) continue;
     double dphi1=3.8,dphi2=3.8,dphi3=3.8,dphi4=3.8,dphiG_MET=3.8;
     if(bestPhoton.Pt()>0.1) dphiG_MET=abs(DeltaPhi(METPhi,bestPhoton.Phi()));
     if(hadJets.size() > 0 ) dphi1 = abs(DeltaPhi(METPhi,(hadJets)[0].Phi()));
     if(hadJets.size() > 1 ) dphi2 = abs(DeltaPhi(METPhi,(hadJets)[1].Phi()));
     if(hadJets.size() > 2 ) dphi3 = abs(DeltaPhi(METPhi,(hadJets)[2].Phi()));
     if(hadJets.size() > 3 ) dphi4 = abs(DeltaPhi(METPhi,(hadJets)[3].Phi()));
-
+    //    if(dphiG_MET<0.3) continue;
     // if(useValRegion){
     //   if     (MET <  200 &&  (isIDFailPho)) regType = 'A';
     //   else if(MET >= 200 &&  (isIDFailPho)) regType = 'B';

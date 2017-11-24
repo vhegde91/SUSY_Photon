@@ -75,18 +75,28 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     //    if(allBestPhotons.size()<2) continue;
     bool noFakeJet = true;
 
-    if(s_data=="genprompt" || s_data=="GJets" || s_data=="TTG" || s_data=="WG" || s_data=="ZG"){
+    if(s_data=="genprompt" || s_data=="TTG" || s_data=="WG" || s_data=="ZG"){
       if(jentry==0){cout<<"**********processing "<<s_data<<" with prompt Gen photon"<<endl;}
       // if(hasGenPromptPhoton)
       // 	process=true;
       // else continue;
     }//Gen prompt
-    else if(s_data=="gennonprompt" || s_data=="QCD" || s_data=="TTJets" || s_data=="WJets" || s_data=="ZJets"){
+    else if(s_data=="gennonprompt" || s_data=="TTJets" || s_data=="WJets" || s_data=="ZJets"){
       if(jentry==0){cout<<"**********processing "<<s_data<<" w/o prompt gen photon"<<endl;}
       if(!hasGenPromptPhoton)
 	process=true;
       else continue;
     }//Gen non-prompt
+    else if(s_data=="QCD"){
+      if(jentry==0){cout<<"**********processing "<<s_data<<" w/o prompt gen photon"<<endl;}
+      //      if(hasGenPromptPhoton && madMinDeltaRStatus==1 && madMinPhotonDeltaR > 0.4) continue;
+      if(!((*Photons_nonPrompt)[bestPhotonIndxAmongPhotons]) && madMinDeltaRStatus==1 && madMinPhotonDeltaR > 0.4) continue;
+    }
+    else if(s_data=="GJets"){
+      if(jentry==0){cout<<"**********processing "<<s_data<<" with prompt Gen photon"<<endl;}
+      //      if(!hasGenPromptPhoton) continue;
+      if((*Photons_nonPrompt)[bestPhotonIndxAmongPhotons]) continue;
+    }
     else if(s_data=="SignalZ"){
       TLorentzVector v1;
       int nZbsn=0,nZbsngsKids=0;
@@ -197,10 +207,9 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     //    if(mTPhoMET<100) continue;
     // if(BTags!=0) continue;
     // if(nHadJets>4) continue;
-    if(MET<=200) continue;
+    //    if(MET<=200) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
     process = process && !eMatchedG && !bestPhoHasPxlSeed && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100 && dphi1 > 0.3 && dphi2 > 0.3;
-        //    process = process && !eMatchedG && !bestPhoHasPxlSeed && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && HT>500 && NJets>=2 && MET > 100;// && dphi1 > 0.3 && dphi2 > 0.3;
     //  process = process && ST>500 && nHadJets>=2 && MET>100 && dphi1 > 0.3 && dphi2 > 0.3;
     //    process = process && NJets>=3 && MET>100;// && dphi1 > 0.3;
     //if(process){process=HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0 && minDR<0.3;}
@@ -227,6 +236,13 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
 	h_MHTstar->Fill(mhtstar,wt);
 
 	h2_PtPhotonvsMET->Fill( bestPhoton.Pt(),MET,wt);
+	h2_METvsnHadJets->Fill(MET,nHadJets,wt);
+	h2_METvBinvsnHadJets->Fill(MET,nHadJets,wt);
+	h2_METvsdPhi1->Fill(MET,dphi1,wt);
+	h2_METvsdPhi2->Fill(MET,dphi2,wt);
+	h2_METvsMindPhi1dPhi2->Fill(MET,min(dphi1,dphi2),wt);
+	h2_dPhi1dPhi2->Fill(dphi1,dphi2,wt);
+
 	h_madHT->Fill(madHT,wt);
 	findObjMatchedtoG(bestPhoton);
 	
@@ -322,6 +338,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
 	if(hadJets.size() > 1 ) h_dPhi_METjet2->Fill( dphi2,wt );
 	if(hadJets.size() > 2 ) h_dPhi_METjet3->Fill( dphi3,wt );
 	if(hadJets.size() > 3 ) h_dPhi_METjet4->Fill( dphi4,wt );
+	h_mindPhi1dPhi2->Fill(min(dphi1,dphi2),wt);
 	//	if(hadJets.size() > 3 ) h_dPhi_METjet4->Fill( abs(DeltaPhi(METPhi,( ((hadJets)[0]+(hadJets)[1]+(hadJets)[2]+(hadJets)[3]).Phi()))) );
 	for(int i=0;i<hadJets.size() && i<4;i++){
 	  h_jetPt[i] ->Fill(hadJets[i].Pt());

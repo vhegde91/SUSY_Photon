@@ -84,8 +84,10 @@ void searchBinsStack(){
 	cout<<"Integarted lumi for "<<f[i]->GetName()<<" is "<<h_intLumi->GetMean()<<" and for other files it is different"<<endl;
     }
     
-    TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("AllSBins_v4_CD");//MET_R1
+    TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("AllSBins_v4_CD");//MET_R
+    //    TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("dPhi_METBestPhoton_CD");h_MET->Rebin(2);
     decorate(h_MET,i,f[i]->GetName());
+    cout<<f[i]->GetName()<<" "<<h_MET->Integral()<<endl;
     
     if(i<=(nBG-1))  hs_MET->Add(h_MET);
     if(i==nBG-1) {
@@ -213,6 +215,8 @@ void drawlegend(TH1D *hist,int i,const char* fname){
   else if(lName.Contains("T5bbbbZg_1600_150")){lName="T5bbbb_ZG_150";}
   else if(lName.Contains("T5bbbbZg_1600_1000")){lName="T5bbbb_ZG_1000";}
   else if(lName.Contains("T5bbbbZg_1600_1550")){lName="T5bbbb_ZG_1550";}
+  else if(lName.Contains("T5bbbbZg_1800_150")){lName="T5bbbb_ZG_150";}
+  else if(lName.Contains("T5bbbbZg_1800_1750")){lName="T5bbbb_ZG_1750";}
 
   //  const char *l_name=lName.c_str();
   TString l_name=lName;

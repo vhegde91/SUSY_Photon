@@ -45,6 +45,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuHadTau_v2.root");
+  //  TFile *f_LP=new TFile("LstMu_LDP_CS_TTWZ_LostMuHadTau_v2.root");
   //  TFile *f_LP=new TFile("LstMu_CS_TTWZ_HadTauOnly_v2.root");
   //TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuOnly_v2.root");
 
@@ -125,7 +126,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     if(hadJets.size() > 1 ) dphi2 = abs(DeltaPhi(METPhi,(hadJets)[1].Phi()));
     if(hadJets.size() > 2 ) dphi3 = abs(DeltaPhi(METPhi,(hadJets)[2].Phi()));
     if(hadJets.size() > 3 ) dphi4 = abs(DeltaPhi(METPhi,(hadJets)[3].Phi()));
-
+    //    if(dphiPho_MET<0.5) continue;
     //+++++++++++++++++++++++++ data only +++++++++++++++++++++++++++++
     wt=1;
     if((Muons->size()==0) && (Electrons->size()==0)) continue;//0-lepton is SR. Blind this region.
@@ -235,6 +236,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     }//photon has been identified. It is a real photon and it is matched to gen photon with dR(genPho,RecoPho) < 0.1 and Pts are within 10%.
     //---------------------- MC only ends-------------------------
 */
+    //    if(MET>200) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
     process = process && ST>500 && MET > 100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
 
@@ -278,6 +280,33 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	else if(MET>=METBinLowEdge[METBinLowEdge.size()-1]){ sBin2 = sBin2+7  ;break; }
       }
       if(BTags>=2 && sBin2==35) sBin2=34;
+      int sBin4=-100,m_i4=0;
+      if(BTags==0){
+        if(nHadJets>=2 && nHadJets<=4)     { sBin4=0;}
+	else if(nHadJets==5 || nHadJets==6){ sBin4=8;}
+        else if(nHadJets>=7)               { sBin4=15;}
+      }
+      else{
+        if(nHadJets>=2 && nHadJets<=4)     { sBin4=22;}
+        else if(nHadJets==5 || nHadJets==6){ sBin4=29;}
+        else if(nHadJets>=7)               { sBin4=36;}
+      }
+      if(sBin4==0){
+        for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
+          if(METBinLowEdgeV4_njLow[i]<99.99) continue;
+          m_i4++;
+          if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin4 = sBin4+m_i4;break; }
+          else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin4 = 8         ;break; }
+	}
+      }
+      else{
+        for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
+          if(METBinLowEdgeV4[i]<99.99) continue;
+          m_i4++;
+          if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin4 = sBin4+m_i4;break; }
+          else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin4 = sBin4+7   ;break; }
+	}
+      }
       //      if(Muons->size()==0){//MC only
       //+++++++++++++++++++++++++ data only +++++++++++++++++++++++++++++
       if(Muons->size()==1){
@@ -290,8 +319,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	  // else if(nHadJets==5 || nHadJets==6) name="LostProb_3";
 	  // else if(nHadJets>=7)                name="LostProb_4";
 	  if(BTags==0)      name="LostProb_0";
-	  else if(BTags==1) name="LostProb_1";
-	  else if(BTags>=2) name="LostProb_2";
+	  else if(BTags>=1) name="LostProb_1";
+	  //	  else if(BTags>=2) name="LostProb_2";
 	  h2_LP=(TH2D*)f_LP->FindObjectAny(name);
 	  if(h2_LP) tf=h2_LP->GetBinContent(h2_LP->FindBin(parX,parY));
 	  else cout<<"hist not found"<<endl;
@@ -362,8 +391,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	else if(nHadJets>=7)                h2_STMET_NJ7toInf_Mu0->Fill(ST,MET,wt);
 
 	if(BTags==0)      h2_METNJ_0b_Mu0->Fill(MET,nHadJets,wt);
-	else if(BTags==1) h2_METNJ_1b_Mu0->Fill(MET,nHadJets,wt);
-	else if(BTags>=2) h2_METNJ_m2b_Mu0->Fill(MET,nHadJets,wt);
+	else if(BTags>=1) h2_METNJ_1b_Mu0->Fill(MET,nHadJets,wt);
+	//	else if(BTags>=2) h2_METNJ_m2b_Mu0->Fill(MET,nHadJets,wt);
 	//---------------- search bins -----------------------
 	if( searchRegion > 0 && searchRegion < 4){
 	  h_MET_Mu0_R[searchRegion-1]->Fill(MET,wt);
@@ -375,6 +404,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
         else if(nHadJets >= 5 && BTags==1)                  h_MET_R_v2_Mu0[3]->Fill(MET,wt);
         else if(BTags>=2)                                   h_MET_R_v2_Mu0[4]->Fill(MET,wt);
 	h_SBins_Mu0->Fill(sBin2,wt);
+	h_SBins_v4_Mu0->Fill(sBin4,wt);
 	wt=wt_org;
       }//0 muon + photon events
       if(Muons->size()==1){
@@ -388,8 +418,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	  // else if(nHadJets==5 || nHadJets==6) name="LostProb_3";
 	  // else if(nHadJets>=7)                name="LostProb_4";
 	  if(BTags==0)      name="LostProb_0";
-	  else if(BTags==1) name="LostProb_1";
-	  else if(BTags>=2) name="LostProb_2";
+	  else if(BTags>=1) name="LostProb_1";
+	  //	  else if(BTags>=2) name="LostProb_2";
 	  h2_LP=(TH2D*)f_LP->FindObjectAny(name);
 	  if(h2_LP) tf=h2_LP->GetBinContent(h2_LP->FindBin(parX,parY));
 	  else cout<<"hist not found"<<endl;
@@ -468,9 +498,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	else if(nHadJets>=7)                h2_STMET_NJ7toInf_Mu1->Fill(ST,MET,wt);
 
 	if(BTags==0)      h2_METNJ_0b_Mu1->Fill(MET,nHadJets,wt);
-	else if(BTags==1) h2_METNJ_1b_Mu1->Fill(MET,nHadJets,wt);
-	else if(BTags>=2) h2_METNJ_m2b_Mu1->Fill(MET,nHadJets,wt);
-
+	else if(BTags>=1) h2_METNJ_1b_Mu1->Fill(MET,nHadJets,wt);
+	//	else if(BTags>=2) h2_METNJ_m2b_Mu1->Fill(MET,nHadJets,wt);
 	int minDRmuIndx = -100;
 	double minDRmu=1000.0;
 	for(int i=0;i<Jets->size();i++){
@@ -492,6 +521,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
         else if(nHadJets >= 5 && BTags==1)                  h_MET_R_v2_Mu1[3]->Fill(MET,wt);
         else if(BTags>=2)                                   h_MET_R_v2_Mu1[4]->Fill(MET,wt);
 	h_SBins_Mu1->Fill(sBin2,wt);
+	h_SBins_v4_Mu1->Fill(sBin4,wt);
 	wt=wt_org;
       }//muon + photon events
     }

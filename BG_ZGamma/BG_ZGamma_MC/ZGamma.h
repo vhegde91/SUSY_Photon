@@ -46,7 +46,8 @@ class ZGamma : public NtupleVariables{
   vector<double> METBinLowEdge2={0,100,150,200,350,5000};
   vector<double> METBinLowEdge={0,20,40,60,80,100,125,160,200,270,350,500,600};
   vector<double> METBinLowEdge2bJ={0,20,40,60,80,100,125,160,200,270,350,500};
-
+  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900};
+  vector<double> METBinLowEdgeV4={0,100,125,160,200,270,350,450,750};
   vector<double> STBinLowEdge={0,500,700,1000,10000};
   vector<double> nBTagsBinLowEdge={0,1,2,10};
   vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,180,200,220,250,280,320,380,450,550,650,750};
@@ -88,6 +89,7 @@ class ZGamma : public NtupleVariables{
 
   TH1D *h_dR_PhoClstLep;
   TH1D *h_dPhi_PhoMET;
+  TH1D *h_mTPho;
   TH1D *h_dphi_METjet1;
   TH1D *h_dphi_METjet2;
   TH1D *h_dphi_PhoLep1;
@@ -127,6 +129,7 @@ class ZGamma : public NtupleVariables{
   TH1D *h_dphi_METjet2_2Mu;
   TH1D *h_dphi_PhoMu1;
   TH1D *h_dphi_PhoMu2;
+  TH1D *h_mTPho_2Mu;
 
   TH1D *h_Jet1Pt_2Mu;
   TH1D *h_Jet2Pt_2Mu;
@@ -173,6 +176,7 @@ class ZGamma : public NtupleVariables{
   TH1D *h_dphi_METjet2_2Ele;
   TH1D *h_dphi_PhoEle1;
   TH1D *h_dphi_PhoEle2;
+  TH1D *h_mTPho_2Ele;
 
   TH1D *h_Jet1Pt_2Ele;
   TH1D *h_Jet2Pt_2Ele;
@@ -190,9 +194,9 @@ class ZGamma : public NtupleVariables{
   TH1D *h_MET_R_v2[5];
   TH1D *h_MET_R_v2_2Mu[5];
   TH1D *h_MET_R_v2_2Ele[5];
-  TH1D *h_SBins;
-  TH1D *h_SBins_2Mu;
-  TH1D *h_SBins_2Ele;
+  TH1D *h_SBins,*h_SBins_v4;
+  TH1D *h_SBins_2Mu,*h_SBins_v4_2Mu;
+  TH1D *h_SBins_2Ele,*h_SBins_v4_2Ele;
 
   TFile *oFile;
  
@@ -249,6 +253,7 @@ void ZGamma::BookHistogram(const char *outFileName) {
 
   h_dR_PhoClstLep=new TH1D("dR_Pho_ClstLep","dR b/w photon and closest lepton",1000,0,10);
   h_dPhi_PhoMET=new TH1D("dPhi_METBestPhoton","dphi between MET and BestPhoton for di-lep events",40,0,4);
+  h_mTPho=new TH1D("mTPho","mT(#gamma,MET) for di-lep events",150,0,1500);
   h_dphi_METjet1=new TH1D("dPhi_METjet1","dphi between MET Vec and Jet1 for di-lep events",40,0,4);
   h_dphi_METjet2=new TH1D("dPhi_METjet2","dphi between MET Vec and Jet2 for di-lep events",40,0,4);
   h_dphi_PhoLep1=new TH1D("dPhi_PhoLep1","dphi b/w leading lepton and photon",40,0,4);
@@ -290,6 +295,7 @@ void ZGamma::BookHistogram(const char *outFileName) {
   h_dphi_METjet2_2Mu=new TH1D("dPhi_METjet2_2Mu","dphi between MET Vec and Jet2 di-Mu events",40,0.,4);
   h_dphi_PhoMu1=new TH1D("dPhi_PhoMu1","dphi b/w leading muon and photon",40,0,4);
   h_dphi_PhoMu2=new TH1D("dPhi_PhoMu2","dphi b/w 2nd muon and photon",40,0,4);
+  h_mTPho_2Mu=new TH1D("mTPho_2Mu","mT(#gamma,MET) for di-Mu events",150,0,1500);
 
   h_Jet1Pt_2Mu=new TH1D("jet1Pt_2Mu","leading jet Pt di-Mu events",200,0,2000);
   h_Jet2Pt_2Mu=new TH1D("jet2Pt_2Mu","2nd leading jet Pt di-Mu events",200,0,2000);
@@ -332,6 +338,7 @@ void ZGamma::BookHistogram(const char *outFileName) {
   h_dphi_METjet2_2Ele=new TH1D("dPhi_METjet2_2Ele","dphi between MET Vec and Jet2 for di-ele events",40,0,4);
   h_dphi_PhoEle1=new TH1D("dPhi_PhoEle1","dphi b/w leading electron and photon",40,0,4);
   h_dphi_PhoEle2=new TH1D("dPhi_PhoEle2","dphi b/w 2nd electron and photon",40,0,4);
+  h_mTPho_2Ele=new TH1D("mTPho_2Ele","mT(#gamma,MET) for di-ele events",150,0,1500);
 
   h_Jet1Pt_2Ele=new TH1D("jet1Pt_2Ele","leading jet Pt for di-ele events",200,0,2000);
   h_Jet2Pt_2Ele=new TH1D("jet2Pt_2Ele","2nd leading jet Pt for di-ele events",200,0,2000);
@@ -377,6 +384,10 @@ void ZGamma::BookHistogram(const char *outFileName) {
   h_SBins = new TH1D("AllSBins_ZG","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2) for di-lep events",34,0.5,34.5);
   h_SBins_2Mu = new TH1D("AllSBins_2Mu","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2) for di-Mu events",34,0.5,34.5);
   h_SBins_2Ele = new TH1D("AllSBins_2Ele","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2) for di-ele events",34,0.5,34.5);
+
+  h_SBins_v4     = new TH1D("AllSBins_v4","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for di-lep events",43,0.5,43.5);
+  h_SBins_v4_2Mu = new TH1D("AllSBins_v4_2Mu","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for di-Mu events",43,0.5,43.5);
+  h_SBins_v4_2Ele= new TH1D("AllSBins_v4_2Ele","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for di-ele events",43,0.5,43.5);
 }
 
 

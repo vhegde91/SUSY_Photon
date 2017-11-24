@@ -48,7 +48,7 @@ void fitter (char * filename = "DMS_Run2016_FR_NoZWindow.root", float startmass 
 
   TFile * hFile = new TFile(filename);
   //  TH1F * DataHist = (TH1F*) hFile->Get("h_elec_zmass");
-  TH1F * DataHist = (TH1F*) hFile->Get("ZMass_Ele");
+  TH1F * DataHist = (TH1F*) hFile->Get("ZMass_Pho");
   DataHist->UseCurrentStyle();
   TString DataHistName = DataHist->GetName();
   DataHistName += "fit";
