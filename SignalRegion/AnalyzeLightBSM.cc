@@ -42,6 +42,9 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
   int decade = 0;
   
   int evtSurvived=0,minbtags=0;
+  TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
+  //choose central, up, or down 
+  TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
   
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
    
@@ -57,8 +60,9 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
     //    print(jentry);    
-    wt=Weight*1000.0*lumiInfb;
-  
+    //    wt=Weight*1000.0*lumiInfb;
+    wt=Weight*1000.0*lumiInfb*(puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(TrueNumInteractions,puhist->GetBinLowEdge(puhist->GetNbinsX()+1)))));
+
     if(s_data!="FastSim"){
       if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0) ) continue;
     }
