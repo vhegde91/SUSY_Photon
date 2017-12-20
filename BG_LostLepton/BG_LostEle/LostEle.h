@@ -142,6 +142,7 @@ class LostEle : public NtupleVariables{
 
   TH2D *h2_STHadJ_Ele0;
   TH2D *h2_METJet1Pt_Ele0;
+  TH2D *h2_RatioJetPhoPtVsPhoPt_Ele0;
   TH3D *h3_STMETnHadJ_Ele0;
 
   TH2D *h2_hadJbTag_Ele0;
@@ -219,6 +220,7 @@ class LostEle : public NtupleVariables{
 
   TH2D *h2_STHadJ_Ele1;
   TH2D *h2_METJet1Pt_Ele1;
+  TH2D *h2_RatioJetPhoPtVsPhoPt_Ele1,*h2_RatioJetElePtVsElePt_Ele1;
   TH3D *h3_STMETnHadJ_Ele1;
 
   TH2D *h2_hadJbTag_Ele1;
@@ -283,7 +285,7 @@ void LostEle::BookHistogram(const char *outFileName) {
   h_BestPhotonPt_Ele0=new TH1D("BestPhotonPt_Ele0","Pt of the best photon for 0 Electron events",150,0,1500);
   h_BestPhotonEta_Ele0=new TH1D("BestPhotonEta_Ele0","Eta of the best photon for 0 Electron events",120,-6,6);
   h_BestPhotonPhi_Ele0=new TH1D("BestPhotonPhi_Ele0","Phi of the best photon for 0 Electron events",80,-4,4);
-  h_mTpho_Ele0=new TH1D("mTPho_Ele0","mT b/w photon and MET for 0 Electron events",500,0,500);
+  h_mTpho_Ele0=new TH1D("mTPho_Ele0","mT b/w photon and MET for 0 Electron events",150,0,1500);
 
   h_EleMultInJets_Ele0=new TH1D("EleMultInJets_Ele0","Electron multiplicity in jets for 0 Ele events",20,0,20);
 
@@ -334,6 +336,7 @@ void LostEle::BookHistogram(const char *outFileName) {
   //  h2_METNJ_m2b_Ele0=new TH2D("METNJ_Ele0_R2","x:MET vs NJets for >=2 b for 0 Ele events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
 
   h2_R_PhoPtJetPtVsDR_Ele0=new TH2D("R_PhoPtJetPtVsDR_Ele0","y:Ratio of closest jet Pt to Photon Pt vs x: dR with closest jet for 0 Ele events",100,0,10,100,0,10);
+  h2_RatioJetPhoPtVsPhoPt_Ele0=new TH2D("RatioJetPhoPtVsPhoPt_Ele0","x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt for 0 Ele events",150,0,1500,400,0,5);
   //****************************************************
   h_nVtx_Ele1=new TH1D("nVtx_Ele1","no. of vertices for 1 Electron events",50,0,50);
   h_ST_Ele1=new TH1D("ST_Ele1","ST for 1 Electron events",400,0,4000);
@@ -344,7 +347,7 @@ void LostEle::BookHistogram(const char *outFileName) {
   h_BestPhotonPt_Ele1=new TH1D("BestPhotonPt_Ele1","Pt of the best photon for 1 Electron events",150,0,1500);
   h_BestPhotonEta_Ele1=new TH1D("BestPhotonEta_Ele1","Eta of the best photon for 1 Electron events",120,-6,6);
   h_BestPhotonPhi_Ele1=new TH1D("BestPhotonPhi_Ele1","Phi of the best photon for 1 Electron events",80,-4,4);
-  h_mTpho_Ele1=new TH1D("mTPho_Ele1","mT b/w photon and MET for 1 Electron events",500,0,500);
+  h_mTpho_Ele1=new TH1D("mTPho_Ele1","mT b/w photon and MET for 1 Electron events",150,0,1500);
   h_dPhiEleMET=new TH1D("dPhiEleMET","dPhi(MET,e) for 1 Electron evnets",80,-4,4);
 
   h_GenElectrons_MT2Activity_Ele1=new TH1D("GenElectrons_MT2Activity_Ele1","Gen MT2 activity for 1 Ele events",100,0,0.5);
@@ -418,7 +421,8 @@ void LostEle::BookHistogram(const char *outFileName) {
   //  h2_METNJ_m2b_Ele1=new TH2D("METNJ_Ele1_R2","x:MET vs NJets for >=2 b for 1 Ele events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
 
   h2_R_ElePtJetPtVsDR=new TH2D("R_ElePtJetPtVsDR","y:Ratio of closest jet Pt to Ele Pt vs x: dR with closest jet",100,0,10,100,0,10);
-
+  h2_RatioJetPhoPtVsPhoPt_Ele1=new TH2D("RatioJetPhoPtVsPhoPt_Ele1","x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt for 1 Ele events",150,0,1500,400,0,5);
+  h2_RatioJetElePtVsElePt_Ele1=new TH2D("RatioJetElePtVsElePt_Ele1","x: #gamma Pt, y:ratio of pT of jet matched to electron to electron Pt for 1 Ele events",150,0,1500,400,0,5);
   h_temp=new TH1D("temp","temp",200,0,2000);
 
   //---------------- search bins -----------------------

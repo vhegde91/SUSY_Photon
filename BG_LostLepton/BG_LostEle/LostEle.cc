@@ -59,7 +59,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     double progress = 10.0 * jentry / (1.0 * nentries);
     int k = int (progress);
     if (k > decade)
-      cout << 10 * k << " %" <<endl;
+      cout << 10 * k << " % " <<endl;
     decade = k;
     // cout<<"j:"<<jentry<<" fcurrent:"<<fCurrent<<endl;
     // ===============read this entry == == == == == == == == == == == 
@@ -183,20 +183,21 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
       if(hasGenPromptPhoton && gendRLepPho > 0.3 && madMinPhotonDeltaR > 0.3) continue;
       if(jentry<3) cout<<"Non-Prompt, dR(pho,q/g/lep) < 0.3 ";
     }
-    
+       
     int nGenMu=0,nGenEle=0,nGenTau=0,nGenMuFmTau=0,nGenEleFmTau=0;
     vector<TLorentzVector> genEle;   
     for(int i=0;i<GenParticles->size();i++){
       if((*GenParticles)[i].Pt()!=0){
-	if( abs((*GenParticles_PdgId)[i])==11 && (abs((*GenParticles_ParentId)[i])<=24) && ((*GenParticles_Status)[i]==1) ) {nGenEle++; genEle.push_back((*GenParticles)[i]);}//electrons
-	else if( abs((*GenParticles_PdgId)[i])==13 && (abs((*GenParticles_ParentId)[i])<=24) && ((*GenParticles_Status)[i]==1) ) {
+	if( abs((*GenParticles_PdgId)[i])==12 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {nGenEle++;}//electrons, cut using e neutrino
+	if( abs((*GenParticles_PdgId)[i])==11 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {genEle.push_back((*GenParticles)[i]);}
+	else if( abs((*GenParticles_PdgId)[i])==14 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {
 	  nGenMu++;
-	}//muons
-	else if( abs((*GenParticles_PdgId)[i])==15 && (abs((*GenParticles_ParentId)[i])<=24) ) {nGenTau++;}//taus
+	}//muons, count using mu neutrino
+	else if( abs((*GenParticles_PdgId)[i])==15 && abs((*GenParticles_ParentId)[i])<=25 ) {nGenTau++;}//taus
       }
     }
+    
     if(nGenMu==0 && nGenEle==0 && nGenTau==0) continue;//to reject W->qq' type of events
-
     if(Electrons->size()==0){
       if(isoMuonTracks!=0 || isoElectronTracks!=0 || isoPionTracks!=0) continue;
       if(nGenEle==0) continue;
@@ -228,6 +229,21 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
       if(matche==1 && matchp==0) continue;//if reco photon matched to gen e and not matched to gen photon, it is fake.
     }//photon has been identified. It is a real photon and it is matched to gen photon with dR(genPho,RecoPho) < 0.1 and Pts are within 10%.
     //---------------------- MC only ends-------------------------
+
+    int eleMatchingJetIndx = -100;
+    double minDREle=1000;
+    if(Electrons->size()==1){
+      for(int i=0;i<Jets->size();i++){
+    	if( ((*Jets)[i].Pt() > MHT_PtCut) && (abs((*Jets)[i].Eta()) <= HT_EtaCut) ){
+    	  double dR=(*Electrons)[0].DeltaR((*Jets)[i]);
+    	  if(dR<minDREle){minDREle=dR;eleMatchingJetIndx=i;}
+    	}
+      }
+      // if(eleMatchingJetIndx>=0 && ((*Jets)[eleMatchingJetIndx].Pt())/((*Electrons)[0].Pt()) < 1.05) continue;
+      // if(eleMatchingJetIndx<0) continue;
+    }
+    // if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
+    // if(phoMatchingJetIndx<0) continue;
 
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
     process = process && ST>500 && MET > 100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
@@ -396,6 +412,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h2_STHadJ_Ele0->Fill(ST,nHadJets,wt);
 	h2_METJet1Pt_Ele0->Fill(MET,hadJets[0].Pt(),wt);
 	h2_R_PhoPtJetPtVsDR_Ele0->Fill(minDR,((*Jets)[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
+	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Ele0->Fill(bestPhoton.Pt(),((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h3_STMETnHadJ_Ele0->Fill(ST,MET,nHadJets,wt);
 	h2_hadJbTag_Ele0->Fill(nHadJets,BTags,wt);
@@ -502,6 +519,8 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h2_METJet1Pt_Ele1->Fill(MET,hadJets[0].Pt(),wt);
 	h2_RecoElePtRecoAct_Ele1->Fill((*Electrons)[0].Pt(),(*Electrons_MT2Activity)[0],wt);
 	h2_R_PhoPtJetPtVsDR_Ele1->Fill(minDR,((*Jets)[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
+	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Ele1->Fill(bestPhoton.Pt(),((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	if(eleMatchingJetIndx>=0) h2_RatioJetElePtVsElePt_Ele1->Fill((*Electrons)[0].Pt(),((*Jets)[eleMatchingJetIndx].Pt())/((*Electrons)[0].Pt()),wt);
 
 	h3_STMETnHadJ_Ele1->Fill(ST,MET,nHadJets,wt);
 	
