@@ -8,6 +8,7 @@
 #include <cstring>
 #include <string>
 #include <fstream>
+#include "btag/BTagCorrector.h"
 
 using namespace std;
 
@@ -45,6 +46,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   TFile *f_LP=new TFile("LstEle_CS_TTWZ_LostEle_v2.root");
+  //  TFile *f_LP=new TFile("LstEle_CS_LDP_TTWZ_LostEle_v2.root");
   //TFile *f_LP=new TFile("LstEle_CS_TTW_LostEle_v2.root");
   TH2D *h2_LP;TH1D *h_LP;
   bool do_prediction=1;
@@ -52,6 +54,24 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
+
+  //----------- btags SFs-----------------  
+  bool applybTagSFs=1;
+  int fListIndxOld=-1;
+  double prob0=-100,prob1=-100;
+  vector<TString> inFileName;
+  TString sampleName;
+  string str1;
+  ifstream runListFile(inputFileList);
+  TFile *currFile;
+  while (std::getline(runListFile, str1)) {
+    inFileName.push_back(str1);
+  }runListFile.close();
+  cout<<"applying b-tag SFs? "<<applybTagSFs<<endl;
+  BTagCorrector btagcorr;
+  //if fastsim
+  // btagcorr.SetFastSim(true);
+  //--------------------------------------
   
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
 
@@ -69,7 +89,24 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     
     bool process=true;
     if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
-   
+
+    if(fListIndxOld!=fCurrent){ 
+      fListIndxOld = fCurrent;
+      sampleName = inFileName[fCurrent];
+      //----------- btags SFs-----------------
+      if(applybTagSFs){
+	currFile = TFile::Open(sampleName);
+	btagcorr.SetEffs(currFile);
+	btagcorr.SetCalib("btag/CSVv2_Moriond17_B_H_mod.csv");
+      }
+    }
+    vector<double> prob;
+    if(applybTagSFs){
+      prob = btagcorr.GetCorrections(Jets,Jets_hadronFlavor,Jets_HTMask);
+      prob0 = prob[0]; prob1 = prob[1]+prob[2]+prob[3];
+      //      double corr = btagcorr.GetSimpleCorrection(Jets,Jets_hadronFlavor,Jets_HTMask,Jets_bDiscriminatorCSV);
+    }
+    //--------------------------------------
     //About photons
     bestPhoton=getBestPhoton();
     if(bestPhoton.Pt() <= 100) continue;
@@ -189,11 +226,11 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     for(int i=0;i<GenParticles->size();i++){
       if((*GenParticles)[i].Pt()!=0){
 	if( abs((*GenParticles_PdgId)[i])==12 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {nGenEle++;}//electrons, cut using e neutrino
-	if( abs((*GenParticles_PdgId)[i])==11 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {genEle.push_back((*GenParticles)[i]);}
 	else if( abs((*GenParticles_PdgId)[i])==14 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {
 	  nGenMu++;
 	}//muons, count using mu neutrino
 	else if( abs((*GenParticles_PdgId)[i])==15 && abs((*GenParticles_ParentId)[i])<=25 ) {nGenTau++;}//taus
+	if( abs((*GenParticles_PdgId)[i])==11 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {genEle.push_back((*GenParticles)[i]);}
       }
     }
     
@@ -239,14 +276,14 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     	  if(dR<minDREle){minDREle=dR;eleMatchingJetIndx=i;}
     	}
       }
-      // if(eleMatchingJetIndx>=0 && ((*Jets)[eleMatchingJetIndx].Pt())/((*Electrons)[0].Pt()) < 1.05) continue;
-      // if(eleMatchingJetIndx<0) continue;
+      if(eleMatchingJetIndx>=0 && ((*Jets)[eleMatchingJetIndx].Pt())/((*Electrons)[0].Pt()) < 1.0) continue;
+      if(eleMatchingJetIndx<0) continue;
     }
-    // if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
-    // if(phoMatchingJetIndx<0) continue;
+    if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
+    if(phoMatchingJetIndx<0) continue;
 
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
-    process = process && ST>500 && MET > 100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
+    process = process && ST>500 && MET > 100 && nHadJets >=2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
 
     if(process && hadJetID){
       evtSurvived++;
@@ -257,7 +294,13 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
       h_ST->Fill(ST,wt);
       h_MET->Fill(MET,wt);
       h_nHadJets->Fill(nHadJets,wt);
-      h_BTags->Fill(BTags,wt);
+      if(applybTagSFs){
+	h_BTags->Fill(0.0,wt*prob[0]);
+	h_BTags->Fill(1.0,wt*prob[1]);
+	h_BTags->Fill(2.0,wt*prob[2]);
+	h_BTags->Fill(3.0,wt*prob[3]);
+      }
+      else h_BTags->Fill(BTags,wt);
       h_HT->Fill(HT,wt);
       h_MHT->Fill(MHT,wt);
       h_nJets->Fill(NJets,wt);
@@ -366,7 +409,13 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_ST_Ele0->Fill(ST,wt);
 	h_MET_Ele0->Fill(MET,wt);
 	h_nHadJets_Ele0->Fill(nHadJets,wt);
-	h_BTags_Ele0->Fill(BTags,wt);
+	if(applybTagSFs){
+	  h_BTags_Ele0->Fill(0.0,wt*prob[0]);
+	  h_BTags_Ele0->Fill(1.0,wt*prob[1]);
+	  h_BTags_Ele0->Fill(2.0,wt*prob[2]);
+	  h_BTags_Ele0->Fill(3.0,wt*prob[3]);
+	}
+	else h_BTags_Ele0->Fill(BTags,wt);
 	h_METvBin_Ele0->Fill(MET,wt);
 	h_BestPhotonPt_Ele0->Fill(bestPhoton.Pt(),wt);
 	h_BestPhotonEta_Ele0->Fill(bestPhoton.Eta(),wt);
@@ -423,8 +472,14 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	else if(nHadJets==5 || nHadJets==6) h2_STMET_NJ5or6_Ele0  ->Fill(ST,MET,wt);
 	else if(nHadJets>=7)                h2_STMET_NJ7toInf_Ele0->Fill(ST,MET,wt);
 
-	if(BTags==0)      h2_METNJ_0b_Ele0->Fill(MET,nHadJets,wt);
-        else if(BTags>=1) h2_METNJ_1b_Ele0->Fill(MET,nHadJets,wt);
+	if(!applybTagSFs){
+          if(BTags==0)      h2_METNJ_0b_Ele0->Fill(MET,nHadJets,wt);
+          else if(BTags>=1) h2_METNJ_1b_Ele0->Fill(MET,nHadJets,wt);
+        }
+        else{
+          h2_METNJ_0b_Ele0->Fill(MET,nHadJets,wt*prob0);
+          h2_METNJ_1b_Ele0->Fill(MET,nHadJets,wt*prob1);
+        }
 	//        else if(BTags>=2) h2_METNJ_m2b_Ele0->Fill(MET,nHadJets,wt);     
 	//---------------- search bins -----------------------
 	if( searchRegion > 0 && searchRegion < 4){
@@ -465,7 +520,13 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_ST_Ele1->Fill(ST,wt);
 	h_MET_Ele1->Fill(MET,wt);
 	h_nHadJets_Ele1->Fill(nHadJets,wt);
-	h_BTags_Ele1->Fill(BTags,wt);
+	if(applybTagSFs){
+	  h_BTags_Ele1->Fill(0.0,wt*prob[0]);
+	  h_BTags_Ele1->Fill(1.0,wt*prob[1]);
+	  h_BTags_Ele1->Fill(2.0,wt*prob[2]);
+	  h_BTags_Ele1->Fill(3.0,wt*prob[3]);
+	}
+	else h_BTags_Ele1->Fill(BTags,wt);
 	h_METvBin_Ele1->Fill(MET,wt);
 	h_BestPhotonPt_Ele1->Fill(bestPhoton.Pt(),wt);
 	h_BestPhotonEta_Ele1->Fill(bestPhoton.Eta(),wt);
@@ -530,8 +591,14 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	else if(nHadJets==5 || nHadJets==6) h2_STMET_NJ5or6_Ele1  ->Fill(ST,MET,wt);
 	else if(nHadJets>=7)                h2_STMET_NJ7toInf_Ele1->Fill(ST,MET,wt);
 
-	if(BTags==0)      h2_METNJ_0b_Ele1->Fill(MET,nHadJets,wt);
-        else if(BTags>=1) h2_METNJ_1b_Ele1->Fill(MET,nHadJets,wt);
+	if(!applybTagSFs){
+          if(BTags==0)      h2_METNJ_0b_Ele1->Fill(MET,nHadJets,wt);
+          else if(BTags>=1) h2_METNJ_1b_Ele1->Fill(MET,nHadJets,wt);
+        }
+        else{
+          h2_METNJ_0b_Ele1->Fill(MET,nHadJets,wt*prob0);
+          h2_METNJ_1b_Ele1->Fill(MET,nHadJets,wt*prob1);
+        }
 	//        else if(BTags>=2) h2_METNJ_m2b_Ele1->Fill(MET,nHadJets,wt);
 
 	int minDReleIndx = -100;

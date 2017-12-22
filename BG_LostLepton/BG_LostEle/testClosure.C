@@ -50,7 +50,7 @@ void testClosure(TString iFname){
   name1.push_back("dPhi_METjet1_Pho_Ele0");   name2.push_back("dPhi_METjet1_Pho_Ele1");  rebin.push_back(4);
   name1.push_back("dPhi_METjet2_Pho_Ele0");   name2.push_back("dPhi_METjet2_Pho_Ele1");  rebin.push_back(4);
   name1.push_back("dPhi_METBestPhoton_Ele0");   name2.push_back("dPhi_METBestPhoton_Ele1");  rebin.push_back(4);
-  name1.push_back("mTPho_Ele0");   name2.push_back("mTPho_Ele1");  rebin.push_back(20);
+  name1.push_back("mTPho_Ele0");   name2.push_back("mTPho_Ele1");  rebin.push_back(10);
   // name1.push_back("MET_R1_v2_Ele0");   name2.push_back("MET_R1_v2_Ele1");  rebin.push_back(1);
   // name1.push_back("MET_R2_v2_Ele0");   name2.push_back("MET_R2_v2_Ele1");  rebin.push_back(1);
   // name1.push_back("MET_R3_v2_Ele0");   name2.push_back("MET_R3_v2_Ele1");  rebin.push_back(1);

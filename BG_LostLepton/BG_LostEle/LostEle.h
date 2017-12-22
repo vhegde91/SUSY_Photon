@@ -269,7 +269,7 @@ void LostEle::BookHistogram(const char *outFileName) {
   h_MET=new TH1D("MET","MET",200,0,2000);
   h_nHadJets=new TH1D("nHadJets","no. of jets(only hadronic jets,not counting photon)",25,0,25);
   h_BTags=new TH1D("nBTags","no. of B tags",10,0,10);
-  h_METvBin=new TH1D("METvarBin","MET with variable bin size",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_METvBin=new TH1D("METvarBin","MET with variable bin size",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
   h_HT=new TH1D("HT","HT",400,0,4000);
   h_MHT=new TH1D("MHT","MHT",200,0,2000);
   h_nJets=new TH1D("nJets","nJets",25,0,25);
@@ -281,7 +281,7 @@ void LostEle::BookHistogram(const char *outFileName) {
   h_MET_Ele0=new TH1D("MET_Ele0","MET for 0 Electron events",200,0,2000);
   h_nHadJets_Ele0=new TH1D("nHadJets_Ele0","no. of jets(only hadronic jets,not counting photon)  for 0 Electron events",25,0,25);
   h_BTags_Ele0=new TH1D("nBTags_Ele0","no. of B tags for 0 Electron events",10,0,10);
-  h_METvBin_Ele0=new TH1D("METvarBin_Ele0","MET with variable bin size for 0 Electron events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_METvBin_Ele0=new TH1D("METvarBin_Ele0","MET with variable bin size for 0 Electron events",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
   h_BestPhotonPt_Ele0=new TH1D("BestPhotonPt_Ele0","Pt of the best photon for 0 Electron events",150,0,1500);
   h_BestPhotonEta_Ele0=new TH1D("BestPhotonEta_Ele0","Eta of the best photon for 0 Electron events",120,-6,6);
   h_BestPhotonPhi_Ele0=new TH1D("BestPhotonPhi_Ele0","Phi of the best photon for 0 Electron events",80,-4,4);
@@ -343,7 +343,7 @@ void LostEle::BookHistogram(const char *outFileName) {
   h_MET_Ele1=new TH1D("MET_Ele1","MET for 1 Electron events",200,0,2000);
   h_nHadJets_Ele1=new TH1D("nHadJets_Ele1","no. of jets(only hadronic jets,not counting photon)  for 1 Electron events",25,0,25);
   h_BTags_Ele1=new TH1D("nBTags_Ele1","no. of B tags for 1 Electron events",10,0,10);
-  h_METvBin_Ele1=new TH1D("METvarBin_Ele1","MET with variable bin size for 1 Electron events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_METvBin_Ele1=new TH1D("METvarBin_Ele1","MET with variable bin size for 1 Electron events",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
   h_BestPhotonPt_Ele1=new TH1D("BestPhotonPt_Ele1","Pt of the best photon for 1 Electron events",150,0,1500);
   h_BestPhotonEta_Ele1=new TH1D("BestPhotonEta_Ele1","Eta of the best photon for 1 Electron events",120,-6,6);
   h_BestPhotonPhi_Ele1=new TH1D("BestPhotonPhi_Ele1","Phi of the best photon for 1 Electron events",80,-4,4);

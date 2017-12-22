@@ -41,7 +41,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
  
   Long64_t nbytes = 0, nb = 0;
   int decade = 0;
-  bool do_AB_reweighting=0;
+  bool do_AB_reweighting=1;
   int evtSurvived=0;
   TFile *f_HLR=TFile::Open("HLR_gjets_qcd.root");
   // TH1D *h_HLratio=(TH1D*)f_HLR->Get("HLratio_1D");
@@ -74,7 +74,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 
     if( (Electrons->size() !=0) || (Muons->size() !=0) ) continue;   
     if(isoElectronTracks!=0 || isoMuonTracks!=0 || isoPionTracks!=0) continue;
-    
+
     TLorentzVector bestPhoton=getBestPhoton();
     bool eMatchedG=check_eMatchedtoGamma();//this may not be necessary since e veto is there.
     if(bestPhoton.Pt()<0.1) continue;
@@ -122,7 +122,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     }
     else myHT=ST;
     sortTLorVec(&hadJets);
-    
+
     double dphi1=3.8,dphi2=3.8,dphi3=3.8,dphi4=3.8,dphiG_MET=3.8;
     if(bestPhoton.Pt()>0.1) dphiG_MET=abs(DeltaPhi(METPhi,bestPhoton.Phi()));
     if(hadJets.size() > 0 ) dphi1 = abs(DeltaPhi(METPhi,(hadJets)[0].Phi()));
@@ -152,6 +152,9 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 
     // if(abs(dphiG_MET) < 0.5) continue;
     // if(mtPho<100) continue;
+
+    if(photonMatchingJetIndx>=0 && ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
+    if(photonMatchingJetIndx<0) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
     process = process && !eMatchedG && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100;
 
@@ -240,11 +243,16 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	h_mTPho_[r_i]->Fill(mtPho,wt);
 	h_dPhi_METBestPhoton_[r_i]->Fill(dphiG_MET,wt);
 	h_dPhiPhotonJet1_[r_i]->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
+	if(photonMatchingJetIndx>=0) h_RatioJetPhoPt_[r_i]->Fill( ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h2_dPhi1dPhi2_[r_i]->Fill(dphi1,dphi2,wt);
 	h2_PtPhotonvsMET_[r_i]->Fill( bestPhoton.Pt(),MET,wt);
 	h2_NJST_[r_i]->Fill(nHadJets,ST,wt);
 	h2_dPhiMETPho_NJ_[r_i]->Fill(dphiG_MET,nHadJets,wt);
+	if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_[r_i]->Fill(bestPhoton.Pt(),((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	//	h2_RatioJetPhoPtVsPhoPt_[r_i]->Fill(bestPhoton.Pt(),MHT/MET,wt);
+	if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsdPhiG_[r_i]->Fill(dphiG_MET,      ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsMET_[r_i]->Fill(MHT,            ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h_HT_[r_i]->Fill(HT,wt);
 	h_MHT_[r_i]->Fill(MHT,wt);
@@ -281,11 +289,17 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_mTPho_AB->Fill(mtPho,wt);
 	  h_dPhi_METBestPhoton_AB->Fill(dphiG_MET,wt);
 	  h_dPhiPhotonJet1_AB->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
+	  if(photonMatchingJetIndx>=0) h_RatioJetPhoPt_AB->Fill( ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsdPhiG_AB->Fill(dphiG_MET,      ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsMET_AB->Fill(MET,            ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	  h2_PtPhotonvsMET_AB->Fill( bestPhoton.Pt(),MET,wt);
 	  h2_dPhi1dPhi2_AB->Fill(dphi1,dphi2,wt);
 	  h2_NJST_AB->Fill(nHadJets,ST,wt);
 	  h2_dPhiMETPho_NJ_AB->Fill(dphiG_MET,nHadJets,wt);
+	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_AB->Fill(bestPhoton.Pt(),((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	  //h2_RatioJetPhoPtVsPhoPt_AB->Fill(bestPhoton.Pt(),MHT/MET,wt);
+
 	  if(BTags==0) h2_METnHadJ_0b_AB->Fill(MET,nHadJets,wt);
 	  else h2_METnHadJ_min1b_AB->Fill(MET,nHadJets,wt);
 
@@ -326,11 +340,17 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_mTPho_CD->Fill(mtPho,wt);
 	  h_dPhi_METBestPhoton_CD->Fill(dphiG_MET,wt);
 	  h_dPhiPhotonJet1_CD->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
+	  if(photonMatchingJetIndx>=0) h_RatioJetPhoPt_CD->Fill( ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	  h2_PtPhotonvsMET_CD->Fill( bestPhoton.Pt(),MET,wt);
 	  h2_dPhi1dPhi2_CD->Fill(dphi1,dphi2,wt);
 	  h2_NJST_CD->Fill(nHadJets,ST,wt);
 	  h2_dPhiMETPho_NJ_CD->Fill(dphiG_MET,nHadJets,wt);
+	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_CD->Fill(bestPhoton.Pt(),((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	  //h2_RatioJetPhoPtVsPhoPt_CD->Fill(bestPhoton.Pt(),MHT/MET,wt);
+	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsdPhiG_CD->Fill(dphiG_MET,      ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsMET_CD->Fill(MET,            ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+
 	  if(BTags==0) h2_METnHadJ_0b_CD->Fill(MET,nHadJets,wt);
 	  else h2_METnHadJ_min1b_CD->Fill(MET,nHadJets,wt);
 

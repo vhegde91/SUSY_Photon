@@ -8,6 +8,7 @@
 #include <cstring>
 #include <string>
 #include <fstream>
+#include "btag/BTagCorrector.h"
 
 using namespace std;
 
@@ -41,7 +42,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
  
   Long64_t nbytes = 0, nb = 0;
   int decade = 0;
-  bool do_AB_reweighting=0;
+  bool do_AB_reweighting=1;
   int evtSurvived=0;
   TFile *f_HLR=TFile::Open("HLR_gjets_qcd.root");
   // TH1D *h_HLratio=(TH1D*)f_HLR->Get("HLratio_1D");
@@ -50,10 +51,24 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
-
-  // TFile *fSF = TFile::Open("Multijet_SF.root");
-  // TH1D *h_SF = (TH1D*)fSF->Get("nHadJets_AB");
-
+  //----------- btags SFs-----------------
+  bool applybTagSFs=1;
+  int fListIndxOld=-1;
+  double prob0=-100,prob1=-100;
+  vector<TString> inFileName;
+  TString sampleName;
+  string str1;
+  ifstream runListFile(inputFileList);
+  TFile *currFile;
+  while (std::getline(runListFile, str1)) {
+    inFileName.push_back(str1);
+  }runListFile.close();
+  cout<<"applying b-tag SFs? "<<applybTagSFs<<endl;
+  BTagCorrector btagcorr;
+  //if fastsim
+  // btagcorr.SetFastSim(true);
+  //--------------------------------------
+  
   cout<<"************* Applying weights for AB? "<<do_AB_reweighting<<endl;
 
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
@@ -73,7 +88,26 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     //    wt=Weight*1000.0*lumiInfb;
     wt=Weight*1000.0*lumiInfb*(puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(TrueNumInteractions,puhist->GetBinLowEdge(puhist->GetNbinsX()+1)))));
 
-    if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;  
+    if(s_data!="FastSim"){
+      if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;  
+    }
+    
+    if(fListIndxOld!=fCurrent){
+      fListIndxOld = fCurrent;
+      sampleName = inFileName[fCurrent];
+      //----------- btags SFs-----------------                                                     
+      if(applybTagSFs){
+        currFile = TFile::Open(sampleName);
+        btagcorr.SetEffs(currFile);
+        btagcorr.SetCalib("btag/CSVv2_Moriond17_B_H_mod.csv");
+      }
+    }
+    vector<double> prob;
+    if(applybTagSFs){
+      prob = btagcorr.GetCorrections(Jets,Jets_hadronFlavor,Jets_HTMask);
+      prob0 = prob[0]; prob1 = prob[1]+prob[2]+prob[3];
+      //      double corr = btagcorr.GetSimpleCorrection(Jets,Jets_hadronFlavor,Jets_HTMask,Jets_bDiscriminatorCSV);                                                 
+    }
 
     if( (Electrons->size() !=0) || (Muons->size() !=0) ) continue;   
     if(isoElectronTracks!=0 || isoMuonTracks!=0 || isoPionTracks!=0) continue;
@@ -83,6 +117,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     if(bestPhoton.Pt()<0.1) continue;
     char regType='n';
     bool process=true;
+    bool noFakeJet = true;
     //    bool bestPromptPho=true;
     if(s_data=="QCD"){
       if(jentry==0){cout<<"**********processing "<<s_data<<endl;}
@@ -94,6 +129,28 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
       //      if( ((*Photons_nonPrompt)[bestPhotonIndxAmongPhotons]) ) continue;
       if(!hasGenPromptPhoton) continue;
     }//GJets
+    else if(s_data=="DiPhoton"){
+      if(jentry==0){cout<<"**********processing "<<s_data<<endl;}
+      //      if( ((*Photons_nonPrompt)[bestPhotonIndxAmongPhotons]) ) continue;
+      if(allBestPhotons.size() < 2) continue;
+    }//GJets
+    else if(s_data=="FastSim"){
+      //      //reject events with any jet pt>20, |eta|<2.5 NOT matched to a GenJet (w/in DeltaR<0.3) and chfrac < 0.1
+      for(unsigned j = 0; j < Jets->size(); ++j){
+      	if(Jets->at(j).Pt() <= 20 || fabs(Jets->at(j).Eta())>=2.5) continue;
+      	bool genMatched = false;
+      	for(unsigned g = 0; g < GenJets->size(); ++g){
+      	  if(GenJets->at(g).DeltaR(Jets->at(j)) < 0.3) {
+      	    genMatched = true;
+      	    break;
+      	  }
+      	}
+      	if(!genMatched && Jets_chargedHadronEnergyFraction->at(j) < 0.1){
+      	  noFakeJet = false;
+      	  break;
+      	}
+      }
+    }
 
     bool hadJetID=true;
     int minDRindx=-100,photonMatchingJetIndx=-100,nHadJets=0;
@@ -139,8 +196,9 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     else if(MET >= 200 &&  (dphi1 > 0.3 && dphi2 > 0.3)) regType = 'D';
     else cout<<"AHHHH:Cannot assign region!!!"<<endl;
 
-    //    if(abs(dphiG_MET) < 0.5) continue;    
-    //    if(mtPho<100) continue;
+    if(photonMatchingJetIndx>=0 && ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
+    if(photonMatchingJetIndx<0) continue;
+
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
     process = process && !eMatchedG && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100;
     
@@ -214,7 +272,15 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	h_ST_[r_i]->Fill(ST,wt);
 	h_MET_[r_i]->Fill(MET,wt);
 	h_nHadJets_[r_i]->Fill(nHadJets,wt);
-	h_BTags_[r_i]->Fill(BTags,wt);
+	if(applybTagSFs){
+	  h_BTags_[r_i]->Fill(0.0,wt*prob[0]);
+	  h_BTags_[r_i]->Fill(1.0,wt*prob[1]);
+	  h_BTags_[r_i]->Fill(2.0,wt*prob[2]);
+	  h_BTags_[r_i]->Fill(3.0,wt*prob[3]);
+	}
+	else{
+	  h_BTags_[r_i]->Fill(BTags,wt);
+	}
 	h_nVtx_[r_i]->Fill(NVtx,wt);
 	h_GenMET_[r_i]->Fill(GenMET,wt);
 	h_METPhi_[r_i]->Fill(METPhi,wt);
@@ -229,11 +295,16 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	h_mTPho_[r_i]->Fill(mtPho,wt);
 	h_dPhi_METBestPhoton_[r_i]->Fill(dphiG_MET,wt);
 	h_dPhiPhotonJet1_[r_i]->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
+	if(photonMatchingJetIndx>=0) h_RatioJetPhoPt_[r_i]->Fill( ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h2_dPhi1dPhi2_[r_i]->Fill(dphi1,dphi2,wt);
 	h2_PtPhotonvsMET_[r_i]->Fill( bestPhoton.Pt(),MET,wt);
 	h2_NJST_[r_i]->Fill(nHadJets,ST,wt);
 	h2_dPhiMETPho_NJ_[r_i]->Fill(dphiG_MET,nHadJets,wt);
+	if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_[r_i]->Fill(bestPhoton.Pt(),((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	//	h2_RatioJetPhoPtVsPhoPt_[r_i]->Fill(bestPhoton.Pt(),MHT/MET,wt);
+	if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsdPhiG_[r_i]->Fill(dphiG_MET,      ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsMET_[r_i]->Fill(MET,            ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h_HT_[r_i]->Fill(HT,wt);
 	h_MHT_[r_i]->Fill(MHT,wt);
@@ -255,7 +326,15 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_ST_AB->Fill(ST,wt);
 	  h_MET_AB->Fill(MET,wt);
 	  h_nHadJets_AB->Fill(nHadJets,wt);
-	  h_BTags_AB->Fill(BTags,wt);
+	  if(applybTagSFs){
+	    h_BTags_AB->Fill(0.0,wt*prob[0]);
+	    h_BTags_AB->Fill(1.0,wt*prob[1]);
+	    h_BTags_AB->Fill(2.0,wt*prob[2]);
+	    h_BTags_AB->Fill(3.0,wt*prob[3]);
+	  }
+	  else{
+	    h_BTags_AB->Fill(BTags,wt);
+	  }
 	  h_nVtx_AB->Fill(NVtx,wt);
 	  h_GenMET_AB->Fill(GenMET,wt);
 	  h_METPhi_AB->Fill(METPhi,wt);
@@ -270,13 +349,25 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_mTPho_AB->Fill(mtPho,wt);
 	  h_dPhi_METBestPhoton_AB->Fill(dphiG_MET,wt);
 	  h_dPhiPhotonJet1_AB->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
+	  if(photonMatchingJetIndx>=0) h_RatioJetPhoPt_AB->Fill( ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	  h2_PtPhotonvsMET_AB->Fill( bestPhoton.Pt(),MET,wt);
 	  h2_dPhi1dPhi2_AB->Fill(dphi1,dphi2,wt);
 	  h2_NJST_AB->Fill(nHadJets,ST,wt);
 	  h2_dPhiMETPho_NJ_AB->Fill(dphiG_MET,nHadJets,wt);
-	  if(BTags==0) h2_METnHadJ_0b_AB->Fill(MET,nHadJets,wt);
-	  else h2_METnHadJ_min1b_AB->Fill(MET,nHadJets,wt);
+	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_AB->Fill(bestPhoton.Pt(),((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	  //h2_RatioJetPhoPtVsPhoPt_AB->Fill(bestPhoton.Pt(),MHT/MET,wt);
+	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsdPhiG_AB->Fill(dphiG_MET,      ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsMET_AB->Fill(MET,              ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+
+	  if(!applybTagSFs){
+	    if(BTags==0) h2_METnHadJ_0b_AB->Fill(MET,nHadJets,wt);
+	    else h2_METnHadJ_min1b_AB->Fill(MET,nHadJets,wt);
+	  }
+	  else{
+	    h2_METnHadJ_0b_AB->Fill(MET,nHadJets,wt*prob0);
+	    h2_METnHadJ_min1b_AB->Fill(MET,nHadJets,wt*prob1);
+	  }
 
 	  h_HT_AB->Fill(HT,wt);
 	  h_MHT_AB->Fill(MHT,wt);
@@ -300,7 +391,15 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_ST_CD->Fill(ST,wt);
 	  h_MET_CD->Fill(MET,wt);
 	  h_nHadJets_CD->Fill(nHadJets,wt);
-	  h_BTags_CD->Fill(BTags,wt);
+	  if(applybTagSFs){
+	    h_BTags_CD->Fill(0.0,wt*prob[0]);
+	    h_BTags_CD->Fill(1.0,wt*prob[1]);
+	    h_BTags_CD->Fill(2.0,wt*prob[2]);
+	    h_BTags_CD->Fill(3.0,wt*prob[3]);
+	  }
+	  else{
+	    h_BTags_CD->Fill(BTags,wt);
+	  }
 	  h_nVtx_CD->Fill(NVtx,wt);
 	  h_GenMET_CD->Fill(GenMET,wt);
 	  h_METPhi_CD->Fill(METPhi,wt);
@@ -315,14 +414,25 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_mTPho_CD->Fill(mtPho,wt);
 	  h_dPhi_METBestPhoton_CD->Fill(dphiG_MET,wt);
 	  h_dPhiPhotonJet1_CD->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
+	  if(photonMatchingJetIndx>=0) h_RatioJetPhoPt_CD->Fill( ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	  h2_PtPhotonvsMET_CD->Fill( bestPhoton.Pt(),MET,wt);
 	  h2_dPhi1dPhi2_CD->Fill(dphi1,dphi2,wt);
 	  h2_NJST_CD->Fill(nHadJets,ST,wt);
 	  h2_dPhiMETPho_NJ_CD->Fill(dphiG_MET,nHadJets,wt);
-	  if(BTags==0) h2_METnHadJ_0b_CD->Fill(MET,nHadJets,wt);
-	  else h2_METnHadJ_min1b_CD->Fill(MET,nHadJets,wt);
+	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_CD->Fill(bestPhoton.Pt(),((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	  //h2_RatioJetPhoPtVsPhoPt_CD->Fill(bestPhoton.Pt(),MHT/MET,wt);
+	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsdPhiG_CD->Fill(dphiG_MET,      ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsMET_CD->Fill(MET,              ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
+	  if(!applybTagSFs){
+	    if(BTags==0) h2_METnHadJ_0b_CD->Fill(MET,nHadJets,wt);
+	    else h2_METnHadJ_min1b_CD->Fill(MET,nHadJets,wt);
+	  }
+	  else{
+	    h2_METnHadJ_0b_CD->Fill(MET,nHadJets,wt*prob0);
+	    h2_METnHadJ_min1b_CD->Fill(MET,nHadJets,wt*prob1);
+	  }
 	  h_HT_CD->Fill(HT,wt);
 	  h_MHT_CD->Fill(MHT,wt);
 	  h_nJets_CD->Fill(NJets,wt);

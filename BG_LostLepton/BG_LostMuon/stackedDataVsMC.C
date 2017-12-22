@@ -23,9 +23,10 @@ TFile *f[nfiles];
 //int col[10]={kOrange,kTeal+9,kBlue,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
 int col[10]={kBlack,kMagenta+2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed};  //Specify Colors
 TString name;
-bool saveCanvas=0;
+bool saveCanvas=1;
 void setLastBinAsOverFlow(TH1D*);
 TString getLegName(TString);
+TString getXaxisName(TString);
 double data_Integral=0,mc_Integral=0;
 TLatex textOnTop,intLumiE;
 double intLumi=35.9;
@@ -47,36 +48,36 @@ void stackedDataVsMC(TString iFname){
   name1.push_back("nBTags_Mu1");   rebin.push_back(1);    //name2.push_back("nBTags_Mu1");     
   name1.push_back("nHadJets_Mu1");  rebin.push_back(1);  //name2.push_back("nHadJets_Mu1");
   name1.push_back("BestPhotonPt_Mu1");   rebin.push_back(5);  //name2.push_back("BestPhotonPt_Mu1");      
-  name1.push_back("BestPhotonEta_Mu1"); rebin.push_back(5);  //name2.push_back("BestPhotonEta_Mu1");  
+  //  name1.push_back("BestPhotonEta_Mu1"); rebin.push_back(5);  //name2.push_back("BestPhotonEta_Mu1");  
   //  name1.push_back("BestPhotonPhi_Mu1"); rebin.push_back(1);  //name2.push_back("BestPhotonEta_Mu1");  
   name1.push_back("METvarBin_Mu1");  rebin.push_back(1); //name2.push_back("METvarBin_Mu1");  
-  name1.push_back("dPhi_METjet1_Pho_Mu1"); rebin.push_back(2);  //name2.push_back("dPhi_METjet1_Pho_Mu1");  
-  name1.push_back("dPhi_METjet2_Pho_Mu1"); rebin.push_back(2);  //name2.push_back("dPhi_METjet2_Pho_Mu1");  
+  // name1.push_back("dPhi_METjet1_Pho_Mu1"); rebin.push_back(2);  //name2.push_back("dPhi_METjet1_Pho_Mu1");  
+  // name1.push_back("dPhi_METjet2_Pho_Mu1"); rebin.push_back(2);  //name2.push_back("dPhi_METjet2_Pho_Mu1");  
   name1.push_back("dPhi_METBestPhoton_Mu1"); rebin.push_back(2);   //name2.push_back("dPhi_METBestPhoton_Mu1");  
-  name1.push_back("dPhi_Muon_Photon"); rebin.push_back(2);
+  //  name1.push_back("dPhi_Muon_Photon"); rebin.push_back(2);
   name1.push_back("dR_MuPho");   rebin.push_back(5);
-  name1.push_back("invMassPhoMu"); rebin.push_back(5);
+  //  name1.push_back("invMassPhoMu"); rebin.push_back(5);
   //  name1.push_back("nBestPho_Mu1"); rebin.push_back(1);
   name1.push_back("MuPt");   rebin.push_back(5);
-  name1.push_back("MuEta");   rebin.push_back(5);
-  name1.push_back("MT_Mu");   rebin.push_back(10);
-  name1.push_back("mTPho_Mu1");   rebin.push_back(20);
-  name1.push_back("mTPhoMuMET");   rebin.push_back(20);
+  //  name1.push_back("MuEta");   rebin.push_back(5);
+  //  name1.push_back("MT_Mu");   rebin.push_back(10);
+  name1.push_back("mTPho_Mu1");   rebin.push_back(5);
+  //  name1.push_back("mTPhoMuMET");   rebin.push_back(20);
 
-  name1.push_back("MET_R1_v2_Mu1");   rebin.push_back(1);
-  name1.push_back("MET_R2_v2_Mu1");   rebin.push_back(1);
-  name1.push_back("MET_R3_v2_Mu1");   rebin.push_back(1);
-  name1.push_back("MET_R4_v2_Mu1");   rebin.push_back(1);
-  name1.push_back("MET_R5_v2_Mu1");   rebin.push_back(1);
-  name1.push_back("AllSBins_Mu1");   rebin.push_back(1);
+  // name1.push_back("MET_R1_v2_Mu1");   rebin.push_back(1);
+  // name1.push_back("MET_R2_v2_Mu1");   rebin.push_back(1);
+  // name1.push_back("MET_R3_v2_Mu1");   rebin.push_back(1);
+  // name1.push_back("MET_R4_v2_Mu1");   rebin.push_back(1);
+  // name1.push_back("MET_R5_v2_Mu1");   rebin.push_back(1);
+  name1.push_back("AllSBins_v4_Mu1");   rebin.push_back(1);
 
-  //  name1.push_back("nVtx_Mu1");   rebin.push_back(5);
+  name1.push_back("nVtx_Mu1");   rebin.push_back(5);
   // name1.push_back("isoEleTrack_Mu1");   rebin.push_back(1);
   // name1.push_back("isoMuTrack_Mu1");   rebin.push_back(1);
   // name1.push_back("isoPiTrack_Mu1");   rebin.push_back(1);
-  name1.push_back("MET_Mu1_R1");rebin.push_back(1);
-  name1.push_back("MET_Mu1_R2");rebin.push_back(1);
-  name1.push_back("MET_Mu1_R3");rebin.push_back(1);
+  // name1.push_back("MET_Mu1_R1");rebin.push_back(1);
+  // name1.push_back("MET_Mu1_R2");rebin.push_back(1);
+  // name1.push_back("MET_Mu1_R3");rebin.push_back(1);
 
   TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
   TCanvas *c_cA[name1.size()];
@@ -166,7 +167,7 @@ void stackedDataVsMC(TString iFname){
     h_numr->SetLineColor(kBlack);
     h_numr->SetMarkerColor(kBlack);
     h_numr->SetTitle(0); name=name1[i];
-    h_numr->GetXaxis()->SetTitle(name);
+    h_numr->GetXaxis()->SetTitle(getXaxisName(name));
     h_numr->GetXaxis()->SetTitleOffset(0.87);
     h_numr->GetXaxis()->SetTitleSize(0.13);
     h_numr->GetXaxis()->SetLabelSize(0.14);
@@ -183,7 +184,7 @@ void stackedDataVsMC(TString iFname){
     //    c_cB->cd(i+1);    p_bot[i]->cd();
     h_numr->Draw("e0");
 
-    c_cA[i]->cd();    p_top[i]->cd();
+    c_cA[i]->cd();    p_top[i]->cd(); gPad->RedrawAxis();
     char name2[100];
     textOnTop.SetTextSize(0.06);
     intLumiE.SetTextSize(0.06);
@@ -191,7 +192,7 @@ void stackedDataVsMC(TString iFname){
     intLumiE.SetTextSize(0.06);
     sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
     intLumiE.DrawLatexNDC(0.73,0.91,name2);
-    if(saveCanvas){name="c_"+name1[i]+".png";c_cA[i]->SaveAs(name);}
+    if(saveCanvas){name="PtRatio_1p1_"+name1[i]+".png";c_cA[i]->SaveAs(name);}
     
   }
   
@@ -207,6 +208,22 @@ TString getLegName(TString fname){
   else if(fname=="CS_TG_LostMuHadTau_v2.root") return "t+#gamma";
   else if(fname=="CS_TGZGDY_LostMuHadTau_v2.root") return "t#gamma+Z#gamma+DY";
   else return fname;
+}
+TString getXaxisName(TString axname){
+  if(axname.Contains("nHadJets")) return "Jets";
+  else if(axname.Contains("ST")) return "ST(GeV)";
+  else if(axname.Contains("BTags")) return "b-Tags";
+  else if(axname.Contains("ElePt")) return "e pT(GeV)";
+  else if(axname.Contains("PhotonPt")) return "#gamma pT(GeV)";
+  else if(axname.Contains("mT")) return "mT_{#gamma,MET}(GeV)";
+  else if(axname.Contains("AllSBin")) return "Bin Number";
+  else if(axname.Contains("dPhi_METjet1") || axname.Contains("dphi1_METjet1")) return "#Delta#Phi_{1}";
+  else if(axname.Contains("dPhi_METjet2") || axname.Contains("dphi2_METjet2")) return "#Delta#Phi_{2}";
+  else if(axname.Contains("dPhi_METBestPhoton") ) return "#Delta#Phi(MET,#gamma)";
+  else if(axname.Contains("QMut") || axname.Contains("Qmut")) return "QMult";
+  else if(axname.Contains("MET")) return "MET(GeV)";
+  else return axname;
+
 }
 
 

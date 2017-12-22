@@ -49,7 +49,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   //TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuOnly_v2.root");
 
   TH2D *h2_LP;TH1D *h_LP;
-  bool do_prediction=0;
+  bool do_prediction=1;
   cout<<"Doing prediction from file |"<<f_LP->GetName()<<"|? "<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
@@ -203,13 +203,10 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     vector<TLorentzVector> genMu;   
     for(int i=0;i<GenParticles->size();i++){
       if((*GenParticles)[i].Pt()!=0){
-	//	if( abs((*GenParticles_PdgId)[i])==13 && ((abs((*GenParticles_ParentId)[i])==24)||(abs((*GenParticles_ParentId)[i])==15)) && ((*GenParticles_Status)[i]==1) ) {
-	if( abs((*GenParticles_PdgId)[i])==13 && (abs((*GenParticles_ParentId)[i])<=24) && ((*GenParticles_Status)[i]==1) ) {
-	  nGenMu++; genMu.push_back((*GenParticles)[i]);
-	}//muons
-	//	else if( abs((*GenParticles_PdgId)[i])==11 && ((abs((*GenParticles_ParentId)[i])==24)||(abs((*GenParticles_ParentId)[i])==15)) && ((*GenParticles_Status)[i]==1) ) {nGenEle++;}//electrons
-	else if( abs((*GenParticles_PdgId)[i])==11 && (abs((*GenParticles_ParentId)[i])<=24) && ((*GenParticles_Status)[i]==1) ) {nGenEle++;}//electrons
-	else if( abs((*GenParticles_PdgId)[i])==15 && (abs((*GenParticles_ParentId)[i])<=24) ) {nGenTau++;}//taus
+	if( abs((*GenParticles_PdgId)[i])==14 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {nGenMu++;}//muons, count using neutrino
+	else if( abs((*GenParticles_PdgId)[i])==12 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {nGenEle++;}//electrons, count using neutrino
+	else if( abs((*GenParticles_PdgId)[i])==15 && (abs((*GenParticles_ParentId)[i])<=25) ) {nGenTau++;}//taus
+	if( abs((*GenParticles_PdgId)[i])==13 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {genMu.push_back((*GenParticles)[i]);}
       }
     }
     if(nGenMu==0 && nGenEle==0 && nGenTau==0) continue;//to reject W->qq' type of events
@@ -251,7 +248,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       if(matche==1 && matchp==0) continue;//if reco photon matched to gen e and not matched to gen photon, it is fake.
     }//photon has been identified. It is a real photon and it is matched to gen photon with dR(genPho,RecoPho) < 0.1 and Pts are within 10%.
     //---------------------- MC only ends-------------------------
-
+    if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
+    if(phoMatchingJetIndx<0) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
     process = process && ST>500 && MET > 100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
 
@@ -393,6 +391,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h2_STHadJ_Mu0->Fill(ST,nHadJets,wt);
 	h2_METJet1Pt_Mu0->Fill(MET,hadJets[0].Pt(),wt);
 	h2_R_PhoPtJetPtVsDR_Mu0->Fill(minDR,((*Jets)[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
+	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Mu0->Fill(bestPhoton.Pt(),((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h3_STMETnHadJ_Mu0->Fill(ST,MET,nHadJets,wt);
 	h2_hadJbTag_Mu0->Fill(nHadJets,BTags,wt);
@@ -500,6 +499,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h2_METJet1Pt_Mu1->Fill(MET,hadJets[0].Pt(),wt);
 	h2_RecoMuPtRecoAct_Mu1->Fill((*Muons)[0].Pt(),(*Muons_MT2Activity)[0],wt);
 	h2_R_PhoPtJetPtVsDR_Mu1->Fill(minDR,((*Jets)[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
+	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Mu1->Fill(bestPhoton.Pt(),((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h3_STMETnHadJ_Mu1->Fill(ST,MET,nHadJets,wt);
 	

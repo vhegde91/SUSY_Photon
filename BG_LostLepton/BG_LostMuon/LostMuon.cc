@@ -8,6 +8,7 @@
 #include <cstring>
 #include <string>
 #include <fstream>
+#include "btag/BTagCorrector.h"
 
 using namespace std;
 
@@ -45,16 +46,35 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuHadTau_v2.root");
+  //  TFile *f_LP=new TFile("LstMu_CS_LDP_TTWZ_LostMuHadTau_v2.root");
   //  TFile *f_LP=new TFile("LstMu_CS_TTWZ_HadTauOnly_v2.root");
   //TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuOnly_v2.root");
 
   TH2D *h2_LP;TH1D *h_LP;
-  bool do_prediction=0;
+  bool do_prediction=1;
   cout<<"Doing prediction from file |"<<f_LP->GetName()<<"|? "<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
-  
+
+  //----------- btags SFs-----------------  
+  bool applybTagSFs=1;
+  int fListIndxOld=-1;
+  double prob0=-100,prob1=-100;
+  vector<TString> inFileName;
+  TString sampleName;
+  string str1;
+  ifstream runListFile(inputFileList);
+  TFile *currFile;
+  while (std::getline(runListFile, str1)) {
+    inFileName.push_back(str1);
+  }runListFile.close();
+  cout<<"applying b-tag SFs? "<<applybTagSFs<<endl;
+  BTagCorrector btagcorr;
+  //if fastsim
+  // btagcorr.SetFastSim(true);
+  //--------------------------------------
+ 
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
 
     // ==============print number of events done == == == == == == == =
@@ -72,6 +92,23 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     bool process=true;
     if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
 
+    if(fListIndxOld!=fCurrent){ 
+      fListIndxOld = fCurrent;
+      sampleName = inFileName[fCurrent];
+      //----------- btags SFs-----------------
+      if(applybTagSFs){
+      	currFile = TFile::Open(sampleName);
+      	btagcorr.SetEffs(currFile);
+      	btagcorr.SetCalib("btag/CSVv2_Moriond17_B_H_mod.csv");
+      }
+    }
+    vector<double> prob;
+    if(applybTagSFs){
+      prob = btagcorr.GetCorrections(Jets,Jets_hadronFlavor,Jets_HTMask);
+      prob0 = prob[0]; prob1 = prob[1]+prob[2]+prob[3];
+      //      double corr = btagcorr.GetSimpleCorrection(Jets,Jets_hadronFlavor,Jets_HTMask,Jets_bDiscriminatorCSV);
+    }
+    //--------------------------------------
     //About photons
     bestPhoton=getBestPhoton();
     if(bestPhoton.Pt() <= 100) continue;
@@ -203,13 +240,10 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     vector<TLorentzVector> genMu;   
     for(int i=0;i<GenParticles->size();i++){
       if((*GenParticles)[i].Pt()!=0){
-	//	if( abs((*GenParticles_PdgId)[i])==13 && ((abs((*GenParticles_ParentId)[i])==24)||(abs((*GenParticles_ParentId)[i])==15)) && ((*GenParticles_Status)[i]==1) ) {
-	if( abs((*GenParticles_PdgId)[i])==13 && (abs((*GenParticles_ParentId)[i])<=24) && ((*GenParticles_Status)[i]==1) ) {
-	  nGenMu++; genMu.push_back((*GenParticles)[i]);
-	}//muons
-	//	else if( abs((*GenParticles_PdgId)[i])==11 && ((abs((*GenParticles_ParentId)[i])==24)||(abs((*GenParticles_ParentId)[i])==15)) && ((*GenParticles_Status)[i]==1) ) {nGenEle++;}//electrons
-	else if( abs((*GenParticles_PdgId)[i])==11 && (abs((*GenParticles_ParentId)[i])<=24) && ((*GenParticles_Status)[i]==1) ) {nGenEle++;}//electrons
-	else if( abs((*GenParticles_PdgId)[i])==15 && (abs((*GenParticles_ParentId)[i])<=24) ) {nGenTau++;}//taus
+	if( abs((*GenParticles_PdgId)[i])==14 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {nGenMu++;}//muons, count using neutrino
+	else if( abs((*GenParticles_PdgId)[i])==12 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {nGenEle++;}//electrons, count using neutrino
+	else if( abs((*GenParticles_PdgId)[i])==15 && (abs((*GenParticles_ParentId)[i])<=25) ) {nGenTau++;}//taus
+	if( abs((*GenParticles_PdgId)[i])==13 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {genMu.push_back((*GenParticles)[i]);}
       }
     }
     if(nGenMu==0 && nGenEle==0 && nGenTau==0) continue;//to reject W->qq' type of events
@@ -251,9 +285,10 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       if(matche==1 && matchp==0) continue;//if reco photon matched to gen e and not matched to gen photon, it is fake.
     }//photon has been identified. It is a real photon and it is matched to gen photon with dR(genPho,RecoPho) < 0.1 and Pts are within 10%.
     //---------------------- MC only ends-------------------------
-
+    if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
+    if(phoMatchingJetIndx<0) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
-    process = process && ST>500 && MET > 100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
+    process = process && ST>500 && MET > 100 && nHadJets >=2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
 
     if(process && hadJetID){
       evtSurvived++;
@@ -264,7 +299,13 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       h_ST->Fill(ST,wt);
       h_MET->Fill(MET,wt);
       h_nHadJets->Fill(nHadJets,wt);
-      h_BTags->Fill(BTags,wt);
+      if(applybTagSFs){
+      	h_BTags->Fill(0.0,wt*prob[0]);
+      	h_BTags->Fill(1.0,wt*prob[1]);
+      	h_BTags->Fill(2.0,wt*prob[2]);
+      	h_BTags->Fill(3.0,wt*prob[3]);
+      }
+      else h_BTags->Fill(BTags,wt);
       h_HT->Fill(HT,wt);
       h_MHT->Fill(MHT,wt);
       h_nJets->Fill(NJets,wt);
@@ -344,7 +385,13 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h_ST_Mu0->Fill(ST,wt);
 	h_MET_Mu0->Fill(MET,wt);
 	h_nHadJets_Mu0->Fill(nHadJets,wt);
-	h_BTags_Mu0->Fill(BTags,wt);
+	if(applybTagSFs){
+	  h_BTags_Mu0->Fill(0.0,wt*prob[0]);
+	  h_BTags_Mu0->Fill(1.0,wt*prob[1]);
+	  h_BTags_Mu0->Fill(2.0,wt*prob[2]);
+	  h_BTags_Mu0->Fill(3.0,wt*prob[3]);
+	}
+	else h_BTags_Mu0->Fill(BTags,wt);
 	h_METvBin_Mu0->Fill(MET,wt);
 	h_BestPhotonPt_Mu0->Fill(bestPhoton.Pt(),wt);
 	h_BestPhotonEta_Mu0->Fill(bestPhoton.Eta(),wt);
@@ -393,6 +440,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h2_STHadJ_Mu0->Fill(ST,nHadJets,wt);
 	h2_METJet1Pt_Mu0->Fill(MET,hadJets[0].Pt(),wt);
 	h2_R_PhoPtJetPtVsDR_Mu0->Fill(minDR,((*Jets)[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
+	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Mu0->Fill(bestPhoton.Pt(),((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h3_STMETnHadJ_Mu0->Fill(ST,MET,nHadJets,wt);
 	h2_hadJbTag_Mu0->Fill(nHadJets,BTags,wt);
@@ -403,8 +451,14 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	else if(nHadJets==5 || nHadJets==6) h2_STMET_NJ5or6_Mu0  ->Fill(ST,MET,wt);
 	else if(nHadJets>=7)                h2_STMET_NJ7toInf_Mu0->Fill(ST,MET,wt);
 
-	if(BTags==0)      h2_METNJ_0b_Mu0->Fill(MET,nHadJets,wt);
-	else if(BTags>=1) h2_METNJ_1b_Mu0->Fill(MET,nHadJets,wt);
+	if(!applybTagSFs){
+	  if(BTags==0)      h2_METNJ_0b_Mu0->Fill(MET,nHadJets,wt);
+	  else if(BTags>=1) h2_METNJ_1b_Mu0->Fill(MET,nHadJets,wt);
+	}
+	else{
+	  h2_METNJ_0b_Mu0->Fill(MET,nHadJets,wt*prob0);
+	  h2_METNJ_1b_Mu0->Fill(MET,nHadJets,wt*prob1);
+	}
 	//	else if(BTags>=2) h2_METNJ_m2b_Mu0->Fill(MET,nHadJets,wt);
 	//---------------- search bins -----------------------
 	if( searchRegion > 0 && searchRegion < 4){
@@ -443,7 +497,13 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h_ST_Mu1->Fill(ST,wt);
 	h_MET_Mu1->Fill(MET,wt);
 	h_nHadJets_Mu1->Fill(nHadJets,wt);
-	h_BTags_Mu1->Fill(BTags,wt);
+	if(applybTagSFs){
+	  h_BTags_Mu1->Fill(0.0,wt*prob[0]);
+	  h_BTags_Mu1->Fill(1.0,wt*prob[1]);
+	  h_BTags_Mu1->Fill(2.0,wt*prob[2]);
+	  h_BTags_Mu1->Fill(3.0,wt*prob[3]);
+	}
+	else h_BTags_Mu1->Fill(BTags,wt);
 	h_METvBin_Mu1->Fill(MET,wt);
 	h_BestPhotonPt_Mu1->Fill(bestPhoton.Pt(),wt);
 	h_BestPhotonEta_Mu1->Fill(bestPhoton.Eta(),wt);
@@ -500,6 +560,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h2_METJet1Pt_Mu1->Fill(MET,hadJets[0].Pt(),wt);
 	h2_RecoMuPtRecoAct_Mu1->Fill((*Muons)[0].Pt(),(*Muons_MT2Activity)[0],wt);
 	h2_R_PhoPtJetPtVsDR_Mu1->Fill(minDR,((*Jets)[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
+	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Mu1->Fill(bestPhoton.Pt(),((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h3_STMETnHadJ_Mu1->Fill(ST,MET,nHadJets,wt);
 	
@@ -509,8 +570,14 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	else if(nHadJets==5 || nHadJets==6) h2_STMET_NJ5or6_Mu1  ->Fill(ST,MET,wt);
 	else if(nHadJets>=7)                h2_STMET_NJ7toInf_Mu1->Fill(ST,MET,wt);
 
-	if(BTags==0)      h2_METNJ_0b_Mu1->Fill(MET,nHadJets,wt);
-	else if(BTags>=1) h2_METNJ_1b_Mu1->Fill(MET,nHadJets,wt);
+	if(!applybTagSFs){
+	  if(BTags==0)      h2_METNJ_0b_Mu1->Fill(MET,nHadJets,wt);
+	  else if(BTags>=1) h2_METNJ_1b_Mu1->Fill(MET,nHadJets,wt);
+	}
+	else{
+	  h2_METNJ_0b_Mu1->Fill(MET,nHadJets,wt*prob0);
+	  h2_METNJ_1b_Mu1->Fill(MET,nHadJets,wt*prob1);
+	}
 	//	else if(BTags>=2) h2_METNJ_m2b_Mu1->Fill(MET,nHadJets,wt);
 
 	int minDRmuIndx = -100;

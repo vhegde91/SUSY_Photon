@@ -149,6 +149,7 @@ class LostMuon : public NtupleVariables{
 
   TH2D *h2_STHadJ_Mu0;
   TH2D *h2_METJet1Pt_Mu0;
+  TH2D *h2_RatioJetPhoPtVsPhoPt_Mu0;
   TH3D *h3_STMETnHadJ_Mu0;
 
   TH2D *h2_hadJbTag_Mu0;
@@ -242,6 +243,7 @@ class LostMuon : public NtupleVariables{
 
   TH2D *h2_R_PhoPtJetPtVsDR_Mu1;
   TH2D *h2_R_MuPtJetPtVsDR;
+  TH2D *h2_RatioJetPhoPtVsPhoPt_Mu1;
 
   TH1D *h_temp;
   TH1D *h_MET_Mu0_R[3];
@@ -346,6 +348,7 @@ void LostMuon::BookHistogram(const char *outFileName) {
   //  h2_METNJ_m2b_Mu0=new TH2D("METNJ_Mu0_R2","x:MET vs NJets for >=2 b for 0 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
 
   h2_R_PhoPtJetPtVsDR_Mu0=new TH2D("R_PhoPtJetPtVsDR_Mu0","y:Ratio of closest jet Pt to Photon Pt vs x: dR with closest jet for 0 Mu events",100,0,10,100,0,10);
+  h2_RatioJetPhoPtVsPhoPt_Mu0=new TH2D("RatioJetPhoPtVsPhoPt_Mu0","x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt for 0 Mu events",150,0,1500,400,0,5);
   //****************************************************
   h_nVtx_Mu1=new TH1D("nVtx_Mu1","no. of vertices for 1 Muon events",50,0,50);
   h_ST_Mu1=new TH1D("ST_Mu1","ST for 1 Muon events",400,0,4000);
@@ -431,7 +434,7 @@ void LostMuon::BookHistogram(const char *outFileName) {
   //  h2_METNJ_m2b_Mu1=new TH2D("METNJ_Mu1_R2","x:MET vs NJets for >=2 b for 1 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
 
   h2_R_MuPtJetPtVsDR=new TH2D("R_MuPtJetPtVsDR","y:Ratio of closest jet Pt to Mu Pt vs x: dR with closest jet",100,0,10,100,0,10);
-
+  h2_RatioJetPhoPtVsPhoPt_Mu1=new TH2D("RatioJetPhoPtVsPhoPt_Mu1","x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt for 1 Mu events",150,0,1500,400,0,5);
   h_temp=new TH1D("temp","temp",200,0,2000);
 
   //---------------- search bins -----------------------

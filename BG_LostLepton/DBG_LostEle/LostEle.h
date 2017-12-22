@@ -142,6 +142,7 @@ class LostEle : public NtupleVariables{
 
   TH2D *h2_STHadJ_Ele0;
   TH2D *h2_METJet1Pt_Ele0;
+  TH2D *h2_RatioJetPhoPtVsPhoPt_Ele0;
   TH3D *h3_STMETnHadJ_Ele0;
 
   TH2D *h2_hadJbTag_Ele0;
@@ -219,6 +220,7 @@ class LostEle : public NtupleVariables{
 
   TH2D *h2_STHadJ_Ele1;
   TH2D *h2_METJet1Pt_Ele1;
+  TH2D *h2_RatioJetPhoPtVsPhoPt_Ele1,*h2_RatioJetElePtVsElePt_Ele1;
   TH3D *h3_STMETnHadJ_Ele1;
 
   TH2D *h2_hadJbTag_Ele1;
@@ -334,6 +336,7 @@ void LostEle::BookHistogram(const char *outFileName) {
   //  h2_METNJ_m2b_Ele0=new TH2D("METNJ_Ele0_R2","x:MET vs NJets for >=2 b for 0 Ele events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
 
   h2_R_PhoPtJetPtVsDR_Ele0=new TH2D("R_PhoPtJetPtVsDR_Ele0","y:Ratio of closest jet Pt to Photon Pt vs x: dR with closest jet for 0 Ele events",100,0,10,100,0,10);
+  h2_RatioJetPhoPtVsPhoPt_Ele0=new TH2D("RatioJetPhoPtVsPhoPt_Ele0","x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt for 0 Ele events",150,0,1500,400,0,5);
   //****************************************************
   h_nVtx_Ele1=new TH1D("nVtx_Ele1","no. of vertices for 1 Electron events",50,0,50);
   h_ST_Ele1=new TH1D("ST_Ele1","ST for 1 Electron events",400,0,4000);
@@ -418,7 +421,8 @@ void LostEle::BookHistogram(const char *outFileName) {
   //  h2_METNJ_m2b_Ele1=new TH2D("METNJ_Ele1_R2","x:MET vs NJets for >=2 b for 1 Ele events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
 
   h2_R_ElePtJetPtVsDR=new TH2D("R_ElePtJetPtVsDR","y:Ratio of closest jet Pt to Ele Pt vs x: dR with closest jet",100,0,10,100,0,10);
-
+  h2_RatioJetPhoPtVsPhoPt_Ele1=new TH2D("RatioJetPhoPtVsPhoPt_Ele1","x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt for 1 Ele events",150,0,1500,400,0,5);
+  h2_RatioJetElePtVsElePt_Ele1=new TH2D("RatioJetElePtVsElePt_Ele1","x: #gamma Pt, y:ratio of pT of jet matched to electron to electron Pt for 1 Ele events",150,0,1500,400,0,5);
   h_temp=new TH1D("temp","temp",200,0,2000);
 
   //---------------- search bins -----------------------

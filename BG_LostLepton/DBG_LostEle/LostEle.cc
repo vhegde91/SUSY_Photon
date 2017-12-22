@@ -45,7 +45,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   TFile *f_LP=new TFile("LstEle_CS_TTWZ_LostEle_v2.root");
-  //TFile *f_LP=new TFile("LstEle_LDP_CS_TTWZ_LostEle_v2.root");
+  //  TFile *f_LP=new TFile("LstEle_LDP_CS_TTWZ_LostEle_v2.root");
   //TFile *f_LP=new TFile("LstEle_CS_TTW_LostEle_v2.root");
   TH2D *h2_LP;TH1D *h_LP;
   bool do_prediction=1;
@@ -227,9 +227,25 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     }//photon has been identified. It is a real photon and it is matched to gen photon with dR(genPho,RecoPho) < 0.1 and Pts are within 10%.
     //---------------------- MC only ends-------------------------
     */
-    //    if(MET>200) continue;
+       // if(MET>200) continue;
+       // if(abs(dphiPho_MET) < 1.0) continue;
+    int eleMatchingJetIndx = -100;
+    double minDREle=1000;
+    if(Electrons->size()==1 && (*Electrons)[0].Pt()>100){
+      for(int i=0;i<Jets->size();i++){
+    	if( ((*Jets)[i].Pt() > MHT_PtCut) && (abs((*Jets)[i].Eta()) <= HT_EtaCut) ){
+    	  double dR=(*Electrons)[0].DeltaR((*Jets)[i]);
+    	  if(dR<minDREle){minDREle=dR;eleMatchingJetIndx=i;}
+    	}
+      }
+      if(eleMatchingJetIndx>=0 && ((*Jets)[eleMatchingJetIndx].Pt())/((*Electrons)[0].Pt()) < 1.0) continue;
+      if(eleMatchingJetIndx<0) continue;
+    }
+    if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
+    if(phoMatchingJetIndx<0) continue;
+
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
-    process = process && ST>500 && MET > 100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
+    process = process && ST>500 && MET > 100 && nHadJets >=2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
 
     if(process && hadJetID){
       evtSurvived++;
@@ -398,6 +414,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h2_STHadJ_Ele0->Fill(ST,nHadJets,wt);
 	h2_METJet1Pt_Ele0->Fill(MET,hadJets[0].Pt(),wt);
 	h2_R_PhoPtJetPtVsDR_Ele0->Fill(minDR,((*Jets)[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
+	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Ele0->Fill(bestPhoton.Pt(),((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h3_STMETnHadJ_Ele0->Fill(ST,MET,nHadJets,wt);
 	h2_hadJbTag_Ele0->Fill(nHadJets,BTags,wt);
@@ -505,6 +522,8 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h2_METJet1Pt_Ele1->Fill(MET,hadJets[0].Pt(),wt);
 	h2_RecoElePtRecoAct_Ele1->Fill((*Electrons)[0].Pt(),(*Electrons_MT2Activity)[0],wt);
 	h2_R_PhoPtJetPtVsDR_Ele1->Fill(minDR,((*Jets)[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
+	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Ele1->Fill(bestPhoton.Pt(),((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	if(eleMatchingJetIndx>=0) h2_RatioJetElePtVsElePt_Ele1->Fill((*Electrons)[0].Pt(),((*Jets)[eleMatchingJetIndx].Pt())/((*Electrons)[0].Pt()),wt);
 
 	h3_STMETnHadJ_Ele1->Fill(ST,MET,nHadJets,wt);
 	

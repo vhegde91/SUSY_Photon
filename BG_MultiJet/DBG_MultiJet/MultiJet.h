@@ -25,7 +25,7 @@ class MultiJet : public NtupleVariables{
   TLorentzVector getBestPhoton();
   bool check_eMatchedtoGamma();
   void print(Long64_t);
-
+  void findObjMatchedtoG(TLorentzVector);
   //Variables defined
   int bestPhotonIndxAmongPhotons=-100;
   float HT_PtCut=30;
@@ -94,6 +94,8 @@ class MultiJet : public NtupleVariables{
   TH1D *h_dPhi_METBestPhoton_AB,*h_dPhi_METBestPhoton_CD,*h_dPhi_METBestPhoton_[4];
   TH1D *h_mTPho_AB,*h_mTPho_CD,*h_mTPho_[4];
   TH1D *h_dPhiPhotonJet1_AB,*h_dPhiPhotonJet1_CD,*h_dPhiPhotonJet1_[4];
+  TH1D *h_RatioJetPhoPt_AB,*h_RatioJetPhoPt_CD,*h_RatioJetPhoPt_[4];
+
   TH2D *h2_PtPhotonvsMET_AB,*h2_PtPhotonvsMET_CD,*h2_PtPhotonvsMET_[4];
   TH2D *h2_dPhi1dPhi2_AB,*h2_dPhi1dPhi2_CD,*h2_dPhi1dPhi2_[4];
   TH2D *h2_NJST_AB,*h2_NJST_CD,*h2_NJST_[4];
@@ -101,6 +103,9 @@ class MultiJet : public NtupleVariables{
   TH2D *h2_METnHadJ_0b_AB,*h2_METnHadJ_0b_CD;
   TH2D *h2_METnHadJ_min1b_AB,*h2_METnHadJ_min1b_CD;
   TH2D *h2_nHadJBTag_A,*h2_nHadJBTag_C;
+  TH2D *h2_RatioJetPhoPtVsPhoPt_AB,*h2_RatioJetPhoPtVsPhoPt_CD,*h2_RatioJetPhoPtVsPhoPt_[4];
+  TH2D *h2_RatioJetPhoPtVsdPhiG_AB,*h2_RatioJetPhoPtVsdPhiG_CD,*h2_RatioJetPhoPtVsdPhiG_[4];
+  TH2D *h2_RatioJetPhoPtVsMET_AB,*h2_RatioJetPhoPtVsMET_CD,*h2_RatioJetPhoPtVsMET_[4];
 
   TH1D *h_nBestPho;
   TH1D *h_BestPho2Pt;
@@ -161,6 +166,9 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h2_dPhiMETPho_NJ_AB=new TH2D("dPhiMETPho_NJ_AB","x:#Delta#Phi(MET, photon) vs nHadJets_AB",dPhiBinLow.size()-1,&(dPhiBinLow[0]),nJBinLow.size()-1,&(nJBinLow[0]));
   h2_METnHadJ_0b_AB=new TH2D("METnHadJ_0b_AB","x:MET vs nHadJets_0b_AB",METLowSimple.size()-1,&(METLowSimple[0]),nJBinLow.size()-1,&(nJBinLow[0]));
   h2_METnHadJ_min1b_AB=new TH2D("METnHadJ_min1b_AB","x:MET vs nHadJets_min1b_AB",METLowSimple.size()-1,&(METLowSimple[0]),nJBinLow.size()-1,&(nJBinLow[0]));
+  h2_RatioJetPhoPtVsPhoPt_AB=new TH2D("RatioJetPhoPtVsPhoPt_AB","x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt_AB",150,0,1500,100,0,5);
+  h2_RatioJetPhoPtVsdPhiG_AB=new TH2D("RatioJetPhoPtVsdPhiG_AB","x: #Delta#Phi(#gamma,MET), y:ratio of pT of jet matched to photon to photon Pt_AB",80,0,4,100,0,5);
+  h2_RatioJetPhoPtVsMET_AB=new TH2D("RatioJetPhoPtVsMET_AB","x: MET, y:ratio of pT of jet matched to photon to photon Pt_AB",200,0,2000,100,0,5);
 
   h_BestPhotonPt_AB=new TH1D("BestPhotonPt_AB","Pt of the Best Photon_AB",150,0,1500);
   h_BestPhotonPtvBin_AB=new TH1D("BestPhotonPtvarBin_AB","BestPhotonPt with variable bin size_AB",BestPhotonPtBinLowEdge.size()-1,&(BestPhotonPtBinLowEdge[0]));
@@ -168,6 +176,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_BestPhotonPhi_AB=new TH1D("BestPhotonPhi_AB","Best Photon Phi_AB",80,-4,4);
   h_dPhi_METBestPhoton_AB=new TH1D("dPhi_METBestPhoton_AB","dphi between MET and BestPhoton_AB",40,0,4);
   h_mTPho_AB=new TH1D("mTPho_AB","mT(#gamma,MET)_AB",150,0,1500);
+  h_RatioJetPhoPt_AB=new TH1D("RatioJetPhoPt_AB","ratio of matching jet Pt to photon Pt_AB",100,0,5);
 
   h_HT_AB=new TH1D("HT_AB","HT_AB",400,0,4000);
   h_MHT_AB=new TH1D("MHT_AB","MHT_AB",200,0,2000);
@@ -202,6 +211,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_BestPhotonPhi_CD=new TH1D("BestPhotonPhi_CD","Best Photon Phi_CD",80,-4,4);
   h_dPhi_METBestPhoton_CD=new TH1D("dPhi_METBestPhoton_CD","dphi between MET and BestPhoton_CD",40,0,4);
   h_mTPho_CD=new TH1D("mTPho_CD","mT(#gamma,MET)_CD",150,0,1500);
+  h_RatioJetPhoPt_CD=new TH1D("RatioJetPhoPt_CD","ratio of matching jet Pt to photon Pt_CD",100,0,5);
 
   h2_PtPhotonvsMET_CD=new TH2D("BestPhotonPtvsMET_CD","Best photon Pt vs MET_CD",150,0,1500,200,0,2000);
   h2_dPhi1dPhi2_CD=new TH2D("dPhi1dPhi2_CD","x:dPhi1 vs dPhi2_CD",40,0,4,40,0,4);
@@ -209,6 +219,9 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h2_dPhiMETPho_NJ_CD=new TH2D("dPhiMETPho_NJ_CD","x:#Delta#Phi(MET, photon) vs nHadJets_CD",dPhiBinLow.size()-1,&(dPhiBinLow[0]),nJBinLow.size()-1,&(nJBinLow[0]));
   h2_METnHadJ_0b_CD=new TH2D("METnHadJ_0b_CD","x:MET vs nHadJets_0b_CD",METLowSimple.size()-1,&(METLowSimple[0]),nJBinLow.size()-1,&(nJBinLow[0]));
   h2_METnHadJ_min1b_CD=new TH2D("METnHadJ_min1b_CD","x:MET vs nHadJets_min1b_CD",METLowSimple.size()-1,&(METLowSimple[0]),nJBinLow.size()-1,&(nJBinLow[0]));
+  h2_RatioJetPhoPtVsPhoPt_CD=new TH2D("RatioJetPhoPtVsPhoPt_CD","x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt_CD",150,0,1500,100,0,5);
+  h2_RatioJetPhoPtVsdPhiG_CD=new TH2D("RatioJetPhoPtVsdPhiG_CD","x: #Delta#Phi(#gamma,MET), y:ratio of pT of jet matched to photon to photon Pt_CD",80,0,4,100,0,5);
+  h2_RatioJetPhoPtVsMET_CD=new TH2D("RatioJetPhoPtVsMET_CD","x: MET, y:ratio of pT of jet matched to photon to photon Pt_CD",200,0,2000,100,0,5);
 
   h_HT_CD=new TH1D("HT_CD","HT_CD",400,0,4000);
   h_MHT_CD=new TH1D("MHT_CD","MHT_CD",200,0,2000);
@@ -249,8 +262,10 @@ void MultiJet::BookHistogram(const char *outFileName) {
     h_BestPhotonEta_[i]=new TH1D("BestPhotonEta_"+regName,"Best Photon Eta_"+regName,120,-6,6);
     h_BestPhotonPhi_[i]=new TH1D("BestPhotonPhi_"+regName,"Best Photon Phi_"+regName,80,-4,4);
     h_dPhi_METBestPhoton_[i]=new TH1D("dPhi_METBestPhoton_"+regName,"dphi between MET and BestPhoton_"+regName,40,0,4);
-    h_dPhiPhotonJet1_[i]=new TH1D("dPhiPhotonJet1_"+regName,"dphi(jet1,photon)_"+regName,40,0,4);
     h_mTPho_[i]=new TH1D("mTPho_"+regName,"mT(#gamma,MET)_"+regName,150,0,1500);
+    h_RatioJetPhoPt_[i]=new TH1D("RatioJetPhoPt_"+regName,"ratio of matching jet Pt to photon Pt_"+regName,100,0,5);
+
+    h_dPhiPhotonJet1_[i]=new TH1D("dPhiPhotonJet1_"+regName,"dphi(jet1,photon)_"+regName,40,0,4);
 
     h_SBins_v1_[i] = new TH1D("AllSBins_v1_"+regName,"search bins:(NJ=2to4) (NJ:5or6) (NJ>=7)_"+regName,21,0.5,21.5);
   
@@ -258,6 +273,9 @@ void MultiJet::BookHistogram(const char *outFileName) {
     h2_dPhi1dPhi2_[i]=new TH2D("dPhi1dPhi2_"+regName,"x:dPhi1 vs dPhi2_"+regName,40,0,4,40,0,4);
     h2_NJST_[i]=new TH2D("NJST_"+regName,"x:no. of hadJets vs ST_"+regName,nJBinLow.size()-1,&(nJBinLow[0]),STBinLow2.size()-1,&(STBinLow2[0]));
     h2_dPhiMETPho_NJ_[i]=new TH2D("dPhiMETPho_NJ_"+regName,"x:#Delta#Phi(MET, photon) vs nHadJets_"+regName,dPhiBinLow.size()-1,&(dPhiBinLow[0]),nJBinLow.size()-1,&(nJBinLow[0]));
+    h2_RatioJetPhoPtVsPhoPt_[i]=new TH2D("RatioJetPhoPtVsPhoPt_"+regName,"x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt_"+regName,150,0,1500,100,0,5);
+    h2_RatioJetPhoPtVsdPhiG_[i]=new TH2D("RatioJetPhoPtVsdPhiG_"+regName,"x: #Delta#Phi(#gamma,MET), y:ratio of pT of jet matched to photon to photon Pt_"+regName,80,0,4,100,0,5);
+    h2_RatioJetPhoPtVsMET_[i]=new TH2D("RatioJetPhoPtVsMET_"+regName,"x: MET, y:ratio of pT of jet matched to photon to photon Pt_"+regName,200,0,2000,100,0,5);
 
     h_HT_[i]=new TH1D("HT_"+regName,"HT_"+regName,400,0,4000);
     h_MHT_[i]=new TH1D("MHT_"+regName,"MHT_"+regName,200,0,2000);

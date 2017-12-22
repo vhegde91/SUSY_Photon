@@ -45,7 +45,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuHadTau_v2.root");
-  //  TFile *f_LP=new TFile("LstMu_LDP_CS_TTWZ_LostMuHadTau_v2.root");
+  //TFile *f_LP=new TFile("LstMu_LDP_CS_TTWZ_LostMuHadTau_v2.root");
   //  TFile *f_LP=new TFile("LstMu_CS_TTWZ_HadTauOnly_v2.root");
   //TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuOnly_v2.root");
 
@@ -237,8 +237,10 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     //---------------------- MC only ends-------------------------
 */
     //    if(MET>200) continue;
+    if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
+    if(phoMatchingJetIndx<0) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
-    process = process && ST>500 && MET > 100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
+    process = process && ST>500 && MET > 100 && nHadJets >=2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
 
     if(process && hadJetID){
       evtSurvived++;
@@ -380,6 +382,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h2_STHadJ_Mu0->Fill(ST,nHadJets,wt);
 	h2_METJet1Pt_Mu0->Fill(MET,hadJets[0].Pt(),wt);
 	h2_R_PhoPtJetPtVsDR_Mu0->Fill(minDR,((*Jets)[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
+	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Mu0->Fill(bestPhoton.Pt(),((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h3_STMETnHadJ_Mu0->Fill(ST,MET,nHadJets,wt);
 	h2_hadJbTag_Mu0->Fill(nHadJets,BTags,wt);
@@ -488,6 +491,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h2_METJet1Pt_Mu1->Fill(MET,hadJets[0].Pt(),wt);
 	h2_RecoMuPtRecoAct_Mu1->Fill((*Muons)[0].Pt(),(*Muons_MT2Activity)[0],wt);
 	h2_R_PhoPtJetPtVsDR_Mu1->Fill(minDR,((*Jets)[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
+	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Mu1->Fill(bestPhoton.Pt(),((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h3_STMETnHadJ_Mu1->Fill(ST,MET,nHadJets,wt);
 	

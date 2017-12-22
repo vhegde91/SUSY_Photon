@@ -149,6 +149,7 @@ class LostMuon : public NtupleVariables{
 
   TH2D *h2_STHadJ_Mu0;
   TH2D *h2_METJet1Pt_Mu0;
+  TH2D *h2_RatioJetPhoPtVsPhoPt_Mu0;
   TH3D *h3_STMETnHadJ_Mu0;
 
   TH2D *h2_hadJbTag_Mu0;
@@ -242,6 +243,7 @@ class LostMuon : public NtupleVariables{
 
   TH2D *h2_R_PhoPtJetPtVsDR_Mu1;
   TH2D *h2_R_MuPtJetPtVsDR;
+  TH2D *h2_RatioJetPhoPtVsPhoPt_Mu1;
 
   TH1D *h_temp;
   TH1D *h_MET_Mu0_R[3];
@@ -274,7 +276,7 @@ void LostMuon::BookHistogram(const char *outFileName) {
   h_MET=new TH1D("MET","MET",200,0,2000);
   h_nHadJets=new TH1D("nHadJets","no. of jets(only hadronic jets,not counting photon)",25,0,25);
   h_BTags=new TH1D("nBTags","no. of B tags",10,0,10);
-  h_METvBin=new TH1D("METvarBin","MET with variable bin size",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_METvBin=new TH1D("METvarBin","MET with variable bin size",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
   h_HT=new TH1D("HT","HT",400,0,4000);
   h_MHT=new TH1D("MHT","MHT",200,0,2000);
   h_nJets=new TH1D("nJets","nJets",25,0,25);
@@ -288,7 +290,7 @@ void LostMuon::BookHistogram(const char *outFileName) {
   h_MET_Mu0=new TH1D("MET_Mu0","MET for 0 Muon events",200,0,2000);
   h_nHadJets_Mu0=new TH1D("nHadJets_Mu0","no. of jets(only hadronic jets,not counting photon)  for 0 Muon events",25,0,25);
   h_BTags_Mu0=new TH1D("nBTags_Mu0","no. of B tags for 0 Muon events",10,0,10);
-  h_METvBin_Mu0=new TH1D("METvarBin_Mu0","MET with variable bin size for 0 Muon events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_METvBin_Mu0=new TH1D("METvarBin_Mu0","MET with variable bin size for 0 Muon events",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
   h_BestPhotonPt_Mu0=new TH1D("BestPhotonPt_Mu0","Pt of the best photon for 0 Muon events",150,0,1500);
   h_BestPhotonEta_Mu0=new TH1D("BestPhotonEta_Mu0","Eta of the best photon for 0 Muon events",120,-6,6);
   h_BestPhotonPhi_Mu0=new TH1D("BestPhotonPhi_Mu0","Phi of the best photon for 0 Muon events",80,-4,4);
@@ -346,13 +348,14 @@ void LostMuon::BookHistogram(const char *outFileName) {
   //  h2_METNJ_m2b_Mu0=new TH2D("METNJ_Mu0_R2","x:MET vs NJets for >=2 b for 0 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
 
   h2_R_PhoPtJetPtVsDR_Mu0=new TH2D("R_PhoPtJetPtVsDR_Mu0","y:Ratio of closest jet Pt to Photon Pt vs x: dR with closest jet for 0 Mu events",100,0,10,100,0,10);
+  h2_RatioJetPhoPtVsPhoPt_Mu0=new TH2D("RatioJetPhoPtVsPhoPt_Mu0","x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt for 0 Mu events",150,0,1500,400,0,5);
   //****************************************************
   h_nVtx_Mu1=new TH1D("nVtx_Mu1","no. of vertices for 1 Muon events",50,0,50);
   h_ST_Mu1=new TH1D("ST_Mu1","ST for 1 Muon events",400,0,4000);
   h_MET_Mu1=new TH1D("MET_Mu1","MET for 1 Muon events",200,0,2000);
   h_nHadJets_Mu1=new TH1D("nHadJets_Mu1","no. of jets(only hadronic jets,not counting photon)  for 1 Muon events",25,0,25);
   h_BTags_Mu1=new TH1D("nBTags_Mu1","no. of B tags for 1 Muon events",10,0,10);
-  h_METvBin_Mu1=new TH1D("METvarBin_Mu1","MET with variable bin size for 1 Muon events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_METvBin_Mu1=new TH1D("METvarBin_Mu1","MET with variable bin size for 1 Muon events",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
   h_BestPhotonPt_Mu1=new TH1D("BestPhotonPt_Mu1","Pt of the best photon for 1 Muon events",150,0,1500);
   h_BestPhotonEta_Mu1=new TH1D("BestPhotonEta_Mu1","Eta of the best photon for 1 Muon events",120,-6,6);
   h_BestPhotonPhi_Mu1=new TH1D("BestPhotonPhi_Mu1","Phi of the best photon for 1 Muon events",80,-4,4);
@@ -431,7 +434,7 @@ void LostMuon::BookHistogram(const char *outFileName) {
   //  h2_METNJ_m2b_Mu1=new TH2D("METNJ_Mu1_R2","x:MET vs NJets for >=2 b for 1 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
 
   h2_R_MuPtJetPtVsDR=new TH2D("R_MuPtJetPtVsDR","y:Ratio of closest jet Pt to Mu Pt vs x: dR with closest jet",100,0,10,100,0,10);
-
+  h2_RatioJetPhoPtVsPhoPt_Mu1=new TH2D("RatioJetPhoPtVsPhoPt_Mu1","x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt for 1 Mu events",150,0,1500,400,0,5);
   h_temp=new TH1D("temp","temp",200,0,2000);
 
   //---------------- search bins -----------------------

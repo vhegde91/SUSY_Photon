@@ -1,0 +1,2 @@
+/home/vinay/work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/SR_Summer16.DiPhotonJetsBox_M40_80-Sherpa.root
+/home/vinay/work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/SR_Summer16.DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa.root

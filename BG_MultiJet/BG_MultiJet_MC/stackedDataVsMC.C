@@ -43,12 +43,13 @@ void stackedDataVsMC(TString iFname){
   // f[4] = new TFile("DCS_LDP_Run2016_SingleEle_v2.root");             suffixHist.push_back("_Pho");
   // f[5] = new TFile("gjets_qcd.root");                                suffixHist.push_back("_AB");
 
-  f[0] = new TFile(iFname);                                          suffixHist.push_back("_AB");
+  f[0] = new TFile(iFname);                                          suffixHist.push_back("_C");
   // f[1] = new TFile("CS_c_ZGZJToNuNuG.root");                       suffixHist.push_back("");
   // f[2] = new TFile("DCS_c_Run2016_LostEle_v2.root");               suffixHist.push_back("_Ele0");
   // f[3] = new TFile("DCS_c_Run2016_LostMuHadTau_v2.root");          suffixHist.push_back("_Mu0");
   // f[4] = new TFile("DCS_c_Run2016_SingleEle_v2.root");             suffixHist.push_back("_Pho");
-  f[1] = new TFile("gjets_qcd.root");                                suffixHist.push_back("_AB");
+  //  f[1] = new TFile("gjets_qcd.root");                                suffixHist.push_back("_AB");
+  f[1] = new TFile("gjets_qcd_diPhoton.root");                                suffixHist.push_back("_C");
 
   //f[5] = new TFile("GJetsQCD_LDPSFs.root");                          suffixHist.push_back("_AB");
 
