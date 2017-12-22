@@ -31,4 +31,5 @@ ls
 echo "COPYING OUTPUT"
 
 xrdcp -f $datasetName'_'$outputFileTag root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/CS_LostEle/
+#xrdcp -f $datasetName'_'$outputFileTag root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/CS_LostMu/
 rm $datasetName'_'$outputFileTag

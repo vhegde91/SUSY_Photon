@@ -46,11 +46,11 @@ void SkimmingGJets::EventLoop(const char *data,const char *inputFileList) {
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
 
     // ==============print number of events done == == == == == == == =
-    // double progress = 10.0 * jentry / (1.0 * nentries);
-    // int k = int (progress);
-    // if (k > decade)
-    //   cout << 10 * k << " %" <<endl;
-    // decade = k;
+    double progress = 10.0 * jentry / (1.0 * nentries);
+    int k = int (progress);
+    if (k > decade)
+      cout << 10 * k << " %" <<endl;
+    decade = k;
     // cout<<"j:"<<jentry<<" fcurrent:"<<fCurrent<<endl;
     // ===============read this entry == == == == == == == == == == == 
     Long64_t ientry = LoadTree(jentry);
@@ -58,34 +58,24 @@ void SkimmingGJets::EventLoop(const char *data,const char *inputFileList) {
     nb = fChain->GetEntry(jentry);   nbytes += nb;
 
     h_selectBaselineYields_->Fill(0);
+    storeBTagEff();
     if( Electrons->size() == 0 && Muons->size()==0 )   h_selectBaselineYields_->Fill(1);
     else continue;//veto leptons
-    if(s_data=="CS_MultiJets_madHT0to600" && madHT>600) continue;//putting a cut on madHT for SingleLept and DiLept samples of TTbar. Do not use for other samples.
 
     //about photons
     TLorentzVector bestPhoton=getBestPhoton();
-    TLorentzVector idFailPhoton=getIDFailPhoton();
-    TLorentzVector aphoton;
-    if(bestPhoton.Pt()>1.0) aphoton = bestPhoton;
-    else if(idFailPhoton.Pt()>1.0){
-      aphoton = idFailPhoton;
-      // cout<<"PhoPt:"<<aphoton.Pt()<<" eta:"<<aphoton.Eta()<<" Phi:"<<aphoton.Phi()<<endl;
-      // for(int i=0;i<GenParticles->size();i++){
-      // 	cout<<EvtNum<<" "<<jentry<<" "<<GenParticles->size()<<" "<<i<<" PdgId:"<<(*GenParticles_PdgId)[i]<<" parentId:"<<(*GenParticles_ParentId)[i]<<" parentIndx:"<<(*GenParticles_ParentIdx)[i]<<" Status:"<<" Pt:"<<(*GenParticles)[i].Pt()<<" Eta:"<<(*GenParticles)[i].Eta()<<" Phi:"<<(*GenParticles)[i].Phi()<<" E:"<<(*GenParticles)[i].Energy()<<" dR:"<<aphoton.DeltaR((*GenParticles)[i])<<endl; 
-      // }
-    }
-    else continue;
-    if(aphoton.Pt()<100) continue;
+    if(bestPhoton.Pt()<100) continue;
     h_selectBaselineYields_->Fill(2);
+    if(s_data=="CS_MultiJets_madHT0to600" && madHT>600) continue;
     //calculate ST and nHadJets
     int minDRindx=-100,phoMatchingJetIndx=-100,nHadJets=0;
     double minDR=99999,ST=0;
     vector<TLorentzVector> hadJets;
-    if(aphoton.Pt()>100){
+    if(bestPhoton.Pt()>=100){
       h_selectBaselineYields_->Fill(2);
       for(int i=0;i<Jets->size();i++){
 	if( ((*Jets)[i].Pt() > 30.0) && (abs((*Jets)[i].Eta()) <= 2.4) ){
-	  double dR=aphoton.DeltaR((*Jets)[i]);
+	  double dR=bestPhoton.DeltaR((*Jets)[i]);
 	  if(dR<minDR){minDR=dR;minDRindx=i;}
 	}
       }
@@ -102,7 +92,7 @@ void SkimmingGJets::EventLoop(const char *data,const char *inputFileList) {
 	if( (abs(hadJets[i].Eta()) < 2.4) ){ST=ST+(hadJets[i].Pt());}
 	if( (abs(hadJets[i].Eta()) < 2.4) ){nHadJets++;}
       }
-      if( minDR<0.3 ) ST=ST+aphoton.Pt();//add the pt of photon if and only if there is a matching jet.
+      if( minDR<0.3 ) ST=ST+bestPhoton.Pt();//add the pt of photon if and only if there is a matching jet.
     }
     else{ ST = HT; nHadJets = NJets; }
     //-----------------------------------------------------------------------
@@ -140,21 +130,30 @@ TLorentzVector SkimmingGJets::getBestPhoton(){
     return goodPho[bestPhoIndx];
   }
 }
-TLorentzVector SkimmingGJets::getIDFailPhoton(){
-  int bestPhoIndx=-100;
-  TLorentzVector v1;
-  vector<TLorentzVector> goodPho;
-  for(int iPhoton=0;iPhoton<Photons->size();iPhoton++){
-    if( !((*Photons_fullID)[iPhoton]) && ((*Photons_hasPixelSeed)[iPhoton]<0.001) ) goodPho.push_back( (*Photons)[iPhoton] );
-  }
 
-  if(goodPho.size()==0) return v1;
-  else if(goodPho.size()==1) return goodPho[0];
-  else{
-    for(int i=0;i<goodPho.size();i++){
-      if(i==0) bestPhoIndx=0;
-      else if(goodPho[bestPhoIndx].Pt() < goodPho[i].Pt()) bestPhoIndx=i;
+void SkimmingGJets::storeBTagEff(){
+  double CSVv2WP = 0.8484;
+  for(unsigned ja = 0; ja < Jets->size(); ++ja){
+    //HT jet cuts
+    if(!Jets_HTMask->at(ja)) continue;
+    
+    //fill by flavor
+    int flav = abs(Jets_hadronFlavor->at(ja));
+    double csv = Jets_bDiscriminatorCSV->at(ja);
+    double pt = Jets->at(ja).Pt();
+    //use abs(eta) for now
+    double eta = fabs(Jets->at(ja).Eta());
+    if(flav==5){
+      d_eff_b->Fill(pt,eta);
+      if(csv > CSVv2WP) n_eff_b->Fill(pt,eta);
     }
-    return goodPho[bestPhoIndx];
+    else if(flav==4){
+      d_eff_c->Fill(pt,eta);
+      if(csv > CSVv2WP) n_eff_c->Fill(pt,eta);
+    }
+    else if(flav<4 || flav==21){
+      d_eff_udsg->Fill(pt,eta);
+      if(csv > CSVv2WP) n_eff_udsg->Fill(pt,eta);
+    }
   }
 }

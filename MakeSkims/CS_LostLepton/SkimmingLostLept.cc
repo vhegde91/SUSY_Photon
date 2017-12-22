@@ -62,11 +62,12 @@ void SkimmingLostLept::EventLoop(const char *data,const char *inputFileList) {
     //    Weight = CrossSection/NumEvents;
     if(s_data=="CS_LostEle_madHT0to600" && madHT>600 ) continue;//putting a cut on madHT for SingleLept and DiLept samples of TTbar. Do not use for other samples.
     h_selectBaselineYields_->Fill(0);
+    storeBTagEff();
     //---------------------------------- For Lost Muons -----------------------------------------------
     //should not be any electron. Need muons in the sample. Do not say anything about the muons.
     // if( Electrons->size() == 0 )   h_selectBaselineYields_->Fill(1);
     // else continue;
-    //---------------------------------- For Lost Electrons -----------------------------------------------
+    //---------------------------------- for Lost Electrons -----------------------------------------------
     //should not be any Muon. Need electrons in the sample. Do not say anything about the electrons.
     if( Muons->size() == 0 )   h_selectBaselineYields_->Fill(1);
     else continue;
@@ -133,5 +134,32 @@ TLorentzVector SkimmingLostLept::getBestPhoton(){
       else if(goodPho[bestPhoIndx].Pt() < goodPho[i].Pt()) bestPhoIndx=i;
     }
     return goodPho[bestPhoIndx];
+  }
+}
+
+void SkimmingLostLept::storeBTagEff(){
+  double CSVv2WP = 0.8484;
+  for(unsigned ja = 0; ja < Jets->size(); ++ja){
+    //HT jet cuts
+    if(!Jets_HTMask->at(ja)) continue;
+    
+    //fill by flavor
+    int flav = abs(Jets_hadronFlavor->at(ja));
+    double csv = Jets_bDiscriminatorCSV->at(ja);
+    double pt = Jets->at(ja).Pt();
+    //use abs(eta) for now
+    double eta = fabs(Jets->at(ja).Eta());
+    if(flav==5){
+      d_eff_b->Fill(pt,eta);
+      if(csv > CSVv2WP) n_eff_b->Fill(pt,eta);
+    }
+    else if(flav==4){
+      d_eff_c->Fill(pt,eta);
+      if(csv > CSVv2WP) n_eff_c->Fill(pt,eta);
+    }
+    else if(flav<4 || flav==21){
+      d_eff_udsg->Fill(pt,eta);
+      if(csv > CSVv2WP) n_eff_udsg->Fill(pt,eta);
+    }
   }
 }

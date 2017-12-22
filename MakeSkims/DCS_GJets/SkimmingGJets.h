@@ -23,7 +23,7 @@ class SkimmingGJets : public NtupleVariables{
   void     EventLoop(const char *,const char *);
   void     BookHistogram();
   TLorentzVector getBestPhoton();
-   
+  TLorentzVector getIDFailPhoton();
   //Variables defined
   TH1F *h_selectBaselineYields_;
   TFile *oFile;

@@ -10,7 +10,7 @@ void splitRunList(string infile,int nfPerJob){
   //------------ needed for condor files --------------
   string exeCondor  = "worker2.sh";
   string exeAna     = "skimmingGJets";
-  string datasetAna = "DCS_GJets";
+  string datasetAna = "DCS_MultiJets";
   //---------------------------------------------------
   cout<<"executable at worker node : "<<exeCondor<<endl
       <<"Analysis executable : "<<exeAna<<endl

@@ -24,8 +24,14 @@ class SkimmingGJets : public NtupleVariables{
   void     BookHistogram();
   TLorentzVector getBestPhoton();
   TLorentzVector getIDFailPhoton();
+  void     storeBTagEff();
   //Variables defined
   TH1F *h_selectBaselineYields_;
+  vector<float> xbins = {20,30,40,50,60,70,80,100,120,160,210,260,320,400,500,600,800,99999}, ybins = {0.0,0.8,1.6,2.4};
+  TH2F *d_eff_b, *n_eff_b;
+  TH2F *d_eff_c, *n_eff_c;
+  TH2F *d_eff_udsg, *n_eff_udsg;
+
   TFile *oFile;
   
 };
@@ -40,7 +46,14 @@ void SkimmingGJets::BookHistogram() {
   //  int nbins = 2000;
   char name[100],title[100];
   h_selectBaselineYields_ = new TH1F("selectBaselineYields_","selectBaselineYields_",9,0.5,9.5);
+  d_eff_b = new TH2F("d_eff_b","d_eff_b",xbins.size()-1,&(xbins[0]), ybins.size()-1,&(ybins[0]));
+  n_eff_b = new TH2F("n_eff_b","n_eff_b",xbins.size()-1,&(xbins[0]), ybins.size()-1,&(ybins[0]));
   
+  d_eff_c = new TH2F("d_eff_c","d_eff_c",xbins.size()-1,&(xbins[0]), ybins.size()-1,&(ybins[0]));
+  n_eff_c = new TH2F("n_eff_c","n_eff_c",xbins.size()-1,&(xbins[0]), ybins.size()-1,&(ybins[0]));
+  
+  d_eff_udsg = new TH2F("d_eff_udsg","d_eff_udsg",xbins.size()-1,&(xbins[0]), ybins.size()-1,&(ybins[0]));
+  n_eff_udsg = new TH2F("n_eff_udsg","n_eff_udsg",xbins.size()-1,&(xbins[0]), ybins.size()-1,&(ybins[0])); 
  
 }
 
@@ -107,6 +120,13 @@ SkimmingGJets::~SkimmingGJets() {
   delete fChain->GetCurrentFile();
   oFile->cd();
   h_selectBaselineYields_->Write();
+  d_eff_b->Write();
+  n_eff_b->Write();
+  d_eff_c->Write();
+  n_eff_c->Write();
+  d_eff_udsg->Write();
+  n_eff_udsg->Write();
+  
   oFile->Write();
   oFile->Close();
 

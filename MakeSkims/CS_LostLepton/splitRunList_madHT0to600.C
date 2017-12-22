@@ -50,7 +50,7 @@ void splitRunList_madHT0to600(string infile,int nfPerJob){
     outf.open(name);
     outf<<"universe = vanilla"<<endl
 	<<"Executable = "<<exeCondor<<endl
-	<<"Requirements = OpSys == \"LINUX\" && (Arch != \"DUMMY\" )"<<endl
+      //	<<"Requirements = OpSys == \"LINUX\" && (Arch != \"DUMMY\" )"<<endl
 	// <<"request_disk = 10000000"<<endl
 	// <<"request_memory = 10000"<<endl
 	<<"Should_Transfer_Files = YES"<<endl
@@ -62,7 +62,7 @@ void splitRunList_madHT0to600(string infile,int nfPerJob){
 	<<"Log = "<<logFile<<".condor"<<endl
 	<<"notification = Error"<<endl
 	<<"notify_user = vhegde@FNAL.GOV"<<endl
-	<<"x509userproxy = $ENV(X509_USER_PROXY)"<<endl
+      //	<<"x509userproxy = $ENV(X509_USER_PROXY)"<<endl
 	<<"Arguments = "<<exeAna<<" "<<fileListName<<" "<<logFile<<".root "<<datasetAna<<endl
 	<<"+LENGTH=\"SHORT\""<<endl
 	<<endl

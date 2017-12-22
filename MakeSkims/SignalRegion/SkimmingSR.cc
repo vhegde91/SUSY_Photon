@@ -43,9 +43,9 @@ void SkimmingSR::EventLoop(const char *data,const char *inputFileList) {
 
   string s_data = data;
   //-------------------- for signal only ---------------
-  double momMass = 1050, nlspMass = 127, nevents=0;
+  double momMass = 1600, nlspMass = 1000, nevents=0;
   if(s_data=="Signal"){
-    TFile *f1 = new TFile("T5qqqqHg_MassScan.root");
+    TFile *f1 = new TFile("T5bbbbZg_MassScan.root");
     TH2D *h2_mass = (TH2D*)f1->FindObjectAny("MGlMNLSP");
     if(!h2_mass){ cout<<"AHHHHH: could not find hist"<<endl; return;}
     int nxbins = h2_mass->GetNbinsX();
@@ -61,8 +61,8 @@ void SkimmingSR::EventLoop(const char *data,const char *inputFileList) {
     }
     cout<<"No. of entries for mGluino = "<<momMass<<" mNLSP = "<<nlspMass<<" : "<<nevents<<endl;
   }
-  //  NumEvents = nevents;
-  //  CrossSection = 0.00810078;//for Gluino mass = 1600 GeV
+  // NumEvents = nevents;
+  // CrossSection = 0.00810078;//for Gluino mass = 1600 GeV
   //-------------------- for signal only ends ------------------
 
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
@@ -81,8 +81,8 @@ void SkimmingSR::EventLoop(const char *data,const char *inputFileList) {
     //----------------- for signal samples --------------------
     if(s_data=="Signal"){
       NumEvents = nevents;
-      CrossSection = 0.229367;//for Gluino mass = 1050 GeV
-      //      CrossSection = 0.00810078;//for Gluino mass = 1600 GeV
+      //    CrossSection = 0.229367;//for Gluino mass = 1050 GeV
+      CrossSection = 0.00810078;//for Gluino mass = 1600 GeV
       //------------ full sim T5bbbbZG private ------------------
       //    NumEvents = 33611;//for mGl1600_NLSP150
       //    NumEvents = 33922;//for mGl1600_NLSP1000
@@ -92,6 +92,7 @@ void SkimmingSR::EventLoop(const char *data,const char *inputFileList) {
       //---------------------------------------------------------
       if(abs(SusyMotherMass-momMass) > 0.001 || abs(SusyLSPMass-nlspMass) > 0.001) continue;
       //      cout<<"SusyMotherMass:"<<SusyMotherMass<<" SusyLSPMass:"<<SusyLSPMass<<endl;
+      //      newtree->Fill(); continue;//!!!!!!!!!!!!!!!!!!!!!!  This creates unskimmed tree  !!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     h_selectBaselineYields_->Fill(0);

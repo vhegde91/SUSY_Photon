@@ -62,61 +62,32 @@ void SkimmingGJets::EventLoop(const char *data,const char *inputFileList) {
     else continue;//veto leptons
 
     //----------------------------------skiming parematers for data only------------------------------
-    bool passTrg=false;
-    for(int i=0;i<TriggerNames->size();i++){
-      string trgName=(*TriggerNames)[i];
-      trgName.pop_back();
-      // if( trgName=="HLT_PFHT350_v" && (*TriggerPass)[i]==1 ) {passTrg = true;break;}          //JetHT
-      // else if( trgName=="HLT_PFHT400_v" && (*TriggerPass)[i]==1 ) {passTrg = true;break;}     //JetHT
-      // else if( trgName=="HLT_PFHT475_v" && (*TriggerPass)[i]==1 ) {passTrg = true;break;}     //JetHT
-      // else if( trgName=="HLT_PFHT600_v" && (*TriggerPass)[i]==1 ) {passTrg = true;break;}     //JetHT
-      if( trgName=="HLT_Photon165_HE10_v" && (*TriggerPass)[i]==1 ) {passTrg = true;break;}       //SinglePhoton
-      else if( trgName=="HLT_Photon90_CaloIdL_PFHT600_v" && (*TriggerPass)[i]==1 ) {passTrg = true;break;}    //SinglePhoton
-    }
-    if(passTrg) h_selectBaselineYields_->Fill(7);
-    else continue;
+    // bool passTrg=false;
+    // for(int i=0;i<TriggerNames->size();i++){
+    //   string trgName=(*TriggerNames)[i];
+    //   trgName.pop_back();
+    //   // if( trgName=="HLT_PFHT350_v" && (*TriggerPass)[i]==1 ) {passTrg = true;break;}          //JetHT
+    //   // else if( trgName=="HLT_PFHT400_v" && (*TriggerPass)[i]==1 ) {passTrg = true;break;}     //JetHT
+    //   // else if( trgName=="HLT_PFHT475_v" && (*TriggerPass)[i]==1 ) {passTrg = true;break;}     //JetHT
+    //   // else if( trgName=="HLT_PFHT600_v" && (*TriggerPass)[i]==1 ) {passTrg = true;break;}     //JetHT
+    //   if( trgName=="HLT_Photon165_HE10_v" && (*TriggerPass)[i]==1 ) {passTrg = true;break;}       //SinglePhoton
+    //   else if( trgName=="HLT_Photon90_CaloIdL_PFHT600_v" && (*TriggerPass)[i]==1 ) {passTrg = true;break;}    //SinglePhoton
+    // }
+    // if(passTrg) h_selectBaselineYields_->Fill(7);
+    // else continue;
     //about photons
     TLorentzVector bestPhoton=getBestPhoton();
-    //    if(bestPhoton.Pt()>=100) continue;              // veto photons for JetHT dataset.
-    if(bestPhoton.Pt()<100) continue;        //requires a photon for Signgle photon dataset.
+    if(bestPhoton.Pt()>=100) continue;              // veto photons for JetHT dataset.
+    //    if(bestPhoton.Pt()<100) continue;        //requires a photon for Signgle photon dataset.
     h_selectBaselineYields_->Fill(2);
     //----------------------------------------------------------------
-    //calculate ST and nHadJets
-    int minDRindx=-100,phoMatchingJetIndx=-100,nHadJets=0;
-    double minDR=99999,ST=0;
-    vector<TLorentzVector> hadJets;
-    if(bestPhoton.Pt()>100){
-      h_selectBaselineYields_->Fill(2);
-      for(int i=0;i<Jets->size();i++){
-	if( ((*Jets)[i].Pt() > 30.0) && (abs((*Jets)[i].Eta()) <= 2.4) ){
-	  double dR=bestPhoton.DeltaR((*Jets)[i]);
-	  if(dR<minDR){minDR=dR;minDRindx=i;}
-	}
-      }
-    
-      for(int i=0;i<Jets->size();i++){
-	if( ((*Jets)[i].Pt() > 30.0) && (abs((*Jets)[i].Eta()) <= 2.4) ){
-	  if( !(minDR < 0.3 && i==minDRindx) )
-	    hadJets.push_back((*Jets)[i]);
-	}
-      }
-      if( minDR<0.3 ) phoMatchingJetIndx=minDRindx;
-
-      for(int i=0;i<hadJets.size();i++){
-	if( (abs(hadJets[i].Eta()) < 2.4) ){ST=ST+(hadJets[i].Pt());}
-	if( (abs(hadJets[i].Eta()) < 2.4) ){nHadJets++;}
-      }
-      if( minDR<0.3 ) ST=ST+bestPhoton.Pt();//add the pt of photon if and only if there is a matching jet.
-    }
-    else{ ST = HT; nHadJets = NJets; }
-    //-----------------------------------------------------------------------
-
+    double nHadJets = NJets, ST = HT;
     //select skimming parameters
     if( nHadJets >= 2 )  h_selectBaselineYields_->Fill(3);
     else continue;
-    if( ST>500.)        h_selectBaselineYields_->Fill(4);
+    if( ST>950.)        h_selectBaselineYields_->Fill(4);
     else continue;
-    if( MET>100. && MET<200 )        h_selectBaselineYields_->Fill(5);
+    if( MET>100 )        h_selectBaselineYields_->Fill(5);
     else continue;
     //end of select skimming parameters
     //
