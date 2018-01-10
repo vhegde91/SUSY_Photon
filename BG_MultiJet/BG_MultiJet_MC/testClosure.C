@@ -56,7 +56,7 @@ void testClosure(TString inFname){
   name1.push_back("dPhi_METBestPhoton_D");   name2.push_back("dPhi_METBestPhoton_B");rebin.push_back(5);
   name1.push_back("dPhiPhotonJet1_D");   name2.push_back("dPhiPhotonJet1_B");rebin.push_back(1);
   name1.push_back("AllSBins_v4_CD");   name2.push_back("AllSBins_v4_AB");rebin.push_back(1);
-  name1.push_back("AllSBins_v1_D");   name2.push_back("AllSBins_v1_B");rebin.push_back(1);
+  name1.push_back("AllSBins_v7_CD");   name2.push_back("AllSBins_v7_AB");rebin.push_back(1);
 
   TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
   TCanvas *c_cA[name1.size()];

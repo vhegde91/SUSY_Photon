@@ -56,8 +56,8 @@ void testClosure(TString iFname){
   // name1.push_back("MET_R3_v2_Ele0");   name2.push_back("MET_R3_v2_Ele1");  rebin.push_back(1);
   // name1.push_back("MET_R4_v2_Ele0");   name2.push_back("MET_R4_v2_Ele1");  rebin.push_back(1);
   // name1.push_back("MET_R5_v2_Ele0");   name2.push_back("MET_R5_v2_Ele1");  rebin.push_back(1);
-  name1.push_back("AllSBins_Ele0");    name2.push_back("AllSBins_Ele1");  rebin.push_back(1);
-  name1.push_back("AllSBins_v3_Ele0");    name2.push_back("AllSBins_v3_Ele1");  rebin.push_back(1);
+  //  name1.push_back("AllSBins_Ele0");    name2.push_back("AllSBins_Ele1");  rebin.push_back(1);
+  name1.push_back("AllSBins_v7_Ele0");    name2.push_back("AllSBins_v7_Ele1");  rebin.push_back(1);
   name1.push_back("AllSBins_v4_Ele0");    name2.push_back("AllSBins_v4_Ele1");  rebin.push_back(1);
   
   // name1.push_back("MET_Ele0_R1");         name2.push_back("MET_Ele1_R1");rebin.push_back(1);
@@ -71,6 +71,11 @@ void testClosure(TString iFname){
   TLine *line3=new TLine(22.5,0.01, 22.5,50);
   TLine *line4=new TLine(29.5,0.01, 29.5,50);
   TLine *line5=new TLine(36.5,0.01, 36.5,8 );
+  TLine *line1V7=new TLine( 6.5,0.05,  6.5,150);
+  TLine *line2V7=new TLine(11.5,0.05, 11.5,150);
+  TLine *line3V7=new TLine(16.5,0.05, 16.5,150);
+  TLine *line4V7=new TLine(21.5,0.05, 21.5,150);
+  TLine *line5V7=new TLine(26.5,0.05, 26.5,15 );
   //  TCanvas *c_cB=new TCanvas("closure_test","closure test",1500,800); c_cB->Divide(4,2);
   TPad *p_top[name1.size()];
   TPad *p_bot[name1.size()];
@@ -141,6 +146,10 @@ void testClosure(TString iFname){
 	  line1->Draw();line2->Draw();line3->Draw();line4->Draw();line5->Draw();
 	  p_top[i]->SetGridx(0);
 	}
+	else if(name.Contains("SBins_v7")){ 
+	  line1V7->Draw();	line2V7->Draw();	line3V7->Draw();	line4V7->Draw();	line5V7->Draw();
+	  p_top[i]->SetGridx(0);
+	}
       }
     }
     
@@ -177,7 +186,9 @@ void testClosure(TString iFname){
       h_pullHist->Write();
       //      p_bot[i]->SetGridx(0);
     }
-
+    else if(name.Contains("SBins_v7")){
+      line1V7->Draw();	line2V7->Draw();	line3V7->Draw();	line4V7->Draw();	line5V7->Draw();
+    }
     c_cA[i]->cd();    p_top[i]->cd();
     char name2[100];
     textOnTop.SetTextSize(0.06);

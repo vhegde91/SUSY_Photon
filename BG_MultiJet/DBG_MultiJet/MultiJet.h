@@ -23,6 +23,9 @@ class MultiJet : public NtupleVariables{
   void     EventLoop(const char *,const char *);
   void     BookHistogram(const char *);
   TLorentzVector getBestPhoton();
+  int getBinNoV4(int);
+  int getBinNoV7(int);
+
   bool check_eMatchedtoGamma();
   void print(Long64_t);
   void findObjMatchedtoG(TLorentzVector);
@@ -40,17 +43,19 @@ class MultiJet : public NtupleVariables{
   //  vector<double> HTBinLowEdge ={0,100,200,300,400,500,600,700,800,900,1000,1200,1500,2000,2500};
   //  vector<double> MHTBinLowEdge={0,20,40,60,80,100,120,160,200,270,350,500};
   vector<double> STBinLowEdge ={0,300,360,420,500,600,700,850,1000,1200,1500,2000,2500,3000};
-  vector<double> METBinLowEdge={0,20,40,60,80,100,120,160,200,270,350,450,600,750,900,1200};
+  vector<double> METBinLowEdge={0,100,125,160,200,270,350,450,750,900};
   vector<double> METBinLowEdge2={0,20,40,60,80,100,120,160,200,270,350,450,500};
-  /* vector<double> METBinLowEdgeV4_njLow={0,100,200,270,350,450,750,900}; */
-  /* vector<double> METBinLowEdgeV4={0,100,200,270,350,450,750}; */
-  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900};
+
+  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900}; 
   vector<double> METBinLowEdgeV4={0,100,125,160,200,270,350,450,750};
+  vector<double> METBinLowEdgeV7_njLow={0,100,200,270,350,450,750,900};
+  vector<double> METBinLowEdgeV7={0,100,200,270,350,450,750};
 
   vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,180,200,220,250,280,320,380,450,550,650,750};
   //vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,200,250,300,350,400,500,600};
   vector<double> METLowSimple={0,100,200,15000};
-  vector<double> nJBinLow={0,1,2,3,4,5,6,7,20};
+  //  vector<double> nJBinLow={0,1,2,3,4,5,6,7,20};
+  vector<double> nJBinLow={0,2,5,7,20};
   vector<double> STBinLow2={0,400,500,600,700,800,950,1200,1500,1800,2400,3000,4000,15000};
   vector<double> dPhiBinLow={0,0.3,0.6,2,2.3,2.6,2.9,3.15};
   vector<TLorentzVector> allBestPhotons;
@@ -76,7 +81,7 @@ class MultiJet : public NtupleVariables{
   TH1D *h_METvBin_AB,*h_METvBin_CD,*h_METvBin_[4];
   TH1D *h_SBins_v1_AB,*h_SBins_v1_CD,*h_SBins_v1_[4];
   TH1D *h_SBins_v4_AB,*h_SBins_v4_CD,*h_SBins_v4_[4];
-  TH1D *h_SBins_v4p1_AB,*h_SBins_v4p1_CD,*h_SBins_v4p1_[4];
+  TH1D *h_SBins_v7_AB,*h_SBins_v7_CD,*h_SBins_v7_[4];
 
   TH1D *h_jet1Pt_AB,*h_jet1Pt_CD,*h_jet1Pt_[4];
   TH1D *h_jet2Pt_AB,*h_jet2Pt_CD,*h_jet2Pt_[4];
@@ -183,7 +188,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_nJets_AB=new TH1D("nJets_AB","nJets_AB",25,0,25);
 
   h_STvBin_AB=new TH1D("STvarBin_AB","STvarBin_AB",STBinLowEdge.size()-1,&(STBinLowEdge[0]));
-  h_METvBin_AB=new TH1D("METvarBin_AB","MET with variable bin size_AB",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_METvBin_AB=new TH1D("METvarBin_AB","MET with variable bin size_AB",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
 
   h_jet1Pt_AB=new TH1D("jet1Pt_AB","Leading Jet Pt_AB",200,0,2000);
   h_jet2Pt_AB=new TH1D("jet2Pt_AB","2nd Leading Jet Pt_AB",200,0,2000);
@@ -228,7 +233,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_nJets_CD=new TH1D("nJets_CD","nJets_CD",25,0,25);
 
   h_STvBin_CD=new TH1D("STvarBin_CD","STvarBin_CD",STBinLowEdge.size()-1,&(STBinLowEdge[0]));
-  h_METvBin_CD=new TH1D("METvarBin_CD","MET with variable bin size_CD",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_METvBin_CD=new TH1D("METvarBin_CD","MET with variable bin size_CD",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
 
   h_jet1Pt_CD=new TH1D("jet1Pt_CD","Leading Jet Pt_CD",200,0,2000);
   h_jet2Pt_CD=new TH1D("jet2Pt_CD","2nd Leading Jet Pt_CD",200,0,2000);
@@ -282,7 +287,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
     h_nJets_[i]=new TH1D("nJets_"+regName,"nJets_"+regName,25,0,25);
 
     h_STvBin_[i]=new TH1D("STvarBin_"+regName,"STvarBin_"+regName,STBinLowEdge.size()-1,&(STBinLowEdge[0]));
-    h_METvBin_[i]=new TH1D("METvarBin_"+regName,"MET with variable bin size_"+regName,METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+    h_METvBin_[i]=new TH1D("METvarBin_"+regName,"MET with variable bin size_"+regName,METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
 
     h_jet1Pt_[i]=new TH1D("jet1Pt_"+regName,"Leading Jet Pt_"+regName,200,0,2000);
     h_jet2Pt_[i]=new TH1D("jet2Pt_"+regName,"2nd Leading Jet Pt_"+regName,200,0,2000);
@@ -292,8 +297,8 @@ void MultiJet::BookHistogram(const char *outFileName) {
     h_dPhi_METjet2_[i]=new TH1D("dPhi_METjet2_"+regName,"dphi between MET Vec and Jet2_"+regName,40,0,4);
     h_dPhi_METjet3_[i]=new TH1D("dPhi_METjet3_"+regName,"dphi between MET Vec and Jet3_"+regName,40,0,4);
     h_dPhi_METjet4_[i]=new TH1D("dPhi_METjet4_"+regName,"dphi between MET Vec and Jet4_"+regName,40,0,4);
-    h_SBins_v4_[i] = new TH1D("AllSBins_v4_"+regName,"search bins:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_"+regName,31,0.5,31.5);
-    h_SBins_v4p1_[i] = new TH1D("AllSBins_v4p1_"+regName,"search bins 4p1:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_"+regName,31,0.5,31.5);
+    h_SBins_v4_[i] = new TH1D("AllSBins_v4_"+regName,"search bins:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_"+regName,43,0.5,43.5);
+    h_SBins_v7_[i] = new TH1D("AllSBins_v7_"+regName,"search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_"+regName,31,0.5,31.5);
   }
 
   h_nBestPho=new TH1D("nBestPhotons","no. of best photons",5,0,5);
@@ -327,10 +332,12 @@ void MultiJet::BookHistogram(const char *outFileName) {
   //---------------Search Bins ----------------------------
   h_SBins_v1_AB = new TH1D("AllSBins_v1_AB","search bins:(NJ=2to4) (NJ:5or6) (NJ>=7)_AB",21,0.5,21.5);
   h_SBins_v1_CD = new TH1D("AllSBins_v1_CD","search bins:(NJ=2to4) (NJ:5or6) (NJ>=7)_CD",21,0.5,21.5);
-  /* h_SBins_v4_AB = new TH1D("AllSBins_v4_AB","search bins:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_AB",31,0.5,31.5); */
-  /* h_SBins_v4_CD = new TH1D("AllSBins_v4_CD","search bins:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5); */
+
   h_SBins_v4_AB = new TH1D("AllSBins_v4_AB","search bins:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_AB",43,0.5,43.5);
   h_SBins_v4_CD = new TH1D("AllSBins_v4_CD","search bins:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",43,0.5,43.5);
+
+  h_SBins_v7_AB = new TH1D("AllSBins_v7_AB","search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_AB",31,0.5,31.5);
+  h_SBins_v7_CD = new TH1D("AllSBins_v7_CD","search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
 
 }
 

@@ -51,12 +51,16 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   //TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuOnly_v2.root");
 
   TH2D *h2_LP;TH1D *h_LP;
-  bool do_prediction=1;
+  bool do_prediction=0;
   cout<<"Doing prediction from file |"<<f_LP->GetName()<<"|? "<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
 
+  bool applyMuSFs=1;
+  TFile *f_MuSF1 = TFile::Open("TnP_NUM_MiniIsoTight_DENOM_MediumID_VAR_map_pt_eta.root");
+  TH2F *h2_MuSF1 = (TH2F*)f_MuSF1->Get("SF");
+  cout<<"applying Muon SFs? "<<applyMuSFs<<endl;
   //----------- btags SFs-----------------  
   bool applybTagSFs=1;
   int fListIndxOld=-1;
@@ -124,7 +128,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     // 	cout<<i<<" Pt:"<<(*TAPMuonTracks)[i].Pt()<<" Eta:"<<(*TAPMuonTracks)[i].Eta()<<" Phi:"<<(*TAPMuonTracks)[i].Phi()<<(*TAPMuonTracks)[i].Energy()<<" mT:"<<sqrt(2*(*TAPMuonTracks)[i].Pt()*MET*(1-cos(DeltaPhi(METPhi,(*TAPMuonTracks)[i].Phi()))))<<" mTTree:"<<(*TAPMuonTracks_mT)[i]<<endl;
     //   }
     //   cout<<"isoMuonTracks:"<<isoMuonTracks<<" mymyisoTrk:"<<myisoTrk<<endl;
-    //   print(jentry);
+    //    print(jentry);
     // }
     //leptons
     if(Electrons->size()>0) continue;//veto electrons for lost muon estimation
@@ -296,6 +300,13 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       h_RunNum->Fill(RunNum);
       h_intLumi->Fill(lumiInfb);
 
+      if(applyMuSFs && Muons->size()==1){
+        float musf1 = (h2_MuSF1->GetBinContent(h2_MuSF1->GetXaxis()->FindBin((*Muons)[0].Pt()),h2_MuSF1->GetYaxis()->FindBin(abs((*Muons)[0].Eta()))));
+        if(h2_MuSF1->GetXaxis()->FindBin((*Muons)[0].Pt()) > h2_MuSF1->GetNbinsX())
+          musf1 = (h2_MuSF1->GetBinContent(h2_MuSF1->GetXaxis()->FindBin((*Muons)[0].Pt())-1,h2_MuSF1->GetYaxis()->FindBin(abs((*Muons)[0].Eta()))));
+        if(musf1 > 0.001) wt = wt*musf1;
+      }
+
       h_ST->Fill(ST,wt);
       h_MET->Fill(MET,wt);
       h_nHadJets->Fill(nHadJets,wt);
@@ -336,34 +347,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	else if(MET>=METBinLowEdge[METBinLowEdge.size()-1]){ sBin2 = sBin2+7  ;break; }
       }
       if(BTags>=2 && sBin2==35) sBin2=34;
-      int sBin4=-100,m_i4=0;
-      if(BTags==0){
-        if(nHadJets>=2 && nHadJets<=4)     { sBin4=0;}
-	else if(nHadJets==5 || nHadJets==6){ sBin4=8;}
-        else if(nHadJets>=7)               { sBin4=15;}
-      }
-      else{
-        if(nHadJets>=2 && nHadJets<=4)     { sBin4=22;}
-        else if(nHadJets==5 || nHadJets==6){ sBin4=29;}
-        else if(nHadJets>=7)               { sBin4=36;}
-      }
-      if(sBin4==0){
-        for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
-          if(METBinLowEdgeV4_njLow[i]<99.99) continue;
-          m_i4++;
-          if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin4 = sBin4+m_i4;break; }
-          else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin4 = 8         ;break; }
-	}
-      }
-      else{
-        for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
-          if(METBinLowEdgeV4[i]<99.99) continue;
-          m_i4++;
-          if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin4 = sBin4+m_i4;break; }
-          else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin4 = sBin4+7   ;break; }
-	}
-      }
-
+      int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
+      
       if(Muons->size()==0){//MC only
 	//+++++++++++++++++++++++++ data only +++++++++++++++++++++++++++++
 	/*	if(Muons->size()==1){
@@ -472,6 +457,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
         else if(BTags>=2)                                   h_MET_R_v2_Mu0[4]->Fill(MET,wt);
 	h_SBins_Mu0->Fill(sBin2,wt);
 	h_SBins_v4_Mu0->Fill(sBin4,wt);
+	h_SBins_v7_Mu0->Fill(sBin7,wt);
 	wt=wt_org;
       }//0 muon + photon events
       if(Muons->size()==1){
@@ -602,6 +588,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
         else if(BTags>=2)                                   h_MET_R_v2_Mu1[4]->Fill(MET,wt);
 	h_SBins_Mu1->Fill(sBin2,wt);
 	h_SBins_v4_Mu1->Fill(sBin4,wt);
+	h_SBins_v7_Mu1->Fill(sBin7,wt);
 	wt=wt_org;
       }//muon + photon events
     }
@@ -636,6 +623,66 @@ TLorentzVector LostMuon::getBestPhoton(){
   }
 }
 
+int LostMuon::getBinNoV4(int nHadJets){
+  int sBin=-100,m_i=0;
+  if(BTags==0){
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=8;}
+    else if(nHadJets>=7)               { sBin=15;}
+  }
+  else{
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=22;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=29;}
+    else if(nHadJets>=7)               { sBin=36;}
+  }
+  if(sBin==0){
+    for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
+      if(METBinLowEdgeV4_njLow[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin = 8         ;break; }
+    }
+  }
+  else{
+    for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
+      if(METBinLowEdgeV4[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin = sBin+7   ;break; }
+    }
+  }
+  return sBin;
+}
+int LostMuon::getBinNoV7(int nHadJets){
+  int sBin=-100,m_i=0;
+  if(BTags==0){
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=6;}
+    else if(nHadJets>=7)               { sBin=11;}
+  }
+  else{
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=16;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=21;}
+    else if(nHadJets>=7)               { sBin=26;}
+  }
+  if(sBin==0){
+    for(int i=0;i<METBinLowEdgeV7_njLow.size()-1;i++){
+      if(METBinLowEdgeV7_njLow[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV7_njLow[i] && MET < METBinLowEdgeV7_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV7_njLow[METBinLowEdgeV7_njLow.size()-1])  { sBin = 6         ;break; }
+    }
+  }
+  else{
+    for(int i=0;i<METBinLowEdgeV7.size()-1;i++){
+      if(METBinLowEdgeV7[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV7[i] && MET < METBinLowEdgeV7[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV7[METBinLowEdgeV7.size()-1])  { sBin = sBin+5   ;break; }
+    }
+  }
+  return sBin;
+}
 
 bool LostMuon::check_eMatchedtoGamma(){
   if(bestPhotonIndxAmongPhotons>=0){

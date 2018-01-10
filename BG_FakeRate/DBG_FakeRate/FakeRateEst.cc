@@ -47,7 +47,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
   //TFile *f_FR=new TFile("FR_Hist_MS_FR_DYJetsToLL_Truth.root");
 
   TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_ISRWt_v2.root");
-  //TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_ISRWt_LowDphi_v2.root");
+  //  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_ISRWt_LowDphi_v2.root");
   //  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_NoTrgPuWt.root");
   //  TFile *f_FR=new TFile("FR_Hist_MS_FR_DYJetsToLL_v2.root");
   // TFile* NLOWeightFile = new TFile("kfactors.root");
@@ -122,7 +122,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
       else if( trgName.Contains("HLT_Photon165_HE10_v") && (*TriggerPass)[i]==1 ) passTrig = true;
       wt=0.98/0.99;
       // if((*Electrons)[0].Pt() > 190.0){
-      // 	if( (trgName=="HLT_Ele27_WPTight_Gsf_v" || trgName=="HLT_Ele27_WPTight_Gsf_" || trgName=="HLT_Photon165_HE10_v" || trgName=="HLT_Photon165_HE10_" ) ){
+      // 	if( (trgName.Contains("HLT_Ele27_WPTight_Gsf_v") || trgName.Contains("HLT_Photon165_HE10_v") ) ){
       // 	  if((*TriggerPass)[i]==1){
       // 	    passTrig = true;
       // 	    wt = 1.0*0.98/0.99;//0.98 for SR trig eff, 0.99 for (Ele27 || Pho165) eff
@@ -133,7 +133,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
       // 	}
       // }
       // else if((*Electrons)[0].Pt() > 100){
-      // 	if( (trgName=="HLT_Ele27_WPTight_Gsf_v" || trgName=="HLT_Ele27_WPTight_Gsf_" ) ){
+      // 	if( trgName.Contains("HLT_Ele27_WPTight_Gsf_v") ){
       // 	  if((*TriggerPass)[i]==1){
       // 	    passTrig = true;
       // 	    wt = 1.0*0.98/0.87;//0.98 for SR trig eff, 0.87 for Ele27 eff.
@@ -253,8 +253,10 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
     for(int i=0;i<hadJets.size();i++){
       if(minDRHadJ > bestEMObj.DeltaR((hadJets)[i])) minDRHadJ=bestEMObj.DeltaR(hadJets[i]);
     }
-    //    if(MET>200) continue;
-    process = process && ST>500 && nHadJets>=2 && MET>100 && dphi1 > 0.3 && dphi2 > 0.3 && bestEMObj.Pt()>100;
+    if(MET>200) continue;
+    if(emObjMatchingJetIndx>=0 && ((*Jets)[emObjMatchingJetIndx].Pt())/(bestEMObj.Pt()) < 1.0) continue; 
+    if(emObjMatchingJetIndx<0) continue;
+    process = process && ST>500 && nHadJets>=2 && MET>100 && (dphi1 > 0.3 && dphi2 > 0.3) && bestEMObj.Pt()>100;
     if( !((ST>800 && bestEMObj.Pt()>100) || (bestEMObj.Pt()>190)) ) continue;
     if(process){
       evtSurvived++;
@@ -279,34 +281,8 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	if(MET>=METBinLowEdge[i] && MET<METBinLowEdge[i+1]){ sBin2 = sBin2+m_i;break; }
 	else if(MET>=METBinLowEdge[METBinLowEdge.size()-1]){ sBin2 = sBin2+7  ;break; }
       }
-
-      int sBin4=-100,m_i4=0;
-      if(BTags==0){
-        if(nHadJets>=2 && nHadJets<=4)     { sBin4=0;}
-        else if(nHadJets==5 || nHadJets==6){ sBin4=8;}
-        else if(nHadJets>=7)               { sBin4=15;}
-      }
-      else{
-        if(nHadJets>=2 && nHadJets<=4)     { sBin4=22;}
-        else if(nHadJets==5 || nHadJets==6){ sBin4=29;}
-        else if(nHadJets>=7)               { sBin4=36;}
-      }
-      if(sBin4==0){
-        for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
-          if(METBinLowEdgeV4_njLow[i]<99.99) continue;
-          m_i4++;
-          if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin4 = sBin4+m_i4;break; }
-          else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin4 = 8         ;break; }
-        }
-      }
-      else{
-        for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
-          if(METBinLowEdgeV4[i]<99.99) continue;
-          m_i4++;
-          if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin4 = sBin4+m_i4;break; }
-          else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin4 = sBin4+7   ;break; }
-        }
-      }
+      int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
+      //------------------------ Sbins----------------------------
       
       int nTracksNearEM = 0;
       for(int i=0;i<TAPElectronTracks->size();i++){
@@ -357,6 +333,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  else if(BTags>=2)                                   h_MET_R_v2_Ele[4]->Fill(MET,wt);
 	  h_SBins_Ele->Fill(sBin2,wt);
 	  h_SBins_v4_Ele->Fill(sBin4,wt);
+	  h_SBins_v7_Ele->Fill(sBin7,wt);
 
 	  //	  h_madHT_Ele->Fill(madHT,wt);//------ MC only --------------
 	  h_nVtx_Ele->Fill(NVtx,wt);
@@ -391,6 +368,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  h2_ElePtMinDRHadJ->Fill(minDRHadJ,bestEMObj.Pt(),wt);
 	  h2_PtEleQHadFracJet->Fill(bestEMObj.Pt(),(*Jets_chargedHadronEnergyFraction)[minDRindx],wt);
 	  h2_ElePtQMultJet->Fill(bestEMObj.Pt(),qMultMatchJet,wt);
+	  if(emObjMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Ele->Fill(bestEMObj.Pt(),((*Jets)[emObjMatchingJetIndx].Pt())/(bestEMObj.Pt()),wt);
 
 	  h2_ElePtVtx->Fill(bestEMObj.Pt(),NVtx,wt);
 	  h2_EleEtaPhi->Fill(bestEMObj.Eta(),bestEMObj.Phi(),wt);
@@ -506,6 +484,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  else if(BTags>=2)                                   h_MET_R_v2_Pho[4]->Fill(MET,wt);
 	  h_SBins_Pho->Fill(sBin2,wt);
 	  h_SBins_v4_Pho->Fill(sBin4,wt);
+	  h_SBins_v7_Pho->Fill(sBin7,wt);
 
 	  //	  h_madHT_Pho->Fill(madHT,wt);//------ MC only --------------
 	  h_nVtx_Pho->Fill(NVtx,wt);
@@ -550,6 +529,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  //	  h2_RecoPhoPt_GenEPt->Fill(genElePt,bestEMObj.Pt(),wt);//------ MC only --------------
 	  h2_JptGptRatiovsDR->Fill(minDR,((*Jets)[minDRindx].Pt())/(bestEMObj.Pt()),wt);
 	  h2_HadDRJptGptRatio_Vtx->Fill( minDRHadJ*(((*Jets)[minDRindx].Pt())/(bestEMObj.Pt())),NVtx,wt);
+	  if(emObjMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Pho->Fill(bestEMObj.Pt(),((*Jets)[emObjMatchingJetIndx].Pt())/(bestEMObj.Pt()),wt);
 
 	  h3_PhotonPtEtaNJ->Fill(abs(bestEMObj.Eta()),nHadJets,bestEMObj.Pt(),wt);
 	  h3_PhoPtEtaVtx->Fill(abs(bestEMObj.Eta()),NVtx,bestEMObj.Pt(),wt);
@@ -685,6 +665,68 @@ TLorentzVector FakeRateEst::getBestPhoton(){
   else bestPhotonIndxAmongPhotons = -100;
   if(highPtIndx==-100){TLorentzVector v0;return v0;}
   else return goodPho[highPtIndx];  
+}
+
+int FakeRateEst::getBinNoV4(int nHadJets){
+  int sBin=-100,m_i=0;
+  if(BTags==0){
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=8;}
+    else if(nHadJets>=7)               { sBin=15;}
+  }
+  else{
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=22;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=29;}
+    else if(nHadJets>=7)               { sBin=36;}
+  }
+  if(sBin==0){
+    for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
+      if(METBinLowEdgeV4_njLow[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin = 8         ;break; }
+    }
+  }
+  else{
+    for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
+      if(METBinLowEdgeV4[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin = sBin+7   ;break; }
+    }
+  }
+  return sBin;
+}
+
+int FakeRateEst::getBinNoV7(int nHadJets){
+  int sBin=-100,m_i=0;
+  if(BTags==0){
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=6;}
+    else if(nHadJets>=7)               { sBin=11;}
+  }
+  else{
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=16;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=21;}
+    else if(nHadJets>=7)               { sBin=26;}
+  }
+  if(sBin==0){
+    for(int i=0;i<METBinLowEdgeV7_njLow.size()-1;i++){
+      if(METBinLowEdgeV7_njLow[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV7_njLow[i] && MET < METBinLowEdgeV7_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV7_njLow[METBinLowEdgeV7_njLow.size()-1])  { sBin = 6         ;break; }
+    }
+  }
+  else{
+    for(int i=0;i<METBinLowEdgeV7.size()-1;i++){
+      if(METBinLowEdgeV7[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV7[i] && MET < METBinLowEdgeV7[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV7[METBinLowEdgeV7.size()-1])  { sBin = sBin+5   ;break; }
+    }
+  }
+  return sBin;
 }
 
 

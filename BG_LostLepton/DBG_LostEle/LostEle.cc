@@ -45,7 +45,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   TFile *f_LP=new TFile("LstEle_CS_TTWZ_LostEle_v2.root");
-  //  TFile *f_LP=new TFile("LstEle_LDP_CS_TTWZ_LostEle_v2.root");
+  //  TFile *f_LP=new TFile("LstEle_CS_LDP_TTWZ_LostEle_v2.root");
   //TFile *f_LP=new TFile("LstEle_CS_TTW_LostEle_v2.root");
   TH2D *h2_LP;TH1D *h_LP;
   bool do_prediction=1;
@@ -227,7 +227,6 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     }//photon has been identified. It is a real photon and it is matched to gen photon with dR(genPho,RecoPho) < 0.1 and Pts are within 10%.
     //---------------------- MC only ends-------------------------
     */
-       // if(MET>200) continue;
        // if(abs(dphiPho_MET) < 1.0) continue;
     int eleMatchingJetIndx = -100;
     double minDREle=1000;
@@ -244,6 +243,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
     if(phoMatchingJetIndx<0) continue;
 
+    //    if(MET>200) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
     process = process && ST>500 && MET > 100 && nHadJets >=2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
 
@@ -316,33 +316,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
         if(MET>=METBinLowEdge[i] && MET<METBinLowEdge[i+1]){ sBin3 = sBin3+m_i3;break; }
         else if(MET>=METBinLowEdge[METBinLowEdge.size()-1]){ sBin3 = sBin3+7   ;break; }
       }
-      int sBin4=-100,m_i4=0;
-      if(BTags==0){
-        if(nHadJets>=2 && nHadJets<=4)     { sBin4=0;}
-        else if(nHadJets==5 || nHadJets==6){ sBin4=8;}
-        else if(nHadJets>=7)               { sBin4=15;}
-      }
-      else{
-        if(nHadJets>=2 && nHadJets<=4)     { sBin4=22;}
-        else if(nHadJets==5 || nHadJets==6){ sBin4=29;}
-        else if(nHadJets>=7)               { sBin4=36;}
-      }
-      if(sBin4==0){
-        for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
-          if(METBinLowEdgeV4_njLow[i]<99.99) continue;
-          m_i4++;
-          if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin4 = sBin4+m_i4;break; }
-          else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin4 = 8         ;break; }
-        }
-      }
-      else{
-        for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
-          if(METBinLowEdgeV4[i]<99.99) continue;
-          m_i4++;
-          if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin4 = sBin4+m_i4;break; }
-          else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin4 = sBin4+7   ;break; }
-        }
-      }
+      int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
       //-------------------search bins----------------------------------
       //      if(Electrons->size()==0){//MC only
       //+++++++++++++++++++++++++ data only +++++++++++++++++++++++++++++
@@ -442,6 +416,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_v1_Ele0->Fill(sBin1,wt);
         h_SBins_v3_Ele0->Fill(sBin3,wt);
 	h_SBins_v4_Ele0->Fill(sBin4,wt);
+	h_SBins_v7_Ele0->Fill(sBin7,wt);
 	wt=wt_org;
       }//0 electron + photon events
       if(Electrons->size()==1){
@@ -561,6 +536,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_v1_Ele1->Fill(sBin1,wt);
         h_SBins_v3_Ele1->Fill(sBin3,wt);
 	h_SBins_v4_Ele1->Fill(sBin4,wt);
+	h_SBins_v7_Ele1->Fill(sBin7,wt);
 	wt=wt_org;
       }//electron + photon events
     }
@@ -595,6 +571,67 @@ TLorentzVector LostEle::getBestPhoton(){
   }
 }
 
+int LostEle::getBinNoV4(int nHadJets){
+  int sBin=-100,m_i=0;
+  if(BTags==0){
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=8;}
+    else if(nHadJets>=7)               { sBin=15;}
+  }
+  else{
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=22;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=29;}
+    else if(nHadJets>=7)               { sBin=36;}
+  }
+  if(sBin==0){
+    for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
+      if(METBinLowEdgeV4_njLow[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin = 8         ;break; }
+    }
+  }
+  else{
+    for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
+      if(METBinLowEdgeV4[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin = sBin+7   ;break; }
+    }
+  }
+  return sBin;
+}
+
+int LostEle::getBinNoV7(int nHadJets){
+  int sBin=-100,m_i=0;
+  if(BTags==0){
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=6;}
+    else if(nHadJets>=7)               { sBin=11;}
+  }
+  else{
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=16;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=21;}
+    else if(nHadJets>=7)               { sBin=26;}
+  }
+  if(sBin==0){
+    for(int i=0;i<METBinLowEdgeV7_njLow.size()-1;i++){
+      if(METBinLowEdgeV7_njLow[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV7_njLow[i] && MET < METBinLowEdgeV7_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV7_njLow[METBinLowEdgeV7_njLow.size()-1])  { sBin = 6         ;break; }
+    }
+  }
+  else{
+    for(int i=0;i<METBinLowEdgeV7.size()-1;i++){
+      if(METBinLowEdgeV7[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV7[i] && MET < METBinLowEdgeV7[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV7[METBinLowEdgeV7.size()-1])  { sBin = sBin+5   ;break; }
+    }
+  }
+  return sBin;
+}
 
 bool LostEle::check_eMatchedtoGamma(){
   if(bestPhotonIndxAmongPhotons>=0){

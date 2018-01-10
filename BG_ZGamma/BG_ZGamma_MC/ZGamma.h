@@ -25,6 +25,8 @@ class ZGamma : public NtupleVariables{
   void     EventLoop(const char *,const char *);
   void     BookHistogram(const char *);
   TLorentzVector getBestPhoton();
+  int getBinNoV4(int);
+  int getBinNoV7(int);
   bool check_eMatchedtoGamma();
   bool check_muMatchedtoGamma();
   double getGendRLepPho();
@@ -44,10 +46,14 @@ class ZGamma : public NtupleVariables{
   bool isSignal=false;
   //  vector<double> METBinLowEdge={0,20,40,60,80,100,120,160,200,270,350,450,500};
   vector<double> METBinLowEdge2={0,100,150,200,350,5000};
-  vector<double> METBinLowEdge={0,20,40,60,80,100,125,160,200,270,350,500,600};
-  vector<double> METBinLowEdge2bJ={0,20,40,60,80,100,125,160,200,270,350,500};
-  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900};
+  vector<double> METBinLowEdge={0,100,125,160,200,270,350,450,750,900};
+
+  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900};                                                     
   vector<double> METBinLowEdgeV4={0,100,125,160,200,270,350,450,750};
+  vector<double> METBinLowEdgeV7_njLow={0,100,200,270,350,450,750,900};
+  vector<double> METBinLowEdgeV7={0,100,200,270,350,450,750};
+
+  vector<double> METBinLowEdge2bJ={0,20,40,60,80,100,125,160,200,270,350,500};
   vector<double> STBinLowEdge={0,500,700,1000,10000};
   vector<double> nBTagsBinLowEdge={0,1,2,10};
   vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,180,200,220,250,280,320,380,450,550,650,750};
@@ -194,9 +200,9 @@ class ZGamma : public NtupleVariables{
   TH1D *h_MET_R_v2[5];
   TH1D *h_MET_R_v2_2Mu[5];
   TH1D *h_MET_R_v2_2Ele[5];
-  TH1D *h_SBins,*h_SBins_v4;
-  TH1D *h_SBins_2Mu,*h_SBins_v4_2Mu;
-  TH1D *h_SBins_2Ele,*h_SBins_v4_2Ele;
+  TH1D *h_SBins,*h_SBins_v4,*h_SBins_v7;
+  TH1D *h_SBins_2Mu,*h_SBins_v4_2Mu,*h_SBins_v7_2Mu;
+  TH1D *h_SBins_2Ele,*h_SBins_v4_2Ele,*h_SBins_v7_2Ele;
 
   TFile *oFile;
  
@@ -388,6 +394,10 @@ void ZGamma::BookHistogram(const char *outFileName) {
   h_SBins_v4     = new TH1D("AllSBins_v4","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for di-lep events",43,0.5,43.5);
   h_SBins_v4_2Mu = new TH1D("AllSBins_v4_2Mu","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for di-Mu events",43,0.5,43.5);
   h_SBins_v4_2Ele= new TH1D("AllSBins_v4_2Ele","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for di-ele events",43,0.5,43.5);
+
+  h_SBins_v7     = new TH1D("AllSBins_v7","search bins v7: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for di-lep events",31,0.5,31.5);
+  h_SBins_v7_2Mu = new TH1D("AllSBins_v7_2Mu","search bins v7: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for di-Mu events",31,0.5,31.5);
+  h_SBins_v7_2Ele= new TH1D("AllSBins_v7_2Ele","search bins v7: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for di-ele events",31,0.5,31.5);
 }
 
 

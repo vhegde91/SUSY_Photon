@@ -211,7 +211,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     if(hadJets.size() > 3 ) dphi4 = abs(DeltaPhi(METPhi,(hadJets)[3].Phi()));
 
     double mTPhoMET=sqrt(2*(bestPhoton.Pt())*MET*(1-cos(DeltaPhi(METPhi,bestPhoton.Phi()))));
-    //    if(mTPhoMET<100) continue;
+    if(mTPhoMET<100) continue;
     // if(BTags!=0) continue;
     // if(nHadJets>4) continue;
     //    if(MET<=200) continue;

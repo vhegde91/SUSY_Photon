@@ -24,6 +24,8 @@ class FakeRateEst : public NtupleVariables{
   void     EventLoop(const char *,const char *);
   void     BookHistogram(const char *);
   TLorentzVector getBestPhoton();
+  int getBinNoV4(int);
+  int getBinNoV7(int);
   bool check_eMatchedtoGamma();
   void print(Long64_t);
   //Variables defined
@@ -42,9 +44,12 @@ class FakeRateEst : public NtupleVariables{
   //  vector<double> MHTBinLowEdge={0,20,40,60,80,100,120,160,200,270,350,500};
   vector<double> STBinLowEdge ={0,300,360,420,500,600,700,850,1000,1200,1500,2000,2500,3000};
   //  vector<double> METBinLowEdge={0,20,40,60,80,100,120,160,200,270,350,450,600,750,900,1200};
-  vector<double> METBinLowEdge={0,20,40,60,80,100,125,160,200,270,350,500,600};
-  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900};                                                       
+  vector<double> METBinLowEdge={0,100,125,160,200,270,350,450,750,900};
+
+  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900}; 
   vector<double> METBinLowEdgeV4={0,100,125,160,200,270,350,450,750};
+  vector<double> METBinLowEdgeV7_njLow={0,100,200,270,350,450,750,900};
+  vector<double> METBinLowEdgeV7={0,100,200,270,350,450,750};
   //  vector<double> METBinLowEdge2={0,20,40,60,80,100,120,160,200,270,350,450,500};//org
   vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,180,200,220,250,280,320,380,450,550,650,750};
   //vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,200,250,300,350,400,500,600};
@@ -113,6 +118,7 @@ class FakeRateEst : public NtupleVariables{
   TH2D *h2_JetPtNearPhoEtavBin,*h2_JetPtNearEleEtavBin;
 
   TH2D *h2_JetPtNearPhoMinDRHadJ,*h2_JetPtNearEleMinDRHadJ;
+  TH2D *h2_RatioJetPhoPtVsPhoPt_Pho,*h2_RatioJetPhoPtVsPhoPt_Ele;
   TH2D *h2_PhoPtMinDRHadJ,*h2_ElePtMinDRHadJ;
   TH2D *h2_PhoPtQMultJet,*h2_ElePtQMultJet;
   TH2D *h2_PhoEtaPhi,*h2_EleEtaPhi;
@@ -173,8 +179,8 @@ class FakeRateEst : public NtupleVariables{
 
   TH1D *h_MET_R_v2_Ele[5];
   TH1D *h_MET_R_v2_Pho[5];
-  TH1D *h_SBins_Ele,*h_SBins_v4_Ele;
-  TH1D *h_SBins_Pho,*h_SBins_v4_Pho;
+  TH1D *h_SBins_Ele,*h_SBins_v4_Ele,*h_SBins_v7_Ele;
+  TH1D *h_SBins_Pho,*h_SBins_v4_Pho,*h_SBins_v7_Pho;
 
   //ele and pho type events
   TH1D *h_nConsti;
@@ -301,6 +307,7 @@ void FakeRateEst::BookHistogram(const char *outFileName) {
   h2_RecoPhoPt_GenEPt=new TH2D("RecoPhoPt_GenEPt","x:Pt of Gen Electron matching RECO photon vs RECO photon Pt",150,0,1500,150,0,1500);
   h2_HadDRJptGptRatio_Vtx=new TH2D("HadDRJptGptRatio_Vtx","x:HadDR*JetPt/PhotonPt vs NVtx",sizeof(minDR_RatioLow)/sizeof(double)-1,minDR_RatioLow,nVtxLow.size()-1,&(nVtxLow[0]));
   h2_minHadDR_QMult_Pho=new TH2D("minHadDR_QMult_Pho","x:minHad DR vs Qmult in a jet closest to the photon",1000,0,10,50,0,50);
+  h2_RatioJetPhoPtVsPhoPt_Pho=new TH2D("RatioJetPhoPtVsPhoPt_Pho","x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt",150,0,1500,400,0,5);
   h2_QMult_MinDRbJ_Pho=new TH2D("QMult_MinDRbJ_Pho","x:charge multiplicity in matching jet vs dR(pho,nearest b-jet)",50,0,50,60,0,3);
   h2_QMult_CSV_MatchJet_Pho=new TH2D("QMult_CSV_MatchJet_Pho","x: charge multiplicity in matching jet vs CSV of the matching jet Pho",50,0,50,100,0,1);
   h2_QMult_CSV_NearestNoMatchJet_Pho=new TH2D("QMult_CSV_NearestNoMatchJet_Pho","x: Q mult in nearest-nonmatched jet(mindR(e,jet)>0.3) vs CSV of the nonmathched jet Pho",50,0,50,100,0,1);
@@ -377,6 +384,7 @@ void FakeRateEst::BookHistogram(const char *outFileName) {
   h2_nVtx_EleMT2Act=new TH2D("nVtx_EleMT2","x:nVtx vs electron MT2 activity",50,0,50,5000,0,50);
 
   h2_JptEleptRatiovsDR=new TH2D("JptEptRatiovsDR","x:minDR b/w jet and electron vs ratio of pt_jet to pt_Ele",100,0,1,100,0,10);
+  h2_RatioJetPhoPtVsPhoPt_Ele=new TH2D("RatioJetPhoPtVsPhoPt_Ele","x: e Pt, y:ratio of pT of jet matched to electron to electron Pt",150,0,1500,400,0,5);
   h2_PtElevsMET=new TH2D("ElePtvsMET","Electron Pt vs MET",150,0,1500,200,0,2000);
   h2_RecoElePt_GenEPt=new TH2D("RecoElePt_GenEPt","x:Pt of Gen Electron matching RECO electron vs RECO electron Pt",150,0,1500,150,0,1500);
   h2_HadDRJptEptRatio_Vtx=new TH2D("HadDRJptEptRatio_Vtx","x:dR*JetPt/ElectronPt vs NVtx",sizeof(minDR_RatioLow)/sizeof(double)-1,minDR_RatioLow,nVtxLow.size()-1,&(nVtxLow[0]));
@@ -471,6 +479,9 @@ void FakeRateEst::BookHistogram(const char *outFileName) {
   h_SBins_Pho = new TH1D("AllSBins_Pho","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2) for photon like events",34,0.5,34.5);
   h_SBins_v4_Ele = new TH1D("AllSBins_v4_Ele","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for electron events",43,0.5,43.5);
   h_SBins_v4_Pho = new TH1D("AllSBins_v4_Pho","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for photon like events",43,0.5,43.5);
+
+  h_SBins_v7_Ele = new TH1D("AllSBins_v7_Ele","search bins v7: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for electron events",31,0.5,31.5);
+  h_SBins_v7_Pho = new TH1D("AllSBins_v7_Pho","search bins v7: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for photon like events",31,0.5,31.5);
 
   h_temp=new TH1D("temp","temp",200,0,2000);
 }

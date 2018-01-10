@@ -129,13 +129,14 @@ void GetLostEleProb(TString iFname){
 	h2_histGcopy->Draw("colz texte");
 	for(int xi=1;xi<=h2_histGcopy->GetNbinsX();xi++){
 	  for(int yi=1;yi<=h2_histGcopy->GetNbinsY();yi++){
-	    cout<<h2_histGcopy->GetXaxis()->GetBinLowEdge(xi)<<" "<<h2_histGcopy->GetYaxis()->GetBinLowEdge(yi)<<" "<<h2_histGcopy->GetBinContent(xi,yi)<<"\t"<<h2_histGcopy->GetBinError(xi,yi)<<endl;
+	    if(h2_histGcopy->GetBinContent(xi,yi) > 0.0001)
+	      cout<<h2_histGcopy->GetXaxis()->GetBinLowEdge(xi)<<" "<<h2_histGcopy->GetYaxis()->GetBinLowEdge(yi)<<" "<<h2_histGcopy->GetBinContent(xi,yi)<<"\t"<<h2_histGcopy->GetBinError(xi,yi)<<endl;
 	  }
 	}
 	//	h2_histGcopy->SetMaximum(0.02);
 	gPad->Update();
 	if(h2_histGcopy) h2_histGcopy->Write();
-      }
+      }cout<<endl;
     }
   }
   gStyle->SetTextSize(2);

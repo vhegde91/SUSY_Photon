@@ -36,21 +36,19 @@ void stackedDataVsMC(TString iFname){
   gStyle->SetOptStat(0);
   //  gStyle->SetOptStat("nemri");
   vector<TString> suffixHist; 
-  //  f[0] = new TFile(iFname);                                          suffixHist.push_back("_AB");
-  // f[1] = new TFile("CS_LDP_ZGZJToNuNuG.root");                       suffixHist.push_back("");
-  // f[2] = new TFile("DCS_LDP_Run2016_LostEle_v2.root");               suffixHist.push_back("_Ele0");
-  // f[3] = new TFile("DCS_LDP_Run2016_LostMuHadTau_v2.root");          suffixHist.push_back("_Mu0");
-  // f[4] = new TFile("DCS_LDP_Run2016_SingleEle_v2.root");             suffixHist.push_back("_Pho");
-  // f[5] = new TFile("gjets_qcd.root");                                suffixHist.push_back("_AB");
+  f[0] = new TFile(iFname);                                          suffixHist.push_back("_AB");
+  f[1] = new TFile("CS_LDP_ZGZJToNuNuG.root");                       suffixHist.push_back("");
+  f[2] = new TFile("DCS_LDP_Run2016_LostEle_v2.root");               suffixHist.push_back("_Ele0");
+  f[3] = new TFile("DCS_LDP_Run2016_LostMuHadTau_v2.root");          suffixHist.push_back("_Mu0");
+  f[4] = new TFile("DCS_LDP_Run2016_SingleEle_v2.root");             suffixHist.push_back("_Pho");
+  f[5] = new TFile("gjets_qcd.root");                                suffixHist.push_back("_AB");
 
-  f[0] = new TFile(iFname);                                          suffixHist.push_back("_C");
-  f[1] = new TFile("CS_c_ZGZJToNuNuG.root");                       suffixHist.push_back("");
-  f[2] = new TFile("DCS_c_Run2016_LostEle_v2.root");               suffixHist.push_back("_Ele0");
-  f[3] = new TFile("DCS_c_Run2016_LostMuHadTau_v2.root");          suffixHist.push_back("_Mu0");
-  f[4] = new TFile("DCS_c_Run2016_SingleEle_v2.root");             suffixHist.push_back("_Pho");
-  f[5] = new TFile("gjets_qcd.root");                                suffixHist.push_back("_C");
-
-  //f[5] = new TFile("GJetsQCD_LDPSFs.root");                          suffixHist.push_back("_AB");
+  // f[0] = new TFile(iFname);                                          suffixHist.push_back("_C");
+  // f[1] = new TFile("CS_c_ZGZJToNuNuG.root");                       suffixHist.push_back("");
+  // f[2] = new TFile("DCS_c_Run2016_LostEle_v2.root");               suffixHist.push_back("_Ele0");
+  // f[3] = new TFile("DCS_c_Run2016_LostMuHadTau_v2.root");          suffixHist.push_back("_Mu0");
+  // f[4] = new TFile("DCS_c_Run2016_SingleEle_v2.root");             suffixHist.push_back("_Pho");
+  // f[5] = new TFile("gjets_qcd.root");                                suffixHist.push_back("_C");
 
   TFile *fout;
   vector<string> name1;
@@ -65,13 +63,14 @@ void stackedDataVsMC(TString iFname){
   name1.push_back("BestPhotonEta");   rebin.push_back(2);
   name1.push_back("BestPhotonPhi");   rebin.push_back(2);
   name1.push_back("nVtx");   rebin.push_back(2);
-  //name1.push_back("METvarBin");  rebin.push_back(1); //name2.push_back("METvarBin_Mu1");  
+  name1.push_back("METvarBin");  rebin.push_back(1); //name2.push_back("METvarBin_Mu1");  
   //name1.push_back("dPhi_METjet1_Pho_Mu1"); rebin.push_back(2);  //name2.push_back("dPhi_METjet1_Pho_Mu1");  
   // name1.push_back("dPhi_METjet2_Pho_Mu1"); rebin.push_back(2);  //name2.push_back("dPhi_METjet2_Pho_Mu1");  
   // name1.push_back("dPhi_METBestPhoton_Mu1"); rebin.push_back(2);   //name2.push_back("dPhi_METBestPhoton_Mu1");  
-  name1.push_back("mTPho");   rebin.push_back(2);
+  name1.push_back("mTPho");   rebin.push_back(5);
   name1.push_back("dPhi_METBestPhoton");   rebin.push_back(2);
-  // name1.push_back("AllSBins_Mu1");   rebin.push_back(1);
+  name1.push_back("AllSBins_v4");   rebin.push_back(1);
+  name1.push_back("AllSBins_v7");   rebin.push_back(1);
 
 
   TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
@@ -180,7 +179,7 @@ void stackedDataVsMC(TString iFname){
     h_numr->GetYaxis()->SetTitleSize(0.13);
     h_numr->GetYaxis()->SetLabelSize(0.14);
     h_numr->GetYaxis()->SetNdivisions(505);
-    //    h_numr->SetMaximum(1.99);
+    h_numr->SetMaximum(1.99);
     h_numr->SetMinimum(0.01);
     c_cA[i]->cd();    p_bot[i]->cd();
     p_bot[i]->SetTickx();p_bot[i]->SetTicky();
@@ -215,7 +214,7 @@ TString getLegName(TString fname){
   else if(fname.Contains("LostEle")){return "Lost e";}
   else if(fname.Contains("LostMuHadTau")){return "Lost #mu+had #tau";}
   else if(fname.Contains("SingleEle")){return "e #rightarrow #gamma";}
-  else if(fname.Contains("GJets") || fname.Contains("gjets")  ){return "#gamma +jets";}
+  else if(fname.Contains("GJets") || fname.Contains("gjets")  ){return "#gamma +jets(Pure MC)";}
   else if(fname.Contains("Run2016_Multijet") ){return "Data";}
   else return fname;
 }

@@ -53,6 +53,7 @@ void stackedDataVsMC(TString iFname){
   name1.push_back("nBTags_Ele");   rebin.push_back(1);    //name2.push_back("nBTags_Ele");     
   name1.push_back("nHadJets_Ele");  rebin.push_back(1);  //name2.push_back("nHadJets_Ele");
   name1.push_back("ElePt");   rebin.push_back(5);  //name2.push_back("BestPhotonPt_Ele");      
+  name1.push_back("ElePtvBin");   rebin.push_back(1); 
   //  name1.push_back("EleEta"); rebin.push_back(2);  //name2.push_back("BestPhotonEta_Ele");  
   //  name1.push_back("ElePhi"); rebin.push_back(1);  //name2.push_back("BestPhotonEta_Ele");  
   name1.push_back("METvarBin_Ele");  rebin.push_back(1); //name2.push_back("METvarBin_Ele");  

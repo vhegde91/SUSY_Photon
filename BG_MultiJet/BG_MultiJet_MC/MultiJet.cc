@@ -220,34 +220,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	}
       }
       else cout<<"Event outside search region! ";
-      //-------------------------- Sbins 4p1 -------------------------
-      int sBin4p1=-100,m_i4=0,sBin4=-100;
-      if(BTags==0){
-        if(nHadJets>=2 && nHadJets<=4)     { sBin4=0;}
-        else if(nHadJets==5 || nHadJets==6){ sBin4=8;}
-        else if(nHadJets>=7)               { sBin4=15;}
-      }
-      else{
-        if(nHadJets>=2 && nHadJets<=4)     { sBin4=22;}
-        else if(nHadJets==5 || nHadJets==6){ sBin4=29;}
-        else if(nHadJets>=7)               { sBin4=36;}
-      }
-      if(sBin4==0){
-        for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
-          if(METBinLowEdgeV4_njLow[i]<99.99) continue;
-          m_i4++;
-          if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin4 = sBin4+m_i4;break; }
-          else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin4 = 8         ;break; }
-        }
-      }
-      else{
-        for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
-          if(METBinLowEdgeV4[i]<99.99) continue;
-          m_i4++;
-          if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin4 = sBin4+m_i4;break; }
-          else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin4 = sBin4+7   ;break; }
-        }
-      }
+      int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
       //------------------------ Sbins----------------------------
       if(do_AB_reweighting && (regType=='A' || regType=='B')){
 	double parX=MET;
@@ -287,6 +260,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	h_myHT_[r_i]->Fill(myHT,wt);
 	h_SBins_v1_[r_i]->Fill(sBin1,wt);
 	h_SBins_v4_[r_i]->Fill(sBin4,wt);
+	h_SBins_v7_[r_i]->Fill(sBin7,wt);
 
 	h_BestPhotonPt_[r_i]->Fill( bestPhoton.Pt(),wt );	
 	h_BestPhotonPtvBin_[r_i]->Fill(bestPhoton.Pt(),wt);
@@ -341,6 +315,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_myHT_AB->Fill(myHT,wt);
 	  h_SBins_v1_AB->Fill(sBin1,wt);
 	  h_SBins_v4_AB->Fill(sBin4,wt);
+	  h_SBins_v7_AB->Fill(sBin7,wt);
 
 	  h_BestPhotonPt_AB->Fill( bestPhoton.Pt(),wt );	
 	  h_BestPhotonPtvBin_AB->Fill(bestPhoton.Pt(),wt);
@@ -406,6 +381,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_myHT_CD->Fill(myHT,wt);
 	  h_SBins_v1_CD->Fill(sBin1,wt);
 	  h_SBins_v4_CD->Fill(sBin4,wt);
+	  h_SBins_v7_CD->Fill(sBin7,wt);
 
 	  h_BestPhotonPt_CD->Fill( bestPhoton.Pt(),wt );	
 	  h_BestPhotonPtvBin_CD->Fill(bestPhoton.Pt(),wt);
@@ -523,6 +499,67 @@ TLorentzVector MultiJet::getBestPhoton(){
   else return goodPho[highPtIndx];  
 }
 
+int MultiJet::getBinNoV4(int nHadJets){
+  int sBin=-100,m_i=0;
+  if(BTags==0){
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=8;}
+    else if(nHadJets>=7)               { sBin=15;}
+  }
+  else{
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=22;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=29;}
+    else if(nHadJets>=7)               { sBin=36;}
+  }
+  if(sBin==0){
+    for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
+      if(METBinLowEdgeV4_njLow[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin = 8         ;break; }
+    }
+  }
+  else{
+    for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
+      if(METBinLowEdgeV4[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin = sBin+7   ;break; }
+    }
+  }
+  return sBin;
+}
+
+int MultiJet::getBinNoV7(int nHadJets){
+  int sBin=-100,m_i=0;
+  if(BTags==0){
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=6;}
+    else if(nHadJets>=7)               { sBin=11;}
+  }
+  else{
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=16;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=21;}
+    else if(nHadJets>=7)               { sBin=26;}
+  }
+  if(sBin==0){
+    for(int i=0;i<METBinLowEdgeV7_njLow.size()-1;i++){
+      if(METBinLowEdgeV7_njLow[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV7_njLow[i] && MET < METBinLowEdgeV7_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV7_njLow[METBinLowEdgeV7_njLow.size()-1])  { sBin = 6         ;break; }
+    }
+  }
+  else{
+    for(int i=0;i<METBinLowEdgeV7.size()-1;i++){
+      if(METBinLowEdgeV7[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV7[i] && MET < METBinLowEdgeV7[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV7[METBinLowEdgeV7.size()-1])  { sBin = sBin+5   ;break; }
+    }
+  }
+  return sBin;
+}
 
 bool MultiJet::check_eMatchedtoGamma(){
   if(bestPhotonIndxAmongPhotons>=0){
@@ -604,33 +641,3 @@ void MultiJet::print(Long64_t jentry){
   cout<<"MET:"<<MET<<" METPhi:"<<METPhi<<endl;
   cout<<"^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^"<<endl<<endl;
 }
-
-
-/*
-      if(BTags==0){
-	if(nHadJets>=2 && nHadJets<=4)     { sBin4=0;}
-	else if(nHadJets==5 || nHadJets==6){ sBin4=6;}
-	else if(nHadJets>=7)               { sBin4=11;}
-      }
-      else{
-	if(nHadJets>=2 && nHadJets<=4)     { sBin4=16;}
-	else if(nHadJets==5 || nHadJets==6){ sBin4=21;}
-	else if(nHadJets>=7)               { sBin4=26;}
-      }
-      if(sBin4==0){
-	for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
-	  if(METBinLowEdgeV4_njLow[i]<99.99) continue;
-	  m_i4++;
-	  if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin4 = sBin4+m_i4;break; }
-	  else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin4 = sBin4+6   ;break; }
-	}
-      }
-      else{
-	for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
-	  if(METBinLowEdgeV4[i]<99.99) continue;
-	  m_i4++;
-	  if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin4 = sBin4+m_i4;break; }
-	  else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin4 = sBin4+5   ;break; }
-	}
-      }
-*/

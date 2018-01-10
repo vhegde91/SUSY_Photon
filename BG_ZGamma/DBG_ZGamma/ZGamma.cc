@@ -196,7 +196,9 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
     if(hadJets.size() > 1 ) dphi2 = abs(DeltaPhi(metstar.Phi(),(hadJets)[1].Phi()));
     if(hadJets.size() > 2 ) dphi3 = abs(DeltaPhi(metstar.Phi(),(hadJets)[2].Phi()));
     if(hadJets.size() > 3 ) dphi4 = abs(DeltaPhi(metstar.Phi(),(hadJets)[3].Phi()));
-  
+
+    // if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
+    // if(phoMatchingJetIndx<0) continue;  
     //if(!(passPhoton165HE10Trigger || passPhoton135MET100Trigger)) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
     //apply baseline selections

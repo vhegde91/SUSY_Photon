@@ -249,14 +249,16 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
 	if(dRphoClstLep > bestPhoton.DeltaR((*Electrons)[i])) dRphoClstLep = bestPhoton.DeltaR((*Electrons)[i]);
       }
     }
-    
+
+    if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
+    if(phoMatchingJetIndx<0) continue;   
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
     wt=wt*0.98;
     //apply baseline selections
     //    process = process && ST>500 && MET > 100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
     //process = process && ST>500 &&  nHadJets >=2 && bestPhoton.Pt() > 100;//&& metstar.Pt() > 100 && dphi1 > 0.3 && dphi2 > 0.3 ;
     //    if(MET>200) continue;
-    process = process && ST>500 && metstar.Pt()>100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
+    process = process && ST>500 && metstar.Pt()>100 && nHadJets >=2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
     //process = process && ST>500 && nHadJets >=2 && bestPhoton.Pt() > 100;
 
     if(process && hadJetID){
@@ -297,33 +299,9 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
         else if(metstar.Pt()>=METBinLowEdge[METBinLowEdge.size()-1]){ sBin2 = sBin2+7  ;break; }
       }
       if(BTags>=2 && sBin2==35) sBin2=34;
-      int sBin4=-100,m_i4=0;
-      if(BTags==0){
-        if(nHadJets>=2 && nHadJets<=4)     { sBin4=0;}
-	else if(nHadJets==5 || nHadJets==6){ sBin4=8;}
-        else if(nHadJets>=7)               { sBin4=15;}
-      }
-      else{
-        if(nHadJets>=2 && nHadJets<=4)     { sBin4=22;}
-        else if(nHadJets==5 || nHadJets==6){ sBin4=29;}
-        else if(nHadJets>=7)               { sBin4=36;}
-      }
-      if(sBin4==0){
-        for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
-          if(METBinLowEdgeV4_njLow[i]<99.99) continue;
-          m_i4++;
-          if(metstar.Pt() >= METBinLowEdgeV4_njLow[i] && metstar.Pt() < METBinLowEdgeV4_njLow[i+1]){ sBin4 = sBin4+m_i4;break; }
-          else if(metstar.Pt() >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin4 = 8         ;break; }
-	}
-      }
-      else{
-        for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
-          if(METBinLowEdgeV4[i]<99.99) continue;
-          m_i4++;
-          if(metstar.Pt() >= METBinLowEdgeV4[i] && metstar.Pt()< METBinLowEdgeV4[i+1]){ sBin4 = sBin4+m_i4;break; }
-          else if(metstar.Pt() >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin4 = sBin4+7   ;break; }
-	}
-      }
+
+      int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
+      //------------------------ Sbins----------------------------
 
       h_ST->Fill(ST,wt);
       h_MET->Fill(metstar.Pt(),wt);
@@ -386,6 +364,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
       else if(BTags>=2)                                   h_MET_R_v2[4]->Fill(metstar.Pt(),wt);
       h_SBins->Fill(sBin2,wt);
       h_SBins_v4->Fill(sBin4,wt);
+      h_SBins_v7->Fill(sBin7,wt);
       //    if(Muons->size()==0){
 
       if(Muons->size()==2){
@@ -454,6 +433,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
         else if(BTags>=2)                                   h_MET_R_v2_2Mu[4]->Fill(metstar.Pt(),wt);
         h_SBins_2Mu->Fill(sBin2,wt);
 	h_SBins_v4_2Mu->Fill(sBin4,wt);
+	h_SBins_v7_2Mu->Fill(sBin7,wt);
       }
       else if(Electrons->size()==2){
 	h_ST_2Ele->Fill(ST,wt);
@@ -520,6 +500,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
         else if(BTags>=2)                                   h_MET_R_v2_2Ele[4]->Fill(metstar.Pt(),wt);
         h_SBins_2Ele->Fill(sBin2,wt);
 	h_SBins_v4_2Ele->Fill(sBin4,wt);
+	h_SBins_v7_2Ele->Fill(sBin7,wt);
       }//e-e + photon events
     }
   } // loop over entries
@@ -556,6 +537,67 @@ TLorentzVector ZGamma::getBestPhoton(){
   }
 }
 
+int ZGamma::getBinNoV4(int nHadJets){
+  int sBin=-100,m_i=0;
+  if(BTags==0){
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=8;}
+    else if(nHadJets>=7)               { sBin=15;}
+  }
+  else{
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=22;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=29;}
+    else if(nHadJets>=7)               { sBin=36;}
+  }
+  if(sBin==0){
+    for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
+      if(METBinLowEdgeV4_njLow[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin = 8         ;break; }
+    }
+  }
+  else{
+    for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
+      if(METBinLowEdgeV4[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin = sBin+7   ;break; }
+    }
+  }
+  return sBin;
+}
+
+int ZGamma::getBinNoV7(int nHadJets){
+  int sBin=-100,m_i=0;
+  if(BTags==0){
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=6;}
+    else if(nHadJets>=7)               { sBin=11;}
+  }
+  else{
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=16;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=21;}
+    else if(nHadJets>=7)               { sBin=26;}
+  }
+  if(sBin==0){
+    for(int i=0;i<METBinLowEdgeV7_njLow.size()-1;i++){
+      if(METBinLowEdgeV7_njLow[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV7_njLow[i] && MET < METBinLowEdgeV7_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV7_njLow[METBinLowEdgeV7_njLow.size()-1])  { sBin = 6         ;break; }
+    }
+  }
+  else{
+    for(int i=0;i<METBinLowEdgeV7.size()-1;i++){
+      if(METBinLowEdgeV7[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV7[i] && MET < METBinLowEdgeV7[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV7[METBinLowEdgeV7.size()-1])  { sBin = sBin+5   ;break; }
+    }
+  }
+  return sBin;
+}
 
 bool ZGamma::check_eMatchedtoGamma(){
   if(bestPhotonIndxAmongPhotons>=0){

@@ -36,6 +36,7 @@ void setOverflow(TH1D*);
 void printInt(TH1D*,int,const char*);
 TLegend *legend=new TLegend(0.6, 0.90,  0.98, 0.45);
 void StackHists(){
+
   
   f[0] = new TFile("WGJetsToLNuG.root");
   f[1] = new TFile("TTGJets.root");

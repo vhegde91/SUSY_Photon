@@ -57,7 +57,7 @@ void testClosure(TString iFname){
   // name1.push_back("MET_R3_v2_Mu0");   name2.push_back("MET_R3_v2_Mu1");  rebin.push_back(1);
   // name1.push_back("MET_R4_v2_Mu0");   name2.push_back("MET_R4_v2_Mu1");  rebin.push_back(1);
   // name1.push_back("MET_R5_v2_Mu0");   name2.push_back("MET_R5_v2_Mu1");  rebin.push_back(1);
-  name1.push_back("AllSBins_Mu0");    name2.push_back("AllSBins_Mu1");  rebin.push_back(1);
+  name1.push_back("AllSBins_v7_Mu0");    name2.push_back("AllSBins_v7_Mu1");  rebin.push_back(1);
   name1.push_back("AllSBins_v4_Mu0");    name2.push_back("AllSBins_v4_Mu1");  rebin.push_back(1);
   // name1.push_back("MET_Mu0_R1");         name2.push_back("MET_Mu1_R1");rebin.push_back(1);
   // name1.push_back("MET_Mu0_R2");         name2.push_back("MET_Mu1_R2");rebin.push_back(1);
@@ -70,6 +70,12 @@ void testClosure(TString iFname){
   TLine *line3=new TLine(22.5,0.05, 22.5,100);
   TLine *line4=new TLine(29.5,0.05, 29.5,100);
   TLine *line5=new TLine(36.5,0.05, 36.5,10 );
+  TLine *line1V7=new TLine( 6.5,0.05,  6.5,300);
+  TLine *line2V7=new TLine(11.5,0.05, 11.5,300);
+  TLine *line3V7=new TLine(16.5,0.05, 16.5,300);
+  TLine *line4V7=new TLine(21.5,0.05, 21.5,300);
+  TLine *line5V7=new TLine(26.5,0.05, 26.5,30 );
+  
   //  TCanvas *c_cB=new TCanvas("closure_test","closure test",1500,800); c_cB->Divide(4,2);
   TPad *p_top[name1.size()];
   TPad *p_bot[name1.size()];
@@ -142,6 +148,10 @@ void testClosure(TString iFname){
 	  line1->Draw();	line2->Draw();	line3->Draw();	line4->Draw();	line5->Draw();
 	  p_top[i]->SetGridx(0);
 	}
+	else if(name.Contains("SBins_v7")){ 
+	  line1V7->Draw();	line2V7->Draw();	line3V7->Draw();	line4V7->Draw();	line5V7->Draw();
+	  p_top[i]->SetGridx(0);
+	}
 	
       }
     }
@@ -183,7 +193,9 @@ void testClosure(TString iFname){
       h_pullHist->Write();
       //      p_bot[i]->SetGridx(0);
     }
-
+    else if(name.Contains("SBins_v7")){
+      line1V7->Draw();	line2V7->Draw();	line3V7->Draw();	line4V7->Draw();	line5V7->Draw();
+    }
     c_cA[i]->cd();    p_top[i]->cd();
     char name2[100];
     textOnTop.SetTextSize(0.06);

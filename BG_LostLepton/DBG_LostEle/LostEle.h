@@ -33,6 +33,8 @@ class LostEle : public NtupleVariables{
   int bestPhotonIndxAmongPhotons=-100;
   double gendRLepPho=1000.;
   TLorentzVector bestPhoton;//(0.,0.,0.,0.);
+  int getBinNoV4(int);
+  int getBinNoV7(int);
     
   float HT_PtCut=30;
   float MHT_PtCut=30;//keep MHT_PtCut <= HT_PtCut and <= Njets_PtCut
@@ -53,8 +55,11 @@ class LostEle : public NtupleVariables{
   vector<double> METBinLowEdge2bJ={0,20,40,60,80,100,125,150,200,250,350,500};
   //  vector<double> METBinLowEdgeMidNJ={0,20,40,60,80,100,120,160,200,270,350};
   //  vector<double> METBinLowEdgeHighNJ={0,20,40,60,80,100,120,160,200,250};
-  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900};                                                       
+  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900};
   vector<double> METBinLowEdgeV4={0,100,125,160,200,270,350,450,750};
+  vector<double> METBinLowEdgeV7_njLow={0,100,200,270,350,450,750,900};
+  vector<double> METBinLowEdgeV7={0,100,200,270,350,450,750};
+
   vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,180,200,220,250,280,320,380,450,550,650,750};
   //vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,200,250,300,350,400,500,600};
   vector<double> nHadJLow0b={0,2,3,4,5,7,15};//0b                                                                                               
@@ -242,8 +247,8 @@ class LostEle : public NtupleVariables{
   TH1D *h_MET_Ele1_R[3];
   TH1D *h_MET_R_v2_Ele0[5];
   TH1D *h_MET_R_v2_Ele1[5];
-  TH1D *h_SBins_Ele0,*h_SBins_v1_Ele0,*h_SBins_v3_Ele0,*h_SBins_v4_Ele0;
-  TH1D *h_SBins_Ele1,*h_SBins_v1_Ele1,*h_SBins_v3_Ele1,*h_SBins_v4_Ele1;
+  TH1D *h_SBins_Ele0,*h_SBins_v1_Ele0,*h_SBins_v3_Ele0,*h_SBins_v4_Ele0,*h_SBins_v7_Ele0;
+  TH1D *h_SBins_Ele1,*h_SBins_v1_Ele1,*h_SBins_v3_Ele1,*h_SBins_v4_Ele1,*h_SBins_v7_Ele1;
   TH1D *h_HTgammaSB;
   TFile *oFile;
  
@@ -269,7 +274,7 @@ void LostEle::BookHistogram(const char *outFileName) {
   h_MET=new TH1D("MET","MET",200,0,2000);
   h_nHadJets=new TH1D("nHadJets","no. of jets(only hadronic jets,not counting photon)",25,0,25);
   h_BTags=new TH1D("nBTags","no. of B tags",10,0,10);
-  h_METvBin=new TH1D("METvarBin","MET with variable bin size",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_METvBin=new TH1D("METvarBin","MET with variable bin size",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
   h_HT=new TH1D("HT","HT",400,0,4000);
   h_MHT=new TH1D("MHT","MHT",200,0,2000);
   h_nJets=new TH1D("nJets","nJets",25,0,25);
@@ -281,7 +286,7 @@ void LostEle::BookHistogram(const char *outFileName) {
   h_MET_Ele0=new TH1D("MET_Ele0","MET for 0 Electron events",200,0,2000);
   h_nHadJets_Ele0=new TH1D("nHadJets_Ele0","no. of jets(only hadronic jets,not counting photon)  for 0 Electron events",25,0,25);
   h_BTags_Ele0=new TH1D("nBTags_Ele0","no. of B tags for 0 Electron events",10,0,10);
-  h_METvBin_Ele0=new TH1D("METvarBin_Ele0","MET with variable bin size for 0 Electron events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_METvBin_Ele0=new TH1D("METvarBin_Ele0","MET with variable bin size for 0 Electron events",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
   h_BestPhotonPt_Ele0=new TH1D("BestPhotonPt_Ele0","Pt of the best photon for 0 Electron events",150,0,1500);
   h_BestPhotonEta_Ele0=new TH1D("BestPhotonEta_Ele0","Eta of the best photon for 0 Electron events",120,-6,6);
   h_BestPhotonPhi_Ele0=new TH1D("BestPhotonPhi_Ele0","Phi of the best photon for 0 Electron events",80,-4,4);
@@ -343,7 +348,7 @@ void LostEle::BookHistogram(const char *outFileName) {
   h_MET_Ele1=new TH1D("MET_Ele1","MET for 1 Electron events",200,0,2000);
   h_nHadJets_Ele1=new TH1D("nHadJets_Ele1","no. of jets(only hadronic jets,not counting photon)  for 1 Electron events",25,0,25);
   h_BTags_Ele1=new TH1D("nBTags_Ele1","no. of B tags for 1 Electron events",10,0,10);
-  h_METvBin_Ele1=new TH1D("METvarBin_Ele1","MET with variable bin size for 1 Electron events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_METvBin_Ele1=new TH1D("METvarBin_Ele1","MET with variable bin size for 1 Electron events",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
   h_BestPhotonPt_Ele1=new TH1D("BestPhotonPt_Ele1","Pt of the best photon for 1 Electron events",150,0,1500);
   h_BestPhotonEta_Ele1=new TH1D("BestPhotonEta_Ele1","Eta of the best photon for 1 Electron events",120,-6,6);
   h_BestPhotonPhi_Ele1=new TH1D("BestPhotonPhi_Ele1","Phi of the best photon for 1 Electron events",80,-4,4);
@@ -456,6 +461,9 @@ void LostEle::BookHistogram(const char *outFileName) {
 
   h_SBins_v4_Ele0 = new TH1D("AllSBins_v4_Ele0","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for 0 Ele events",43,0.5,43.5);
   h_SBins_v4_Ele1 = new TH1D("AllSBins_v4_Ele1","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for 1 Ele events",43,0.5,43.5);
+
+  h_SBins_v7_Ele0 = new TH1D("AllSBins_v7_Ele0","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for 0 Ele events",31,0.5,31.5);
+  h_SBins_v7_Ele1 = new TH1D("AllSBins_v7_Ele1","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for 1 Ele events",31,0.5,31.5);
 
   h_HTgammaSB = new TH1D("HTgammaSB","Search bins used in HT+gamma analysis",6,0.5,6.5);
 }

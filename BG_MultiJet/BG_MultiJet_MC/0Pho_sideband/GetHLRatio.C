@@ -169,6 +169,7 @@ void GetHLRatio(TString inFname){
     // }
   }
 
+  TH1D *h_doubleR_num,*h_doubleR_den,*h_doubleR;
   TH2D *h2_histG,*h2_histE,*h2_histGcopy; 
   for(int i=0;i<name1_2d.size();i++){
     //    sprintf(name,"%s_%s",name1_2d[i].c_str(),name2_2d[i].c_str());
@@ -196,6 +197,18 @@ void GetHLRatio(TString inFname){
 	gPad->Update();
 	fout->cd();
 	h2_histGcopy->Write();
+
+	h_doubleR_num = (TH1D*)h2_histGcopy->ProjectionY("doubleR_num",h2_histGcopy->GetXaxis()->FindBin(201),h2_histGcopy->GetXaxis()->FindBin(201));
+	h_doubleR_den = (TH1D*)h2_histGcopy->ProjectionY("doubleR_den",h2_histGcopy->GetXaxis()->FindBin(101),h2_histGcopy->GetXaxis()->FindBin(101));
+
+	name="doubleR_"+name2_2d[i];
+	h_doubleR = (TH1D*)h_doubleR_num->Clone(name);
+	h_doubleR->Divide(h_doubleR_den);
+	cout<<name<<endl;
+	for(int iDouble=1;iDouble<=h_doubleR->GetNbinsX();iDouble++){
+	  if(h_doubleR->GetBinContent(iDouble) > 0.0001) cout<<h_doubleR->GetBinContent(iDouble)<<" "<<h_doubleR->GetBinError(iDouble)<<endl;
+	}
+	h_doubleR->Write();
       }
     }
   }
@@ -221,14 +234,3 @@ void setLastBinAsOverFlow(TH1D* h_hist){
   }
   
 }
-
-/*
-
-
-	double lastBinCt =h_histG->GetBinContent(h_histG->GetNbinsX()),overflCt =h_histG->GetBinContent(h_histG->GetNbinsX()+1);
-	double lastBinErr=h_histG->GetBinError(h_histG->GetNbinsX()),  overflErr=h_histG->GetBinError(h_histG->GetNbinsX()+1);
-	lastBinEr = (lastBinCt+overflCt)* (sqrt( ((lastBinErr/lastBinCt)*(lastBinErr/lastBinCt)) + ((overflErr/overflCt)*(overflErr/overflCt)) ) );
-	lastBinCt = lastBinCt+overflCt;
-	h_histG->SetBinContent(h_histG->GetNbinsX(),h_histG->GetBinContent(h_histG->GetNbinsX())+h_histG->GetBinContent(h_histG->GetNbinsX()+1));
-	h_histE->SetBinContent(h_histE->GetNbinsX(),h_histE->GetBinContent(h_histE->GetNbinsX())+h_histE->GetBinContent(h_histE->GetNbinsX()+1));
-*/

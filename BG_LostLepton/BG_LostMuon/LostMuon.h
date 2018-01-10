@@ -33,6 +33,8 @@ class LostMuon : public NtupleVariables{
   int bestPhotonIndxAmongPhotons=-100;
   double gendRLepPho=1000.;
   TLorentzVector bestPhoton;//(0.,0.,0.,0.);
+  int getBinNoV4(int);
+  int getBinNoV7(int);
     
   float HT_PtCut=30;
   float MHT_PtCut=30;//keep MHT_PtCut <= HT_PtCut and <= Njets_PtCut
@@ -55,6 +57,9 @@ class LostMuon : public NtupleVariables{
   //  vector<double> METBinLowEdgeHighNJ={0,20,40,60,80,100,120,160,200,250};
   vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900};
   vector<double> METBinLowEdgeV4={0,100,125,160,200,270,350,450,750};
+  vector<double> METBinLowEdgeV7_njLow={0,100,200,270,350,450,750,900};
+  vector<double> METBinLowEdgeV7={0,100,200,270,350,450,750};
+
   vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,180,200,220,250,280,320,380,450,550,650,750};
   //vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,200,250,300,350,400,500,600};
   vector<double> nHadJLow0b={0,2,3,4,5,7,15};//0b
@@ -250,8 +255,8 @@ class LostMuon : public NtupleVariables{
   TH1D *h_MET_Mu1_R[3];
   TH1D *h_MET_R_v2_Mu0[5];
   TH1D *h_MET_R_v2_Mu1[5];
-  TH1D *h_SBins_Mu0,*h_SBins_v4_Mu0;
-  TH1D *h_SBins_Mu1,*h_SBins_v4_Mu1;
+  TH1D *h_SBins_Mu0,*h_SBins_v4_Mu0,*h_SBins_v7_Mu0;
+  TH1D *h_SBins_Mu1,*h_SBins_v4_Mu1,*h_SBins_v7_Mu1;
   TFile *oFile;
  
 };
@@ -463,6 +468,9 @@ void LostMuon::BookHistogram(const char *outFileName) {
 
   h_SBins_v4_Mu0 = new TH1D("AllSBins_v4_Mu0","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for 0 Mu events",43,0.5,43.5);
   h_SBins_v4_Mu1 = new TH1D("AllSBins_v4_Mu1","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for 1 Mu events",43,0.5,43.5);
+
+  h_SBins_v7_Mu0 = new TH1D("AllSBins_v7_Mu0","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for 0 Mu events",31,0.5,31.5);
+  h_SBins_v7_Mu1 = new TH1D("AllSBins_v7_Mu1","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] for 1 Mu events",31,0.5,31.5);
 }
 
 

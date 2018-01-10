@@ -46,15 +46,21 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   TFile *f_LP=new TFile("LstEle_CS_TTWZ_LostEle_v2.root");
-  //  TFile *f_LP=new TFile("LstEle_CS_LDP_TTWZ_LostEle_v2.root");
+  //TFile *f_LP=new TFile("LstEle_CS_LDP_TTWZ_LostEle_v2.root");
   //TFile *f_LP=new TFile("LstEle_CS_TTW_LostEle_v2.root");
   TH2D *h2_LP;TH1D *h_LP;
-  bool do_prediction=1;
+  bool do_prediction=0;
   cout<<"Doing prediction from file |"<<f_LP->GetName()<<"|? "<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
 
+  bool applyEGMSFs = 1;
+  TFile *f_EGMSF1=TFile::Open("scaleFactors.root");
+  TFile *f_EGMSF2=TFile::Open("egammaEffi.txt_EGM2D.root");
+  TH2F *h2_EGMSF1=(TH2F*)f_EGMSF1->Get("GsfElectronToCutBasedSpring15V");
+  TH2F *h2_EGMSF2=(TH2F*)f_EGMSF2->Get("EGamma_SF2D");
+  cout<<"applying EGM SFs to electrons? "<<applyEGMSFs<<endl;
   //----------- btags SFs-----------------  
   bool applybTagSFs=1;
   int fListIndxOld=-1;
@@ -291,6 +297,14 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
       h_RunNum->Fill(RunNum);
       h_intLumi->Fill(lumiInfb);
       //      print(jentry);
+      if(applyEGMSFs && Electrons->size()==1){
+	float egmsf1 = (h2_EGMSF1->GetBinContent(h2_EGMSF1->GetXaxis()->FindBin((*Electrons)[0].Pt()),h2_EGMSF1->GetYaxis()->FindBin(abs((*Electrons)[0].Eta()))));
+	if(h2_EGMSF1->GetXaxis()->FindBin((*Electrons)[0].Pt()) > h2_EGMSF1->GetNbinsX())
+	  egmsf1 = (h2_EGMSF1->GetBinContent(h2_EGMSF1->GetXaxis()->FindBin((*Electrons)[0].Pt())-1,h2_EGMSF1->GetYaxis()->FindBin(abs((*Electrons)[0].Eta()))));
+	float egmsf2 = (h2_EGMSF2->GetBinContent(h2_EGMSF2->GetXaxis()->FindBin(abs((*Electrons)[0].Eta())),h2_EGMSF2->GetYaxis()->FindBin((*Electrons)[0].Pt())));
+	if(egmsf1 > 0.001) wt = wt*egmsf1;
+	if(egmsf2 > 0.001) wt = wt*egmsf2;
+      }
       h_ST->Fill(ST,wt);
       h_MET->Fill(MET,wt);
       h_nHadJets->Fill(nHadJets,wt);
@@ -360,33 +374,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	if(MET>=METBinLowEdge[i] && MET<METBinLowEdge[i+1]){ sBin3 = sBin3+m_i3;break; }
 	else if(MET>=METBinLowEdge[METBinLowEdge.size()-1]){ sBin3 = sBin3+7   ;break; }
       }
-      int sBin4=-100,m_i4=0;
-      if(BTags==0){
-        if(nHadJets>=2 && nHadJets<=4)     { sBin4=0;}
-        else if(nHadJets==5 || nHadJets==6){ sBin4=8;}
-        else if(nHadJets>=7)               { sBin4=15;}
-      }
-      else{
-        if(nHadJets>=2 && nHadJets<=4)     { sBin4=22;}
-        else if(nHadJets==5 || nHadJets==6){ sBin4=29;}
-        else if(nHadJets>=7)               { sBin4=36;}
-      }
-      if(sBin4==0){
-        for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
-          if(METBinLowEdgeV4_njLow[i]<99.99) continue;
-          m_i4++;
-          if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin4 = sBin4+m_i4;break; }
-          else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin4 = 8         ;break; }
-        }
-      }
-      else{
-        for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
-          if(METBinLowEdgeV4[i]<99.99) continue;
-          m_i4++;
-          if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin4 = sBin4+m_i4;break; }
-          else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin4 = sBin4+7   ;break; }
-        }
-      }
+      int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
       //-------------------search bins----------------------------------
       if(Electrons->size()==0){//MC only
 	//+++++++++++++++++++++++++ data only +++++++++++++++++++++++++++++
@@ -495,6 +483,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_v1_Ele0->Fill(sBin1,wt);
 	h_SBins_v3_Ele0->Fill(sBin3,wt);
 	h_SBins_v4_Ele0->Fill(sBin4,wt);
+	h_SBins_v7_Ele0->Fill(sBin7,wt);
 	wt=wt_org;
       }//0 electron + photon events
       if(Electrons->size()==1){
@@ -625,6 +614,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_v1_Ele1->Fill(sBin1,wt);
 	h_SBins_v3_Ele1->Fill(sBin3,wt);
 	h_SBins_v4_Ele1->Fill(sBin4,wt);
+	h_SBins_v7_Ele1->Fill(sBin7,wt);
 	wt=wt_org;
       }//electron + photon events
     }
@@ -657,6 +647,67 @@ TLorentzVector LostEle::getBestPhoton(){
     bestPhotonIndxAmongPhotons = -100;
     TLorentzVector v0;return v0;
   }
+}
+
+int LostEle::getBinNoV4(int nHadJets){
+  int sBin=-100,m_i=0;
+  if(BTags==0){
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=8;}
+    else if(nHadJets>=7)               { sBin=15;}
+  }
+  else{
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=22;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=29;}
+    else if(nHadJets>=7)               { sBin=36;}
+  }
+  if(sBin==0){
+    for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
+      if(METBinLowEdgeV4_njLow[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin = 8         ;break; }
+    }
+  }
+  else{
+    for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
+      if(METBinLowEdgeV4[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin = sBin+7   ;break; }
+    }
+  }
+  return sBin;
+}
+int LostEle::getBinNoV7(int nHadJets){
+  int sBin=-100,m_i=0;
+  if(BTags==0){
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=6;}
+    else if(nHadJets>=7)               { sBin=11;}
+  }
+  else{
+    if(nHadJets>=2 && nHadJets<=4)     { sBin=16;}
+    else if(nHadJets==5 || nHadJets==6){ sBin=21;}
+    else if(nHadJets>=7)               { sBin=26;}
+  }
+  if(sBin==0){
+    for(int i=0;i<METBinLowEdgeV7_njLow.size()-1;i++){
+      if(METBinLowEdgeV7_njLow[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV7_njLow[i] && MET < METBinLowEdgeV7_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV7_njLow[METBinLowEdgeV7_njLow.size()-1])  { sBin = 6         ;break; }
+    }
+  }
+  else{
+    for(int i=0;i<METBinLowEdgeV7.size()-1;i++){
+      if(METBinLowEdgeV7[i]<99.99) continue;
+      m_i++;
+      if(MET >= METBinLowEdgeV7[i] && MET < METBinLowEdgeV7[i+1]){ sBin = sBin+m_i;break; }
+      else if(MET >= METBinLowEdgeV7[METBinLowEdgeV7.size()-1])  { sBin = sBin+5   ;break; }
+    }
+  }
+  return sBin;
 }
 
 
