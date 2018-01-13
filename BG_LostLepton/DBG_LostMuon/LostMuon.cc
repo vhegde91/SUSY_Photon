@@ -300,6 +300,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	  //	  else if(BTags>=2) name="LostProb_2";
 	  h2_LP=(TH2D*)f_LP->FindObjectAny(name);
 	  if(h2_LP) tf=h2_LP->GetBinContent(h2_LP->FindBin(parX,parY));
+	  //	  if(h2_LP) tf=h2_LP->GetBinContent(h2_LP->FindBin(parX,parY))+h2_LP->GetBinError(h2_LP->FindBin(parX,parY));
 	  else cout<<"hist not found"<<endl;
 	  wt=tf*wt;
 	}
@@ -384,6 +385,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_Mu0->Fill(sBin2,wt);
 	h_SBins_v4_Mu0->Fill(sBin4,wt);
 	h_SBins_v7_Mu0->Fill(sBin7,wt);
+
+	h2_SBinsv7VsnJ_Mu0->Fill(sBin7,nHadJets,wt);
 	wt=wt_org;
       }//0 muon + photon events
       if(Muons->size()==1){
@@ -503,6 +506,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_Mu1->Fill(sBin2,wt);
 	h_SBins_v4_Mu1->Fill(sBin4,wt);
 	h_SBins_v7_Mu1->Fill(sBin7,wt);
+
+	h2_SBinsv7VsnJ_Mu1->Fill(sBin7,nHadJets,wt);
 	wt=wt_org;
       }//muon + photon events
     }

@@ -99,7 +99,7 @@ void GetLostEleProb(TString iFname){
 	/*
 	  if(name1[i]=="nHadJets_Pho") cout<<h_histGcopy->GetNbinsX();
 	if(name1[i]=="MET_Pho") {fout->cd();h_histGcopy->Write();}*/
-	h_histGcopy->Draw();
+	h_histGcopy->Draw("texte");
 	//	if(name1[i]=="ST_Pho" || name1[i]=="BestPhotonPt") h_histGcopy->Write();
       }
     }

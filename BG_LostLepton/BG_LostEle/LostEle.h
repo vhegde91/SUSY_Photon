@@ -247,6 +247,8 @@ class LostEle : public NtupleVariables{
   TH1D *h_MET_Ele1_R[3];
   TH1D *h_MET_R_v2_Ele0[5];
   TH1D *h_MET_R_v2_Ele1[5];
+
+  TH2D *h2_SBinsv7VsnJ_Ele0,*h2_SBinsv7VsnJ_Ele1;
   TH1D *h_SBins_Ele0,*h_SBins_v1_Ele0,*h_SBins_v3_Ele0,*h_SBins_v4_Ele0,*h_SBins_v7_Ele0;
   TH1D *h_SBins_Ele1,*h_SBins_v1_Ele1,*h_SBins_v3_Ele1,*h_SBins_v4_Ele1,*h_SBins_v7_Ele1;
   TH1D *h_HTgammaSB;
@@ -431,6 +433,9 @@ void LostEle::BookHistogram(const char *outFileName) {
   h_temp=new TH1D("temp","temp",200,0,2000);
 
   //---------------- search bins -----------------------
+  h2_SBinsv7VsnJ_Ele0 = new TH2D("SBinsv7VsnJ_Ele0","x:search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] , y: nHadJets for 0 Ele events",31,0.5,31.5,nHadJLow0b.size()-1,&(nHadJLow0b[0]));
+  h2_SBinsv7VsnJ_Ele1 = new TH2D("SBinsv7VsnJ_Ele1","x:search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] , y: nHadJets for 1 Ele events",31,0.5,31.5,nHadJLow0b.size()-1,&(nHadJLow0b[0]));
+
   h_MET_Ele0_R[0] = new TH1D("MET_Ele0_R1","MET: NJ=2to4, for 0 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_MET_Ele0_R[1] = new TH1D("MET_Ele0_R2","MET: NJ=5or6, for 0 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_MET_Ele0_R[2] = new TH1D("MET_Ele0_R3","MET: NJ>=7,   for 0 Ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));

@@ -251,10 +251,13 @@ class LostMuon : public NtupleVariables{
   TH2D *h2_RatioJetPhoPtVsPhoPt_Mu1;
 
   TH1D *h_temp;
+  TH2D *h2_SBinsv7VsnJ_Mu0,*h2_SBinsv7VsnJ_Mu1;
+
   TH1D *h_MET_Mu0_R[3];
   TH1D *h_MET_Mu1_R[3];
   TH1D *h_MET_R_v2_Mu0[5];
   TH1D *h_MET_R_v2_Mu1[5];
+
   TH1D *h_SBins_Mu0,*h_SBins_v4_Mu0,*h_SBins_v7_Mu0;
   TH1D *h_SBins_Mu1,*h_SBins_v4_Mu1,*h_SBins_v7_Mu1;
   TFile *oFile;
@@ -443,6 +446,9 @@ void LostMuon::BookHistogram(const char *outFileName) {
   h_temp=new TH1D("temp","temp",200,0,2000);
 
   //---------------- search bins -----------------------
+  h2_SBinsv7VsnJ_Mu0 = new TH2D("SBinsv7VsnJ_Mu0","x:search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] , y: nHadJets for 0 Mu events",31,0.5,31.5,nHadJLow0b.size()-1,&(nHadJLow0b[0]));
+  h2_SBinsv7VsnJ_Mu1 = new TH2D("SBinsv7VsnJ_Mu1","x:search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] , y: nHadJets for 1 Mu events",31,0.5,31.5,nHadJLow0b.size()-1,&(nHadJLow0b[0]));
+
   h_MET_Mu0_R[0] = new TH1D("MET_Mu0_R1","MET: NJ=2to4, for 0 Mu events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_MET_Mu0_R[1] = new TH1D("MET_Mu0_R2","MET: NJ=5or6, for 0 Mu events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_MET_Mu0_R[2] = new TH1D("MET_Mu0_R3","MET: NJ>=7,   for 0 Mu events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));

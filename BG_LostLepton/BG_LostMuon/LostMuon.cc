@@ -9,6 +9,7 @@
 #include <string>
 #include <fstream>
 #include "btag/BTagCorrector.h"
+#include <TGraphAsymmErrors.h>
 
 using namespace std;
 
@@ -60,7 +61,11 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   bool applyMuSFs=1;
   TFile *f_MuSF1 = TFile::Open("TnP_NUM_MiniIsoTight_DENOM_MediumID_VAR_map_pt_eta.root");
   TH2F *h2_MuSF1 = (TH2F*)f_MuSF1->Get("SF");
+  TFile *f_MuSF2 = TFile::Open("Tracking_EfficienciesAndSF_BCDEFGH.root");
+  TGraphAsymmErrors *gr_MuSFeta = (TGraphAsymmErrors*)f_MuSF2->Get("ratio_eff_aeta_dr030e030_corr");
+  TGraphAsymmErrors *gr_MuSFvtx = (TGraphAsymmErrors*)f_MuSF2->Get("ratio_eff_vtx_dr030e030_corr");
   cout<<"applying Muon SFs? "<<applyMuSFs<<endl;
+  //https://twiki.cern.ch/twiki/bin/view/CMS/MuonWorkInProgressAndPagResults#Results_on_the_full_2016_data
   //----------- btags SFs-----------------  
   bool applybTagSFs=1;
   int fListIndxOld=-1;
@@ -305,8 +310,27 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
         if(h2_MuSF1->GetXaxis()->FindBin((*Muons)[0].Pt()) > h2_MuSF1->GetNbinsX())
           musf1 = (h2_MuSF1->GetBinContent(h2_MuSF1->GetXaxis()->FindBin((*Muons)[0].Pt())-1,h2_MuSF1->GetYaxis()->FindBin(abs((*Muons)[0].Eta()))));
         if(musf1 > 0.001) wt = wt*musf1;
+	//	cout<<(*Muons)[0].Pt()<<" "<<abs((*Muons)[0].Eta())<<" "<<musf1<<endl;
+	
+	float musf2 = 0., minDiff=1000;
+	for(int igr = 0;igr<gr_MuSFeta->GetN();igr++){
+	  if(minDiff > abs(abs((*Muons)[0].Eta()) - gr_MuSFeta->GetX()[igr])){
+	    minDiff = abs(abs((*Muons)[0].Eta()) - gr_MuSFeta->GetX()[igr]);
+	    musf2 = gr_MuSFeta->GetY()[igr];
+	  }
+	}if(musf2 > 0.0001) wt = wt*musf2;
+	//	cout<<"SF2 "<<abs((*Muons)[0].Eta())<<" "<<musf2<<endl;
+	
+	minDiff=1000; musf2 = 0.;
+	for(int igr = 0;igr<gr_MuSFvtx->GetN();igr++){
+	  if(minDiff > abs(NVtx - gr_MuSFvtx->GetX()[igr])){
+            minDiff = abs(NVtx - gr_MuSFvtx->GetX()[igr]);
+            musf2 = gr_MuSFvtx->GetY()[igr];
+          }
+        }if(musf2 > 0.0001) wt = wt*musf2;
+	//	cout<<"Vtx "<<NVtx<<" SF:"<<musf2<<endl;
       }
-
+      
       h_ST->Fill(ST,wt);
       h_MET->Fill(MET,wt);
       h_nHadJets->Fill(nHadJets,wt);
@@ -458,6 +482,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_Mu0->Fill(sBin2,wt);
 	h_SBins_v4_Mu0->Fill(sBin4,wt);
 	h_SBins_v7_Mu0->Fill(sBin7,wt);
+
+	h2_SBinsv7VsnJ_Mu0->Fill(sBin7,nHadJets,wt);
 	wt=wt_org;
       }//0 muon + photon events
       if(Muons->size()==1){
@@ -589,6 +615,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_Mu1->Fill(sBin2,wt);
 	h_SBins_v4_Mu1->Fill(sBin4,wt);
 	h_SBins_v7_Mu1->Fill(sBin7,wt);
+
+	h2_SBinsv7VsnJ_Mu1->Fill(sBin7,nHadJets,wt);
 	wt=wt_org;
       }//muon + photon events
     }

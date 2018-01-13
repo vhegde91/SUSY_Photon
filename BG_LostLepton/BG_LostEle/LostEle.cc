@@ -484,6 +484,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_v3_Ele0->Fill(sBin3,wt);
 	h_SBins_v4_Ele0->Fill(sBin4,wt);
 	h_SBins_v7_Ele0->Fill(sBin7,wt);
+	h2_SBinsv7VsnJ_Ele0->Fill(sBin7,nHadJets,wt);
 	wt=wt_org;
       }//0 electron + photon events
       if(Electrons->size()==1){
@@ -615,6 +616,8 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_v3_Ele1->Fill(sBin3,wt);
 	h_SBins_v4_Ele1->Fill(sBin4,wt);
 	h_SBins_v7_Ele1->Fill(sBin7,wt);
+
+	h2_SBinsv7VsnJ_Ele1->Fill(sBin7,nHadJets,wt);
 	wt=wt_org;
       }//electron + photon events
     }

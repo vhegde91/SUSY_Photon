@@ -147,7 +147,7 @@ void GetLostMuProb(TString iFname){
 	for(int xi=1;xi<=h2_histGcopy->GetNbinsX();xi++){
 	  for(int yi=1;yi<=h2_histGcopy->GetNbinsY();yi++){
 	    if(h2_histGcopy->GetBinContent(xi,yi) > 0.001)
-	      cout<<h2_histGcopy->GetXaxis()->GetBinLowEdge(xi)<<" "<<h2_histGcopy->GetYaxis()->GetBinLowEdge(yi)<<" "<<h2_histGcopy->GetBinContent(xi,yi)<<"\t"<<h2_histGcopy->GetBinError(xi,yi)<<endl;
+	      cout<<h2_histGcopy->GetXaxis()->GetBinLowEdge(xi)<<" "<<h2_histGcopy->GetYaxis()->GetBinLowEdge(yi)<<" "<<h2_histGcopy->GetBinContent(xi,yi)<<" "<<h2_histGcopy->GetBinError(xi,yi)<<endl;
 	  }
 	}
 	//	h2_histGcopy->SetMaximum(0.02);
