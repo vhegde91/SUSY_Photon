@@ -20,15 +20,15 @@
 
 class c_getBGHists{
 public:
-  TFile *f[5],*fl;
-  TString fName[5],fOutName;
+  TFile *f[8],*fl;
+  TString fName[8],fOutName;
   TFile *fout;
 
-  void getLEleHist();
-  void getLMuTauHist();
-  void getFRHist();
-  void getZGHist();
-  void getMultiJHist();
+  void getLEleHist(int);
+  void getLMuTauHist(int);
+  void getFRHist(int);
+  void getZGHist(int);
+  void getMultiJHist(int);
   int getSBinNumV7(int nHadJets,int BTags,double MET){
     vector<double> METBinLowEdgeV7={0,100,200,270,350,450,750};
     if(BTags==0 && nHadJets>=2 && nHadJets<=4 && MET > 750) return 6;
@@ -59,11 +59,16 @@ public:
 void getBGHists(){
   c_getBGHists c1;
   c1.setFileNames();
-  c1.getLEleHist();
-  c1.getLMuTauHist();
-  c1.getFRHist();
-  c1.getZGHist();
-  c1.getMultiJHist();
+  
+  c1.getLEleHist(0);
+  c1.getLMuTauHist(1);
+  c1.getFRHist(2);
+  c1.getZGHist(3);
+  c1.getMultiJHist(4);
+
+  c1.getLEleHist(5);
+  c1.getLMuTauHist(6);
+  c1.getFRHist(7);
 }
 
 void c_getBGHists::setFileNames(){
@@ -73,113 +78,159 @@ void c_getBGHists::setFileNames(){
   fName[3] = "CS_ZGZJToNuNuG.root";
   fName[4] = "DCS_LDP_Run2016_Multijet_v2.root";
 
+  fName[5] = "DCS_LDP_Run2016_LostEle_v2.root";
+  fName[6] = "DCS_LDP_Run2016_LostMuHadTau_v2.root";
+  fName[7] = "DCS_LDP_Run2016_SingleEle_v2.root";
+  fName[8] = "CS_LDP_ZGZJToNuNuG.root";
+
   fOutName = "SBinHists.root";
 
   fout = new TFile(fOutName,"recreate");
 }
 
-void c_getBGHists::getLEleHist(){
-  fl = TFile::Open(fName[0]);
-  TFile *flUp=TFile::Open("DCS_Run2016_LostEle_TFup_v2.root");
+void c_getBGHists::getLEleHist(int i_f){
+  bool isLDP = (fName[i_f].Contains("LDP"));
+  fl = TFile::Open(fName[i_f]);
+  TFile *flUnc;
+  if(!isLDP)  flUnc=TFile::Open("DCS_Run2016_LostEle_TFUncSq_v2.root");
+  else flUnc=TFile::Open("DCS_LDP_Run2016_LostEle_TFUncSq_v2.root");
   TH1D *hCS,*hTemp,*hTF,*hPred;
   //----- DCS hist
   hTemp = (TH1D*)fl->Get("AllSBins_v7_Ele1");
-  hCS = (TH1D*)hTemp->Clone("AllSBins_v7_LEleCS");
+  if(!isLDP) hCS = (TH1D*)hTemp->Clone("AllSBins_v7_LEleCS");
+  else hCS = (TH1D*)hTemp->Clone("AllSBins_v7_LEleCS_LDP");
+  //hCS->SetBinErrorOption(TH1::kPoisson);
   //-----get TF in SBins
   hTemp = (TH1D*)fl->Get("AllSBins_v7_Ele0");
-  hTF = (TH1D*)hTemp->Clone("LEleTFs");
-  hTF->Divide((TH1D*)fl->Get("AllSBins_v7_Ele1"));
+  if(!isLDP)  hTF = (TH1D*)hTemp->Clone("LEleTFs");
+  else   hTF = (TH1D*)hTemp->Clone("LEleTFs_LDP");
+  hTF->Divide(hCS);
   //-----get TF unc in SBins
-  hTemp=(TH1D*)flUp->Get("AllSBins_v7_Ele0");
+  hTemp=(TH1D*)flUnc->Get("AllSBins_v7_Ele0");
   TH1D *hTFUnc=(TH1D*)hTemp->Clone("hTFUnc");
-  hTFUnc->Divide((TH1D*)flUp->Get("AllSBins_v7_Ele1"));
-  hTFUnc->Add(hTF,-1);
+  hTFUnc->Divide((TH1D*)flUnc->Get("AllSBins_v7_Ele1"));
   for(int i=1;i<=hTF->GetNbinsX();i++){
-    hTF->SetBinError(i,hTFUnc->GetBinContent(i));
+    hTF->SetBinError(i,sqrt(hTFUnc->GetBinContent(i)));
   }
-  hTF->SetBinContent(6,0.);  hTF->SetBinError(6,0.);
-  hTF->SetBinContent(13,0.337721);  hTF->SetBinError(13,0.0771929);
-  hTF->SetBinContent(16,0.337721);  hTF->SetBinError(16,0.0771929);
-  hTF->SetBinContent(20,0.560793);  hTF->SetBinError(20,0.0501785);
-  hTF->SetBinContent(29,0.346311);  hTF->SetBinError(29,0.0597414);
-
+  if(!isLDP){
+    // hTF->SetBinContent( 6,0.362095);  hTF->SetBinError( 6,0.121615);//special case
+    hTF->SetBinContent( 6,0.362095);  hTF->SetBinError( 6,0.0328);//special case
+    hTF->SetBinContent(13,0.337721);  hTF->SetBinError(13,0.0771929);
+    hTF->SetBinContent(16,0.337721);  hTF->SetBinError(16,0.0771929);
+    hTF->SetBinContent(20,0.560793);  hTF->SetBinError(20,0.0501785);
+    hTF->SetBinContent(29,0.346311);  hTF->SetBinError(29,0.0597414);
+  }
+  else{
+    hTF->SetBinContent( 6,0.231834);  hTF->SetBinError( 6,0.039783);
+    hTF->SetBinContent(11,0.163806);  hTF->SetBinError(11,0.0287722);
+    hTF->SetBinContent(14,0.168521);  hTF->SetBinError(14,0.0496167);
+    hTF->SetBinContent(16,0.168521);  hTF->SetBinError(16,0.0496167);
+    hTF->SetBinContent(21,0.272343);  hTF->SetBinError(21,0.0429325);
+    hTF->SetBinContent(31,0.245341);  hTF->SetBinError(31,0.0636078);
+  }
   //-----multiply DCS with TF histogram with TF unc
-  hPred=(TH1D*)hCS->Clone("AllSBins_v7_LElePred");
+  if(!isLDP) hPred=(TH1D*)hCS->Clone("AllSBins_v7_LElePred");
+  else hPred=(TH1D*)hCS->Clone("AllSBins_v7_LElePred_LDP");
+  hPred->SetBinErrorOption(TH1::kPoisson);
   hPred->Multiply(hTF);
-  hPred->SetBinError(6,1.14*hTF->GetBinContent(6));
-  hPred->SetBinError(13,1.14*hTF->GetBinContent(13));
-  hPred->SetBinError(16,1.14*hTF->GetBinContent(16));
-  hPred->SetBinError(20,1.14*hTF->GetBinContent(20));
-  hPred->SetBinError(29,1.14*hTF->GetBinContent(29));
+  for(int i=1;i<=hPred->GetNbinsX();i++){
+    if(hPred->GetBinContent(i) < 0.00001)
+      hPred->SetBinError(i,1.8*hTF->GetBinContent(i));
+  }
   //---------------------
   fout->cd();
   hCS->Write();
   hTF->Write();
   hPred->Write();
 
-  c1.printContents(hTF);
-  c1.printContents(hPred);
-}
-
-void c_getBGHists::getLMuTauHist(){
-  fl = TFile::Open(fName[1]);
-  TFile *flUp=TFile::Open("DCS_Run2016_LostMuHadTau_TFup_v2.root");
-  TH1D *hCS,*hTemp,*hTF,*hPred;
-  //----- DCS hist
-  hTemp = (TH1D*)fl->Get("AllSBins_v7_Mu1");
-  hCS = (TH1D*)hTemp->Clone("AllSBins_v7_LMuCS");
-  //-----get TF in SBins
-  hTemp = (TH1D*)fl->Get("AllSBins_v7_Mu0");
-  hTF = (TH1D*)hTemp->Clone("LMuTFs");
-  hTF->Divide((TH1D*)fl->Get("AllSBins_v7_Mu1"));
-  //-----get TF unc in SBins
-  hTemp=(TH1D*)flUp->Get("AllSBins_v7_Mu0");
-  TH1D *hTFUnc=(TH1D*)hTemp->Clone("hTFUnc");
-  hTFUnc->Divide((TH1D*)flUp->Get("AllSBins_v7_Mu1"));
-  hTFUnc->Add(hTF,-1);
-  for(int i=1;i<=hTF->GetNbinsX();i++){
-    hTF->SetBinError(i,hTFUnc->GetBinContent(i));
-  }
-  hTF->SetBinContent(13,0.703993);  hTF->SetBinError(13,0.098179);
-  hTF->SetBinContent(16,0.750494);  hTF->SetBinError(16,0.0984693);
-  hTF->SetBinContent(26,0.797014);  hTF->SetBinError(26,0.0704897);
-  hTF->SetBinContent(30,0.706147);  hTF->SetBinError(30,0.0969159);
-  hTF->SetBinContent(31,0.706147);  hTF->SetBinError(31,0.0969159);
-
-  //-----multiply DCS with TF histogram with TF unc
-  hPred=(TH1D*)hCS->Clone("AllSBins_v7_LMuPred");
-  hPred->Multiply(hTF);
-  hPred->SetBinError(13,1.14*hTF->GetBinContent(13));
-  hPred->SetBinError(16,1.14*hTF->GetBinContent(16));
-  hPred->SetBinError(26,1.14*hTF->GetBinContent(26));
-  hPred->SetBinError(30,1.14*hTF->GetBinContent(30));
-  hPred->SetBinError(31,1.14*hTF->GetBinContent(31));
-  //---------------------
-  fout->cd();
-  hCS->Write();
-  hTF->Write();
-  hPred->Write();
-
-  // c1.printContents(hTF);
+  //  c1.printContents(hCS);
+  //  c1.printContents(hTF);
   // c1.printContents(hPred);
 }
 
-void c_getBGHists::getFRHist(){
-  fl = TFile::Open(fName[2]);
+void c_getBGHists::getLMuTauHist(int i_f){
+  bool isLDP = (fName[i_f].Contains("LDP"));
+  fl = TFile::Open(fName[i_f]);
+  TFile *flUnc;
+  if(!isLDP) flUnc=TFile::Open("DCS_Run2016_LostMuHadTau_TFUncSq_v2.root");
+  else flUnc=TFile::Open("DCS_LDP_Run2016_LostMuHadTau_TFUncSq_v2.root");
+  TH1D *hCS,*hTemp,*hTF,*hPred;
+  //----- DCS hist
+  hTemp = (TH1D*)fl->Get("AllSBins_v7_Mu1");
+  if(!isLDP) hCS = (TH1D*)hTemp->Clone("AllSBins_v7_LMuCS");
+  else hCS = (TH1D*)hTemp->Clone("AllSBins_v7_LMuCS_LDP");
+  //hCS->SetBinErrorOption(TH1::kPoisson);
+  //-----get TF in SBins
+  hTemp = (TH1D*)fl->Get("AllSBins_v7_Mu0");
+  if(!isLDP)  hTF = (TH1D*)hTemp->Clone("LMuTauTFs");
+  else   hTF = (TH1D*)hTemp->Clone("LMuTauTFs_LDP");
+  hTF->Divide(hCS);
+  //-----get TF unc in SBins
+  hTemp=(TH1D*)flUnc->Get("AllSBins_v7_Mu0");
+  TH1D *hTFUnc=(TH1D*)hTemp->Clone("hTFUnc");
+  hTFUnc->Divide((TH1D*)flUnc->Get("AllSBins_v7_Mu1"));
+  for(int i=1;i<=hTF->GetNbinsX();i++){
+    hTF->SetBinError(i,sqrt(hTFUnc->GetBinContent(i)));
+  }
+  if(!isLDP){
+    hTF->SetBinContent(13,0.703993);  hTF->SetBinError(13,0.098179);
+    hTF->SetBinContent(16,0.750494);  hTF->SetBinError(16,0.0984693);
+    hTF->SetBinContent(26,0.797014);  hTF->SetBinError(26,0.0704897);
+    hTF->SetBinContent(30,0.706147);  hTF->SetBinError(30,0.0969159);
+    hTF->SetBinContent(31,0.706147);  hTF->SetBinError(31,0.0969159);
+  }
+  else{
+    hTF->SetBinContent( 6,0.671757);  hTF->SetBinError( 6,0.103653);
+    hTF->SetBinContent(14,0.603732);  hTF->SetBinError(14,0.197632);
+    hTF->SetBinContent(20,0.690634);  hTF->SetBinError(20,0.0959729);
+    hTF->SetBinContent(29,0.536487);  hTF->SetBinError(29,0.103087);
+    hTF->SetBinContent(30,0.536487);  hTF->SetBinError(30,0.103087);
+    hTF->SetBinContent(31,0.536487);  hTF->SetBinError(31,0.103087);
+  }
+
+  //-----multiply DCS with TF histogram with TF unc
+  if(!isLDP)  hPred=(TH1D*)hCS->Clone("AllSBins_v7_LMuPred");
+  else hPred=(TH1D*)hCS->Clone("AllSBins_v7_LMuPred_LDP");
+  hPred->Multiply(hTF);
+  for(int i=1;i<=hPred->GetNbinsX();i++){
+    if(hPred->GetBinContent(i) < 0.00001)
+      hPred->SetBinError(i,1.8*hTF->GetBinContent(i));
+  }
+  //---------------------
+  fout->cd();
+  hCS->Write();
+  hTF->Write();
+  hPred->Write();
+
+  // c1.printContents(hCS);
+   c1.printContents(hTF);
+   c1.printContents(hPred);
+}
+
+void c_getBGHists::getFRHist(int i_f){
+  bool isLDP = (fName[i_f].Contains("LDP"));
+  fl = TFile::Open(fName[i_f]);
   TH1D *h1 = (TH1D*)fl->Get("AllSBins_v7_Ele");
-  TH1D *h1cp = (TH1D*)h1->Clone("AllSBins_v7_FRCS");
+  TH1D *h1cp;
+  if(!isLDP) h1cp = (TH1D*)h1->Clone("AllSBins_v7_FRCS");
+  else h1cp = (TH1D*)h1->Clone("AllSBins_v7_FRCS_LDP");
   fout->cd(); h1cp->Write();
+  c1.printContents(h1cp);
   
   h1 = (TH1D*)fl->Get("AllSBins_v7_Pho");
-  h1cp = (TH1D*)h1->Clone("AllSBins_v7_FRPred");
+  if(!isLDP) h1cp = (TH1D*)h1->Clone("AllSBins_v7_FRPred");
+  else h1cp = (TH1D*)h1->Clone("AllSBins_v7_FRPred_LDP");
   fout->cd(); h1cp->Write();
+
+  // c1.printContents(h1cp);
   //  c1.printContents(h1cp);
   // TH2D *h2_num=(TH2D*)fl->Get("METNJ_Mu0_R0");
   // TH2D *h2_den=(TH2D*)fl->Get("METNJ_Mu1_R0");
 }
 
-void c_getBGHists::getZGHist(){
-  fl = TFile::Open(fName[3]);
+void c_getBGHists::getZGHist(int i_f){
+  bool isLDP = (fName[i_f].Contains("LDP"));
+  fl = TFile::Open(fName[i_f]);
   TH1D *h1 = (TH1D*)fl->Get("AllSBins_v7");
   TH1D *h1cp = (TH1D*)h1->Clone("AllSBins_v7_ZGCS");
   c1.setNegContentsTo0(h1cp);
@@ -192,8 +243,8 @@ void c_getBGHists::getZGHist(){
 
 }
 
-void c_getBGHists::getMultiJHist(){
-  fl = TFile::Open(fName[4]);
+void c_getBGHists::getMultiJHist(int i_f){
+  fl = TFile::Open(fName[i_f]);
   TH1D *h1 = (TH1D*)fl->Get("AllSBins_v7_AB");
   TH1D *h1cp = (TH1D*)h1->Clone("AllSBins_v7_MultiJCS");
   fout->cd(); h1cp->Write();
@@ -224,8 +275,6 @@ void c_getBGHists::printContents(TH1D *h1){
     else cout<<h1->GetBinContent(i)<<endl;
   }
 }
-
-
 /*
 int c_getBGHists::setLostMuTF(int nj, int nb, double met){
   double tf = -1, errTF = -1;
