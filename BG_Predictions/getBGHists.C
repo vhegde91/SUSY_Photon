@@ -20,15 +20,17 @@
 
 class c_getBGHists{
 public:
-  TFile *f[8],*fl;
-  TString fName[8],fOutName;
+  TFile *f[10],*fl;
+  TString fName[10],fOutName;
   TFile *fout;
+  //  TH1D *hLElePredLDP, *hLMuPredLDP, *hFRPredLDP, *hZGPredLDP;
 
   void getLEleHist(int);
   void getLMuTauHist(int);
   void getFRHist(int);
   void getZGHist(int);
   void getMultiJHist(int);
+  void getTotalBG(int);
   int getSBinNumV7(int nHadJets,int BTags,double MET){
     vector<double> METBinLowEdgeV7={0,100,200,270,350,450,750};
     if(BTags==0 && nHadJets>=2 && nHadJets<=4 && MET > 750) return 6;
@@ -64,11 +66,15 @@ void getBGHists(){
   c1.getLMuTauHist(1);
   c1.getFRHist(2);
   c1.getZGHist(3);
-  c1.getMultiJHist(4);
-
+  
   c1.getLEleHist(5);
   c1.getLMuTauHist(6);
   c1.getFRHist(7);
+  c1.getZGHist(8);
+
+  c1.getMultiJHist(4);
+
+  c1.getTotalBG(9);
 }
 
 void c_getBGHists::setFileNames(){
@@ -82,6 +88,8 @@ void c_getBGHists::setFileNames(){
   fName[6] = "DCS_LDP_Run2016_LostMuHadTau_v2.root";
   fName[7] = "DCS_LDP_Run2016_SingleEle_v2.root";
   fName[8] = "CS_LDP_ZGZJToNuNuG.root";
+
+  fName[9] = "DCS_LDP_Run2016_Multijet_v2.root";
 
   fOutName = "SBinHists.root";
 
@@ -142,7 +150,6 @@ void c_getBGHists::getLEleHist(int i_f){
   hCS->Write();
   hTF->Write();
   hPred->Write();
-
   //  c1.printContents(hCS);
   //  c1.printContents(hTF);
   // c1.printContents(hPred);
@@ -201,31 +208,56 @@ void c_getBGHists::getLMuTauHist(int i_f){
   hCS->Write();
   hTF->Write();
   hPred->Write();
-
+  //  if(isLDP) hLMuPredLDP = (TH1D*)hPred->Clone("hLMuPredLDP");
   // c1.printContents(hCS);
-   c1.printContents(hTF);
-   c1.printContents(hPred);
+   // c1.printContents(hTF);
+   // c1.printContents(hPred);
 }
 
 void c_getBGHists::getFRHist(int i_f){
   bool isLDP = (fName[i_f].Contains("LDP"));
   fl = TFile::Open(fName[i_f]);
-  TH1D *h1 = (TH1D*)fl->Get("AllSBins_v7_Ele");
-  TH1D *h1cp;
-  if(!isLDP) h1cp = (TH1D*)h1->Clone("AllSBins_v7_FRCS");
-  else h1cp = (TH1D*)h1->Clone("AllSBins_v7_FRCS_LDP");
-  fout->cd(); h1cp->Write();
-  c1.printContents(h1cp);
+  TFile *flUnc;
+  if(!isLDP) flUnc=TFile::Open("DCS_Run2016_SingleEle_FRUncSq_v2.root");
+  else flUnc=TFile::Open("DCS_LDP_Run2016_SingleEle_FRUncSq_v2.root");
+  TH1D *hCS,*hTemp,*hFR,*hPred;
+  //----- DCS hist
+  hTemp = (TH1D*)fl->Get("AllSBins_v7_Ele");
+  if(!isLDP) hCS = (TH1D*)hTemp->Clone("AllSBins_v7_FRCS");
+  else hCS = (TH1D*)hTemp->Clone("AllSBins_v7_FRCS_LDP");
+  //hCS->SetBinErrorOption(TH1::kPoisson);
+  //-----get FR in SBins
+  hTemp = (TH1D*)fl->Get("AllSBins_v7_Pho");
+  if(!isLDP)  hFR = (TH1D*)hTemp->Clone("FRs");
+  else   hFR = (TH1D*)hTemp->Clone("FRs_LDP");
+  hFR->Divide(hCS);
+  //-----get FR unc in SBins
+  hTemp=(TH1D*)flUnc->Get("AllSBins_v7_Pho");
+  TH1D *hFRUnc=(TH1D*)hTemp->Clone("hFRUnc");
+  hFRUnc->Divide((TH1D*)flUnc->Get("AllSBins_v7_Ele"));
+  for(int i=1;i<=hFR->GetNbinsX();i++){
+    hFR->SetBinError(i,sqrt(hFRUnc->GetBinContent(i)));
+  }
   
-  h1 = (TH1D*)fl->Get("AllSBins_v7_Pho");
-  if(!isLDP) h1cp = (TH1D*)h1->Clone("AllSBins_v7_FRPred");
-  else h1cp = (TH1D*)h1->Clone("AllSBins_v7_FRPred_LDP");
-  fout->cd(); h1cp->Write();
-
-  // c1.printContents(h1cp);
-  //  c1.printContents(h1cp);
-  // TH2D *h2_num=(TH2D*)fl->Get("METNJ_Mu0_R0");
-  // TH2D *h2_den=(TH2D*)fl->Get("METNJ_Mu1_R0");
+  if(isLDP)
+    hFR->SetBinContent(16,hFR->GetBinContent(11));  hFR->SetBinError(16,hFR->GetBinError(11));
+  //-----multiply DCS with FR histogram with FR unc
+  if(!isLDP)  hPred=(TH1D*)hCS->Clone("AllSBins_v7_FRPred");
+  else hPred=(TH1D*)hCS->Clone("AllSBins_v7_FRPred_LDP");
+  hPred->Multiply(hFR);
+  for(int i=1;i<=hPred->GetNbinsX();i++){
+    if(hPred->GetBinContent(i) < 0.00001)
+      hPred->SetBinError(i,1.8*hFR->GetBinContent(i));
+  }
+  
+  fout->cd();
+  hCS->Write();
+  hFR->Write();
+  hPred->Write();
+  //  if(isLDP) hFRPredLDP = (TH1D*)hPred->Clone("hFRPredLDP");
+  // c1.printContents(hCS);
+  // c1.printContents(hFR);
+  // c1.printContents(hPred);
 }
 
 void c_getBGHists::getZGHist(int i_f){
@@ -234,29 +266,207 @@ void c_getBGHists::getZGHist(int i_f){
   TH1D *h1 = (TH1D*)fl->Get("AllSBins_v7");
   TH1D *h1cp = (TH1D*)h1->Clone("AllSBins_v7_ZGCS");
   c1.setNegContentsTo0(h1cp);
-  fout->cd(); h1cp->Write();
-  //c1.printContents(h1cp);
-  
-  // h1 = (TH1D*)fl->Get("AllSBins_v7_Pho");
-  // h1cp = (TH1D*)h1->Clone("AllSBins_v7_FRPred");
-  // fout->cd(); h1cp->Write();
+
+  TH1D *hLLGmc = (TH1D*)h1cp->Clone("MCLLG");
+  TH1D *hLLGdata = (TH1D*)h1cp->Clone("dataLLG");
+  TH1D *hLLGpurity = (TH1D*)h1cp->Clone("LLGpurity");
+  for(int i=1;i<=hLLGmc->GetNbinsX();i++){
+    if(i<=16){
+      hLLGdata->SetBinContent(i,31.);
+      hLLGdata->SetBinError(i,sqrt(hLLGdata->GetBinContent(i)));
+
+      hLLGmc->SetBinContent(i,32.409096);//LLG MC yield
+      hLLGmc->SetBinError(i,1.48495);//LLG MC yield Unc
+
+      hLLGpurity->SetBinContent(i,0.98);//purity of LLG sample
+      hLLGpurity->SetBinError(i,0.02);//unc on purity of LLG sample
+    }
+    else{
+      hLLGdata->SetBinContent(i,5.);
+      hLLGdata->SetBinError(i,sqrt(hLLGdata->GetBinContent(i)));
+
+      hLLGmc->SetBinContent(i,5.332);//LLG MC yield
+      hLLGmc->SetBinError(i,0.811977);//LLG MC yield Unc
+
+      hLLGpurity->SetBinContent(i,0.89);//purity of LLG sample
+      hLLGpurity->SetBinError(i,0.11);//unc on purity of LLG sample
+    }
+  }
+  h1cp->SetBinContent(30,0.040508);
+  h1cp->SetBinContent(31,0.0260939);
+  h1cp->SetBinError(30,0.7*0.040508);
+  h1cp->SetBinError(31,0.7*0.026094);
+
+  h1cp->Divide(hLLGmc);
+  h1cp->Multiply(hLLGpurity);
+
+  TH1D *hPred = (TH1D*)h1cp->Clone("AllSBins_v7_ZGPred");
+  hPred->Multiply(hLLGdata);
+  if(!isLDP){
+    fout->cd(); 
+    h1cp->Write();
+    hLLGdata->Write();
+    hLLGmc->Write();
+    hLLGpurity->Write();
+    hPred->Write();
+    // c1.printContents(h1cp);
+    // c1.printContents(hLLGdata);
+    // c1.printContents(hPred);
+  }
+  else{
+    TH1D *hSF=(TH1D*)hLLGdata->Clone("ZGSF_LDP");
+    hSF->Divide(hLLGmc);
+    hSF->Multiply(hLLGpurity);
+
+    TH1D *hTemp = (TH1D*)fl->Get("AllSBins_v7");
+    TH1D *hCS = (TH1D*)hTemp->Clone("AllSBins_v7_ZGCS_LDP");
+    hCS->SetBinContent(26,0.026939); hCS->SetBinError(26,hCS->GetBinContent(26));
+
+    hCS->SetBinContent(27,0.034524); hCS->SetBinError(27,hCS->GetBinContent(27));
+    hCS->SetBinContent(29,0.000953); hCS->SetBinError(29,hCS->GetBinContent(29));
+    hCS->SetBinContent(31,0.000986); hCS->SetBinError(31,hCS->GetBinContent(31));
+   
+    TH1D *hPred = (TH1D*)hCS->Clone("AllSBins_v7_ZGPred_LDP");
+    hPred->Multiply(hSF);
+
+    fout->cd();
+    hCS->Write();
+    hSF->Write();
+    hPred->Write();
+    // c1.printContents(hCS);
+    // c1.printContents(hSF);
+    // c1.printContents(hPred);
+  }
 
 }
 
 void c_getBGHists::getMultiJHist(int i_f){
   fl = TFile::Open(fName[i_f]);
-  TH1D *h1 = (TH1D*)fl->Get("AllSBins_v7_AB");
-  TH1D *h1cp = (TH1D*)h1->Clone("AllSBins_v7_MultiJCS");
-  fout->cd(); h1cp->Write();
-  //  c1.printContents(h1cp);
-  // h1 = (TH1D*)fl->Get("AllSBins_v7_Pho");
-  // h1cp = (TH1D*)h1->Clone("AllSBins_v7_FRPred");
-  // fout->cd(); h1cp->Write();
-  //  c1.printContents(h1cp);
-  // TH2D *h2_num=(TH2D*)fl->Get("METNJ_Mu0_R0");
-  // TH2D *h2_den=(TH2D*)fl->Get("METNJ_Mu1_R0");
+  TH1D *hTemp = (TH1D*)fl->Get("AllSBins_v7_AB");
+  TH1D *hCSraw = (TH1D*)hTemp->Clone("AllSBins_v7_rawMultiJCS");
+
+  hTemp = (TH1D*)fout->Get("AllSBins_v7_LElePred_LDP");
+  TH1D *hEWSumLDP = (TH1D*)hTemp->Clone("AllSBins_v7_EWSum_LDP");
+  hEWSumLDP->Add((TH1D*)fout->Get("AllSBins_v7_LMuPred_LDP"));
+  hEWSumLDP->Add((TH1D*)fout->Get("AllSBins_v7_FRPred_LDP"));
+  hEWSumLDP->Add((TH1D*)fout->Get("AllSBins_v7_ZGPred_LDP"));
+
+  TH1D *hCS = (TH1D*)hCSraw->Clone("AllSBins_v7_MultiJCS");
+  hCS->Add(hEWSumLDP,-1);
+ 
+  for(int i=1;i<=hCS->GetNbinsX();i++){
+    if(hCS->GetBinContent(i) < 0.00000001){
+      hCS->SetBinContent(i,0);
+      hCS->SetBinError(i,1.8);
+    }
+  }
+  fout->cd(); 
+  hCSraw->Write();
+  hEWSumLDP->Write();
+  hCS->Write();
+  c1.printContents(hCSraw);
+  c1.printContents(hEWSumLDP);
+  c1.printContents(hCS);
+  //----------------do predictions for HDP ----------------------
+  hTemp->Reset();
+  hTemp = (TH1D*)fout->Get("AllSBins_v7_LElePred");
+  TH1D *hEWSum = (TH1D*)hTemp->Clone("AllSBins_v7_EWSum");
+  hEWSum->Add((TH1D*)fout->Get("AllSBins_v7_LMuPred"));
+  hEWSum->Add((TH1D*)fout->Get("AllSBins_v7_FRPred"));
+  hEWSum->Add((TH1D*)fout->Get("AllSBins_v7_ZGPred"));
+  
+  hTemp = (TH1D*)fl->Get("AllSBins_v7_C");
+  TH1D *hHLR = (TH1D*)hTemp->Clone("AllSBins_v7_HLRatio");
+  hHLR->Add(hEWSum,-1);
+  hHLR->Divide(hCS);
+
+  hTemp->Reset();
+  TH1D *h_doubleR = (TH1D*)hTemp->Clone("doubleRatio_MC");
+  double dRatio[6]    = {0.291625, 0.466531, 0.398334, 0.241211, 0.344722, 0.474065};
+  double dRatioUnc[6] = {0.042260, 0.108875, 0.108132, 0.0541237,0.0703203,0.339079};
+
+  for(int i=1;i<=h_doubleR->GetNbinsX();i++){
+    if( i==1 || i==7 || i==12 || i==17 || i==22 || i==27 ){
+      h_doubleR->SetBinContent(i,1.0);
+      h_doubleR->SetBinError(i,0.);
+    }
+    else if(i<=6){
+      h_doubleR->SetBinContent(i,dRatio[0]);
+      h_doubleR->SetBinError(i,dRatioUnc[0]);
+      hHLR->SetBinContent(i,hHLR->GetBinContent(1));
+      hHLR->SetBinError(i,hHLR->GetBinError(1));
+    }
+    else if(i<=11){
+      h_doubleR->SetBinContent(i,dRatio[1]);
+      h_doubleR->SetBinError(i,dRatioUnc[1]);
+      hHLR->SetBinContent(i,hHLR->GetBinContent(7));
+      hHLR->SetBinError(i,hHLR->GetBinError(7));
+    }
+    else if(i<=16){
+      h_doubleR->SetBinContent(i,dRatio[2]);
+      h_doubleR->SetBinError(i,dRatioUnc[2]);
+      hHLR->SetBinContent(i,hHLR->GetBinContent(12));
+      hHLR->SetBinError(i,hHLR->GetBinError(12));
+    }
+    else if(i<=21){
+      h_doubleR->SetBinContent(i,dRatio[3]);
+      h_doubleR->SetBinError(i,dRatioUnc[3]);
+      hHLR->SetBinContent(i,hHLR->GetBinContent(17));
+      hHLR->SetBinError(i,hHLR->GetBinError(17));
+    }
+    else if(i<=26){
+      h_doubleR->SetBinContent(i,dRatio[4]);
+      h_doubleR->SetBinError(i,dRatioUnc[4]);
+      hHLR->SetBinContent(i,hHLR->GetBinContent(22));
+      hHLR->SetBinError(i,hHLR->GetBinError(22));
+    }
+    else{
+      h_doubleR->SetBinContent(i,dRatio[5]);
+      h_doubleR->SetBinError(i,dRatioUnc[5]);
+      hHLR->SetBinContent(i,hHLR->GetBinContent(27));
+      hHLR->SetBinError(i,hHLR->GetBinError(27));
+    }
+  }
+  
+  TH1D *h_MultiJPred = (TH1D*)hCS->Clone("AllSBins_v7_MultiJPred");
+  h_MultiJPred->Multiply(h_doubleR);
+  h_MultiJPred->Multiply(hHLR);
+
+  fout->cd();
+
+  hHLR->Write();
+  h_doubleR->Write();
+  h_MultiJPred->Write();
+ 
+  c1.printContents(hHLR);
+  c1.printContents(h_doubleR);
+  c1.printContents(h_MultiJPred);
+    
 }
 
+void c_getBGHists::getTotalBG(int i_f){
+  fl = TFile::Open(fName[i_f]);
+  TH1D *hTemp = (TH1D*)fout->Get("AllSBins_v7_LElePred");
+  TH1D *hTot = (TH1D*)hTemp->Clone("AllSBins_v7_TotalBG");
+  hTot->Add((TH1D*)fout->Get("AllSBins_v7_LMuPred"));
+  hTot->Add((TH1D*)fout->Get("AllSBins_v7_FRPred"));
+  hTot->Add((TH1D*)fout->Get("AllSBins_v7_ZGPred"));
+  hTot->Add((TH1D*)fout->Get("AllSBins_v7_MultiJPred"));
+  
+  hTemp = (TH1D*)fl->Get("AllSBins_v7_CD");
+  TH1D *hData = (TH1D*)hTemp->Clone("AllSBins_v7_Obs");
+  TH1D *hDataVsBG = (TH1D*)hData->Clone("DataOverBG");
+  hDataVsBG->Divide(hTot);
+
+  fout->cd();
+  hTot->Write();
+  hData->Write();
+  hDataVsBG->Write();
+
+  c1.printContents(hTot);
+  c1.printContents(hData);
+  c1.printContents(hDataVsBG);
+}
 
 //------------------------------------------------
 void c_getBGHists::setNegContentsTo0(TH1D *h1){
