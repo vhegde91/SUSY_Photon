@@ -1,0 +1,30 @@
+# - - - - - - - - - - - - - - - - - - -
+# Datacard for mGl= 1600 mNLSP= 150 with model FastSim_T5bbbbZG_1600_150
+# - - - - - - - - - - - - - - - - - - - 
+imax 1 number of channels
+jmax *  number of backgrounds('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin 19
+observation 0
+------------
+bin 19 19 19 19 19 19 
+process FastSim_T5bbbbZG_1600_150_bin19 LEle_bin19 LMuTau_bin19 Fake_bin19 ZG_bin19 MultiJ_bin19 
+process 0 1 2 3 4 5 
+rate 0.74419 2.80396 5.51564 4.07118 3.06461 5.74489 
+------------
+lumi lnN              1.023      -       -       -       -       -
+sigStat_b19 lnN       1.09525    -       -       -       -       -
+SigXsec lnN         1.24268    -       -       -       -       -
+LEle_b19 gmN 5        -     0.560793     -       -       -       -
+LEleTFUnc_b19 lnN     -     1.08948      -       -       -       -
+LMuTau_b19 gmN  5     -       -     1.10313     -       -       -
+LMuTauTFUnc_b19 lnN   -       -     1.08967      -       -       -
+FakeUncRate_b19 lnN   -       -          -    1.1786    -       -
+ZG_mcStat_b19 lnN     -       -          -      -     1.31989       -
+ZGTF_bB gmN 5         -       -          -      -     0.612922       -
+ZGPureOverLLG_bB lnN  -       -          -      -     1.19613     -
+MultiJ_b19 gmN 39     -       -          -          -         -       0.147305
+MultiJdR_bR4 lnN      -       -          -          -         -       1.04889
+MultiJHL_bR4 lnN      -       -          -          -         -       1.22438
+MultiJEW_b19  lnN      -       -          -          -         -        0.908306/0.962989
