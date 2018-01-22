@@ -83,8 +83,9 @@ void searchBinsStack(){
 	cout<<"Integarted lumi for "<<f[i]->GetName()<<" is "<<h_intLumi->GetMean()<<" and for other files it is different"<<endl;
     }
     
-    TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("AllSBins_v3");//MET_R1
-    //TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("mTPhoMET");
+    //    TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("AllSBins_v3");//MET_R1
+    TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("mindPhi1dPhi2");
+    h_MET->Rebin(5);
     decorate(h_MET,i,f[i]->GetName());
     
     if(i<=(nBG-1))  hs_MET->Add(h_MET);
@@ -99,7 +100,7 @@ void searchBinsStack(){
       h_MET->Draw("HISTE sames");
     }
     drawlegend(h_MET,i,f[i]->GetName());
-    if(i==nfiles-1) hs_MET->SetTitle(";Bin No.;Events");
+    if(i==nfiles-1) hs_MET->SetTitle(";min(#Delta#Phi_{1},#Delta#Phi_{2});Events");
 
     //----------------------all search bins----------------------------
     for(int j=1;j<=3;j++){

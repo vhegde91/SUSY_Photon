@@ -46,8 +46,8 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
   //get 2d histogram========================================
   //TFile *f_FR=new TFile("FR_Hist_MS_FR_DYJetsToLL_Truth.root");
 
-  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_ISRWt_v2.root");
-  //  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_ISRWt_LowDphi_v2.root");
+  //  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_ISRWt_v2.root");
+  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_ISRWt_LowDphi_v2.root");
   //  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_NoTrgPuWt.root");
   //  TFile *f_FR=new TFile("FR_Hist_MS_FR_DYJetsToLL_v2.root");
   // TFile* NLOWeightFile = new TFile("kfactors.root");
@@ -120,7 +120,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
       TString trgName=(*TriggerNames)[i];
       if( trgName.Contains("HLT_Photon90_CaloIdL_PFHT600_v") && (*TriggerPass)[i]==1 ) passTrig = true;
       else if( trgName.Contains("HLT_Photon165_HE10_v") && (*TriggerPass)[i]==1 ) passTrig = true;
-      wt=0.98/0.99;
+      //      wt=0.98/0.99;
       // if((*Electrons)[0].Pt() > 190.0){
       // 	if( (trgName.Contains("HLT_Ele27_WPTight_Gsf_v") || trgName.Contains("HLT_Photon165_HE10_v") ) ){
       // 	  if((*TriggerPass)[i]==1){
@@ -256,7 +256,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
     //    if(MET>200) continue;
     if(emObjMatchingJetIndx>=0 && ((*Jets)[emObjMatchingJetIndx].Pt())/(bestEMObj.Pt()) < 1.0) continue; 
     if(emObjMatchingJetIndx<0) continue;
-    process = process && ST>500 && nHadJets>=2 && MET>100 && (dphi1 > 0.3 && dphi2 > 0.3) && bestEMObj.Pt()>100;
+    process = process && ST>500 && nHadJets>=2 && MET>100 && !(dphi1 > 0.3 && dphi2 > 0.3) && bestEMObj.Pt()>100;
     if( !((ST>800 && bestEMObj.Pt()>100) || (bestEMObj.Pt()>190)) ) continue;
     if(process){
       evtSurvived++;
@@ -453,12 +453,15 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  double parX=bestEMObj.Pt(),parY=qMultMatchJet;
 	  //	    double parX=bestEMObj.Pt(),parY=NVtx;
 	    double fakerate=0;
-	    if(h2_FR) fakerate=h2_FR->GetBinContent(h2_FR->FindBin(parX,parY));
+	    //	    if(h2_FR) fakerate=h2_FR->GetBinContent(h2_FR->FindBin(parX,parY));
+	    if(h2_FR) fakerate=(h2_FR->GetBinError(h2_FR->FindBin(parX,parY)))*(h2_FR->GetBinError(h2_FR->FindBin(parX,parY)));
 	    else{ cout<<"hist not found"<<endl; return;}
 	    //	    wt=(fakerate/(1-fakerate))*wt;
-	    if(qMultMatchJet<=1) fakerate = fakerate*0.95;
-	    else fakerate = fakerate*1.67;
-	    wt=fakerate*wt;
+	    // if(qMultMatchJet<=1) fakerate = fakerate*0.95;//from sideband sub
+	    // else fakerate = fakerate*1.67;//from sideband sub
+	    if(qMultMatchJet<=1) fakerate = fakerate*1.18;
+	    else fakerate = fakerate*1.21;
+	    wt=fakerate*wt*0.98/0.99;
 	  }
 	  //++++++++++++++++++++++ data only ends +++++++++++++++++++++++++++
 	  h_ST_Pho->Fill(ST,wt);

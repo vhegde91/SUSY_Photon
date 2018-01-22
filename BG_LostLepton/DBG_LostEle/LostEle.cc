@@ -45,7 +45,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   TFile *f_LP=new TFile("LstEle_CS_TTWZ_LostEle_v2.root");
-  //  TFile *f_LP=new TFile("LstEle_CS_LDP_TTWZ_LostEle_v2.root");
+  //TFile *f_LP=new TFile("LstEle_CS_LDP_TTWZ_LostEle_v2.root");
   //TFile *f_LP=new TFile("LstEle_CS_TTW_LostEle_v2.root");
   TH2D *h2_LP;TH1D *h_LP;
   bool do_prediction=1;
@@ -333,8 +333,8 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
           else if(BTags>=1) name="LostProb_1";
 	  //          else if(BTags>=2) name="LostProb_2";
           h2_LP=(TH2D*)f_LP->FindObjectAny(name);
-	  //          if(h2_LP) tf=h2_LP->GetBinContent(h2_LP->FindBin(parX,parY));
-          if(h2_LP) tf=h2_LP->GetBinContent(h2_LP->FindBin(parX,parY))+h2_LP->GetBinError(h2_LP->FindBin(parX,parY));
+	  if(h2_LP) tf=h2_LP->GetBinContent(h2_LP->FindBin(parX,parY));
+	  //if(h2_LP) tf=(h2_LP->GetBinError(h2_LP->FindBin(parX,parY)))*(h2_LP->GetBinError(h2_LP->FindBin(parX,parY)));
           else cout<<"hist not found"<<endl;
           wt=tf*wt;
         }
@@ -419,7 +419,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_v4_Ele0->Fill(sBin4,wt);
 	h_SBins_v7_Ele0->Fill(sBin7,wt);
 
-	h2_SBinsv7VsnJ_Ele0->Fill(sBin7,nHadJets,wt);
+	h2_SBinsv4VsnJ_Ele0->Fill(sBin4,nHadJets,wt);
 	wt=wt_org;
       }//0 electron + photon events
       if(Electrons->size()==1){
@@ -541,7 +541,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_v4_Ele1->Fill(sBin4,wt);
 	h_SBins_v7_Ele1->Fill(sBin7,wt);
 
-	h2_SBinsv7VsnJ_Ele1->Fill(sBin7,nHadJets,wt);
+	h2_SBinsv4VsnJ_Ele1->Fill(sBin4,nHadJets,wt);
 	wt=wt_org;
       }//electron + photon events
     }

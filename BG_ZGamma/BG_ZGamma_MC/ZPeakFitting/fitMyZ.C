@@ -19,7 +19,8 @@ Double_t fitFunction(Double_t *x, Double_t *par) {
 
 void fitMyZ(){
   // TFile *f1 = new TFile("CS_ZDYToLLG.root");
-  TFile *f1 = new TFile("DCS_ZGToLL_NoZMassWindow.root");
+  //  TFile *f1 = new TFile("DCS_ZGToLL_NoZMassWindow.root");
+  TFile *f1 = new TFile("DCS_ZGToLL_NoZMassWindow_v2.root");
   TH1D *h_zmass=(TH1D*)f1->FindObjectAny("ZMass");
   int nBins = h_zmass->GetNbinsX();
   double data[nBins];

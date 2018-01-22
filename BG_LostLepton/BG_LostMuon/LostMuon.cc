@@ -47,7 +47,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuHadTau_v2.root");
-  //  TFile *f_LP=new TFile("LstMu_CS_LDP_TTWZ_LostMuHadTau_v2.root");
+  //TFile *f_LP=new TFile("LstMu_CS_LDP_TTWZ_LostMuHadTau_v2.root");
   //  TFile *f_LP=new TFile("LstMu_CS_TTWZ_HadTauOnly_v2.root");
   //TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuOnly_v2.root");
 
@@ -482,7 +482,10 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_Mu0->Fill(sBin2,wt);
 	h_SBins_v4_Mu0->Fill(sBin4,wt);
 	h_SBins_v7_Mu0->Fill(sBin7,wt);
-
+	// if(applybTagSFs && (sBin7==6 || sBin7==21)){
+	//   h2_SBinsv7VsnJ_Mu0->Fill( 6,nHadJets,prob0*wt);
+	//   h2_SBinsv7VsnJ_Mu0->Fill(21,nHadJets,prob1*wt);
+	// }else h2_SBinsv7VsnJ_Mu0->Fill(sBin7,nHadJets,wt);
 	h2_SBinsv7VsnJ_Mu0->Fill(sBin7,nHadJets,wt);
 	wt=wt_org;
       }//0 muon + photon events
@@ -615,7 +618,10 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_Mu1->Fill(sBin2,wt);
 	h_SBins_v4_Mu1->Fill(sBin4,wt);
 	h_SBins_v7_Mu1->Fill(sBin7,wt);
-
+	// if(applybTagSFs && (sBin7==6 ||sBin7==21)){
+        //   h2_SBinsv7VsnJ_Mu1->Fill( 6,nHadJets,prob0*wt);
+        //   h2_SBinsv7VsnJ_Mu1->Fill(21,nHadJets,prob1*wt);
+	// }else h2_SBinsv7VsnJ_Mu1->Fill(sBin7,nHadJets,wt);
 	h2_SBinsv7VsnJ_Mu1->Fill(sBin7,nHadJets,wt);
 	wt=wt_org;
       }//muon + photon events

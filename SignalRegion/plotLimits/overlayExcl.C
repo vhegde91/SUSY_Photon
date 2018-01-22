@@ -17,24 +17,24 @@
 
 
 void overlayExcl(){
-  const int nFiles=2;
+  const int nFiles=3;
   int col[7]={kRed,kBlue,kTeal+9,kBlack,kOrange,kPink,kMagenta};
   gStyle->SetOptStat(0);
   TCanvas *c1=new TCanvas("c1","c1",1200,1000);
   c1->SetLogz();
   TFile *f[nFiles];
-  // f[0]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV1.root");
-  // f[1]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV2.root");
-  // f[2]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV3.root");
+  // f[0]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV4.root");
+  // f[1]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV7.root");
+  // f[2]=new TFile("EMHT_Limits_Knut/T5qqqqHg_v20/saved_graphs1d_limit.root");
   f[0]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV4.root");
-  // f[4]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV5.root");
+  f[1]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7.root");
+  f[2]=new TFile("EMHT_Limits_Knut/T5bbbbZg_v20/saved_graphs1d_limit.root");
   // f[5]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV6.root");
-  f[1]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV4_mT100.root");
+  //  f[1]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV4_mT100.root");
   //  f[1]=new TFile("a.root");
   // f[1]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV4.root");
   // f[2]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV4.root");
   //  f[2]=new TFile("EMHT_Limits_Knut/T5ttttZg_v20/saved_graphs1d_limit.root");
-  //  f[2]=new TFile("EMHT_Limits_Knut/T5bbbbZg_v20/saved_graphs1d_limit.root");
   //TFile *f1=new TFile("EMHT_Limits_Knut/T5ttttZg_v20/saved_graphs1d_limit.root");
   TLegend *leg = new TLegend(0.8,0.6,0.9,0.9);
   // TH2D *h2=(TH2D*)f[0]->FindObjectAny("mGlmNLSP_XsecUL");

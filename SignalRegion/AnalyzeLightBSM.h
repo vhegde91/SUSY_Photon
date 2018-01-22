@@ -23,6 +23,9 @@ class AnalyzeLightBSM : public NtupleVariables{
   void     EventLoop(const char *,const char *);
   void     BookHistogram(const char *);
   TLorentzVector getBestPhoton();
+  int getBinNoV4(int);
+  int getBinNoV7(int);
+
   bool check_eMatchedtoGamma();
   void print(Long64_t);
   void findObjMatchedtoG(TLorentzVector);
@@ -43,6 +46,11 @@ class AnalyzeLightBSM : public NtupleVariables{
   //  vector<double> MHTBinLowEdge={0,20,40,60,80,100,120,160,200,270,350,500};
   vector<double> STBinLowEdge ={0,300,360,420,500,600,700,850,1000,1200,1500,2000,2500,3000};
   //  vector<double> METBinLowEdge={0,20,40,60,80,100,120,160,200,270,350,450,600,750,900,1200};
+  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900}; 
+  vector<double> METBinLowEdgeV4={0,100,125,160,200,270,350,450,750};
+  vector<double> METBinLowEdgeV7_njLow={0,100,200,270,350,450,750,900};
+  vector<double> METBinLowEdgeV7={0,100,200,270,350,450,750};
+
   vector<double> METBinLowEdge={0,20,40,60,80,100,125,160,200,270,350,500,600};
   vector<double> METBinLowEdge2bJ={0,20,40,60,80,100,125,160,200,270,350,500};
   vector<double> METBinLowEdge2={0,20,40,60,80,100,120,160,200,270,350,450,500};
@@ -171,6 +179,8 @@ class AnalyzeLightBSM : public NtupleVariables{
 
   TH1D *h_MET_R_v2[5];
   TH1D *h_SBins,*h_SBins_v1,*h_SBins_v3;
+  TH1D *h_SBins_v4_CD;
+  TH1D *h_SBins_v7_CD;
 
   TFile *oFile;
   
@@ -320,6 +330,11 @@ void AnalyzeLightBSM::BookHistogram(const char *outFileName) {
   h_SBins = new TH1D("AllSBins","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2)",34,0.5,34.5);
   h_SBins_v1 = new TH1D("AllSBins_v1","search bins:(NJ=2to4) (NJ:5or6) (NJ>=7)",21,0.5,21.5);
   h_SBins_v3 = new TH1D("AllSBins_v3","search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, 1b, >=2b]",63,0.5,63.5);
+
+  h_SBins_v4_CD = new TH1D("AllSBins_v4_CD","search bins:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",43,0.5,43.5);
+
+  h_SBins_v7_CD = new TH1D("AllSBins_v7_CD","search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
+
 }
 
 

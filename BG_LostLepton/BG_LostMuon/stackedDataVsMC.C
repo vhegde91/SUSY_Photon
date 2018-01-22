@@ -23,7 +23,7 @@ TFile *f[nfiles];
 //int col[10]={kOrange,kTeal+9,kBlue,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
 int col[10]={kBlack,kMagenta+2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed};  //Specify Colors
 TString name;
-bool saveCanvas=1;
+bool saveCanvas=0;
 void setLastBinAsOverFlow(TH1D*);
 TString getLegName(TString);
 TString getXaxisName(TString);
@@ -43,7 +43,7 @@ void stackedDataVsMC(TString iFname){
   
   vector<string> name1;
   vector<int> rebin;
-  name1.push_back("ST_Mu1");  rebin.push_back(10);         //name2.push_back("ST_Mu1");     
+  name1.push_back("ST_Mu1");  rebin.push_back(10);    
   name1.push_back("MET_Mu1");    rebin.push_back(5);     //name2.push_back("MET_Mu1");     
   name1.push_back("nBTags_Mu1");   rebin.push_back(1);    //name2.push_back("nBTags_Mu1");     
   name1.push_back("nHadJets_Mu1");  rebin.push_back(1);  //name2.push_back("nHadJets_Mu1");
@@ -99,7 +99,7 @@ void stackedDataVsMC(TString iFname){
     p_bot[i]->Draw();p_bot[i]->SetGridx();p_bot[i]->SetGridy();    
     name=name1[i]+"_Stack";
     hs_hist[i] = new THStack(name,name);
-    legend[i]=new TLegend(0.8, 0.90,  0.90, 0.45);
+    legend[i]=new TLegend(0.7, 0.90,  0.80, 0.45);
   }
   //cout<<getLegName(f[0]->GetName());
   TH1D *h_histG,*h_histE,*h_histGcopy;
@@ -108,6 +108,7 @@ void stackedDataVsMC(TString iFname){
     name=name1[i];
     h_histG=(TH1D*)f[0]->FindObjectAny(name);
     h_histG->Rebin(rebin[i]);
+    if(name.Contains("MuPt")) h_histG->GetXaxis()->SetRangeUser(0,600);
     setLastBinAsOverFlow(h_histG);
     if(name1[i]=="nHadJets_Mu1") data_Integral=h_histG->Integral();
     c_cA[i]->cd();p_top[i]->cd();
@@ -151,6 +152,8 @@ void stackedDataVsMC(TString iFname){
     c_cA[i]->cd();    p_top[i]->cd();
     hs_hist[i]->SetMinimum(0.8);
     hs_hist[i]->Draw("BAR");
+    name = h_histG->GetName();
+    if(name.Contains("MuPt")) hs_hist[i]->GetXaxis()->SetRangeUser(0,600);
     h_histG->Draw("same");
     hs_hist[i]->SetTitle(";;Events");
     hs_hist[i]->GetYaxis()->SetTitleOffset(0.50);    
@@ -177,7 +180,7 @@ void stackedDataVsMC(TString iFname){
     h_numr->GetYaxis()->SetTitleSize(0.13);
     h_numr->GetYaxis()->SetLabelSize(0.14);
     h_numr->GetYaxis()->SetNdivisions(505);
-    h_numr->SetMaximum(2.0);
+    h_numr->SetMaximum(1.99);
     h_numr->SetMinimum(0.01);
     c_cA[i]->cd();    p_bot[i]->cd();
     p_bot[i]->SetTickx();p_bot[i]->SetTicky();
@@ -192,7 +195,7 @@ void stackedDataVsMC(TString iFname){
     intLumiE.SetTextSize(0.06);
     sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
     intLumiE.DrawLatexNDC(0.73,0.91,name2);
-    if(saveCanvas){name="PtRatio_1p1_"+name1[i]+".png";c_cA[i]->SaveAs(name);}
+    if(saveCanvas){name=name1[i]+".png";c_cA[i]->SaveAs(name);}
     
   }
   
@@ -214,8 +217,10 @@ TString getXaxisName(TString axname){
   else if(axname.Contains("ST")) return "ST(GeV)";
   else if(axname.Contains("BTags")) return "b-Tags";
   else if(axname.Contains("ElePt")) return "e pT(GeV)";
+  else if(axname.Contains("MuPt")) return "#mu pT(GeV)";
   else if(axname.Contains("PhotonPt")) return "#gamma pT(GeV)";
   else if(axname.Contains("mT")) return "mT_{#gamma,MET}(GeV)";
+  else if(axname.Contains("dR_MuPho")) return "#DeltaR(#mu,#gamma)";
   else if(axname.Contains("AllSBin")) return "Bin Number";
   else if(axname.Contains("dPhi_METjet1") || axname.Contains("dphi1_METjet1")) return "#Delta#Phi_{1}";
   else if(axname.Contains("dPhi_METjet2") || axname.Contains("dphi2_METjet2")) return "#Delta#Phi_{2}";

@@ -264,12 +264,13 @@ void c_getBGHists::getZGHist(int i_f){
   bool isLDP = (fName[i_f].Contains("LDP"));
   fl = TFile::Open(fName[i_f]);
   TH1D *h1 = (TH1D*)fl->Get("AllSBins_v7");
-  TH1D *h1cp = (TH1D*)h1->Clone("AllSBins_v7_ZGCS");
-  c1.setNegContentsTo0(h1cp);
+  TH1D *hCS = (TH1D*)h1->Clone("AllSBins_v7_ZGCS");
+  c1.setNegContentsTo0(hCS);
 
-  TH1D *hLLGmc = (TH1D*)h1cp->Clone("MCLLG");
-  TH1D *hLLGdata = (TH1D*)h1cp->Clone("dataLLG");
-  TH1D *hLLGpurity = (TH1D*)h1cp->Clone("LLGpurity");
+  TH1D *hLLGmc = (TH1D*)hCS->Clone("MCLLG");
+  TH1D *hLLGdata = (TH1D*)hCS->Clone("dataLLG");
+  TH1D *hLLGpurity = (TH1D*)hCS->Clone("LLGpurity");
+  
   for(int i=1;i<=hLLGmc->GetNbinsX();i++){
     if(i<=16){
       hLLGdata->SetBinContent(i,31.);
@@ -292,26 +293,39 @@ void c_getBGHists::getZGHist(int i_f){
       hLLGpurity->SetBinError(i,0.11);//unc on purity of LLG sample
     }
   }
-  h1cp->SetBinContent(30,0.040508);
-  h1cp->SetBinContent(31,0.0260939);
-  h1cp->SetBinError(30,0.7*0.040508);
-  h1cp->SetBinError(31,0.7*0.026094);
+  hCS->SetBinContent(30,0.0354253);
+  hCS->SetBinContent(31,0.0228197);
+  hCS->SetBinError(30,0.7*0.0354253);
+  hCS->SetBinError(31,0.7*0.0228197);
 
-  h1cp->Divide(hLLGmc);
-  h1cp->Multiply(hLLGpurity);
+  TH1D *hTF = (TH1D*)hCS->Clone("AllSBins_v7_ZGTF");
+  hTF->Divide(hLLGmc);
+  hTF->Multiply(hLLGpurity);
 
-  TH1D *hPred = (TH1D*)h1cp->Clone("AllSBins_v7_ZGPred");
+  TH1D *hPred = (TH1D*)hTF->Clone("AllSBins_v7_ZGPred");
   hPred->Multiply(hLLGdata);
+
+  TH1D *hPureOverLLGmc = (TH1D*)hLLGpurity->Clone("PureOverLLG_MC");
+  hPureOverLLGmc->Divide(hLLGmc);
+
   if(!isLDP){
     fout->cd(); 
-    h1cp->Write();
+    hCS->Write();
+    hPureOverLLGmc->Write();
     hLLGdata->Write();
-    hLLGmc->Write();
-    hLLGpurity->Write();
+    hTF->Write();
+
     hPred->Write();
-    // c1.printContents(h1cp);
+    hLLGpurity->Write();
+    hLLGmc->Write();
+
+    // c1.printContents(hCS);
+    // c1.printContents(hLLGpurity);
+    // c1.printContents(hLLGmc);
     // c1.printContents(hLLGdata);
+    // c1.printContents(hPureOverLLGmc);
     // c1.printContents(hPred);
+    // c1.printContents(hTF);
   }
   else{
     TH1D *hSF=(TH1D*)hLLGdata->Clone("ZGSF_LDP");
@@ -364,9 +378,28 @@ void c_getBGHists::getMultiJHist(int i_f){
   hCSraw->Write();
   hEWSumLDP->Write();
   hCS->Write();
-  c1.printContents(hCSraw);
-  c1.printContents(hEWSumLDP);
-  c1.printContents(hCS);
+  TH1D *h_pure = (TH1D*)hCSraw->Clone("MultiJLDPpurity");
+  h_pure->Add(hEWSumLDP,-1);
+  h_pure->Divide(hCSraw);
+  for(int i=1;i<=h_pure->GetNbinsX();i++){
+    if(h_pure->GetBinContent(i) < 0.00001) h_pure->SetBinContent(i,-1.);
+    if(hCSraw->GetBinContent(i) < 0.00001){
+      h_pure->SetBinContent(i,-1.);
+      h_pure->SetBinError(i,0.0);
+    }
+    else
+      h_pure->SetBinError(i,hEWSumLDP->GetBinError(i)/(hCSraw->GetBinContent(i)));
+  }
+  // setNegContentsTo0(h_pure);
+
+  fout->cd();
+  h_pure->Write();
+  c1.printContents(h_pure);
+  // c1.printContents(h_pureUncUp);
+  // c1.printContents(h_pureUncDown);
+  // c1.printContents(hCSraw);
+  // c1.printContents(hEWSumLDP);
+  //  c1.printContents(hCS);
   //----------------do predictions for HDP ----------------------
   hTemp->Reset();
   hTemp = (TH1D*)fout->Get("AllSBins_v7_LElePred");
@@ -438,9 +471,10 @@ void c_getBGHists::getMultiJHist(int i_f){
   h_doubleR->Write();
   h_MultiJPred->Write();
  
-  c1.printContents(hHLR);
-  c1.printContents(h_doubleR);
-  c1.printContents(h_MultiJPred);
+  
+  // c1.printContents(hHLR);
+  // c1.printContents(h_doubleR);
+  //c1.printContents(h_MultiJPred);
     
 }
 
@@ -463,9 +497,9 @@ void c_getBGHists::getTotalBG(int i_f){
   hData->Write();
   hDataVsBG->Write();
 
-  c1.printContents(hTot);
-  c1.printContents(hData);
-  c1.printContents(hDataVsBG);
+  // c1.printContents(hTot);
+  // c1.printContents(hData);
+  // c1.printContents(hDataVsBG);
 }
 
 //------------------------------------------------

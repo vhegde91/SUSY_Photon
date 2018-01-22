@@ -21,8 +21,8 @@
 void quickPlot(TString fName,TString histName){
 
   //  TString xName = "#Delta#Phi(#gamma,MET)";
-  TString xName = "e pT(GeV)";
-  TString yName = "#frac{e-Jet pT}{e pT}";
+  TString xName = "QMult";
+  TString yName = "Events";
   //  gStyle->SetOptStat(0);
   TString name = fName,name1 = fName;
   name = name.ReplaceAll(".root","")+yName+"_Vs_"+xName;
@@ -40,17 +40,17 @@ void quickPlot(TString fName,TString histName){
     h1->SetTitle(0);
     h1->Draw("histe");
   }
-  if(h2){
-    h2->GetYaxis()->SetRangeUser(0.5,1.5);
-    //    h2->SetTitle(fName.ReplaceAll(".root",""));
-    h2->GetXaxis()->SetTitle(xName);
-    h2->GetYaxis()->SetTitle(yName);
-    h2->GetYaxis()->SetTitleOffset(0.9);
-    h2->Draw("colz");
-    c1->SetLogz();
-  }
+  // if(h2){
+  //   h2->GetYaxis()->SetRangeUser(0.5,1.5);
+  //   //    h2->SetTitle(fName.ReplaceAll(".root",""));
+  //   h2->GetXaxis()->SetTitle(xName);
+  //   h2->GetYaxis()->SetTitle(yName);
+  //   h2->GetYaxis()->SetTitleOffset(0.9);
+  //   h2->Draw("colz");
+  //   c1->SetLogz();
+  // }
   if(!h1 && !h2) {cout<<"Hist Not found"<<endl;}
 
-  c1->SaveAs(name1+"_RpTvsdPhiG.png");
+  c1->SaveAs(name1+"_"+xName+".png");
 
 }

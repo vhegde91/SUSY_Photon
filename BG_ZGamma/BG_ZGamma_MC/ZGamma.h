@@ -24,6 +24,7 @@ class ZGamma : public NtupleVariables{
   Long64_t LoadTree(Long64_t entry);
   void     EventLoop(const char *,const char *);
   void     BookHistogram(const char *);
+  TLorentzVector metstar;
   TLorentzVector getBestPhoton();
   int getBinNoV4(int);
   int getBinNoV7(int);

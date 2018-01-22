@@ -39,10 +39,10 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
   cout << "Analyzing dataset " << data << " " << endl;
 
   string s_data=data;
- 
+
   Long64_t nbytes = 0, nb = 0;
   int decade = 0;
-  bool do_AB_reweighting=1;
+  bool do_AB_reweighting=0;
   int evtSurvived=0;
   TFile *f_HLR=TFile::Open("HLR_gjets_qcd.root");
   // TH1D *h_HLratio=(TH1D*)f_HLR->Get("HLratio_1D");
@@ -52,7 +52,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
   //choose central, up, or down
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
   //----------- btags SFs-----------------
-  bool applybTagSFs=1;
+  bool applybTagSFs=0;
   int fListIndxOld=-1;
   double prob0=-100,prob1=-100;
   vector<TString> inFileName;
@@ -66,7 +66,8 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
   cout<<"applying b-tag SFs? "<<applybTagSFs<<endl;
   BTagCorrector btagcorr;
   //if fastsim
-  // btagcorr.SetFastSim(true);
+  if(s_data=="FastSim")
+    btagcorr.SetFastSim(true);
   //--------------------------------------
   
   cout<<"************* Applying weights for AB? "<<do_AB_reweighting<<endl;
@@ -100,6 +101,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
         currFile = TFile::Open(sampleName);
         btagcorr.SetEffs(currFile);
         btagcorr.SetCalib("btag/CSVv2_Moriond17_B_H_mod.csv");
+	if(s_data!="FastSim") btagcorr.SetCalibFastSim("btag/fastsim_csvv2_ttbar_26_1_2017.csv");
       }
     }
     vector<double> prob;
@@ -201,7 +203,11 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
     process = process && !eMatchedG && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100;
-    
+
+    if(s_data=="FastSim"){
+      hadJetID = true;
+      if(!noFakeJet) continue;
+    }
     if(process){
       evtSurvived++;
       h_RunNum->Fill(RunNum);

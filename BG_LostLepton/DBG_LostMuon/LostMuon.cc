@@ -45,7 +45,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuHadTau_v2.root");
-  //  TFile *f_LP=new TFile("LstMu_LDP_CS_TTWZ_LostMuHadTau_v2.root");
+  //  TFile *f_LP=new TFile("LstMu_CS_LDP_TTWZ_LostMuHadTau_v2.root");
   //  TFile *f_LP=new TFile("LstMu_CS_TTWZ_HadTauOnly_v2.root");
   //TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuOnly_v2.root");
 
@@ -300,7 +300,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	  //	  else if(BTags>=2) name="LostProb_2";
 	  h2_LP=(TH2D*)f_LP->FindObjectAny(name);
 	  if(h2_LP) tf=h2_LP->GetBinContent(h2_LP->FindBin(parX,parY));
-	  //	  if(h2_LP) tf=h2_LP->GetBinContent(h2_LP->FindBin(parX,parY))+h2_LP->GetBinError(h2_LP->FindBin(parX,parY));
+	  //if(h2_LP) tf=(h2_LP->GetBinError(h2_LP->FindBin(parX,parY)))*(h2_LP->GetBinError(h2_LP->FindBin(parX,parY)));
 	  else cout<<"hist not found"<<endl;
 	  wt=tf*wt;
 	}

@@ -26,6 +26,7 @@ TString name;
 bool saveCanvas=0;
 void setLastBinAsOverFlow(TH1D*);
 TString getLegName(TString);
+TString getXaxisName(TString);
 double data_Integral=0,mc_Integral=0;
 TLatex textOnTop,intLumiE;
 double intLumi=35.9;
@@ -55,10 +56,10 @@ void stackedDataVsMC(TString iFname){
   name1.push_back("dPhi_METBestPhoton_Ele1"); rebin.push_back(2);   //name2.push_back("dPhi_METBestPhoton_Ele1");  
   name1.push_back("dPhi_Ele_Photon"); rebin.push_back(2);
   name1.push_back("dPhiEleMET"); rebin.push_back(2);
-  name1.push_back("dR_ElePho");   rebin.push_back(1);
+  name1.push_back("dR_ElePho");   rebin.push_back(5);
   name1.push_back("invMassPhoEle"); rebin.push_back(5);
   //  name1.push_back("nBestPho_Ele1"); rebin.push_back(1);
-  name1.push_back("ElePt");   rebin.push_back(1);
+  name1.push_back("ElePt");   rebin.push_back(5);
   name1.push_back("EleEta");   rebin.push_back(5);
   name1.push_back("MT_Ele");   rebin.push_back(10);
   name1.push_back("mTPho_Ele1");   rebin.push_back(5);
@@ -98,7 +99,7 @@ void stackedDataVsMC(TString iFname){
     p_bot[i]->Draw();p_bot[i]->SetGridx();p_bot[i]->SetGridy();    
     name=name1[i]+"_Stack";
     hs_hist[i] = new THStack(name,name);
-    legend[i]=new TLegend(0.80, 0.90,  0.90, 0.45);
+    legend[i]=new TLegend(0.7, 0.90,  0.80, 0.45);
   }
   //cout<<getLegName(f[0]->GetName());
   TH1D *h_histG,*h_histE,*h_histGcopy;
@@ -166,7 +167,7 @@ void stackedDataVsMC(TString iFname){
     h_numr->SetLineColor(kBlack);
     h_numr->SetMarkerColor(kBlack);
     h_numr->SetTitle(0); name=name1[i];
-    h_numr->GetXaxis()->SetTitle(name);
+    h_numr->GetXaxis()->SetTitle(getXaxisName(name));
     h_numr->GetXaxis()->SetTitleOffset(0.87);
     h_numr->GetXaxis()->SetTitleSize(0.13);
     h_numr->GetXaxis()->SetLabelSize(0.14);
@@ -176,14 +177,14 @@ void stackedDataVsMC(TString iFname){
     h_numr->GetYaxis()->SetTitleSize(0.13);
     h_numr->GetYaxis()->SetLabelSize(0.14);
     h_numr->GetYaxis()->SetNdivisions(505);
-    h_numr->SetMaximum(2.0);
+    h_numr->SetMaximum(1.99);
     h_numr->SetMinimum(0.01);
     c_cA[i]->cd();    p_bot[i]->cd();
     p_bot[i]->SetTickx();p_bot[i]->SetTicky();
     //    c_cB->cd(i+1);    p_bot[i]->cd();
     h_numr->Draw("e0");
 
-    c_cA[i]->cd();    p_top[i]->cd();
+    c_cA[i]->cd();    p_top[i]->cd(); gPad->RedrawAxis();
     char name2[100];
     textOnTop.SetTextSize(0.06);
     intLumiE.SetTextSize(0.06);
@@ -209,6 +210,26 @@ TString getLegName(TString fname){
   else return fname;
 }
 
+TString getXaxisName(TString axname){
+  if(axname.Contains("nHadJets")) return "Jets";
+  else if(axname.Contains("ST")) return "ST(GeV)";
+  else if(axname.Contains("BTags")) return "b-Tags";
+  else if(axname.Contains("ElePt")) return "e pT(GeV)";
+  else if(axname.Contains("EleEta")) return "e #eta";
+  else if(axname.Contains("MuPt")) return "#mu pT(GeV)";
+  else if(axname.Contains("PhotonPt")) return "#gamma pT(GeV)";
+  else if(axname.Contains("PhotonEta")) return "#gamma #eta";
+  else if(axname.Contains("mT")) return "mT_{#gamma,MET}(GeV)";
+  else if(axname.Contains("dR_ElePho")) return "#DeltaR(e,#gamma)";
+  else if(axname.Contains("AllSBin")) return "Bin Number";
+  else if(axname.Contains("dPhi_METjet1") || axname.Contains("dphi1_METjet1")) return "#Delta#Phi_{1}";
+  else if(axname.Contains("dPhi_METjet2") || axname.Contains("dphi2_METjet2")) return "#Delta#Phi_{2}";
+  else if(axname.Contains("dPhi_METBestPhoton") ) return "#Delta#Phi(MET,#gamma)";
+  else if(axname.Contains("QMut") || axname.Contains("Qmut")) return "QMult";
+  else if(axname.Contains("MET")) return "MET(GeV)";
+  else return axname;
+
+}
 
 void setLastBinAsOverFlow(TH1D* h_hist){
   double lastBinCt =h_hist->GetBinContent(h_hist->GetNbinsX()),overflCt =h_hist->GetBinContent(h_hist->GetNbinsX()+1);

@@ -180,15 +180,15 @@ void testClosure(TString iFname){
     h_numr->Draw("e0");
 
     TString name = h_histG->GetName();
-    if(name.Contains("SBins_v4")){ 
+    if(name.Contains("SBins_v7")){ 
       line1->Draw();	line2->Draw();	line3->Draw();	line4->Draw();	line5->Draw();
       fout->cd();
       h_numr->Write();
-      //      TH1D *h_pullHist = new TH1D("pull_lostMuHadTau","1D pull for lost Mu+hadTau",50,-2.5,7.5);
-      TH1D *h_pullHist = new TH1D("pull_lostMuHadTau","1D pull for lost Mu+hadTau",43,0.5,43.5);
+      TH1D *h_pullHist = new TH1D("pull_lostMuHadTau","1D pull for lost Mu+hadTau",50,-2.5,7.5);
+      //TH1D *h_pullHist = new TH1D("pull_lostMuHadTau","1D pull for lost Mu+hadTau",43,0.5,43.5);
       for(int p=1;p<=h_numr->GetNbinsX();p++){
-	//	h_pullHist->Fill( (1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));
-	h_pullHist->Fill( p,(1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));
+	h_pullHist->Fill( (1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));
+	//h_pullHist->Fill( p,(1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));
       }
       h_pullHist->Write();
       //      p_bot[i]->SetGridx(0);

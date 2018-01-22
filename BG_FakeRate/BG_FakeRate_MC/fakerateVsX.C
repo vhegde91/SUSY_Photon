@@ -31,41 +31,32 @@ double intLumi=35.9;
 
 double sr_Integral=0,cr_Integral=0;
 
-void testClosure(TString iFname){
+void fakerateVsX(TString iFname){
   TH1::SetDefaultSumw2(1);
   gStyle->SetOptStat(0);
  
   f[0] = new TFile(iFname);
-  TFile *fout = new TFile("forPull.root","recreate");
   //  gStyle->SetOptStat("nemri");
   
   vector<string> name1,name2;
   vector<int> rebin;
   name1.push_back("ST_Pho");          name2.push_back("ST_Ele");      rebin.push_back(25);
-  //  name1.push_back("HT_Pho");          name2.push_back("HT_Ele");      rebin.push_back(25);
   name1.push_back("MET_Pho");         name2.push_back("MET_Ele");     rebin.push_back(10);
   name1.push_back("nHadJets_Pho");    name2.push_back("nHadJets_Ele");rebin.push_back(1);
   name1.push_back("nBTags_Pho");      name2.push_back("nBTags_Ele");  rebin.push_back(1);
   name1.push_back("BestPhotonPt");    name2.push_back("ElePt");       rebin.push_back(5);
+  name1.push_back("PhoPtvBin");    name2.push_back("ElePtvBin");       rebin.push_back(1);
   // name1.push_back("BestPhotonEta");   name2.push_back("EleEta");      rebin.push_back(3);
-  name1.push_back("METvarBin_Pho");   name2.push_back("METvarBin_Ele");rebin.push_back(1);
+  //  name1.push_back("METvarBin_Pho");   name2.push_back("METvarBin_Ele");rebin.push_back(1);
   name1.push_back("nVtx_Pho");name2.push_back("nVtx_Ele");rebin.push_back(5);
   // name1.push_back("PtJetNearPho");name2.push_back("PtJetNearEle");rebin.push_back(5);
   // name1.push_back("minDR_Pho_HadJet");name2.push_back("minDR_Ele_HadJet");rebin.push_back(5);
   //  name1.push_back("genEleMT2Act_Pho");name2.push_back("genEleMT2Act_Ele");rebin.push_back(4);
   //  name1.push_back("RemJetPtNearPhoton");name2.push_back("RemJetPtNearEle");rebin.push_back(1);
-  name1.push_back("AllSBins_v7_Pho");name2.push_back("AllSBins_v7_Ele");rebin.push_back(1);
-  name1.push_back("AllSBins_v4_Pho");          name2.push_back("AllSBins_v4_Ele");      rebin.push_back(1);
   //name1.push_back("BestPhotonPhi");   name2.push_back("ElePhi");rebin.push_back(8);
   name1.push_back("dPhi_METjet1_Pho");name2.push_back("dPhi_METjet1_Ele");rebin.push_back(1);
   name1.push_back("dPhi_METjet2_Pho");name2.push_back("dPhi_METjet2_Ele");rebin.push_back(1);
   name1.push_back("Qmulti_Pho");name2.push_back("Qmulti_Ele");rebin.push_back(2);
-  // name1.push_back("JptGptRatio");name2.push_back("JptEleptRatio");rebin.push_back(1); 
-  //  name1.push_back("minDR_Pho_Jet");name2.push_back("minDR_Ele_Jet");rebin.push_back(1);
-  //name1.push_back("minDR_Pho_Jet2");     name2.push_back("minDR_Ele_Jet2");rebin.push_back(2);
-  //  name1.push_back("dR_GptJptRatio");name2.push_back("dR_EleptJptRatio");rebin.push_back(5);
-  // name1.push_back("dPhi_METBestPhoton");name2.push_back("dPhi_METEle");rebin.push_back(1);
-  // name1.push_back("mT_Pho");name2.push_back("mT_Ele");rebin.push_back(1);
   //name1.push_back("");name2.push_back("");rebin.push_back(1);
   
   TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
@@ -134,17 +125,17 @@ void testClosure(TString iFname){
 
 	c_cA[i]->cd();p_top[i]->cd();
 	//c_cB->cd(i+1);p_top[i]->cd();
-	h_histG->Draw("histe");
+	h_histG->DrawNormalized("histe");
 	// h_histE->SetFillStyle(3004);
 	// h_histE->SetFillColor(h_histE->GetLineColor());
- 	h_histE->Draw("same histe");
+ 	h_histE->DrawNormalized("same histe");
 	//	h_histE->Draw("L same");
 
 	legend[i]=new TLegend(0.65, 0.85,  0.87, 0.67);
 	name=name1[i];
-	legend[i]->AddEntry(h_histG,"Exp(MC Truth)","lp");
+	legend[i]->AddEntry(h_histG,"Fake Photons","lp");
 	name=name2[i];
-	legend[i]->AddEntry(h_histE,"Pred(e CS)","lp");
+	legend[i]->AddEntry(h_histE,"e CS","lp");
 	legend[i]->Draw();
 	
 	TString name = h_histG->GetName();
@@ -167,7 +158,7 @@ void testClosure(TString iFname){
 
     h_numr->SetLineColor(kBlack);
     h_numr->SetMarkerColor(kBlack);
-    h_numr->SetTitle(";;#frac{Exp}{Pred}");
+    h_numr->SetTitle(";;#frac{Fake Photon}{e CS}");
     h_numr->GetXaxis()->SetLabelSize(0.13);
     h_numr->GetXaxis()->SetTitle(xaxisName);
     h_numr->GetXaxis()->SetTitleSize(0.13);
@@ -177,8 +168,8 @@ void testClosure(TString iFname){
     h_numr->GetYaxis()->SetTitleSize(0.13);
     h_numr->GetYaxis()->SetLabelSize(0.13);
     h_numr->GetYaxis()->SetNdivisions(505);
-    h_numr->SetMaximum(1.90);
-    h_numr->SetMinimum(0.01);
+    // h_numr->SetMaximum(1.90);
+    // h_numr->SetMinimum(0.01);
     c_cA[i]->cd();    p_bot[i]->cd();
     //    c_cB->cd(i+1);    p_bot[i]->cd();
     h_numr->Draw("e0");
@@ -186,17 +177,9 @@ void testClosure(TString iFname){
     TString name = h_histG->GetName();
     if(name.Contains("SBins_v4")){ 
       line1->Draw();	line2->Draw();	line3->Draw();	line4->Draw();	line5->Draw();
-      fout->cd();
-      h_numr->Write();
     }
     else if(name.Contains("SBins_v7")){
       line1V7->Draw();	line2V7->Draw();	line3V7->Draw();	line4V7->Draw();	line5V7->Draw();
-      TH1D *h_pullHist = new TH1D("pull_Fakerate","1D pull for fakerate",50,-4.5,10.5);
-      for(int p=1;p<=h_numr->GetNbinsX();p++){
-        h_pullHist->Fill( (1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));
-	//	cout<<p<<" "<<(1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p)<<endl;
-      }
-      h_pullHist->Write();
     }
     
     c_cA[i]->cd();    p_top[i]->cd();

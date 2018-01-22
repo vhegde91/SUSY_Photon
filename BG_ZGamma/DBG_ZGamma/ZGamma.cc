@@ -104,7 +104,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
       zvec =  ((*Muons)[0] + (*Electrons)[0]);
       zmass = zvec.M();
     }
-    if(zvec.M() < 80 || zvec.M() > 100) continue;
+    //    if(zvec.M() < 80 || zvec.M() > 100) continue;
     // if(Muons->size()==1){
     //   print(0);
     //   cout<<zmass<<endl;

@@ -135,7 +135,8 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
       if(zvec.M() < 80 || zvec.M() > 100) continue;
       if(MET > 100) continue;
     }
-    TLorentzVector metstar,metvec;
+    TLorentzVector metvec;
+    metstar = metvec;
     metvec.SetPtEtaPhiE(MET,0.0,METPhi,0.0);
     metstar = metvec + zvec;
     if((s_data=="ZGToNuNuG") || (s_data=="ZJetsToNuNu")){
@@ -553,16 +554,16 @@ int ZGamma::getBinNoV4(int nHadJets){
     for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
       if(METBinLowEdgeV4_njLow[i]<99.99) continue;
       m_i++;
-      if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin = sBin+m_i;break; }
-      else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin = 8         ;break; }
+      if(metstar.Pt() >= METBinLowEdgeV4_njLow[i] && metstar.Pt() < METBinLowEdgeV4_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(metstar.Pt() >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin = 8         ;break; }
     }
   }
   else{
     for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
       if(METBinLowEdgeV4[i]<99.99) continue;
       m_i++;
-      if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin = sBin+m_i;break; }
-      else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin = sBin+7   ;break; }
+      if(metstar.Pt() >= METBinLowEdgeV4[i] && metstar.Pt() < METBinLowEdgeV4[i+1]){ sBin = sBin+m_i;break; }
+      else if(metstar.Pt() >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin = sBin+7   ;break; }
     }
   }
   return sBin;
@@ -584,16 +585,16 @@ int ZGamma::getBinNoV7(int nHadJets){
     for(int i=0;i<METBinLowEdgeV7_njLow.size()-1;i++){
       if(METBinLowEdgeV7_njLow[i]<99.99) continue;
       m_i++;
-      if(MET >= METBinLowEdgeV7_njLow[i] && MET < METBinLowEdgeV7_njLow[i+1]){ sBin = sBin+m_i;break; }
-      else if(MET >= METBinLowEdgeV7_njLow[METBinLowEdgeV7_njLow.size()-1])  { sBin = 6         ;break; }
+      if(metstar.Pt() >= METBinLowEdgeV7_njLow[i] && metstar.Pt() < METBinLowEdgeV7_njLow[i+1]){ sBin = sBin+m_i;break; }
+      else if(metstar.Pt() >= METBinLowEdgeV7_njLow[METBinLowEdgeV7_njLow.size()-1])  { sBin = 6         ;break; }
     }
   }
   else{
     for(int i=0;i<METBinLowEdgeV7.size()-1;i++){
       if(METBinLowEdgeV7[i]<99.99) continue;
       m_i++;
-      if(MET >= METBinLowEdgeV7[i] && MET < METBinLowEdgeV7[i+1]){ sBin = sBin+m_i;break; }
-      else if(MET >= METBinLowEdgeV7[METBinLowEdgeV7.size()-1])  { sBin = sBin+5   ;break; }
+      if(metstar.Pt() >= METBinLowEdgeV7[i] && metstar.Pt() < METBinLowEdgeV7[i+1]){ sBin = sBin+m_i;break; }
+      else if(metstar.Pt() >= METBinLowEdgeV7[METBinLowEdgeV7.size()-1])  { sBin = sBin+5   ;break; }
     }
   }
   return sBin;
