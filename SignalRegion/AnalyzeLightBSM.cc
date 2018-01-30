@@ -40,12 +40,14 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
   string s_data=data;
   Long64_t nbytes = 0, nb = 0;
   int decade = 0;
-  
+  bool applISRWtsTottbar = 1;  
   int evtSurvived=0,minbtags=0;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down 
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
-  
+  cout<<"applying PU weights."<<endl
+      <<"applying ISR weights to ttbar? "<<applISRWtsTottbar<<endl
+
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
    
     // ==============print number of events done == == == == == == == =
@@ -78,6 +80,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     if(eMatchedG) continue;
     //    if(allBestPhotons.size()<2) continue;
     bool noFakeJet = true;
+    double gendRLepPho = getGendRLepPho();
 
     if(s_data=="genprompt" || s_data=="TTG" || s_data=="WG" || s_data=="ZG"){
       if(jentry==0){cout<<"**********processing "<<s_data<<" with prompt Gen photon"<<endl;}
@@ -85,11 +88,13 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
       // 	process=true;
       // else continue;
     }//Gen prompt
-    else if(s_data=="gennonprompt" || s_data=="TTJets" || s_data=="WJets" || s_data=="ZJets"){
-      if(jentry==0){cout<<"**********processing "<<s_data<<" w/o prompt gen photon"<<endl;}
-      if(!hasGenPromptPhoton)
-	process=true;
-      else continue;
+    else if( s_data=="WJets" ){
+      if(hasGenPromptPhoton && gendRLepPho > 0.5 && madMinPhotonDeltaR > 0.5) continue;
+      if(jentry<3) cout<<"Non-Prompt, dR(pho,q/g/lep) < 0.5 ";
+    }
+    else if((s_data=="gennonprompt") || (s_data=="TTJets") || (s_data=="SingleTop") || (s_data=="ZJets") ){
+      if(hasGenPromptPhoton && gendRLepPho > 0.3 && madMinPhotonDeltaR > 0.3) continue;
+      if(jentry<3) cout<<"Non-Prompt, dR(pho,q/g/lep) < 0.3 ";
     }//Gen non-prompt
     else if(s_data=="QCD"){
       if(jentry==0){cout<<"**********processing "<<s_data<<" w/o prompt gen photon"<<endl;}
@@ -154,6 +159,22 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
       }
     }
 
+    if(applISRWtsTottbar && s_data=="TTJets"){
+      double isrWt = 0;
+      vector<double> D_values={1.0697, 1.0150, 0.9917, 0.9435, 0.95};
+      //      vector<double> D_values={1.071, 0.7838, 0.7600, 0.7365, 0.7254};
+      vector<double> isrwt_arr={1., 0.920, 0.821, 0.715, 0.662, 0.561, 0.511};
+      if(NJetsISR>=6) isrWt = isrwt_arr[6];
+      else isrWt = isrwt_arr[NJetsISR];
+      
+      if(madHT<600) isrWt = isrWt*D_values[0];
+      else if(madHT < 800) isrWt = isrWt*D_values[1];
+      else if(madHT < 1200) isrWt = isrWt*D_values[2];
+      else if(madHT < 2500) isrWt = isrWt*D_values[3];
+      else isrWt = isrWt*D_values[4];
+      wt = wt*isrWt;
+    }
+
     if( eMatchedG || bestPhoHasPxlSeed || !process || (bestPhoton.Pt()<100) || (Electrons->size() > 0) || (Muons->size() > 0) )
       continue;
 
@@ -216,7 +237,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     if(photonMatchingJetIndx<0) continue;
 
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
-    process = process && !eMatchedG && !bestPhoHasPxlSeed && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100;// && dphi1 > 0.3 && dphi2 > 0.3;
+    process = process && !eMatchedG && !bestPhoHasPxlSeed && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100 && dphi1 > 0.3 && dphi2 > 0.3;
     //  process = process && ST>500 && nHadJets>=2 && MET>100 && dphi1 > 0.3 && dphi2 > 0.3;
     //    process = process && NJets>=3 && MET>100;// && dphi1 > 0.3;
     //if(process){process=HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0 && minDR<0.3;}
@@ -542,6 +563,26 @@ bool AnalyzeLightBSM::check_eMatchedtoGamma(){
     }
   }
   return false;
+}
+
+double AnalyzeLightBSM::getGendRLepPho(){//MC only
+  TLorentzVector genPho1,genLep1;
+  int leadGenPhoIdx=-100;
+  for(int i=0;i<GenParticles->size();i++){
+    if((*GenParticles)[i].Pt()!=0){
+      if((abs((*GenParticles_PdgId)[i])==22) && ((abs((*GenParticles_ParentId)[i])<=25) || ((*GenParticles_ParentId)[i]==2212) ) && (*GenParticles_Status)[i]==1 ){
+	if(genPho1.Pt() < (*GenParticles)[i].Pt()){
+	  leadGenPhoIdx = i;
+	  genPho1 = ((*GenParticles)[i]);
+	}
+      }
+      if( (abs((*GenParticles_PdgId)[i])==11 || abs((*GenParticles_PdgId)[i])==13 || abs((*GenParticles_PdgId)[i])==15 ) && (abs((*GenParticles_ParentId)[i])<=25) && (abs((*GenParticles_ParentId)[i])!=15) ){
+	if(genLep1.Pt() < ((*GenParticles)[i]).Pt()) genLep1 = ((*GenParticles)[i]);
+      }
+    }
+  }//for
+  if(genPho1.Pt() > 0. && genLep1.Pt() > 0.) return genLep1.DeltaR(genPho1);
+  else return 1000.0;
 }
 
 void  AnalyzeLightBSM::findObjMatchedtoG(TLorentzVector bestPhoton){

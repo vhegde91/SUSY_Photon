@@ -55,12 +55,12 @@ void stackedDataVsMC(TString iFname){
   // name1.push_back("dPhi_METjet2_Pho_Mu1"); rebin.push_back(2);  //name2.push_back("dPhi_METjet2_Pho_Mu1");  
   name1.push_back("dPhi_METBestPhoton_Mu1"); rebin.push_back(2);   //name2.push_back("dPhi_METBestPhoton_Mu1");  
   //  name1.push_back("dPhi_Muon_Photon"); rebin.push_back(2);
-  name1.push_back("dR_MuPho");   rebin.push_back(5);
+  name1.push_back("dR_MuPho");   rebin.push_back(1);
   //  name1.push_back("invMassPhoMu"); rebin.push_back(5);
   //  name1.push_back("nBestPho_Mu1"); rebin.push_back(1);
   name1.push_back("MuPt");   rebin.push_back(5);
   //  name1.push_back("MuEta");   rebin.push_back(5);
-  //  name1.push_back("MT_Mu");   rebin.push_back(10);
+  name1.push_back("MT_Mu");   rebin.push_back(10);
   name1.push_back("mTPho_Mu1");   rebin.push_back(5);
   //  name1.push_back("mTPhoMuMET");   rebin.push_back(20);
 

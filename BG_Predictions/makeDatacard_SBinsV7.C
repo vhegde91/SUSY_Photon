@@ -58,6 +58,8 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
   TH1D *h_doubleR = (TH1D*)f[1]->Get("doubleRatio_MC");
   TH1D *h_HLRatio = (TH1D*)f[1]->Get("AllSBins_v7_HLRatio");
   TH1D *h_MultiJPurity = (TH1D*)f[1]->Get("MultiJLDPpurity");
+  //total BG
+  TH1D *h_totBG = (TH1D*)f[1]->Get("AllSBins_v7_TotalBG");
   for(int i=0;i<jmax+2;i++){
     if(i==0) h_rate[i] = (TH1D*)f[0]->Get(rateHistName[i]); //h_rate[i]->Draw();}
     else{
@@ -92,7 +94,8 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
       "kmax *  number of nuisance parameters (sources of systematical uncertainties)"<<endl<<
       "------------"<<endl<<
       "bin "<<i<<endl<<
-      "observation "<<h_rate[jmax+2-1]->GetBinContent(i)<<endl<<
+      //      "observation "<<h_rate[jmax+2-1]->GetBinContent(i)<<endl<<//this is for data
+      "observation "<<h_totBG->GetBinContent(i)<<endl<<//this is for exp limit calc using BG predictions only, no data
       "------------"<<endl<<
       "bin ";
     for(int j=0;j<jmax+nSig;j++){outf<<i<<" ";}
@@ -112,7 +115,7 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
     
     outf<<"lumi lnN              1.023      -       -       -       -       -"<<endl;
     outf<<"sigStat_b"<<i<<" lnN       "<<1+((h_rate[0]->GetBinError(i))/(h_rate[0]->GetBinContent(i)))<<"    -       -       -       -       -"<<endl;
-    outf<<"SigXsec"<<" lnN         "<<1+sigXsecUnc/sigXsec<<"    -       -       -       -       -"<<endl;
+    //    outf<<"SigXsec"<<" lnN         "<<1+sigXsecUnc/sigXsec<<"    -       -       -       -       -"<<endl;
     
     outf<<"LEle_b"<<i<<" gmN "<<h_LEleCS->GetBinContent(i)<<"        -     "<<h_LEleTFs->GetBinContent(i)<<"     -       -       -       -"<<endl;
     outf<<"LEleTFUnc_b"<<i<<" lnN     -     "<<1+h_LEleTFs->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;

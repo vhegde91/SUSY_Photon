@@ -23,7 +23,7 @@ TFile *f[nfiles];
 //int col[10]={kOrange,kBlue,kTeal+9,kGray+1,kCyan,kOrange-9,kYellow+2,kRed,kMagenta+2,kMagenta};  //Specify Colors
 int col[10]={kOrange,kBlue,kTeal+9,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
 char name[100];
-double sr_Integral=0,cr_Integral=0;
+double sr_Integral=0,cr_Integral=0,sr_IntrErr=0,cr_IntrErr=0,tf_err=0;
 TH2D rebin2DHist(TH2D*,int,double*,int,double*);
 
 void GetLostEleProb(TString iFname){
@@ -43,6 +43,7 @@ void GetLostEleProb(TString iFname){
   name1.push_back("nHadJets_Ele0");    name2.push_back("nHadJets_Ele1");  rebin.push_back(1);
   name1.push_back("BestPhotonPt_Ele0");name2.push_back("BestPhotonPt_Ele1");  rebin.push_back(5);
   name1.push_back("nBTags_Ele0");       name2.push_back("nBTags_Ele1");     rebin.push_back(1);
+  name1.push_back("tot_Ele0");       name2.push_back("tot_Ele1");     rebin.push_back(1);
   //  name1.push_back("GenElePt_Ele0");  name2.push_back("GenElePt_Ele1"); rebin.push_back(1);
   name1.push_back("dPhi_METjet1_Pho_Ele0");   name2.push_back("dPhi_METjet1_Pho_Ele1");  rebin.push_back(5);
   name1.push_back("dPhi_METjet2_Pho_Ele0");   name2.push_back("dPhi_METjet2_Pho_Ele1");  rebin.push_back(5);
@@ -53,9 +54,8 @@ void GetLostEleProb(TString iFname){
   //  name1.push_back("ST_2to3HadJ_Ele0");   name2.push_back("ST_2to3HadJ_Ele1");  rebin.push_back(10);
   //  name1.push_back("MET_2to3HadJ_Ele0");   name2.push_back("MET_2to3HadJ_Ele1");  rebin.push_back(2);
 
-  name1.push_back("MET_Ele0_R1");         name2.push_back("MET_Ele1_R1");rebin.push_back(1);
-  name1.push_back("MET_Ele0_R2");         name2.push_back("MET_Ele1_R2");rebin.push_back(1);
-  name1.push_back("MET_Ele0_R3");         name2.push_back("MET_Ele1_R3");rebin.push_back(1);
+  name1.push_back("genDRLepPho_Ele0");         name2.push_back("genDRLepPho_Ele1");rebin.push_back(5);
+  name1.push_back("genDRqrkPho_Ele0");         name2.push_back("genDRqrkPho_Ele1");rebin.push_back(5);
   name1.push_back("AllSBins_v4_Ele0");         name2.push_back("AllSBins_v4_Ele1");rebin.push_back(1);
 
   name1_2d.push_back("METNJ_Ele0_R0");   name2_2d.push_back("METNJ_Ele1_R0");newName.push_back("0");
@@ -81,10 +81,11 @@ void GetLostEleProb(TString iFname){
       h_histE=(TH1D*)f[j]->FindObjectAny(name);//h_histE->Rebin(2);
 
       if(h_histG && h_histE){
-	if(name1[i]=="nHadJets_Ele0"){
-	  sr_Integral=h_histG->Integral();
-	  cr_Integral=h_histE->Integral();
+	if(name1[i]=="tot_Ele0"){
+	  sr_Integral=h_histG->GetBinContent(2); sr_IntrErr=h_histG->GetBinError(2);
+	  cr_Integral=h_histE->GetBinContent(2); cr_IntrErr=h_histE->GetBinError(2);
 	}
+	
 	h_histG->Rebin(rebin[i]);
 	h_histE->Rebin(rebin[i]);
 	h_histG->SetBinContent(h_histG->GetNbinsX(),h_histG->GetBinContent(h_histG->GetNbinsX())+h_histG->GetBinContent(h_histG->GetNbinsX()+1));
@@ -93,6 +94,7 @@ void GetLostEleProb(TString iFname){
 	h_histE->SetBinContent(h_histE->GetNbinsX(),h_histE->GetBinContent(h_histE->GetNbinsX())+h_histE->GetBinContent(h_histE->GetNbinsX()+1));
 	h_histGcopy->Divide(h_histE);
 	h_histGcopy->SetLineWidth(2);
+	if(name1[i]=="tot_Ele0"){tf_err = h_histGcopy->GetBinError(2);}
 	// for(int k=1;k<=h_histGcopy->GetNbinsX();k++){
 	//   if(name1[i]=="nHadJets_Ele0")  cout<<h_histGcopy->GetBinContent(k)<<",";
 	// }cout<<endl;
@@ -166,7 +168,8 @@ void GetLostEleProb(TString iFname){
   fout->cd();
   //  if(h3_histGcopy) h3_histGcopy->Write();
 
-  cout<<"Integral in SR(0 Ele events) "<<sr_Integral<<endl
-      <<"Integral in CR(1 Ele events) "<<cr_Integral<<endl;
+  cout<<"Integral in SR(0 Ele events) "<<sr_Integral<<" +/- "<<sr_IntrErr<<endl
+      <<"Integral in CR(1 Ele events) "<<cr_Integral<<" +/- "<<cr_IntrErr<<endl
+      <<"TF = 0Ele/1Ele    "<<sr_Integral/cr_Integral<<" +/- "<<tf_err<<endl;
 
 }

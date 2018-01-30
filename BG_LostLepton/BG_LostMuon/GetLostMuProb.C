@@ -23,7 +23,7 @@ TFile *f[nfiles];
 //int col[10]={kOrange,kBlue,kTeal+9,kGray+1,kCyan,kOrange-9,kYellow+2,kRed,kMagenta+2,kMagenta};  //Specify Colors
 int col[10]={kOrange,kBlue,kTeal+9,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
 char name[100];
-double sr_Integral=0,cr_Integral=0;
+double sr_Integral=0,cr_Integral=0,sr_IntrErr=0,cr_IntrErr=0,tf_err=0;
 TH2D rebin2DHist(TH2D*,int,double*,int,double*);
 
 void GetLostMuProb(TString iFname){
@@ -53,6 +53,7 @@ void GetLostMuProb(TString iFname){
   name1.push_back("nHadJets_Mu0");    name2.push_back("nHadJets_Mu1");  rebin.push_back(1);
   name1.push_back("BestPhotonPt_Mu0");name2.push_back("BestPhotonPt_Mu1");  rebin.push_back(5);
   name1.push_back("nBTags_Mu0");       name2.push_back("nBTags_Mu1");     rebin.push_back(1);
+  name1.push_back("tot_Mu0");       name2.push_back("tot_Mu1");     rebin.push_back(1);
   // name1.push_back("GenMuons_MT2Activity_Mu0");  name2.push_back("GenMuons_MT2Activity_Mu1"); rebin.push_back(5);
   // name1.push_back("GenMuPt_Mu0");  name2.push_back("GenMuPt_Mu1"); rebin.push_back(1);
   // name1.push_back("nIsoMuonTracks_Mu0");  name2.push_back("nIsoMuonTracks_Mu1");rebin.push_back(1);
@@ -60,6 +61,7 @@ void GetLostMuProb(TString iFname){
   name1.push_back("dPhi_METjet1_Pho_Mu0");   name2.push_back("dPhi_METjet1_Pho_Mu1");  rebin.push_back(5);
   name1.push_back("dPhi_METjet2_Pho_Mu0");   name2.push_back("dPhi_METjet2_Pho_Mu1");  rebin.push_back(5);
   name1.push_back("dPhi_METBestPhoton_Mu0");   name2.push_back("dPhi_METBestPhoton_Mu1");  rebin.push_back(5);
+  //  name1.push_back("dR_MuPho");   name1.push_back("dR_MuPho");rebin.push_back(1);
   // name1.push_back("jet1Pt_Mu0");   name2.push_back("jet1Pt_Mu1");  rebin.push_back(10);
   // name1.push_back("jet2Pt_Mu0");   name2.push_back("jet2Pt_Mu1");  rebin.push_back(10);
   // name1.push_back("gendRLepPho_Mu0");   name2.push_back("gendRLepPho_Mu1");  rebin.push_back(5);
@@ -97,9 +99,9 @@ void GetLostMuProb(TString iFname){
       h_histE=(TH1D*)f[j]->FindObjectAny(name);//h_histE->Rebin(2);
       
       if(h_histG && h_histE){
-	if(name1[i]=="nHadJets_Mu0"){
-	  sr_Integral=h_histG->Integral();
-	  cr_Integral=h_histE->Integral();
+	if(name1[i]=="tot_Mu0"){
+	  sr_Integral=h_histG->GetBinContent(2); sr_IntrErr=h_histG->GetBinError(2);
+	  cr_Integral=h_histE->GetBinContent(2); cr_IntrErr=h_histE->GetBinError(2);
 	}
 	h_histG->Rebin(rebin[i]);
 	h_histE->Rebin(rebin[i]);
@@ -110,7 +112,7 @@ void GetLostMuProb(TString iFname){
 	h_histGcopy->Divide(h_histE);
 	h_histGcopy->SetLineWidth(2);
 
-	if(name1[i]=="nHadJets_Mu0"){fout->cd();} //h_histGcopy->Write();}
+	if(name1[i]=="tot_Mu0"){tf_err = h_histGcopy->GetBinError(2);} //h_histGcopy->Write();}
 	/*	for(int k=1;k<=h_histGcopy->GetNbinsX();k++){
 	  if(name1[i]=="ST_Mu0")  cout<<h_histGcopy->GetBinLowEdge(k)<<",";
 	  }*/
@@ -143,6 +145,7 @@ void GetLostMuProb(TString iFname){
 	h2_histGcopy->Divide(h2_histE);
 	//h2_hsum->Add(h2_histGcopy,h2_histE);
 	//	h2_histGcopy->Divide(h2_hsum);
+	//	h2_histGcopy->SetMarkerSize(2);
 	h2_histGcopy->Draw("colz texte");
 	for(int xi=1;xi<=h2_histGcopy->GetNbinsX();xi++){
 	  for(int yi=1;yi<=h2_histGcopy->GetNbinsY();yi++){
@@ -183,7 +186,8 @@ void GetLostMuProb(TString iFname){
   fout->cd();
   //  if(h3_histGcopy) h3_histGcopy->Write();
 
-  cout<<"Integral in SR(0 Mu events) "<<sr_Integral<<endl
-      <<"Integral in CR(1 Mu events) "<<cr_Integral<<endl;
+  cout<<"Integral in SR(0 Mu events) "<<sr_Integral<<" +/- "<<sr_IntrErr<<endl
+      <<"Integral in CR(1 Mu events) "<<cr_Integral<<" +/- "<<cr_IntrErr<<endl
+      <<"TF = 0Mu/1Mu    "<<sr_Integral/cr_Integral<<" +/- "<<tf_err<<endl;
 
 }

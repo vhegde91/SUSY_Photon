@@ -25,7 +25,7 @@ class AnalyzeLightBSM : public NtupleVariables{
   TLorentzVector getBestPhoton();
   int getBinNoV4(int);
   int getBinNoV7(int);
-
+  double getGendRLepPho();
   bool check_eMatchedtoGamma();
   void print(Long64_t);
   void findObjMatchedtoG(TLorentzVector);

@@ -58,6 +58,7 @@ class ZGamma : public NtupleVariables{
   vector<double> STBinLowEdge={0,500,700,1000,10000};
   vector<double> nBTagsBinLowEdge={0,1,2,10};
   vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,180,200,220,250,280,320,380,450,550,650,750};
+  vector<double> nHadJLow0b={0,2,3,4,5,7,15};
   vector <TLorentzVector> allBestPhotons;
   //histograms
   TH1I *h_RunNum;
@@ -150,6 +151,7 @@ class ZGamma : public NtupleVariables{
 
   TH2D *h2_R_Mu1PtJetPtVsDR;
   TH2D *h2_Mu1PtMatchJetPt;
+  TH2D *h2_METVsPhoPt;
   //-----------------------------------------
   TH1D *h_ST_2Ele;
   TH1D *h_MET_2Ele;
@@ -201,6 +203,8 @@ class ZGamma : public NtupleVariables{
   TH1D *h_MET_R_v2[5];
   TH1D *h_MET_R_v2_2Mu[5];
   TH1D *h_MET_R_v2_2Ele[5];
+
+  TH2D *h2_SBinsv7VsnJ;
   TH1D *h_SBins,*h_SBins_v4,*h_SBins_v7;
   TH1D *h_SBins_2Mu,*h_SBins_v4_2Mu,*h_SBins_v7_2Mu;
   TH1D *h_SBins_2Ele,*h_SBins_v4_2Ele,*h_SBins_v7_2Ele;
@@ -270,6 +274,7 @@ void ZGamma::BookHistogram(const char *outFileName) {
 
   h_GmatchedObj=new TH1D("GmatchedObj","Gen Obj close to Reco-Gamma",62,-0.75,30.25);
   h_PdgIdPhoParent = new TH1D("PdgIdPhoParent","PdgID of the Photon's parent",62,-0.75,30.25);
+  h2_METVsPhoPt = new TH2D("METVsPhoPt","x:MET vs photon Pt",200,0,2000,200,0,2000);
   //********************************************************
   h_ST_2Mu=new TH1D("ST_2Mu","ST di-Mu events",400,0,4000);
   h_MET_2Mu=new TH1D("MET_2Mu","MET di-Mu events",200,0,2000);
@@ -388,6 +393,7 @@ void ZGamma::BookHistogram(const char *outFileName) {
   h_MET_R_v2_2Ele[3] =new TH1D("MET_R4_v2_2Ele","MET for 1b, NJ>=5 for di-ele events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_MET_R_v2_2Ele[4] =new TH1D("MET_R5_v2_2Ele","MET for b>=2 for di-ele events",METBinLowEdge2bJ.size()-1,&(METBinLowEdge2bJ[0]));
 
+  h2_SBinsv7VsnJ = new TH2D("SBinsv7VsnJ","x:search bins: [ NJ:2-4, NJ:5or6, NJ>=7] x [0b, >=1b] , y: nHadJets",31,0.5,31.5,nHadJLow0b.size()-1,&(nHadJLow0b[0]));
   h_SBins = new TH1D("AllSBins_ZG","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2) for di-lep events",34,0.5,34.5);
   h_SBins_2Mu = new TH1D("AllSBins_2Mu","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2) for di-Mu events",34,0.5,34.5);
   h_SBins_2Ele = new TH1D("AllSBins_2Ele","all search bins:(0b, NJ=2to4)(0b, NJ>=5)(1b, NJ=2to4)(1b, NJ>=5)(b>=2) for di-ele events",34,0.5,34.5);

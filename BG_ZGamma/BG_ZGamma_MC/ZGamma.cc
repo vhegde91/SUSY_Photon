@@ -45,8 +45,10 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
   
   int evtSurvived=0;
   TFile *f_TF = new TFile("TF_CS_ZDYToLLG.root");
+  //  TFile *f_TF = new TFile("TF_CS_ZGToNuNuG_PtG130_LO.root");
   TH1D *h_TF=(TH1D*)f_TF->FindObjectAny("Ratio_NuNuToLL");
-  bool do_prediction=0;
+
+  bool do_prediction=0,reweightLO=0;
   cout<<"Doing prediction from ZToLL sample from file |"<<f_TF->GetName()<<"|?"<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
@@ -259,9 +261,9 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
     //    process = process && ST>500 && MET > 100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
     //process = process && ST>500 &&  nHadJets >=2 && bestPhoton.Pt() > 100;//&& metstar.Pt() > 100 && dphi1 > 0.3 && dphi2 > 0.3 ;
     //    if(MET>200) continue;
-    process = process && ST>500 && metstar.Pt()>100 && nHadJets >=2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
+    process = process && ST>500 && metstar.Pt()>100 && nHadJets >= 2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
     //process = process && ST>500 && nHadJets >=2 && bestPhoton.Pt() > 100;
-
+    //    if(bestPhoton.Pt() < 200) continue;
     if(process && hadJetID){
       evtSurvived++;
       h_RunNum->Fill(RunNum);
@@ -286,6 +288,14 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
 	else cout<<"hist not found"<<endl;
 	wt=tf*wt;
       }
+      if(reweightLO) wt=wt*h_TF->GetBinContent(h_TF->FindBin(nHadJets));      
+
+      //-----------for NNNNN...LO correction syst---------
+      // if(nHadJets==2) wt=wt*0.27*0.27;
+      // else if(nHadJets==3) wt=wt*0.13*0.13;
+      // else if(nHadJets==4) wt=wt*0.01;
+      // else wt=wt*0.02*0.02;
+      //-----------end NNNNN...LO correction syst---------
       
       int sBin2=-100,m_i=0;
       if(nHadJets >= 2 && nHadJets <= 4 && BTags==0)      sBin2 = 0;
@@ -341,6 +351,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
       h_dphi_METjet2->Fill(dphi2,wt);
       h_dphi_PhoLep1->Fill(dphi_PhoLep1,wt);
       h_dphi_PhoLep2->Fill(dphi_PhoLep2,wt);
+      h2_METVsPhoPt->Fill(metstar.Pt(),bestPhoton.Pt(),wt);
 
       findObjMatchedtoG(bestPhoton);
       h_nGenbs->Fill(nGenbs,wt);
@@ -366,6 +377,8 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
       h_SBins->Fill(sBin2,wt);
       h_SBins_v4->Fill(sBin4,wt);
       h_SBins_v7->Fill(sBin7,wt);
+
+      h2_SBinsv7VsnJ->Fill(sBin7,nHadJets,wt);
       //    if(Muons->size()==0){
 
       if(Muons->size()==2){

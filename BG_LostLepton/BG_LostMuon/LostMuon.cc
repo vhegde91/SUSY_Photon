@@ -100,7 +100,6 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     
     bool process=true;
     if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
-
     if(fListIndxOld!=fCurrent){ 
       fListIndxOld = fCurrent;
       sampleName = inFileName[fCurrent];
@@ -244,7 +243,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       if(hasGenPromptPhoton && gendRLepPho > 0.3 && madMinPhotonDeltaR > 0.3) continue;
       if(jentry<3) cout<<"Non-Prompt, dR(pho,q/g/lep) < 0.3 ";
     }
-    
+    //    if(madMinPhotonDeltaR < 0.5 || gendRLepPho < 0.5) continue;    
     int nGenMu=0,nGenEle=0,nGenTau=0,nGenMuFmTau=0,nGenEleFmTau=0;
     vector<TLorentzVector> genMu;   
     for(int i=0;i<GenParticles->size();i++){
@@ -487,6 +486,15 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	//   h2_SBinsv7VsnJ_Mu0->Fill(21,nHadJets,prob1*wt);
 	// }else h2_SBinsv7VsnJ_Mu0->Fill(sBin7,nHadJets,wt);
 	h2_SBinsv7VsnJ_Mu0->Fill(sBin7,nHadJets,wt);
+	h_tot_Mu0->Fill(1,wt);
+	for(int i=0;i<PDFweights->size();i++){
+	  if(i > 150) cout<<"Filling PDF wt hist as overflow!!!!!!"<<endl;
+	  h_PDFwts_Mu0->Fill(i,(*PDFweights)[i]*wt);	  
+	}
+	for(int i=0;i<ScaleWeights->size();i++){
+	  if(i > 15) cout<<"Filling ScaleWts hist as overflow!!!!!"<<endl;
+	  h_ScaleWts_Mu0->Fill(i,(*ScaleWeights)[i]*wt);
+	}
 	wt=wt_org;
       }//0 muon + photon events
       if(Muons->size()==1){
@@ -623,6 +631,15 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
         //   h2_SBinsv7VsnJ_Mu1->Fill(21,nHadJets,prob1*wt);
 	// }else h2_SBinsv7VsnJ_Mu1->Fill(sBin7,nHadJets,wt);
 	h2_SBinsv7VsnJ_Mu1->Fill(sBin7,nHadJets,wt);
+	h_tot_Mu1->Fill(1,wt);
+	for(int i=0;i<PDFweights->size();i++){
+	  if(i > 150) cout<<"Filling PDF wt hist as overflow!!!!!!"<<endl;
+	  h_PDFwts_Mu1->Fill(i,(*PDFweights)[i]*wt);	  
+	}
+	for(int i=0;i<ScaleWeights->size();i++){
+	  if(i > 15) cout<<"Filling ScaleWts hist as overflow!!!!!"<<endl;
+	  h_ScaleWts_Mu1->Fill(i,(*ScaleWeights)[i]*wt);
+	}
 	wt=wt_org;
       }//muon + photon events
     }
@@ -801,6 +818,7 @@ void  LostMuon::findObjMatchedtoG(TLorentzVector bestPhoton){//MC only
 
 void LostMuon::print(Long64_t jentry){
   cout<<"*********************************************************************************"<<endl;
+  cout<<"MET: "<<MET<<endl;
   cout<<"Photons:"<<endl;
   for(int i=0;i<Photons->size();i++){
     double dR=0;//DeltaR( bestPhoton.Eta(),bestPhoton.Phi(),(*Photons)[i].Eta(),(*Photons)[i].Phi() );
@@ -819,6 +837,22 @@ void LostMuon::print(Long64_t jentry){
   cout<<"Jets:"<<endl; 
   for(int i=0;i<Jets->size();i++){
     cout<<"JetPt:"<<(*Jets)[i].Pt()<<" JetEta:"<<(*Jets)[i].Eta()<<" JetPhi:"<<(*Jets)[i].Phi()<<endl;
+  }
+  cout<<"Jets_jecFactor:"<<endl;
+  for(int i=0;i<Jets_jecFactor->size();i++){
+      cout<<(*Jets_jecFactor)[i]<<endl;
+  }
+  cout<<"Jets_jecUnc:"<<endl;
+  for(int i=0;i<Jets_jecUnc->size();i++){
+      cout<<(*Jets_jecUnc)[i]<<endl;
+  }
+  cout<<"JetsJECdown:"<<endl; 
+  for(int i=0;i<JetsJECdown->size();i++){
+    cout<<"JetPt:"<<(*JetsJECdown)[i].Pt()<<" JetEta:"<<(*JetsJECdown)[i].Eta()<<" JetPhi:"<<(*JetsJECdown)[i].Phi()<<endl;
+  }
+  cout<<"METDown: "<<endl;
+  for(int i=0;i<METDown->size();i++){
+    cout<<(*METDown)[i]<<endl;
   }
   //------------------------- MC only -------------------------------------------------
   for(int i=0;i<GenJets->size();i++){

@@ -168,6 +168,9 @@ class LostMuon : public NtupleVariables{
   TH2D *h2_METNJ_1b_Mu0;
   TH2D *h2_METNJ_m2b_Mu0;
   TH2D *h2_R_PhoPtJetPtVsDR_Mu0;
+  TH1D *h_tot_Mu0;
+  TH1D *h_ScaleWts_Mu0;
+  TH1D *h_PDFwts_Mu0;
   //-----------------------------------------
   TH1D *h_nVtx_Mu1;
   TH1D *h_ST_Mu1;
@@ -249,6 +252,9 @@ class LostMuon : public NtupleVariables{
   TH2D *h2_R_PhoPtJetPtVsDR_Mu1;
   TH2D *h2_R_MuPtJetPtVsDR;
   TH2D *h2_RatioJetPhoPtVsPhoPt_Mu1;
+  TH1D *h_tot_Mu1;
+  TH1D *h_ScaleWts_Mu1;
+  TH1D *h_PDFwts_Mu1;
 
   TH1D *h_temp;
   TH2D *h2_SBinsv7VsnJ_Mu0,*h2_SBinsv7VsnJ_Mu1;
@@ -357,6 +363,9 @@ void LostMuon::BookHistogram(const char *outFileName) {
 
   h2_R_PhoPtJetPtVsDR_Mu0=new TH2D("R_PhoPtJetPtVsDR_Mu0","y:Ratio of closest jet Pt to Photon Pt vs x: dR with closest jet for 0 Mu events",100,0,10,100,0,10);
   h2_RatioJetPhoPtVsPhoPt_Mu0=new TH2D("RatioJetPhoPtVsPhoPt_Mu0","x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt for 0 Mu events",150,0,1500,400,0,5);
+  h_tot_Mu0=new TH1D("tot_Mu0","number of events for 0 Mu events",2,0.5,1.5);
+  h_ScaleWts_Mu0=new TH1D("MC_ScaleWts_Mu0","Total events weighted by Scale Weights for MC for 0 Mu events",16,-0.5,15.5);
+  h_PDFwts_Mu0=new TH1D("MC_PDFwts_Mu0","Total events weighted by PDF weights for 0 Mu events",151,-0.5,150.5);
   //****************************************************
   h_nVtx_Mu1=new TH1D("nVtx_Mu1","no. of vertices for 1 Muon events",50,0,50);
   h_ST_Mu1=new TH1D("ST_Mu1","ST for 1 Muon events",400,0,4000);
@@ -440,7 +449,9 @@ void LostMuon::BookHistogram(const char *outFileName) {
   h2_METNJ_0b_Mu1=new TH2D("METNJ_Mu1_R0","x:MET vs NJets for 0 b for 1 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLow0b.size()-1,&(nHadJLow0b[0]));
   h2_METNJ_1b_Mu1=new TH2D("METNJ_Mu1_R1","x:MET vs NJets for 1 b for 1 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLow1b.size()-1,&(nHadJLow1b[0]));
   //  h2_METNJ_m2b_Mu1=new TH2D("METNJ_Mu1_R2","x:MET vs NJets for >=2 b for 1 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLowm2b.size()-1,&(nHadJLowm2b[0]));
-
+  h_tot_Mu1=new TH1D("tot_Mu1","number of events for 1 Mu events",2,0.5,1.5);
+  h_ScaleWts_Mu1=new TH1D("MC_ScaleWts_Mu1","Total events weighted by Scale Weights for MC for 1 Mu events",16,-0.5,15.5);
+  h_PDFwts_Mu1=new TH1D("MC_PDFwts_Mu1","Total events weighted by PDF weights for 1 Mu events",151,-0.5,150.5);
   h2_R_MuPtJetPtVsDR=new TH2D("R_MuPtJetPtVsDR","y:Ratio of closest jet Pt to Mu Pt vs x: dR with closest jet",100,0,10,100,0,10);
   h2_RatioJetPhoPtVsPhoPt_Mu1=new TH2D("RatioJetPhoPtVsPhoPt_Mu1","x: #gamma Pt, y:ratio of pT of jet matched to photon to photon Pt for 1 Mu events",150,0,1500,400,0,5);
   h_temp=new TH1D("temp","temp",200,0,2000);

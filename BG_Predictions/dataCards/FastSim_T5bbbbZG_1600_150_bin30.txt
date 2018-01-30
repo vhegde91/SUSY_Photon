@@ -6,15 +6,15 @@ jmax *  number of backgrounds('*' = automatic)
 kmax *  number of nuisance parameters (sources of systematical uncertainties)
 ------------
 bin 30
-observation 0
+observation 1.1935
 ------------
 bin 30 30 30 30 30 30 
 process FastSim_T5bbbbZG_1600_150_bin30 LEle_bin30 LMuTau_bin30 Fake_bin30 ZG_bin30 MultiJ_bin30 
 process 0 1 2 3 4 5 
-rate 6.2398 0.692622 0 0.471309 0.0295654 0 
+rate 6.70129 0.692622 0 0.471309 0.0295654 0 
 ------------
 lumi lnN              1.023      -       -       -       -       -
-sigStat_b30 lnN       1.03248    -       -       -       -       -
+sigStat_b30 lnN       1.03136    -       -       -       -       -
 SigXsec lnN         1.24268    -       -       -       -       -
 LEle_b30 gmN 2        -     0.346311     -       -       -       -
 LEleTFUnc_b30 lnN     -     1.17251      -       -       -       -

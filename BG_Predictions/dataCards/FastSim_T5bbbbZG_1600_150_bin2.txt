@@ -6,7 +6,7 @@ jmax *  number of backgrounds('*' = automatic)
 kmax *  number of nuisance parameters (sources of systematical uncertainties)
 ------------
 bin 2
-observation 0
+observation 154.963
 ------------
 bin 2 2 2 2 2 2 
 process FastSim_T5bbbbZG_1600_150_bin2 LEle_bin2 LMuTau_bin2 Fake_bin2 ZG_bin2 MultiJ_bin2 

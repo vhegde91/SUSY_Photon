@@ -226,7 +226,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
       if(hasGenPromptPhoton && gendRLepPho > 0.3 && madMinPhotonDeltaR > 0.3) continue;
       if(jentry<3) cout<<"Non-Prompt, dR(pho,q/g/lep) < 0.3 ";
     }
-       
+    //    if(gendRLepPho < 1.0 || madMinPhotonDeltaR < 1.0) continue;       
     int nGenMu=0,nGenEle=0,nGenTau=0,nGenMuFmTau=0,nGenEleFmTau=0;
     vector<TLorentzVector> genEle;   
     for(int i=0;i<GenParticles->size();i++){
@@ -251,11 +251,14 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     //check if the photon is real or fake
     bool realPho=true;
     int matche=0,matchp=0;
-    double minDR_Pho_GenObj=1000;
+    double minDR_Pho_GenObj=1000,matchgenElePt=0,matchgenPhoPt=0;
     for(int i=0;i<GenParticles->size();i++){
       if((*GenParticles)[i].Pt()!=0){
 	double dr1=bestPhoton.DeltaR((*GenParticles)[i]);
-	if(dr1 < 0.1 && (abs((*GenParticles_PdgId)[i])==11) && (abs((*GenParticles_ParentId)[i])<=24) ) {matche=1;realPho=false;}
+	if(dr1 < 0.2 && (abs((*GenParticles_PdgId)[i])==11) && (abs((*GenParticles_ParentId)[i])<=24) ) {
+	  matche=1;
+	  matchgenElePt = (*GenParticles)[i].Pt();
+	}
 	if(minDR_Pho_GenObj > dr1) minDR_Pho_GenObj=dr1;
       }
     }
@@ -263,16 +266,25 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     for(int i=0;i<GenParticles->size();i++){
       if((*GenParticles)[i].Pt()!=0){
     	double dr1=bestPhoton.DeltaR((*GenParticles)[i]);
-    	if( dr1<0.1 && (abs((*GenParticles_PdgId)[i])==22) && 
-    	    ( ((*GenParticles)[i].Pt()/bestPhoton.Pt()) > 0.9) && ( ((*GenParticles)[i].Pt()/bestPhoton.Pt()) < 1.1) )
-    	  { matchp=1;realPho=true;}
+	if( dr1 < 0.2 && (abs((*GenParticles_PdgId)[i])==22) ){
+	  matchp=1; 
+	  matchgenPhoPt = (*GenParticles)[i].Pt();
+	}
       }
     }
     if(Electrons->size()==0){
-      if(matche==1 && matchp==0) continue;//if reco photon matched to gen e and not matched to gen photon, it is fake.
-    }//photon has been identified. It is a real photon and it is matched to gen photon with dR(genPho,RecoPho) < 0.1 and Pts are within 10%.
+      if(matche==0) realPho=true;
+      else if(matche==1 && matchp==0) realPho=false;
+      else if(matche==1 && matchp==1){
+	//	realPho=false;
+	if( abs(bestPhoton.Pt() - matchgenElePt) < abs(bestPhoton.Pt() - matchgenPhoPt)) realPho=false;
+	else realPho=true;
+      }
+      else cout<<"Logic issue in gen e/gamma matching with reco gamma"<<endl;
+      if(!realPho) continue;
+    }
     //---------------------- MC only ends-------------------------
-
+  
     int eleMatchingJetIndx = -100;
     double minDREle=1000;
     if(Electrons->size()==1){
@@ -438,6 +450,8 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	    h_genEleParent_Ele0->Fill(abs((*GenParticles_ParentId)[i]),wt);//MC only
 	  }
 	}
+	h_genDRLepPho_Ele0->Fill(gendRLepPho,wt);
+	h_genDRqrkPho_Ele0->Fill(madMinPhotonDeltaR,wt);
 	//-----------------------------------------------------
 	//print(jentry);
 	h2_METnHadJ_Ele0->Fill(MET,nHadJets,wt);
@@ -490,6 +504,16 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	// }
 	// else h2_SBinsv4VsnJ_Ele0->Fill(sBin4,nHadJets,wt);
 	h2_SBinsv4VsnJ_Ele0->Fill(sBin4,nHadJets,wt);
+	h_tot_Ele0->Fill(1,wt);
+	cout<<PDFweights->size()<<" "<<ScaleWeights->size()<<endl;
+	for(int i=0;i<PDFweights->size();i++){
+          if(i > 150) cout<<"Filling PDF wt hist as overflow!!!!!!"<<endl;
+          h_PDFwts_Ele0->Fill(i,(*PDFweights)[i]*wt);
+        }
+        for(int i=0;i<ScaleWeights->size();i++){
+          if(i > 15) cout<<"Filling ScaleWts hist as overflow!!!!!"<<endl;
+          h_ScaleWts_Ele0->Fill(i,(*ScaleWeights)[i]*wt);
+        }
 	wt=wt_org;
       }//0 electron + photon events
       if(Electrons->size()==1){
@@ -506,8 +530,8 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
           else if(BTags>=1) name="LostProb_1";
 	  //          else if(BTags>=2) name="LostProb_2";
 	  h2_LP=(TH2D*)f_LP->FindObjectAny(name);
-	  //	  if(h2_LP) tf=h2_LP->GetBinContent(h2_LP->FindBin(parX,parY));
-	  if(h2_LP) tf=(h2_LP->GetBinError(h2_LP->FindBin(parX,parY)))*h2_LP->GetBinError(h2_LP->FindBin(parX,parY));
+	  if(h2_LP) tf=h2_LP->GetBinContent(h2_LP->FindBin(parX,parY));
+	  //if(h2_LP) tf=(h2_LP->GetBinError(h2_LP->FindBin(parX,parY)))*h2_LP->GetBinError(h2_LP->FindBin(parX,parY));
 	  else cout<<"hist not found"<<endl;
 	  wt=tf*wt;
 	}
@@ -562,6 +586,8 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_invMassElePhoNu->Fill(invMelePhoNu,wt);//MC only
 	if(matche==1 && matchp==0) h_fakePhoPt_Ele1->Fill(bestPhoton.Pt(),wt);//MC only
 	h2_GenElePtVsRECOElePt->Fill(genEle[0].Pt(),(*Electrons)[0].Pt(),wt);//MC only
+	h_genDRLepPho_Ele1->Fill(gendRLepPho,wt);
+	h_genDRqrkPho_Ele1->Fill(madMinPhotonDeltaR,wt);
 	//-------------------------------------------------------------------------------------
 	h2_STvsElePt_Ele1->Fill((*Electrons)[0].Pt(),ST,wt);
 	h2_METvsElePt_Ele1->Fill((*Electrons)[0].Pt(),MET,wt);
@@ -628,6 +654,15 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
         // }
 	// else h2_SBinsv4VsnJ_Ele1->Fill(sBin4,nHadJets,wt);
 	h2_SBinsv4VsnJ_Ele1->Fill(sBin4,nHadJets,wt);
+	h_tot_Ele1->Fill(1,wt);
+	for(int i=0;i<PDFweights->size();i++){
+          if(i > 150) cout<<"Filling PDF wt hist as overflow!!!!!!"<<endl;
+          h_PDFwts_Ele1->Fill(i,(*PDFweights)[i]*wt);
+        }
+        for(int i=0;i<ScaleWeights->size();i++){
+          if(i > 15) cout<<"Filling ScaleWts hist as overflow!!!!!"<<endl;
+          h_ScaleWts_Ele1->Fill(i,(*ScaleWeights)[i]*wt);
+        }
 	wt=wt_org;
       }//electron + photon events
     }

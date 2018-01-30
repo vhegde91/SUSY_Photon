@@ -297,7 +297,26 @@ void c_getBGHists::getZGHist(int i_f){
   hCS->SetBinContent(31,0.0228197);
   hCS->SetBinError(30,0.7*0.0354253);
   hCS->SetBinError(31,0.7*0.0228197);
-
+  //----------------- assign higher order unc ---------------------
+  TH2D *h2_SBinV7VsnJ=(TH2D*)fl->Get("SBinsv7VsnJ");
+  TH1D *h_highOrd=(TH1D*)hCS->Clone("ZG_HighOrd");
+  for(int i=1;i<=h_highOrd->GetNbinsX();i++){
+    h_highOrd->SetBinError(i,0);
+    if((i>=7 && i<=16) || (i>=22 && i<=31)){
+      h_highOrd->SetBinError(i,0.02*h_highOrd->GetBinContent(i));
+      h_highOrd->SetBinContent(i,1);
+    }
+    else{
+      double unc=0.;
+      unc = sqrt(pow(0.27*(h2_SBinV7VsnJ->GetBinContent(h2_SBinV7VsnJ->GetXaxis()->FindBin(i), h2_SBinV7VsnJ->GetYaxis()->FindBin(2.1))),2)
+		 + pow(0.13*(h2_SBinV7VsnJ->GetBinContent(h2_SBinV7VsnJ->GetXaxis()->FindBin(i), h2_SBinV7VsnJ->GetYaxis()->FindBin(3.1))),2)
+		 + pow(0.10*(h2_SBinV7VsnJ->GetBinContent(h2_SBinV7VsnJ->GetXaxis()->FindBin(i), h2_SBinV7VsnJ->GetYaxis()->FindBin(4.1))),2));
+      h_highOrd->SetBinError(i,unc);
+      h_highOrd->SetBinContent(i,1);
+    }
+  }
+  c1.printContents(h_highOrd);
+  //---------------------------------------------------------------
   TH1D *hTF = (TH1D*)hCS->Clone("AllSBins_v7_ZGTF");
   hTF->Divide(hLLGmc);
   hTF->Multiply(hLLGpurity);
@@ -319,7 +338,7 @@ void c_getBGHists::getZGHist(int i_f){
     hLLGpurity->Write();
     hLLGmc->Write();
 
-    // c1.printContents(hCS);
+    c1.printContents(hCS);
     // c1.printContents(hLLGpurity);
     // c1.printContents(hLLGmc);
     // c1.printContents(hLLGdata);

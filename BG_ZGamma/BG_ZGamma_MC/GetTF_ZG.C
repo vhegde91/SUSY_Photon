@@ -42,6 +42,7 @@ void GetTF_ZG(){
   // TFile *fd=new TFile("CS_ZDYToLLG.root");
   TFile *fn=new TFile("CS_ZGToNuNuG_PtG130_NLO.root");
   TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO.root");
+  //  TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO_reWtnJ_NLO.root");
 
   //  TFile *fd=new TFile("CS_ZDYToLLG_NoZMassWindow.root");
 
@@ -59,10 +60,10 @@ void GetTF_ZG(){
   name="TF_"+name;
   TFile *fout=new TFile(name,"RECREATE");
   
-  TString histToSave="nBTagsvarBin";
+  TString histToSave="nHadJets";
   // TFile *fd=new TFile("CS_ZGToLLG.root");
 
-  name2.push_back("MET");  rebin.push_back(5);
+  name2.push_back("MET");  rebin.push_back(2);
   name2.push_back("METvarBin");  rebin.push_back(1);
   //  name2.push_back("METvarBin_TF");  rebin.push_back(1);
   name2.push_back("ST");  rebin.push_back(10);
@@ -70,13 +71,13 @@ void GetTF_ZG(){
   name2.push_back("nHadJets");  rebin.push_back(1);
   name2.push_back("nBTags");  rebin.push_back(1);
   name2.push_back("AllSBins_v7");  rebin.push_back(1);
-  //  name2.push_back("MET");  rebin.push_back(1);
+  name2.push_back("mTPho");  rebin.push_back(2);
   // name2.push_back("nGenbs");  rebin.push_back(1);
   // name2.push_back("bParent_PdgId");  rebin.push_back(1);
   //  name2.push_back("ZMass");  rebin.push_back(2);
   //  name2.push_back("nBTagsvarBin"); rebin.push_back(1);
   //  name2.push_back("AllSBins_ZG"); rebin.push_back(1);
-  // name2.push_back("STvarBin"); rebin.push_back(1);
+  //  name2.push_back("STvarBin"); rebin.push_back(1);
   // name2.push_back("MET_R1");  rebin.push_back(1);
   // name2.push_back("MET_R2");  rebin.push_back(1);
   // name2.push_back("MET_R3");  rebin.push_back(1);
@@ -86,7 +87,7 @@ void GetTF_ZG(){
   // name2.push_back("Mu2Pt");  rebin.push_back(5);
 
   // name2.push_back("METPhi");  rebin.push_back(1);
-  // name2.push_back("dPhi_METBestPhoton");  rebin.push_back(1);
+  name2.push_back("dPhi_METBestPhoton");  rebin.push_back(1);
   // name2.push_back("dPhi_METjet1");  rebin.push_back(1);
   // name2.push_back("dPhi_METjet2");  rebin.push_back(1);
   
@@ -94,7 +95,7 @@ void GetTF_ZG(){
   TString nameN="NLO";
   //TString nameN="Data";
   //  TString nameD="Z#gamma#rightarrow l^{+}l^{-}#gamma"; 
-  TString nameD="LO"; 
+  TString nameD="LO(Wted)"; 
   TLegend *legend[name2.size()];
   gStyle->SetOptStat(0);
   
