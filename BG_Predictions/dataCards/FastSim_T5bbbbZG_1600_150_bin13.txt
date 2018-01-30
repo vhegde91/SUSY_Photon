@@ -15,7 +15,6 @@ rate 0.26998 0 0 0.773209 0.833209 1.86106
 ------------
 lumi lnN              1.023      -       -       -       -       -
 sigStat_b13 lnN       1.15663    -       -       -       -       -
-SigXsec lnN         1.24268    -       -       -       -       -
 LEle_b13 gmN 0        -     0.337721     -       -       -       -
 LEleTFUnc_b13 lnN     -     1.22857      -       -       -       -
 LMuTau_b13 gmN  0     -       -     0.703993     -       -       -
