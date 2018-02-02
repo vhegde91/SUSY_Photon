@@ -1,0 +1,154 @@
+TreeUtilities : FillChain 
+No. of Entries in this tree : 27825
+Initiating analysis of dataset WG
+Treating the input files as BG for setting tree branches
+dataset WG 
+nentries 27825
+Analyzing dataset WG 
+Doing prediction from file |LstMu_CS_TTWZ_LostMuHadTau_v2.root|? 0
+applying Muon SFs? 1
+applying b-tag SFs? 1
+Prompt10 %
+20 %
+30 %
+40 %
+50 %
+60 %
+70 %
+80 %
+90 %
+Events Survied:8080
+TreeUtilities : FillChain 
+No. of Entries in this tree : 113877
+Initiating analysis of dataset TTG
+Treating the input files as BG for setting tree branches
+dataset TTG 
+nentries 113877
+Analyzing dataset TTG 
+Doing prediction from file |LstMu_CS_TTWZ_LostMuHadTau_v2.root|? 0
+applying Muon SFs? 1
+applying b-tag SFs? 1
+Prompt10 %
+20 %
+30 %
+40 %
+50 %
+60 %
+70 %
+80 %
+90 %
+Events Survied:25538
+TreeUtilities : FillChain 
+No. of Entries in this tree : 37528
+Initiating analysis of dataset WJets
+Treating the input files as BG for setting tree branches
+dataset WJets 
+nentries 37528
+Analyzing dataset WJets 
+Doing prediction from file |LstMu_CS_TTWZ_LostMuHadTau_v2.root|? 0
+applying Muon SFs? 1
+applying b-tag SFs? 1
+Non-Prompt, dR(pho,q/g/lep) < 0.5 10 %
+20 %
+30 %
+40 %
+50 %
+60 %
+70 %
+80 %
+90 %
+Events Survied:4385
+TreeUtilities : FillChain 
+No. of Entries in this tree : 48708
+Initiating analysis of dataset TTJets
+Treating the input files as BG for setting tree branches
+dataset TTJets 
+nentries 48708
+Analyzing dataset TTJets 
+Doing prediction from file |LstMu_CS_TTWZ_LostMuHadTau_v2.root|? 0
+applying Muon SFs? 1
+applying b-tag SFs? 1
+10 %
+20 %
+30 %
+40 %
+50 %
+60 %
+70 %
+80 %
+90 %
+Events Survied:2992
+TreeUtilities : FillChain 
+No. of Entries in this tree : 1630
+Initiating analysis of dataset TG
+Treating the input files as BG for setting tree branches
+dataset TG 
+nentries 1630
+Analyzing dataset TG 
+Doing prediction from file |LstMu_CS_TTWZ_LostMuHadTau_v2.root|? 0
+applying Muon SFs? 1
+applying b-tag SFs? 1
+Prompt10 %
+20 %
+30 %
+40 %
+50 %
+60 %
+70 %
+80 %
+90 %
+Events Survied:313
+TreeUtilities : FillChain 
+No. of Entries in this tree : 456
+Initiating analysis of dataset ZG
+Treating the input files as BG for setting tree branches
+dataset ZG 
+nentries 456
+Analyzing dataset ZG 
+Doing prediction from file |LstMu_CS_TTWZ_LostMuHadTau_v2.root|? 0
+applying Muon SFs? 1
+applying b-tag SFs? 1
+PromptPrompt10 %
+20 %
+30 %
+40 %
+50 %
+60 %
+70 %
+80 %
+90 %
+Events Survied:33
+TreeUtilities : FillChain 
+No. of Entries in this tree : 8390
+Initiating analysis of dataset ZJets
+Treating the input files as BG for setting tree branches
+dataset ZJets 
+nentries 8390
+Analyzing dataset ZJets 
+Doing prediction from file |LstMu_CS_TTWZ_LostMuHadTau_v2.root|? 0
+applying Muon SFs? 1
+applying b-tag SFs? 1
+Non-Prompt, dR(pho,q/g/lep) < 0.3 10 %
+20 %
+30 %
+40 %
+50 %
+60 %
+70 %
+80 %
+90 %
+Events Survied:589
+hadd Target file: CS_TGZGDY_LostMuHadTau_v2.root
+hadd compression setting for all ouput: 1
+hadd Source file 1: CS_TG_LostMuHadTau_v2.root
+hadd Source file 2: CS_ZGToLLG_LostMuHadTau_v2.root
+hadd Source file 3: CS_DYJetsToLL_LostMuHadTau_v2.root
+hadd Target path: CS_TGZGDY_LostMuHadTau_v2.root:/
+hadd Target file: CS_TTWZ_LostMuHadTau_v2.root
+hadd compression setting for all ouput: 1
+hadd Source file 1: CS_WG_LostMuHadTau_v2.root
+hadd Source file 2: CS_TTG_LostMuHadTau_v2.root
+hadd Source file 3: CS_WJets_LostMuHadTau_v2.root
+hadd Source file 4: CS_TTJets_LostMuHadTau_v2.root
+hadd Source file 5: CS_TGZGDY_LostMuHadTau_v2.root
+hadd Target path: CS_TTWZ_LostMuHadTau_v2.root:/

@@ -31,7 +31,7 @@ void GetFakeRate(TString iFname){
   TH2::SetDefaultSumw2(1);
   bool fakeFrac=true;
   gStyle->SetOptStat(0);
-  double nume=1,numg=1;
+  double nume=1,numg=1,fRate=0,fRateUnc=0;
 
   //f[0] = new TFile("CS_WJetsToLNu.root");
   //  f[0] = new TFile("CS_DYJetsToLL_FR_v2.root");
@@ -114,7 +114,13 @@ void GetFakeRate(TString iFname){
 	h_histE->SetBinContent(h_histE->GetNbinsX(),h_histE->GetBinContent(h_histE->GetNbinsX())+h_histE->GetBinContent(h_histE->GetNbinsX()+1));
 	h_histGcopy->Divide(h_histE);
 	h_histGcopy->SetLineWidth(2);
-	if(name1[i]=="nHadJets_Pho"){ numg=h_histG->Integral(); nume=h_histE->Integral();}
+	if(name1[i]=="nHadJets_Pho"){ 
+	  numg=h_histG->Integral(); nume=h_histE->Integral();
+	  TH1D *h_tempN=(TH1D*)h_histG->Clone("tempN"); h_tempN->Rebin(h_tempN->GetNbinsX());
+	  TH1D *h_tempD=(TH1D*)h_histE->Clone("tempD"); h_tempD->Rebin(h_tempD->GetNbinsX());
+	  h_tempN->Divide(h_tempD);
+	  fRate = h_tempN->IntegralAndError(1,h_tempN->GetNbinsX(),fRateUnc);
+	}
 	for(int k=1;k<=h_histGcopy->GetNbinsX();k++){
 	  if(name1[i]=="dR_GptJptRatio")  cout<<h_histGcopy->GetBinContent(k)<<",";
 	}
@@ -148,7 +154,9 @@ void GetFakeRate(TString iFname){
 	// h2_histGcopy->RebinY(5);
 	// h2_histE->RebinX(2);
 	// h2_histE->RebinY(5);
-	if(fakeFrac)  h2_histGcopy->Divide(h2_histE);
+	if(fakeFrac){
+	  h2_histGcopy->Divide(h2_histE);
+	}
         else{
           h2_histGcopy2->Add(h2_histE);
           h2_histGcopy->Divide(h2_histGcopy2);
@@ -172,6 +180,7 @@ void GetFakeRate(TString iFname){
   }
   cout<<"# of e events: "<<nume<<endl
       <<"# of g events: "<<numg<<endl
-      <<"Fake fraction:  "<<numg/nume<<endl;
+      <<"Fake fraction:  "<<numg/nume<<endl
+      <<"Fakerate: "<<fRate<<"+/-"<<fRateUnc<<endl;
     //      <<"Fake rate:      "<<numg/(numg+nume)<<endl;
 }

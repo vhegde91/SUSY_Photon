@@ -1,0 +1,42 @@
+# - - - - - - - - - - - - - - - - - - -
+# Datacard for mGl= 1600 mNLSP= 150 with model FastSim_T5bbbbZG_1600_150
+# - - - - - - - - - - - - - - - - - - - 
+imax 1 number of channels
+jmax *  number of backgrounds('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin 23
+observation 19.5212
+------------
+bin 23 23 23 23 23 23 
+process FastSim_T5bbbbZG_1600_150_bin23 LEle_bin23 LMuTau_bin23 Fake_bin23 ZG_bin23 MultiJ_bin23 
+process 0 1 2 3 4 5 
+rate 4.8341 3.48991 2.38136 5.51453 0.362076 7.77332 
+------------
+lumi lnN              1.023      -       -       -       -       -
+sigStat_b23 lnN       1.03737    -       -       -       -       -
+LEle_b23 gmN 10        -     0.348991     -       -       -       -
+LEleTFUnc_b23 lnN     -     1.10204      -       -       -       -
+LEleDR_b lnN     -     1.12      -       -       -       -
+LLeptPDF_b lnN     -     1.05      -       -       -       -
+#LElebTag_bB lnN     -     0.98      -       -       -       -
+#LEleLeptSF_bR5 lnN     -     1.02      -       -       -       -
+LEleJEC_b lnN     -     1.02      -       -       -       -
+LMuTau_b23 gmN  3     -       -     0.793787     -       -       -
+LMuTauTFUnc_b23 lnN   -       -     1.09061      -       -       -
+LLeptPDF_b lnN     -     -     1.015       -       -       -
+#LMubTag_bB lnN     -     -    0.98      -       -       -
+#LMuLeptSF_bR5 lnN     -     -    1.01     -       -       -
+FakeUncRate_b23 lnN   -       -          -    1.19548    -       -
+FakeRate_SF_b lnN   -       -          -    1.1    -       -
+FakeRate_PU_b lnN   -       -          -    1.06    -       -
+FakeRate_Trig_b23 lnN   -       -          -    1.02    -       -
+FakeRate_ISR_b lnN   -       -          -    1.02    -       -
+ZG_mcStat_b23 lnN     -       -          -      -     1.32316       -
+ZGTF_bB gmN 5         -       -          -      -     0.0724152       -
+ZGPureOverLLG_bB lnN  -       -          -      -     1.19613     -
+ZG_highOrdCorr_bMJ lnN  -       -          -      -     0.98       -
+MultiJ_b23 gmN 28     -       -          -          -         -       0.277619
+MultiJdR_bR5 lnN      -       -          -          -         -       1.09556
+MultiJHL_bR5 lnN      -       -          -          -         -       1.20788
+MultiJEW_b23  lnN      -       -          -          -         -        0.845202/0.919513

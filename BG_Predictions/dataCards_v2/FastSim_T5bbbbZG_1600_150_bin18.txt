@@ -1,0 +1,42 @@
+# - - - - - - - - - - - - - - - - - - -
+# Datacard for mGl= 1600 mNLSP= 150 with model FastSim_T5bbbbZG_1600_150
+# - - - - - - - - - - - - - - - - - - - 
+imax 1 number of channels
+jmax *  number of backgrounds('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin 18
+observation 39.335
+------------
+bin 18 18 18 18 18 18 
+process FastSim_T5bbbbZG_1600_150_bin18 LEle_bin18 LMuTau_bin18 Fake_bin18 ZG_bin18 MultiJ_bin18 
+process 0 1 2 3 4 5 
+rate 0.773406 3.39085 14.4606 7.11092 3.05655 11.3161 
+------------
+lumi lnN              1.023      -       -       -       -       -
+sigStat_b18 lnN       1.09211    -       -       -       -       -
+LEle_b18 gmN 6        -     0.565142     -       -       -       -
+LEleTFUnc_b18 lnN     -     1.08899      -       -       -       -
+LEleDR_b lnN     -     1.12      -       -       -       -
+LLeptPDF_b lnN     -     1.05      -       -       -       -
+#LElebTag_bB lnN     -     0.98      -       -       -       -
+#LEleLeptSF_bR4 lnN     -     1.02      -       -       -       -
+LEleJEC_b lnN     -     1.02      -       -       -       -
+LMuTau_b18 gmN  13     -       -     1.11235     -       -       -
+LMuTauTFUnc_b18 lnN   -       -     1.09047      -       -       -
+LLeptPDF_b lnN     -     -     1.015       -       -       -
+#LMubTag_bB lnN     -     -    0.98      -       -       -
+#LMuLeptSF_bR4 lnN     -     -    1.01     -       -       -
+FakeUncRate_b18 lnN   -       -          -    1.21696    -       -
+FakeRate_SF_b lnN   -       -          -    1.1    -       -
+FakeRate_PU_b lnN   -       -          -    1.06    -       -
+FakeRate_Trig_b18 lnN   -       -          -    1.02    -       -
+FakeRate_ISR_b lnN   -       -          -    1.02    -       -
+ZG_mcStat_b18 lnN     -       -          -      -     1.09422       -
+ZGTF_bB gmN 5         -       -          -      -     0.61131       -
+ZGPureOverLLG_bB lnN  -       -          -      -     1.19613     -
+ZG_highOrdCorr_bLJ lnN  -       -          -      -     0.884271       -
+MultiJ_b18 gmN 78     -       -          -          -         -       0.145078
+MultiJdR_bR4 lnN      -       -          -          -         -       1.04935
+MultiJHL_bR4 lnN      -       -          -          -         -       1.25932
+MultiJEW_b18  lnN      -       -          -          -         -        0.898959/0.942445

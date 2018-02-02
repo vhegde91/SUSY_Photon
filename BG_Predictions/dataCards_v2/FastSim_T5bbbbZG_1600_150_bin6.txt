@@ -1,0 +1,41 @@
+# - - - - - - - - - - - - - - - - - - -
+# Datacard for mGl= 1600 mNLSP= 150 with model FastSim_T5bbbbZG_1600_150
+# - - - - - - - - - - - - - - - - - - - 
+imax 1 number of channels
+jmax *  number of backgrounds('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin 6
+observation 5.5037
+------------
+bin 6 6 6 6 6 6 
+process FastSim_T5bbbbZG_1600_150_bin6 LEle_bin6 LMuTau_bin6 Fake_bin6 ZG_bin6 MultiJ_bin6 
+process 0 1 2 3 4 5 
+rate 0.0365808 0 1.22868 0.792792 3.05572 0.426511 
+------------
+lumi lnN              1.023      -       -       -       -       -
+sigStat_b6 lnN       1.40847    -       -       -       -       -
+LEle_b6 gmN 0        -     0.384939     -       -       -       -
+LEleTFUnc_b6 lnN     -     1.09248      -       -       -       -
+LEleDR_b lnN     -     1.12      -       -       -       -
+LLeptPDF_b lnN     -     1.05      -       -       -       -
+#LElebTag_bA lnN     -     1.02      -       -       -       -
+#LEleLeptSF_bR1 lnN     -     1.02      -       -       -       -
+LEleJEC_b lnN     -     1.02      -       -       -       -
+LMuTau_b6 gmN  1     -       -     1.22868     -       -       -
+LMuTauTFUnc_b6 lnN   -       -     1.06265      -       -       -
+LLeptPDF_b lnN     -     -     1.015       -       -       -
+#LMubTag_bA lnN     -     -    1.02      -       -       -
+#LMuLeptSF_bR1 lnN     -     -    1.01     -       -       -
+FakeUncRate_b6 lnN   -       -          -    1.21503    -       -
+FakeRate_SF_b lnN   -       -          -    1.1    -       -
+FakeRate_PU_b lnN   -       -          -    1.06    -       -
+FakeRate_Trig_b6 lnN   -       -          -    1.02    -       -
+FakeRate_ISR_b lnN   -       -          -    1.02    -       -
+ZG_mcStat_b6 lnN     -       -          -      -     1.10946       -
+ZGTF_bA gmN 31         -       -          -      -     0.0985716       -
+ZGPureOverLLG_bA lnN  -       -          -      -     1.05016     -
+ZG_highOrdCorr_bLJ lnN  -       -          -      -     1.1716       -
+MultiJ_b6 gmN 2     -       -          -          -         -       0.213256
+MultiJdR_bR1 lnN      -       -          -          -         -       1.02396
+MultiJHL_bR1 lnN      -       -          -          -         -       1.17059

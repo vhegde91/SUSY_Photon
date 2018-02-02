@@ -50,6 +50,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   //TFile *f_LP=new TFile("LstEle_CS_TTW_LostEle_v2.root");
   TH2D *h2_LP;TH1D *h_LP;
   bool do_prediction=0;
+  int jec2Use = 0;//-1 for JEC down, 0 for CV, 1 for JEC up
   cout<<"Doing prediction from file |"<<f_LP->GetName()<<"|? "<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
@@ -58,9 +59,14 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   bool applyEGMSFs = 1;
   TFile *f_EGMSF1=TFile::Open("scaleFactors.root");
   TFile *f_EGMSF2=TFile::Open("egammaEffi.txt_EGM2D.root");
-  TH2F *h2_EGMSF1=(TH2F*)f_EGMSF1->Get("GsfElectronToCutBasedSpring15V");
+  TH2F *h2_EGMSFV=(TH2F*)f_EGMSF1->Get("GsfElectronToCutBasedSpring15V");
+  TH2F *h2_EGMSFMVA=(TH2F*)f_EGMSF1->Get("GsfElectronToMVAVLooseTightIP2D");
+  TH2F *h2_EGMSFMiniIso=(TH2F*)f_EGMSF1->Get("MVAVLooseElectronToMini");
+  TH2F *h2_EGMSF1=(TH2F*)h2_EGMSFV->Clone("EGMSF1");
+  h2_EGMSF1->Multiply(h2_EGMSFMiniIso); h2_EGMSF1->Divide(h2_EGMSFMVA);
   TH2F *h2_EGMSF2=(TH2F*)f_EGMSF2->Get("EGamma_SF2D");
   cout<<"applying EGM SFs to electrons? "<<applyEGMSFs<<endl;
+  if(jec2Use!=0) cout<<"!!!!!!!!!! Applying JECs. -1 for JEC down, 0 for CV, 1 for JEC up. I am using "<<jec2Use<<" !!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
   //----------- btags SFs-----------------  
   bool applybTagSFs=1;
   int fListIndxOld=-1;
@@ -96,6 +102,18 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     bool process=true;
     if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
 
+    //----------------- for jets ----------------
+    int n_j = 0;
+    vector<TLorentzVector> jets;
+    if(jec2Use==0) n_j = Jets->size();
+    else if(jec2Use==-1){ n_j = JetsJECdown->size(); BTags = BTagsJECdown; MET = (*METDown)[1]; METPhi = (*METPhiDown)[1]; }
+    else if(jec2Use== 1){ n_j = JetsJECup->size(); BTags = BTagsJECup; MET = (*METUp)[1]; METPhi = (*METPhiUp)[1]; }
+    for(int i=0;i<n_j;i++){
+      if(jec2Use==0) jets.push_back((*Jets)[i]);
+      else if(jec2Use==-1) jets.push_back((*JetsJECdown)[i]);
+      else if(jec2Use== 1) jets.push_back((*JetsJECup)[i]);
+    }
+    //--------------------------------------------
     if(fListIndxOld!=fCurrent){ 
       fListIndxOld = fCurrent;
       sampleName = inFileName[fCurrent];
@@ -108,8 +126,10 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     }
     vector<double> prob;
     if(applybTagSFs){
-      prob = btagcorr.GetCorrections(Jets,Jets_hadronFlavor,Jets_HTMask);
-      prob0 = prob[0]; prob1 = prob[1]+prob[2]+prob[3];
+      if(jec2Use==0) prob = btagcorr.GetCorrections(Jets,Jets_hadronFlavor,Jets_HTMask);
+      else if(jec2Use==-1) prob = btagcorr.GetCorrections(JetsJECdown,JetsJECdown_hadronFlavor,JetsJECdown_HTMask);
+      else if(jec2Use== 1) prob = btagcorr.GetCorrections(JetsJECup,JetsJECup_hadronFlavor,JetsJECup_HTMask);
+      prob0 = prob[0]; prob1 = prob[1]+prob[2]+prob[3];     
       //      double corr = btagcorr.GetSimpleCorrection(Jets,Jets_hadronFlavor,Jets_HTMask,Jets_bDiscriminatorCSV);
     }
     //--------------------------------------
@@ -136,17 +156,17 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     double minDR=99999,ST=0,remJetPt=0;
     vector<TLorentzVector> hadJets;
 
-    for(int i=0;i<Jets->size();i++){
-      if( ((*Jets)[i].Pt() > MHT_PtCut) && (abs((*Jets)[i].Eta()) <= HT_EtaCut) ){
-	double dR=bestPhoton.DeltaR((*Jets)[i]);
+    for(int i=0;i<jets.size();i++){
+      if( (jets[i].Pt() > MHT_PtCut) && (abs(jets[i].Eta()) <= HT_EtaCut) ){
+	double dR=bestPhoton.DeltaR(jets[i]);
 	if(dR<minDR){minDR=dR;minDRindx=i;}
       }
     }
     
-    for(int i=0;i<Jets->size();i++){
-      if( ((*Jets)[i].Pt() > MHT_PtCut) && (abs((*Jets)[i].Eta()) <= HT_EtaCut) ){
+    for(int i=0;i<jets.size();i++){
+      if( (jets[i].Pt() > MHT_PtCut) && (abs(jets[i].Eta()) <= HT_EtaCut) ){
 	if( !(minDR < 0.3 && i==minDRindx) ){
-	  hadJets.push_back((*Jets)[i]);
+	  hadJets.push_back(jets[i]);
 	  if(hadJetID) hadJetID=(*Jets_ID)[i];
 	}
       }
@@ -288,16 +308,16 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     int eleMatchingJetIndx = -100;
     double minDREle=1000;
     if(Electrons->size()==1){
-      for(int i=0;i<Jets->size();i++){
-    	if( ((*Jets)[i].Pt() > MHT_PtCut) && (abs((*Jets)[i].Eta()) <= HT_EtaCut) ){
-    	  double dR=(*Electrons)[0].DeltaR((*Jets)[i]);
+      for(int i=0;i<jets.size();i++){
+    	if( (jets[i].Pt() > MHT_PtCut) && (abs(jets[i].Eta()) <= HT_EtaCut) ){
+    	  double dR=(*Electrons)[0].DeltaR(jets[i]);
     	  if(dR<minDREle){minDREle=dR;eleMatchingJetIndx=i;}
     	}
       }
-      if(eleMatchingJetIndx>=0 && ((*Jets)[eleMatchingJetIndx].Pt())/((*Electrons)[0].Pt()) < 1.0) continue;
+      if(eleMatchingJetIndx>=0 && (jets[eleMatchingJetIndx].Pt())/((*Electrons)[0].Pt()) < 1.0) continue;
       if(eleMatchingJetIndx<0) continue;
     }
-    if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
+    if(phoMatchingJetIndx>=0 && (jets[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
     if(phoMatchingJetIndx<0) continue;
 
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
@@ -314,8 +334,8 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	if(h2_EGMSF1->GetXaxis()->FindBin((*Electrons)[0].Pt()) > h2_EGMSF1->GetNbinsX())
 	  egmsf1 = (h2_EGMSF1->GetBinContent(h2_EGMSF1->GetXaxis()->FindBin((*Electrons)[0].Pt())-1,h2_EGMSF1->GetYaxis()->FindBin(abs((*Electrons)[0].Eta()))));
 	float egmsf2 = (h2_EGMSF2->GetBinContent(h2_EGMSF2->GetXaxis()->FindBin(abs((*Electrons)[0].Eta())),h2_EGMSF2->GetYaxis()->FindBin((*Electrons)[0].Pt())));
-	if(egmsf1 > 0.001) wt = wt*egmsf1;
-	if(egmsf2 > 0.001) wt = wt*egmsf2;
+	if(egmsf1 > 0.001 && egmsf1 < 2) wt = wt*egmsf1;
+	if(egmsf2 > 0.001 && egmsf2 < 2) wt = wt*egmsf2;
       }
       h_ST->Fill(ST,wt);
       h_MET->Fill(MET,wt);
@@ -335,8 +355,8 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
       h_nVtx->Fill(NVtx,wt);
       findObjMatchedtoG(bestPhoton);//MC only
       int nEleMultJ=0;
-      for(int i=0;i<Jets->size();i++){
-	if((*Jets)[i].Pt()>30.0){ nEleMultJ = nEleMultJ + (*Jets_electronMultiplicity)[i]; }
+      for(int i=0;i<jets.size();i++){
+	if(jets[i].Pt()>30.0){ nEleMultJ = nEleMultJ + (*Jets_electronMultiplicity)[i]; }
       }
       //-------------------search bins----------------------------------
       int searchRegion=0,sBin1=-100,m_i1=0;;
@@ -462,8 +482,8 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h2_dPhi1dPhi2_Ele0->Fill(dphi1,dphi2,wt);
 	h2_STHadJ_Ele0->Fill(ST,nHadJets,wt);
 	h2_METJet1Pt_Ele0->Fill(MET,hadJets[0].Pt(),wt);
-	h2_R_PhoPtJetPtVsDR_Ele0->Fill(minDR,((*Jets)[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
-	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Ele0->Fill(bestPhoton.Pt(),((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	h2_R_PhoPtJetPtVsDR_Ele0->Fill(minDR,(jets[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
+	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Ele0->Fill(bestPhoton.Pt(),(jets[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h3_STMETnHadJ_Ele0->Fill(ST,MET,nHadJets,wt);
 	h2_hadJbTag_Ele0->Fill(nHadJets,BTags,wt);
@@ -505,7 +525,6 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	// else h2_SBinsv4VsnJ_Ele0->Fill(sBin4,nHadJets,wt);
 	h2_SBinsv4VsnJ_Ele0->Fill(sBin4,nHadJets,wt);
 	h_tot_Ele0->Fill(1,wt);
-	cout<<PDFweights->size()<<" "<<ScaleWeights->size()<<endl;
 	for(int i=0;i<PDFweights->size();i++){
           if(i > 150) cout<<"Filling PDF wt hist as overflow!!!!!!"<<endl;
           h_PDFwts_Ele0->Fill(i,(*PDFweights)[i]*wt);
@@ -601,9 +620,9 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h2_STHadJ_Ele1->Fill(ST,nHadJets,wt);
 	h2_METJet1Pt_Ele1->Fill(MET,hadJets[0].Pt(),wt);
 	h2_RecoElePtRecoAct_Ele1->Fill((*Electrons)[0].Pt(),(*Electrons_MT2Activity)[0],wt);
-	h2_R_PhoPtJetPtVsDR_Ele1->Fill(minDR,((*Jets)[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
-	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Ele1->Fill(bestPhoton.Pt(),((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
-	if(eleMatchingJetIndx>=0) h2_RatioJetElePtVsElePt_Ele1->Fill((*Electrons)[0].Pt(),((*Jets)[eleMatchingJetIndx].Pt())/((*Electrons)[0].Pt()),wt);
+	h2_R_PhoPtJetPtVsDR_Ele1->Fill(minDR,(jets[phoMatchingJetIndx].Pt())/bestPhoton.Pt(),wt);
+	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Ele1->Fill(bestPhoton.Pt(),(jets[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	if(eleMatchingJetIndx>=0) h2_RatioJetElePtVsElePt_Ele1->Fill((*Electrons)[0].Pt(),(jets[eleMatchingJetIndx].Pt())/((*Electrons)[0].Pt()),wt);
 
 	h3_STMETnHadJ_Ele1->Fill(ST,MET,nHadJets,wt);
 	
@@ -625,13 +644,13 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 
 	int minDReleIndx = -100;
 	double minDRele=1000.0;
-	for(int i=0;i<Jets->size();i++){
-	  if( ((*Jets)[i].Pt() > MHT_PtCut) && (abs((*Jets)[i].Eta()) <= MHT_EtaCut) ){
-	    double dR=(*Electrons)[0].DeltaR((*Jets)[i]);
+	for(int i=0;i<jets.size();i++){
+	  if( (jets[i].Pt() > MHT_PtCut) && (abs(jets[i].Eta()) <= MHT_EtaCut) ){
+	    double dR=(*Electrons)[0].DeltaR(jets[i]);
 	    if(dR<minDRele){minDRele=dR;minDReleIndx=i;}
 	  }
 	}
-	h2_R_ElePtJetPtVsDR->Fill( minDRele,(((*Jets)[minDReleIndx].Pt())/((*Electrons)[0].Pt())),wt);
+	h2_R_ElePtJetPtVsDR->Fill( minDRele,((jets[minDReleIndx].Pt())/((*Electrons)[0].Pt())),wt);
 	//---------------- search bins -----------------------
 	if( searchRegion > 0 && searchRegion < 4){
 	  h_MET_Ele1_R[searchRegion-1]->Fill(MET,wt);

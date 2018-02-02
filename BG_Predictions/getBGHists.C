@@ -56,6 +56,12 @@ public:
   void setFileNames();
   void printContents(TH1D*);
   void setNegContentsTo0(TH1D*);
+  void assignPCuncAllBins(TH1D *h1,double pc){
+    for(int i=1;i<=h1->GetNbinsX();i++){
+      h1->SetBinError(i,pc*0.01*h1->GetBinContent(i));
+      h1->SetBinContent(i,0.);
+    }
+  }
 }c1;
 
 void getBGHists(){
@@ -121,37 +127,84 @@ void c_getBGHists::getLEleHist(int i_f){
     hTF->SetBinError(i,sqrt(hTFUnc->GetBinContent(i)));
   }
   if(!isLDP){
-    // hTF->SetBinContent( 6,0.362095);  hTF->SetBinError( 6,0.121615);//special case
-    hTF->SetBinContent( 6,0.362095);  hTF->SetBinError( 6,0.0328);//special case
-    hTF->SetBinContent(13,0.337721);  hTF->SetBinError(13,0.0771929);
-    hTF->SetBinContent(16,0.337721);  hTF->SetBinError(16,0.0771929);
-    hTF->SetBinContent(20,0.560793);  hTF->SetBinError(20,0.0501785);
-    hTF->SetBinContent(29,0.346311);  hTF->SetBinError(29,0.0597414);
+    hTF->SetBinContent( 6,0.384939);  hTF->SetBinError( 6,0.0355985);//0.362095);  hTF->SetBinError( 6,0.0328);//special case
+    hTF->SetBinContent(13,hTF->GetBinContent(14));  hTF->SetBinError(13,hTF->GetBinError(14));
+    hTF->SetBinContent(16,hTF->GetBinContent(15));  hTF->SetBinError(16,hTF->GetBinError(15));
+    hTF->SetBinContent(20,hTF->GetBinContent(19));  hTF->SetBinError(20,hTF->GetBinError(19));
+    hTF->SetBinContent(29,hTF->GetBinContent(28));  hTF->SetBinError(29,hTF->GetBinError(28));
   }
   else{
-    hTF->SetBinContent( 6,0.231834);  hTF->SetBinError( 6,0.039783);
-    hTF->SetBinContent(11,0.163806);  hTF->SetBinError(11,0.0287722);
-    hTF->SetBinContent(14,0.168521);  hTF->SetBinError(14,0.0496167);
-    hTF->SetBinContent(16,0.168521);  hTF->SetBinError(16,0.0496167);
-    hTF->SetBinContent(21,0.272343);  hTF->SetBinError(21,0.0429325);
-    hTF->SetBinContent(31,0.245341);  hTF->SetBinError(31,0.0636078);
+    hTF->SetBinContent( 6,0.174976);  hTF->SetBinError( 6,0.0334641);//6,0.231834);  hTF->SetBinError( 6,0.039783);
+    hTF->SetBinContent(11,hTF->GetBinContent(10));  hTF->SetBinError(11,hTF->GetBinError(10));
+    hTF->SetBinContent(14,hTF->GetBinContent(13));  hTF->SetBinError(14,hTF->GetBinError(13));
+    hTF->SetBinContent(16,hTF->GetBinContent(15));  hTF->SetBinError(16,hTF->GetBinError(15));
+    hTF->SetBinContent(21,hTF->GetBinContent(20));  hTF->SetBinError(21,hTF->GetBinError(20));
+    hTF->SetBinContent(31,hTF->GetBinContent(30));  hTF->SetBinError(31,hTF->GetBinError(30));
   }
-  //-----multiply DCS with TF histogram with TF unc
+  //--------assign 12% unc for dR(l,photon)
+  TH1D *hdRLepPho;
+  if(!isLDP) hdRLepPho=(TH1D*)hTF->Clone("AllSBins_v7_UncTF_dRElePho");
+  else hdRLepPho=(TH1D*)hTF->Clone("AllSBins_v7_UncTF_dRElePho_LDP");
+  c1.assignPCuncAllBins(hdRLepPho,12.0);
+  //---------------------
+  //------assign 5% unc for pdf Scale weights
+  TH1D *hPdf;
+  if(!isLDP) hPdf=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_pdf");
+  else hPdf=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_pdf_LDP");
+  c1.assignPCuncAllBins(hPdf,5.0);
+  //------assign 2% unc for b-tagging
+  TH1D *hBTag;
+  if(!isLDP) hBTag=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_bTag");
+  else hBTag=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_bTag_LDP");
+  c1.assignPCuncAllBins(hBTag,2.0);
+  //------assign 2% unc for lepton SF
+  TH1D *hLepSF;
+  if(!isLDP) hLepSF=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_LepSF");
+  else hLepSF=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_LepSF_LDP");
+  c1.assignPCuncAllBins(hLepSF,2.0);
+  //------assign 2% unc for JEC and mT
+  TH1D *hJEC;
+  if(!isLDP) hJEC=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_JEC");
+  else hJEC=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_JEC_LDP");
+  c1.assignPCuncAllBins(hJEC,2.0);
+  //-------get final TF with all unc added in quadrature
+  TH1D *hTF_final;
+  if(!isLDP) hTF_final=(TH1D*)hTF->Clone("LEleTFs_Final");
+  else hTF_final=(TH1D*)hTF->Clone("LEleTFs_Final_LDP");
+  hTF_final->Add(hdRLepPho);
+  hTF_final->Add(hPdf);
+  hTF_final->Add(hBTag);
+  hTF_final->Add(hLepSF);
+  hTF_final->Add(hJEC);
+  //-----multiply DCS with final TF histogram with TF unc
   if(!isLDP) hPred=(TH1D*)hCS->Clone("AllSBins_v7_LElePred");
   else hPred=(TH1D*)hCS->Clone("AllSBins_v7_LElePred_LDP");
-  hPred->SetBinErrorOption(TH1::kPoisson);
-  hPred->Multiply(hTF);
+  // hPred->SetBinErrorOption(TH1::kPoisson);
+  hPred->Multiply(hTF_final);
   for(int i=1;i<=hPred->GetNbinsX();i++){
     if(hPred->GetBinContent(i) < 0.00001)
-      hPred->SetBinError(i,1.8*hTF->GetBinContent(i));
+      hPred->SetBinError(i,1.8*hTF_final->GetBinContent(i));
   }
-  //---------------------
+
   fout->cd();
   hCS->Write();
   hTF->Write();
+  hdRLepPho->Write();
+  hPdf->Write();
+  hBTag->Write();
+  hLepSF->Write();
+  hJEC->Write();
+  hTF_final->Write();
   hPred->Write();
-  //  c1.printContents(hCS);
-  //  c1.printContents(hTF);
+
+  // c1.printContents(hCS);
+  // c1.printContents(hTF);
+  // c1.printContents(hdRLepPho);
+  // c1.printContents(hPdf);
+  // c1.printContents(hBTag);
+  // c1.printContents(hLepSF);
+  // c1.printContents(hJEC);
+  // c1.printContents(hTF_final);
   // c1.printContents(hPred);
 }
 
@@ -180,38 +233,68 @@ void c_getBGHists::getLMuTauHist(int i_f){
     hTF->SetBinError(i,sqrt(hTFUnc->GetBinContent(i)));
   }
   if(!isLDP){
-    hTF->SetBinContent(13,0.703993);  hTF->SetBinError(13,0.098179);
-    hTF->SetBinContent(16,0.750494);  hTF->SetBinError(16,0.0984693);
-    hTF->SetBinContent(26,0.797014);  hTF->SetBinError(26,0.0704897);
-    hTF->SetBinContent(30,0.706147);  hTF->SetBinError(30,0.0969159);
-    hTF->SetBinContent(31,0.706147);  hTF->SetBinError(31,0.0969159);
+    hTF->SetBinContent(13,hTF->GetBinContent(14));  hTF->SetBinError(13,hTF->GetBinError(14));
+    hTF->SetBinContent(16,hTF->GetBinContent(14));  hTF->SetBinError(16,hTF->GetBinError(14));
+    hTF->SetBinContent(26,hTF->GetBinContent(25));  hTF->SetBinError(26,hTF->GetBinError(25));
+    hTF->SetBinContent(30,hTF->GetBinContent(29));  hTF->SetBinError(30,hTF->GetBinError(29));
+    hTF->SetBinContent(31,hTF->GetBinContent(29));  hTF->SetBinError(31,hTF->GetBinError(29));
   }
   else{
-    hTF->SetBinContent( 6,0.671757);  hTF->SetBinError( 6,0.103653);
-    hTF->SetBinContent(14,0.603732);  hTF->SetBinError(14,0.197632);
-    hTF->SetBinContent(20,0.690634);  hTF->SetBinError(20,0.0959729);
-    hTF->SetBinContent(29,0.536487);  hTF->SetBinError(29,0.103087);
-    hTF->SetBinContent(30,0.536487);  hTF->SetBinError(30,0.103087);
-    hTF->SetBinContent(31,0.536487);  hTF->SetBinError(31,0.103087);
+    hTF->SetBinContent( 6,0.584661);  hTF->SetBinError( 6,0.0639891);//6,0.671757);  hTF->SetBinError( 6,0.103653);
+    hTF->SetBinContent(14,hTF->GetBinContent(13));  hTF->SetBinError(14,hTF->GetBinError(13));
+    hTF->SetBinContent(20,hTF->GetBinContent(19));  hTF->SetBinError(20,hTF->GetBinError(19));
+    hTF->SetBinContent(29,hTF->GetBinContent(28));  hTF->SetBinError(29,hTF->GetBinError(28));
+    hTF->SetBinContent(30,hTF->GetBinContent(28));  hTF->SetBinError(30,hTF->GetBinError(28));
+    hTF->SetBinContent(31,hTF->GetBinContent(28));  hTF->SetBinError(31,hTF->GetBinError(28));
   }
-
-  //-----multiply DCS with TF histogram with TF unc
-  if(!isLDP)  hPred=(TH1D*)hCS->Clone("AllSBins_v7_LMuPred");
+  //------assign 1.5% unc for pdf Scale weights
+  TH1D *hPdf;
+  if(!isLDP) hPdf=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_pdf");
+  else hPdf=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_pdf_LDP");
+  c1.assignPCuncAllBins(hPdf,1.5);
+  //------assign 2% unc for b-tagging
+  TH1D *hBTag;
+  if(!isLDP) hBTag=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_bTag");
+  else hBTag=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_bTag_LDP");
+  c1.assignPCuncAllBins(hBTag,2.0);
+  //------assign 1% unc for lepton SF
+  TH1D *hLepSF;
+  if(!isLDP) hLepSF=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_LepSF");
+  else hLepSF=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_LepSF_LDP");
+  c1.assignPCuncAllBins(hLepSF,1.0);
+  //-------get final TF with all unc added in quadrature
+  TH1D *hTF_final;
+  if(!isLDP) hTF_final=(TH1D*)hTF->Clone("LMuTFs_Final");
+  else hTF_final=(TH1D*)hTF->Clone("LMuTFs_Final_LDP");
+  hTF_final->Add(hPdf);
+  hTF_final->Add(hBTag);
+  hTF_final->Add(hLepSF);
+  //-----multiply DCS with final TF histogram with TF unc
+  if(!isLDP) hPred=(TH1D*)hCS->Clone("AllSBins_v7_LMuPred");
   else hPred=(TH1D*)hCS->Clone("AllSBins_v7_LMuPred_LDP");
-  hPred->Multiply(hTF);
+  // hPred->SetBinErrorOption(TH1::kPoisson);
+  hPred->Multiply(hTF_final);
   for(int i=1;i<=hPred->GetNbinsX();i++){
     if(hPred->GetBinContent(i) < 0.00001)
-      hPred->SetBinError(i,1.8*hTF->GetBinContent(i));
+      hPred->SetBinError(i,1.8*hTF_final->GetBinContent(i));
   }
   //---------------------
   fout->cd();
   hCS->Write();
   hTF->Write();
+  hPdf->Write();
+  hBTag->Write();
+  hLepSF->Write();
+  hTF_final->Write();
   hPred->Write();
-  //  if(isLDP) hLMuPredLDP = (TH1D*)hPred->Clone("hLMuPredLDP");
+
   // c1.printContents(hCS);
-   // c1.printContents(hTF);
-   // c1.printContents(hPred);
+  // c1.printContents(hTF);
+  // c1.printContents(hPdf);
+  // c1.printContents(hBTag);
+  // c1.printContents(hLepSF);
+  // c1.printContents(hTF_final);
+  // c1.printContents(hPred);
 }
 
 void c_getBGHists::getFRHist(int i_f){
@@ -238,13 +321,40 @@ void c_getBGHists::getFRHist(int i_f){
   for(int i=1;i<=hFR->GetNbinsX();i++){
     hFR->SetBinError(i,sqrt(hFRUnc->GetBinContent(i)));
   }
-  
   if(isLDP)
     hFR->SetBinContent(16,hFR->GetBinContent(11));  hFR->SetBinError(16,hFR->GetBinError(11));
+  //------assign 10% unc for fakerate SF
+  TH1D *hFakeSF;
+  if(!isLDP) hFakeSF=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_SF");
+  else hFakeSF=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_SF_LDP");
+  c1.assignPCuncAllBins(hFakeSF,10.0);
+  //------assign 6% unc for PU reweighting
+  TH1D *hPU;
+  if(!isLDP) hPU=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_PU");
+  else hPU=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_PU_LDP");
+  c1.assignPCuncAllBins(hPU,6.0);
+  //------assign 2% unc for trigger eff difference in SR and CR
+  TH1D *hTrig;
+  if(!isLDP) hTrig=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_Trig");
+  else hTrig=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_Trig_LDP");
+  c1.assignPCuncAllBins(hTrig,2.0);
+  //------assign 2% unc for ISR re-weighting
+  TH1D *hISRWt;
+  if(!isLDP) hISRWt=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_ISRWt");
+  else hISRWt=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_ISRWt_LDP");
+  c1.assignPCuncAllBins(hISRWt,2.0);
+  //-------get final FR with all unc added in quadrature
+  TH1D *hFR_final;
+  if(!isLDP) hFR_final=(TH1D*)hFR->Clone("FRs_Final");
+  else hFR_final=(TH1D*)hFR->Clone("FRs_Final_LDP");
+  hFR_final->Add(hFakeSF);
+  hFR_final->Add(hPU);
+  hFR_final->Add(hTrig);
+  hFR_final->Add(hISRWt);
   //-----multiply DCS with FR histogram with FR unc
   if(!isLDP)  hPred=(TH1D*)hCS->Clone("AllSBins_v7_FRPred");
   else hPred=(TH1D*)hCS->Clone("AllSBins_v7_FRPred_LDP");
-  hPred->Multiply(hFR);
+  hPred->Multiply(hFR_final);
   for(int i=1;i<=hPred->GetNbinsX();i++){
     if(hPred->GetBinContent(i) < 0.00001)
       hPred->SetBinError(i,1.8*hFR->GetBinContent(i));
@@ -253,10 +363,20 @@ void c_getBGHists::getFRHist(int i_f){
   fout->cd();
   hCS->Write();
   hFR->Write();
+  hFakeSF->Write();
+  hPU->Write();
+  hTrig->Write();
+  hISRWt->Write();
+  hFR_final->Write();
   hPred->Write();
-  //  if(isLDP) hFRPredLDP = (TH1D*)hPred->Clone("hFRPredLDP");
+
   // c1.printContents(hCS);
   // c1.printContents(hFR);
+  // c1.printContents(hFakeSF);
+  // c1.printContents(hPU);
+  // c1.printContents(hTrig);
+  // c1.printContents(hISRWt);
+  // c1.printContents(hFR_final);
   // c1.printContents(hPred);
 }
 
@@ -299,30 +419,33 @@ void c_getBGHists::getZGHist(int i_f){
   hCS->SetBinError(31,0.7*0.0228197);
   //----------------- assign higher order unc ---------------------
   TH2D *h2_SBinV7VsnJ=(TH2D*)fl->Get("SBinsv7VsnJ");
-  TH1D *h_highOrd=(TH1D*)hCS->Clone("ZG_HighOrd");
+  TH1D *h_highOrd;
+  if(!isLDP) h_highOrd=(TH1D*)hCS->Clone("ZG_HighOrd");
+  else h_highOrd=(TH1D*)hCS->Clone("ZG_HighOrd_LDP");
   for(int i=1;i<=h_highOrd->GetNbinsX();i++){
     h_highOrd->SetBinError(i,0);
     if((i>=7 && i<=16) || (i>=22 && i<=31)){
       h_highOrd->SetBinError(i,0.02*h_highOrd->GetBinContent(i));
-      h_highOrd->SetBinContent(i,1);
-    }
+      h_highOrd->SetBinContent(i,0.);
+    }//2% for nJ >=5
     else{
       double unc=0.;
       unc = sqrt(pow(0.27*(h2_SBinV7VsnJ->GetBinContent(h2_SBinV7VsnJ->GetXaxis()->FindBin(i), h2_SBinV7VsnJ->GetYaxis()->FindBin(2.1))),2)
 		 + pow(0.13*(h2_SBinV7VsnJ->GetBinContent(h2_SBinV7VsnJ->GetXaxis()->FindBin(i), h2_SBinV7VsnJ->GetYaxis()->FindBin(3.1))),2)
 		 + pow(0.10*(h2_SBinV7VsnJ->GetBinContent(h2_SBinV7VsnJ->GetXaxis()->FindBin(i), h2_SBinV7VsnJ->GetYaxis()->FindBin(4.1))),2));
       h_highOrd->SetBinError(i,unc);
-      h_highOrd->SetBinContent(i,1);
+      h_highOrd->SetBinContent(i,0.);
     }
   }
-  c1.printContents(h_highOrd);
+  
   //---------------------------------------------------------------
   TH1D *hTF = (TH1D*)hCS->Clone("AllSBins_v7_ZGTF");
   hTF->Divide(hLLGmc);
   hTF->Multiply(hLLGpurity);
-
+    
   TH1D *hPred = (TH1D*)hTF->Clone("AllSBins_v7_ZGPred");
   hPred->Multiply(hLLGdata);
+  hPred->Add(h_highOrd);//add higher order correction unc
 
   TH1D *hPureOverLLGmc = (TH1D*)hLLGpurity->Clone("PureOverLLG_MC");
   hPureOverLLGmc->Divide(hLLGmc);
@@ -337,12 +460,14 @@ void c_getBGHists::getZGHist(int i_f){
     hPred->Write();
     hLLGpurity->Write();
     hLLGmc->Write();
+    h_highOrd->Write();
 
-    c1.printContents(hCS);
+    //    c1.printContents(hCS);
     // c1.printContents(hLLGpurity);
     // c1.printContents(hLLGmc);
     // c1.printContents(hLLGdata);
     // c1.printContents(hPureOverLLGmc);
+    // c1.printContents(h_highOrd);
     // c1.printContents(hPred);
     // c1.printContents(hTF);
   }
@@ -361,13 +486,16 @@ void c_getBGHists::getZGHist(int i_f){
    
     TH1D *hPred = (TH1D*)hCS->Clone("AllSBins_v7_ZGPred_LDP");
     hPred->Multiply(hSF);
+    hPred->Add(h_highOrd);
 
     fout->cd();
     hCS->Write();
     hSF->Write();
+    h_highOrd->Write();
     hPred->Write();
     // c1.printContents(hCS);
     // c1.printContents(hSF);
+    // c1.printContents(h_highOrd);
     // c1.printContents(hPred);
   }
 
@@ -413,7 +541,7 @@ void c_getBGHists::getMultiJHist(int i_f){
 
   fout->cd();
   h_pure->Write();
-  c1.printContents(h_pure);
+  //  c1.printContents(h_pure);
   // c1.printContents(h_pureUncUp);
   // c1.printContents(h_pureUncDown);
   // c1.printContents(hCSraw);
@@ -435,8 +563,15 @@ void c_getBGHists::getMultiJHist(int i_f){
   hTemp->Reset();
   TH1D *h_doubleR = (TH1D*)hTemp->Clone("doubleRatio_MC");
   double dRatio[6]    = {0.291625, 0.466531, 0.398334, 0.241211, 0.344722, 0.474065};
+  // double dRatioUnc[6] = {0.042260, 0.108875, 0.108132, 0.0541237,0.0703203,0.339079};
   double dRatioUnc[6] = {0.042260, 0.108875, 0.108132, 0.0541237,0.0703203,0.339079};
-
+  double doubleRUncVR[6] = {0.09, 0.07, 0.07, 0.13, 0.04, 0.04};//% unc coming from VR. Multiply with double R.
+  //add unc obtained from VR to double ratio
+  for(int i=0;i<6;i++){
+    cout<<dRatioUnc[i]<<" ";
+    dRatioUnc[i] = sqrt((dRatioUnc[i]*dRatioUnc[i]) + (dRatio[i]*dRatio[i]*doubleRUncVR[i]*doubleRUncVR[i]));
+    cout<<dRatioUnc[i]<<endl;
+  }
   for(int i=1;i<=h_doubleR->GetNbinsX();i++){
     if( i==1 || i==7 || i==12 || i==17 || i==22 || i==27 ){
       h_doubleR->SetBinContent(i,1.0);

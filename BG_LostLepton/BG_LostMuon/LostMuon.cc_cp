@@ -9,6 +9,7 @@
 #include <string>
 #include <fstream>
 #include "btag/BTagCorrector.h"
+#include <TGraphAsymmErrors.h>
 
 using namespace std;
 
@@ -46,17 +47,27 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuHadTau_v2.root");
-  //  TFile *f_LP=new TFile("LstMu_CS_LDP_TTWZ_LostMuHadTau_v2.root");
+  //TFile *f_LP=new TFile("LstMu_CS_LDP_TTWZ_LostMuHadTau_v2.root");
   //  TFile *f_LP=new TFile("LstMu_CS_TTWZ_HadTauOnly_v2.root");
   //TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuOnly_v2.root");
 
   TH2D *h2_LP;TH1D *h_LP;
-  bool do_prediction=1;
+  bool do_prediction=0;
   cout<<"Doing prediction from file |"<<f_LP->GetName()<<"|? "<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
 
+  bool applyMuSFs=1;
+  int jec2Use = 0;//-1 for JEC down, 0 for CV, 1 for JEC up
+  TFile *f_MuSF1 = TFile::Open("TnP_NUM_MiniIsoTight_DENOM_MediumID_VAR_map_pt_eta.root");
+  TH2F *h2_MuSF1 = (TH2F*)f_MuSF1->Get("SF");
+  TFile *f_MuSF2 = TFile::Open("Tracking_EfficienciesAndSF_BCDEFGH.root");
+  TGraphAsymmErrors *gr_MuSFeta = (TGraphAsymmErrors*)f_MuSF2->Get("ratio_eff_aeta_dr030e030_corr");
+  TGraphAsymmErrors *gr_MuSFvtx = (TGraphAsymmErrors*)f_MuSF2->Get("ratio_eff_vtx_dr030e030_corr");
+  cout<<"applying Muon SFs? "<<applyMuSFs<<endl;
+  //https://twiki.cern.ch/twiki/bin/view/CMS/MuonWorkInProgressAndPagResults#Results_on_the_full_2016_data
+  if(jec2Use!=0) cout<<"!!!!!!!!!! Applying JECs. -1 for JEC down, 0 for CV, 1 for JEC up. I am using "<<jec2Use<<" !!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
   //----------- btags SFs-----------------  
   bool applybTagSFs=1;
   int fListIndxOld=-1;
@@ -91,7 +102,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     
     bool process=true;
     if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
-
+    
     if(fListIndxOld!=fCurrent){ 
       fListIndxOld = fCurrent;
       sampleName = inFileName[fCurrent];
@@ -124,7 +135,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     // 	cout<<i<<" Pt:"<<(*TAPMuonTracks)[i].Pt()<<" Eta:"<<(*TAPMuonTracks)[i].Eta()<<" Phi:"<<(*TAPMuonTracks)[i].Phi()<<(*TAPMuonTracks)[i].Energy()<<" mT:"<<sqrt(2*(*TAPMuonTracks)[i].Pt()*MET*(1-cos(DeltaPhi(METPhi,(*TAPMuonTracks)[i].Phi()))))<<" mTTree:"<<(*TAPMuonTracks_mT)[i]<<endl;
     //   }
     //   cout<<"isoMuonTracks:"<<isoMuonTracks<<" mymyisoTrk:"<<myisoTrk<<endl;
-    //    print(jentry);
+    //print(jentry);
     // }
     //leptons
     if(Electrons->size()>0) continue;//veto electrons for lost muon estimation
@@ -235,7 +246,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       if(hasGenPromptPhoton && gendRLepPho > 0.3 && madMinPhotonDeltaR > 0.3) continue;
       if(jentry<3) cout<<"Non-Prompt, dR(pho,q/g/lep) < 0.3 ";
     }
-    
+    //    if(madMinPhotonDeltaR < 0.5 || gendRLepPho < 0.5) continue;    
     int nGenMu=0,nGenEle=0,nGenTau=0,nGenMuFmTau=0,nGenEleFmTau=0;
     vector<TLorentzVector> genMu;   
     for(int i=0;i<GenParticles->size();i++){
@@ -296,6 +307,32 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       h_RunNum->Fill(RunNum);
       h_intLumi->Fill(lumiInfb);
 
+      if(applyMuSFs && Muons->size()==1){
+        float musf1 = (h2_MuSF1->GetBinContent(h2_MuSF1->GetXaxis()->FindBin((*Muons)[0].Pt()),h2_MuSF1->GetYaxis()->FindBin(abs((*Muons)[0].Eta()))));
+        if(h2_MuSF1->GetXaxis()->FindBin((*Muons)[0].Pt()) > h2_MuSF1->GetNbinsX())
+          musf1 = (h2_MuSF1->GetBinContent(h2_MuSF1->GetXaxis()->FindBin((*Muons)[0].Pt())-1,h2_MuSF1->GetYaxis()->FindBin(abs((*Muons)[0].Eta()))));
+        if(musf1 > 0.001) wt = wt*musf1;
+	//	cout<<(*Muons)[0].Pt()<<" "<<abs((*Muons)[0].Eta())<<" "<<musf1<<endl;
+	
+	float musf2 = 0., minDiff=1000;
+	for(int igr = 0;igr<gr_MuSFeta->GetN();igr++){
+	  if(minDiff > abs(abs((*Muons)[0].Eta()) - gr_MuSFeta->GetX()[igr])){
+	    minDiff = abs(abs((*Muons)[0].Eta()) - gr_MuSFeta->GetX()[igr]);
+	    musf2 = gr_MuSFeta->GetY()[igr];
+	  }
+	}if(musf2 > 0.0001) wt = wt*musf2;
+	//	cout<<"SF2 "<<abs((*Muons)[0].Eta())<<" "<<musf2<<endl;
+	
+	minDiff=1000; musf2 = 0.;
+	for(int igr = 0;igr<gr_MuSFvtx->GetN();igr++){
+	  if(minDiff > abs(NVtx - gr_MuSFvtx->GetX()[igr])){
+            minDiff = abs(NVtx - gr_MuSFvtx->GetX()[igr]);
+            musf2 = gr_MuSFvtx->GetY()[igr];
+          }
+        }if(musf2 > 0.0001) wt = wt*musf2;
+	//	cout<<"Vtx "<<NVtx<<" SF:"<<musf2<<endl;
+      }
+      
       h_ST->Fill(ST,wt);
       h_MET->Fill(MET,wt);
       h_nHadJets->Fill(nHadJets,wt);
@@ -447,6 +484,20 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_Mu0->Fill(sBin2,wt);
 	h_SBins_v4_Mu0->Fill(sBin4,wt);
 	h_SBins_v7_Mu0->Fill(sBin7,wt);
+	// if(applybTagSFs && (sBin7==6 || sBin7==21)){
+	//   h2_SBinsv7VsnJ_Mu0->Fill( 6,nHadJets,prob0*wt);
+	//   h2_SBinsv7VsnJ_Mu0->Fill(21,nHadJets,prob1*wt);
+	// }else h2_SBinsv7VsnJ_Mu0->Fill(sBin7,nHadJets,wt);
+	h2_SBinsv7VsnJ_Mu0->Fill(sBin7,nHadJets,wt);
+	h_tot_Mu0->Fill(1,wt);
+	for(int i=0;i<PDFweights->size();i++){
+	  if(i > 150) cout<<"Filling PDF wt hist as overflow!!!!!!"<<endl;
+	  h_PDFwts_Mu0->Fill(i,(*PDFweights)[i]*wt);	  
+	}
+	for(int i=0;i<ScaleWeights->size();i++){
+	  if(i > 15) cout<<"Filling ScaleWts hist as overflow!!!!!"<<endl;
+	  h_ScaleWts_Mu0->Fill(i,(*ScaleWeights)[i]*wt);
+	}
 	wt=wt_org;
       }//0 muon + photon events
       if(Muons->size()==1){
@@ -578,6 +629,20 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h_SBins_Mu1->Fill(sBin2,wt);
 	h_SBins_v4_Mu1->Fill(sBin4,wt);
 	h_SBins_v7_Mu1->Fill(sBin7,wt);
+	// if(applybTagSFs && (sBin7==6 ||sBin7==21)){
+        //   h2_SBinsv7VsnJ_Mu1->Fill( 6,nHadJets,prob0*wt);
+        //   h2_SBinsv7VsnJ_Mu1->Fill(21,nHadJets,prob1*wt);
+	// }else h2_SBinsv7VsnJ_Mu1->Fill(sBin7,nHadJets,wt);
+	h2_SBinsv7VsnJ_Mu1->Fill(sBin7,nHadJets,wt);
+	h_tot_Mu1->Fill(1,wt);
+	for(int i=0;i<PDFweights->size();i++){
+	  if(i > 150) cout<<"Filling PDF wt hist as overflow!!!!!!"<<endl;
+	  h_PDFwts_Mu1->Fill(i,(*PDFweights)[i]*wt);	  
+	}
+	for(int i=0;i<ScaleWeights->size();i++){
+	  if(i > 15) cout<<"Filling ScaleWts hist as overflow!!!!!"<<endl;
+	  h_ScaleWts_Mu1->Fill(i,(*ScaleWeights)[i]*wt);
+	}
 	wt=wt_org;
       }//muon + photon events
     }
@@ -756,6 +821,7 @@ void  LostMuon::findObjMatchedtoG(TLorentzVector bestPhoton){//MC only
 
 void LostMuon::print(Long64_t jentry){
   cout<<"*********************************************************************************"<<endl;
+  cout<<"MET: "<<MET<<" MHT: "<<MHT<<endl;
   cout<<"Photons:"<<endl;
   for(int i=0;i<Photons->size();i++){
     double dR=0;//DeltaR( bestPhoton.Eta(),bestPhoton.Phi(),(*Photons)[i].Eta(),(*Photons)[i].Phi() );
@@ -771,10 +837,38 @@ void LostMuon::print(Long64_t jentry){
   for(int i=0;i<Electrons->size();i++){
     cout<<"ElePt: "<<(*Electrons)[i].Pt()<<" Eta: "<<(*Electrons)[i].Eta()<<" Phi: "<<(*Electrons)[i].Phi()<<" M: "<<(*Electrons)[i].M()<<endl;
   }
+  TLorentzVector jetsVec,jetsVecJECdn,met;
+  met.SetPtEtaPhiE(MET,0.,METPhi,0.);
   cout<<"Jets:"<<endl; 
   for(int i=0;i<Jets->size();i++){
     cout<<"JetPt:"<<(*Jets)[i].Pt()<<" JetEta:"<<(*Jets)[i].Eta()<<" JetPhi:"<<(*Jets)[i].Phi()<<endl;
+    jetsVec+=(*Jets)[i];
   }
+  cout<<"Jets_jecFactor:"<<endl;
+  for(int i=0;i<Jets_jecFactor->size();i++){
+      cout<<(*Jets_jecFactor)[i]<<endl;
+  }
+
+  cout<<"Jets_jecUnc:"<<endl;
+  for(int i=0;i<Jets_jecUnc->size();i++){
+      cout<<(*Jets_jecUnc)[i]<<endl;
+  }
+  Jets = JetsJECdown;
+  cout<<"JetsJECdown:"<<endl; 
+  for(int i=0;i<JetsJECdown->size();i++){
+    cout<<"JetPt:"<<(*JetsJECdown)[i].Pt()<<" JetEta:"<<(*JetsJECdown)[i].Eta()<<" JetPhi:"<<(*JetsJECdown)[i].Phi()<<endl;
+    jetsVecJECdn+=(*JetsJECdown)[i];
+  }
+  //  cout<<"METJECdown: "<<METJECdown<<endl;
+  cout<<"METDown: "<<endl;
+  for(int i=0;i<METDown->size();i++){
+    cout<<(*METDown)[i]<<endl;
+  }
+  cout<<"METUp: "<<endl;
+  for(int i=0;i<METUp->size();i++){
+    cout<<(*METUp)[i]<<endl;
+  }
+  cout<<"DownJEC MET: "<<(met+jetsVec-jetsVecJECdn).Pt()<<endl;
   //------------------------- MC only -------------------------------------------------
   for(int i=0;i<GenJets->size();i++){
     cout<<"GenJetPt:"<<(*GenJets)[i].Pt()<<" JetEta:"<<(*GenJets)[i].Eta()<<" JetPhi:"<<(*GenJets)[i].Phi()<<endl;

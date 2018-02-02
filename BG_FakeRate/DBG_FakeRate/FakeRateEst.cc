@@ -45,9 +45,9 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   //TFile *f_FR=new TFile("FR_Hist_MS_FR_DYJetsToLL_Truth.root");
-
-  //  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_ISRWt_v2.root");
-  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_ISRWt_LowDphi_v2.root");
+  
+  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_ISRWt_v2.root");
+  //TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_ISRWt_LowDphi_v2.root");
   //  TFile *f_FR=new TFile("FR_Hist_CS_TTW_FR_NoTrgPuWt.root");
   //  TFile *f_FR=new TFile("FR_Hist_MS_FR_DYJetsToLL_v2.root");
   // TFile* NLOWeightFile = new TFile("kfactors.root");
@@ -256,7 +256,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
     //    if(MET>200) continue;
     if(emObjMatchingJetIndx>=0 && ((*Jets)[emObjMatchingJetIndx].Pt())/(bestEMObj.Pt()) < 1.0) continue; 
     if(emObjMatchingJetIndx<0) continue;
-    process = process && ST>500 && nHadJets>=2 && MET>100 && !(dphi1 > 0.3 && dphi2 > 0.3) && bestEMObj.Pt()>100;
+    process = process && ST>500 && nHadJets>=2 && MET>100 && (dphi1 > 0.3 && dphi2 > 0.3) && bestEMObj.Pt()>100;
     if( !((ST>800 && bestEMObj.Pt()>100) || (bestEMObj.Pt()>190)) ) continue;
     if(process){
       evtSurvived++;
@@ -453,8 +453,8 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	  double parX=bestEMObj.Pt(),parY=qMultMatchJet;
 	  //	    double parX=bestEMObj.Pt(),parY=NVtx;
 	    double fakerate=0;
-	    //	    if(h2_FR) fakerate=h2_FR->GetBinContent(h2_FR->FindBin(parX,parY));
-	    if(h2_FR) fakerate=(h2_FR->GetBinError(h2_FR->FindBin(parX,parY)))*(h2_FR->GetBinError(h2_FR->FindBin(parX,parY)));
+	    if(h2_FR) fakerate=h2_FR->GetBinContent(h2_FR->FindBin(parX,parY));
+	    //if(h2_FR) fakerate=(h2_FR->GetBinError(h2_FR->FindBin(parX,parY)))*(h2_FR->GetBinError(h2_FR->FindBin(parX,parY)));
 	    else{ cout<<"hist not found"<<endl; return;}
 	    //	    wt=(fakerate/(1-fakerate))*wt;
 	    // if(qMultMatchJet<=1) fakerate = fakerate*0.95;//from sideband sub
