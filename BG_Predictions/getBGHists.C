@@ -324,11 +324,11 @@ void c_getBGHists::getFRHist(int i_f){
   if(isLDP)
     hFR->SetBinContent(16,hFR->GetBinContent(11));  hFR->SetBinError(16,hFR->GetBinError(11));
   //------assign CS stats (+) 2% unc for trigger eff difference in SR and CR
-  TH1D *hCSstat;
-  if(!isLDP) hCSstat=(TH1D*)hCS->Clone("AllSBins_v7_FR_CSstatTrig");
-  else hCSstat=(TH1D*)hCS->Clone("AllSBins_v7_FR_CSstatTrig_LDP");
-  for(int i=1;i<=hCSstat->GetNbinsX();i++){
-    hCSstat->SetBinError(i, sqrt((hCSstat->GetBinError(i))*(hCSstat->GetBinError(i)) + pow(hCSstat->GetBinContent(i)*0.02,2)));
+  TH1D *hStat;
+  if(!isLDP) hStat=(TH1D*)hCS->Clone("AllSBins_v7_FR_StatTrig");
+  else hStat=(TH1D*)hCS->Clone("AllSBins_v7_FR_StatTrig_LDP");
+  for(int i=1;i<=hStat->GetNbinsX();i++){
+    hStat->SetBinError(i, sqrt((hStat->GetBinError(i))*(hStat->GetBinError(i)) + pow(hStat->GetBinContent(i)*0.02,2)));
   }
   //------assign 10% unc for fakerate SF
   TH1D *hFakeSF;
@@ -353,32 +353,33 @@ void c_getBGHists::getFRHist(int i_f){
   hFR_final->Add(hPU);
   hFR_final->Add(hISRWt);
   //-----multiply DCS with FR histogram with FR unc
-  if(!isLDP)  hPred=(TH1D*)hCSstat->Clone("AllSBins_v7_FRPred");
-  else hPred=(TH1D*)hCSstat->Clone("AllSBins_v7_FRPred_LDP");
+  if(!isLDP)  hPred=(TH1D*)hStat->Clone("AllSBins_v7_FRPred");
+  else hPred=(TH1D*)hStat->Clone("AllSBins_v7_FRPred_LDP");
   hPred->Multiply(hFR_final);
   for(int i=1;i<=hPred->GetNbinsX();i++){
     if(hPred->GetBinContent(i) < 0.00001)
       hPred->SetBinError(i,1.8*hFR->GetBinContent(i));
   }
+  hStat->Multiply(hFR);
   
   fout->cd();
   hCS->Write();
   hFR->Write();
   hFakeSF->Write();
   hPU->Write();
-  hCSstat->Write();
+  hStat->Write();
   hISRWt->Write();
   hFR_final->Write();
   hPred->Write();
 
-  c1.printContents(hCS);
-  c1.printContents(hFR);
+  // c1.printContents(hCS);
+  // c1.printContents(hFR);
   // c1.printContents(hFakeSF);
   // c1.printContents(hPU);
-  // c1.printContents(hTrig);
+  c1.printContents(hStat);
   // c1.printContents(hISRWt);
-  c1.printContents(hFR_final);
-  c1.printContents(hPred);
+  // c1.printContents(hFR_final);
+  // c1.printContents(hPred);
 }
 
 void c_getBGHists::getZGHist(int i_f){

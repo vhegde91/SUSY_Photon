@@ -57,7 +57,7 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
   TH1D *h_LMuLepSF = (TH1D*)f[1]->Get("AllSBins_v7_UncLMuTF_LepSF");
 
   //for fake
-  TH1D *h_FR_CSstatTrig = (TH1D*)f[1]->Get("AllSBins_v7_FR_CSstatTrig");
+  TH1D *h_FR_StatTrig = (TH1D*)f[1]->Get("AllSBins_v7_FR_StatTrig");
   TH1D *h_FR = (TH1D*)f[1]->Get("FRs");
   TH1D *h_FRSF = (TH1D*)f[1]->Get("AllSBins_v7_UncFR_SF");
   TH1D *h_FRPU = (TH1D*)f[1]->Get("AllSBins_v7_UncFR_PU");
@@ -162,7 +162,7 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
       outf<<"LMubTag_b"<<bTagCorr<<" lnN     -     -    "<<1-h_LMubTag->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"      -       -       -"<<endl;
     outf<<"LMuLeptSF_b"<<metCorr<<" lnN     -     -    "<<1+h_LMuLepSF->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"     -       -       -"<<endl;
     //--------------- Fakerate -----------------
-    outf<<"FakeUncRate_b"<<i<<" lnN   -       -          -    "<<1+h_FR_CSstatTrig->GetBinError(i)/h_FR_CSstatTrig->GetBinContent(i)<<"    -       -"<<endl;
+    outf<<"FakeUncRate_b"<<i<<" lnN   -       -          -    "<<1+h_FR_StatTrig->GetBinError(i)/h_FR_StatTrig->GetBinContent(i)<<"    -       -"<<endl;
     outf<<"FakeRate_SF_b"<<" lnN   -       -          -    "<<1+h_FRSF->GetBinError(i)/h_FR->GetBinContent(i)<<"    -       -"<<endl;
     outf<<"FakeRate_PU_b"<<" lnN   -       -          -    "<<1+h_FRPU->GetBinError(i)/h_FR->GetBinContent(i)<<"    -       -"<<endl;
     //    outf<<"FakeRate_Trig_b"<<i<<" lnN   -       -          -    "<<1+h_FRTrig->GetBinError(i)/h_FR->GetBinContent(i)<<"    -       -"<<endl;
