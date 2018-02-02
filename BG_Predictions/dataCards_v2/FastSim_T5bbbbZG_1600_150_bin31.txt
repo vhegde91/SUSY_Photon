@@ -18,30 +18,29 @@ sigStat_b31 lnN       1.02314    -       -       -       -       -
 
 LEle_b31 gmN 1        -     0.357269     -       -       -       -
 LEleTFUnc_b31 lnN     -     1.16922      -       -       -       -
-LEleDR_b lnN          -     1.12      -       -       -       -
-LLeptPDF_b lnN        -     1.05      -       -       -       -
-#LElebTag_bB lnN      -     0.98      -       -       -       -
-#LEleLeptSF_bR6 lnN   -     1.02      -       -       -       -
-LEleJEC_b lnN         -     1.02      -       -       -       -
+LEleDR_b lnN     -     1.12      -       -       -       -
+LLeptPDF_b lnN     -     1.05      -       -       -       -
+LElebTag_bB lnN     -     0.98      -       -       -       -
+LEleLeptSF_bM5 lnN     -     1.02      -       -       -       -
+LEleJEC_b lnN     -     1.02      -       -       -       -
 
 LMuTau_b31 gmN  0     -       -     0.664767     -       -       -
 LMuTauTFUnc_b31 lnN   -       -     1.14674      -       -       -
-LLeptPDF_b lnN        -     -     1.015       -       -       -
-#LMubTag_bB lnN       -     -    0.98      -       -       -
-#LMuLeptSF_bR6 lnN    -     -    1.01     -       -       -
+LLeptPDF_b lnN     -     -     1.015       -       -       -
+LMubTag_bB lnN     -     -    0.98      -       -       -
+LMuLeptSF_bM5 lnN     -     -    1.01     -       -       -
 
-FakeUncRate_b31 lnN   -       -          -    1.2638    -       -
-FakeRate_SF_b lnN     -       -          -    1.1    -       -
-FakeRate_PU_b lnN     -       -          -    1.06    -       -
-FakeRate_Trig_b31 lnN -       -          -    1.02    -       -
-FakeRate_ISR_b lnN    -       -          -    1.02    -       -
+FakeUncRate_b31 lnN   -       -          -    1.19713    -       -
+FakeRate_SF_b lnN   -       -          -    1.1    -       -
+FakeRate_PU_b lnN   -       -          -    1.06    -       -
+FakeRate_ISR_b lnN   -       -          -    1.02    -       -
 
 ZG_mcStat_b31 lnN     -       -          -      -     1.7       -
 ZGTF_bB gmN 5         -       -          -      -     0.00380899       -
 ZGPureOverLLG_bB lnN  -       -          -      -     1.19613     -
-ZG_highOrdr_bHJ lnN   -       -          -      -     0.98       -
+ZG_highOrdCorr_bHJ lnN  -       -          -      -     0.98       -
 
-MultiJ_b31 gmN 0      -       -          -          -         -       0.618488
+MultiJ_b31 gmN 0     -       -          -          -         -       0.618488
 MultiJdR_bR6 lnN      -       -          -          -         -       1.20011
 MultiJHL_bR6 lnN      -       -          -          -         -       1.71638
-MultiJEW_b31  lnN     -       -          -          -         -        0.5/1.0
+MultiJEW_b31  lnN      -       -          -          -         -        0.5/1.0

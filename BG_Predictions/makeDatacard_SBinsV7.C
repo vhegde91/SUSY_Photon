@@ -57,11 +57,10 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
   TH1D *h_LMuLepSF = (TH1D*)f[1]->Get("AllSBins_v7_UncLMuTF_LepSF");
 
   //for fake
-  TH1D *h_FRPred = (TH1D*)f[1]->Get("AllSBins_v7_FRPred");
+  TH1D *h_FR_CSstatTrig = (TH1D*)f[1]->Get("AllSBins_v7_FR_CSstatTrig");
   TH1D *h_FR = (TH1D*)f[1]->Get("FRs");
   TH1D *h_FRSF = (TH1D*)f[1]->Get("AllSBins_v7_UncFR_SF");
   TH1D *h_FRPU = (TH1D*)f[1]->Get("AllSBins_v7_UncFR_PU");
-  TH1D *h_FRTrig = (TH1D*)f[1]->Get("AllSBins_v7_UncFR_Trig");
   TH1D *h_FRISR = (TH1D*)f[1]->Get("AllSBins_v7_UncFR_ISRWt");
 
   //for ZG
@@ -90,7 +89,7 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
   ofstream outf;
   for(int i=1;i<=imax;i++){
     if( i==1 || i==7 || i==12 || i==17 || i==22 || i==27 ) continue;
-    string bTagCorr, njbjCorr,nJCorr;
+    string bTagCorr, njbjCorr,nJCorr,metCorr;
     if(i<=16) bTagCorr = "A";
     else bTagCorr = "B";
     if(i<7){ njbjCorr = "R1"; nJCorr = "LJ";}
@@ -99,6 +98,12 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
     else if(i<22){ njbjCorr = "R4"; nJCorr = "LJ";}
     else if(i<27){ njbjCorr = "R5"; nJCorr = "MJ";}
     else{          njbjCorr = "R6"; nJCorr = "HJ";}
+    if     (i==2 || i==8  || i==13 || i==18 || i==23 || i==28) metCorr = "M2";
+    else if(i==3 || i==9  || i==14 || i==19 || i==24 || i==29) metCorr = "M3";
+    else if(i==4 || i==10 || i==15 || i==20 || i==25 || i==30) metCorr = "M4";
+    else if(i==5 || i==11 || i==16 || i==21 || i==26 || i==31) metCorr = "M5";
+    else if(i==6)                                              metCorr = "M7";
+
     string name2="dataCards_v2/"+getfname(f[0]->GetName())+"_"+"bin"+to_string(i)+".txt";
     //    cout<<name2;
     sprintf(name,"%s",name2.c_str());
@@ -141,10 +146,10 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
     outf<<"LEleDR_b"<<" lnN     -     "<<1+h_LEleDr->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
     outf<<"LLeptPDF_b"<<" lnN     -     "<<1+h_LElePDF->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
     if(i<=16)
-      outf<<"#LElebTag_b"<<bTagCorr<<" lnN     -     "<<1+h_LElebTag->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
+      outf<<"LElebTag_b"<<bTagCorr<<" lnN     -     "<<1+h_LElebTag->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
     else       
-      outf<<"#LElebTag_b"<<bTagCorr<<" lnN     -     "<<1-h_LElebTag->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
-    outf<<"#LEleLeptSF_b"<<njbjCorr<<" lnN     -     "<<1+h_LEleLepSF->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
+      outf<<"LElebTag_b"<<bTagCorr<<" lnN     -     "<<1-h_LElebTag->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
+    outf<<"LEleLeptSF_b"<<metCorr<<" lnN     -     "<<1+h_LEleLepSF->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
     outf<<"LEleJEC_b"<<" lnN     -     "<<1+h_LEleJEC->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
 
     //--------------- Lost Mu Had Tau-----------------
@@ -152,15 +157,15 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
     outf<<"LMuTauTFUnc_b"<<i<<" lnN   -       -     "<<1+h_LMuTauTFs->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"      -       -       -"<<endl;
     outf<<"LLeptPDF_b"<<" lnN     -     -     "<<1+h_LMuPDF->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"       -       -       -"<<endl;
     if(i<=16)
-      outf<<"#LMubTag_b"<<bTagCorr<<" lnN     -     -    "<<1+h_LMubTag->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"      -       -       -"<<endl;
+      outf<<"LMubTag_b"<<bTagCorr<<" lnN     -     -    "<<1+h_LMubTag->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"      -       -       -"<<endl;
     else       
-      outf<<"#LMubTag_b"<<bTagCorr<<" lnN     -     -    "<<1-h_LMubTag->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"      -       -       -"<<endl;
-    outf<<"#LMuLeptSF_b"<<njbjCorr<<" lnN     -     -    "<<1+h_LMuLepSF->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"     -       -       -"<<endl;
+      outf<<"LMubTag_b"<<bTagCorr<<" lnN     -     -    "<<1-h_LMubTag->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"      -       -       -"<<endl;
+    outf<<"LMuLeptSF_b"<<metCorr<<" lnN     -     -    "<<1+h_LMuLepSF->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"     -       -       -"<<endl;
     //--------------- Fakerate -----------------
-    outf<<"FakeUncRate_b"<<i<<" lnN   -       -          -    "<<1+h_FRPred->GetBinError(i)/h_FRPred->GetBinContent(i)<<"    -       -"<<endl;
+    outf<<"FakeUncRate_b"<<i<<" lnN   -       -          -    "<<1+h_FR_CSstatTrig->GetBinError(i)/h_FR_CSstatTrig->GetBinContent(i)<<"    -       -"<<endl;
     outf<<"FakeRate_SF_b"<<" lnN   -       -          -    "<<1+h_FRSF->GetBinError(i)/h_FR->GetBinContent(i)<<"    -       -"<<endl;
     outf<<"FakeRate_PU_b"<<" lnN   -       -          -    "<<1+h_FRPU->GetBinError(i)/h_FR->GetBinContent(i)<<"    -       -"<<endl;
-    outf<<"FakeRate_Trig_b"<<i<<" lnN   -       -          -    "<<1+h_FRTrig->GetBinError(i)/h_FR->GetBinContent(i)<<"    -       -"<<endl;
+    //    outf<<"FakeRate_Trig_b"<<i<<" lnN   -       -          -    "<<1+h_FRTrig->GetBinError(i)/h_FR->GetBinContent(i)<<"    -       -"<<endl;
     outf<<"FakeRate_ISR_b"<<" lnN   -       -          -    "<<1+h_FRISR->GetBinError(i)/h_FR->GetBinContent(i)<<"    -       -"<<endl;
     //--------------- ZG -----------------------
     outf<<"ZG_mcStat_b"<<i<<" lnN     -       -          -      -     "<<1+(h_ZGCS->GetBinError(i)/h_ZGCS->GetBinContent(i))<<"       -"<<endl;

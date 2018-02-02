@@ -19,18 +19,17 @@ LEle_b2 gmN 27        -     0.385113     -       -       -       -
 LEleTFUnc_b2 lnN     -     1.09246      -       -       -       -
 LEleDR_b lnN     -     1.12      -       -       -       -
 LLeptPDF_b lnN     -     1.05      -       -       -       -
-#LElebTag_bA lnN     -     1.02      -       -       -       -
-#LEleLeptSF_bR1 lnN     -     1.02      -       -       -       -
+LElebTag_bA lnN     -     1.02      -       -       -       -
+LEleLeptSF_bM2 lnN     -     1.02      -       -       -       -
 LEleJEC_b lnN     -     1.02      -       -       -       -
 LMuTau_b2 gmN  31     -       -     1.00775     -       -       -
 LMuTauTFUnc_b2 lnN   -       -     1.06123      -       -       -
 LLeptPDF_b lnN     -     -     1.015       -       -       -
-#LMubTag_bA lnN     -     -    1.02      -       -       -
-#LMuLeptSF_bR1 lnN     -     -    1.01     -       -       -
-FakeUncRate_b2 lnN   -       -          -    1.22089    -       -
+LMubTag_bA lnN     -     -    1.02      -       -       -
+LMuLeptSF_bM2 lnN     -     -    1.01     -       -       -
+FakeUncRate_b2 lnN   -       -          -    1.0285    -       -
 FakeRate_SF_b lnN   -       -          -    1.1    -       -
 FakeRate_PU_b lnN   -       -          -    1.06    -       -
-FakeRate_Trig_b2 lnN   -       -          -    1.02    -       -
 FakeRate_ISR_b lnN   -       -          -    1.02    -       -
 ZG_mcStat_b2 lnN     -       -          -      -     1.05606       -
 ZGTF_bA gmN 31         -       -          -      -     0.958119       -

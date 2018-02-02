@@ -323,6 +323,13 @@ void c_getBGHists::getFRHist(int i_f){
   }
   if(isLDP)
     hFR->SetBinContent(16,hFR->GetBinContent(11));  hFR->SetBinError(16,hFR->GetBinError(11));
+  //------assign CS stats (+) 2% unc for trigger eff difference in SR and CR
+  TH1D *hCSstat;
+  if(!isLDP) hCSstat=(TH1D*)hCS->Clone("AllSBins_v7_FR_CSstatTrig");
+  else hCSstat=(TH1D*)hCS->Clone("AllSBins_v7_FR_CSstatTrig_LDP");
+  for(int i=1;i<=hCSstat->GetNbinsX();i++){
+    hCSstat->SetBinError(i, sqrt((hCSstat->GetBinError(i))*(hCSstat->GetBinError(i)) + pow(hCSstat->GetBinContent(i)*0.02,2)));
+  }
   //------assign 10% unc for fakerate SF
   TH1D *hFakeSF;
   if(!isLDP) hFakeSF=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_SF");
@@ -333,11 +340,6 @@ void c_getBGHists::getFRHist(int i_f){
   if(!isLDP) hPU=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_PU");
   else hPU=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_PU_LDP");
   c1.assignPCuncAllBins(hPU,6.0);
-  //------assign 2% unc for trigger eff difference in SR and CR
-  TH1D *hTrig;
-  if(!isLDP) hTrig=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_Trig");
-  else hTrig=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_Trig_LDP");
-  c1.assignPCuncAllBins(hTrig,2.0);
   //------assign 2% unc for ISR re-weighting
   TH1D *hISRWt;
   if(!isLDP) hISRWt=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_ISRWt");
@@ -349,11 +351,10 @@ void c_getBGHists::getFRHist(int i_f){
   else hFR_final=(TH1D*)hFR->Clone("FRs_Final_LDP");
   hFR_final->Add(hFakeSF);
   hFR_final->Add(hPU);
-  hFR_final->Add(hTrig);
   hFR_final->Add(hISRWt);
   //-----multiply DCS with FR histogram with FR unc
-  if(!isLDP)  hPred=(TH1D*)hCS->Clone("AllSBins_v7_FRPred");
-  else hPred=(TH1D*)hCS->Clone("AllSBins_v7_FRPred_LDP");
+  if(!isLDP)  hPred=(TH1D*)hCSstat->Clone("AllSBins_v7_FRPred");
+  else hPred=(TH1D*)hCSstat->Clone("AllSBins_v7_FRPred_LDP");
   hPred->Multiply(hFR_final);
   for(int i=1;i<=hPred->GetNbinsX();i++){
     if(hPred->GetBinContent(i) < 0.00001)
@@ -365,19 +366,19 @@ void c_getBGHists::getFRHist(int i_f){
   hFR->Write();
   hFakeSF->Write();
   hPU->Write();
-  hTrig->Write();
+  hCSstat->Write();
   hISRWt->Write();
   hFR_final->Write();
   hPred->Write();
 
-  // c1.printContents(hCS);
-  // c1.printContents(hFR);
+  c1.printContents(hCS);
+  c1.printContents(hFR);
   // c1.printContents(hFakeSF);
   // c1.printContents(hPU);
   // c1.printContents(hTrig);
   // c1.printContents(hISRWt);
-  // c1.printContents(hFR_final);
-  // c1.printContents(hPred);
+  c1.printContents(hFR_final);
+  c1.printContents(hPred);
 }
 
 void c_getBGHists::getZGHist(int i_f){
@@ -627,7 +628,7 @@ void c_getBGHists::getMultiJHist(int i_f){
  
   
   // c1.printContents(hHLR);
-  // c1.printContents(h_doubleR);
+  c1.printContents(h_doubleR);
   //c1.printContents(h_MultiJPred);
     
 }
