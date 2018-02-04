@@ -33,6 +33,6 @@ ZGTF_bB gmN 5         -       -          -      -     0.612922       -
 ZGPureOverLLG_bB lnN  -       -          -      -     1.19613     -
 ZG_highOrdCorr_bLJ lnN  -       -          -      -     0.908536       -
 MultiJ_b19 gmN 39     -       -          -          -         -       0.14764
-MultiJdR_bR4 lnN      -       -          -          -         -       1.04933
-MultiJHL_bR4 lnN      -       -          -          -         -       1.25932
+MultiJHL_bR4 lnN      -       -          -          -         -       1.04933
+MultiJdR_bR4 lnN      -       -          -          -         -       1.25932
 MultiJEW_b19  lnN      -       -          -          -         -        0.909773/0.964143

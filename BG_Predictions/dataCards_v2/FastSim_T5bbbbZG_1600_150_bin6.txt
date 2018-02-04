@@ -33,5 +33,5 @@ ZGTF_bA gmN 31         -       -          -      -     0.0985716       -
 ZGPureOverLLG_bA lnN  -       -          -      -     1.05016     -
 ZG_highOrdCorr_bLJ lnN  -       -          -      -     1.1716       -
 MultiJ_b6 gmN 2     -       -          -          -         -       0.213256
-MultiJdR_bR1 lnN      -       -          -          -         -       1.02394
-MultiJHL_bR1 lnN      -       -          -          -         -       1.17059
+MultiJHL_bR1 lnN      -       -          -          -         -       1.02394
+MultiJdR_bR1 lnN      -       -          -          -         -       1.17059

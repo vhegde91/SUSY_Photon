@@ -181,8 +181,8 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
     if(h_MultiJPurity->GetBinContent(i) > 0.0)
       outf<<"MultiJ_b"<<i<<" gmN "<<h_MultiJCSraw->GetBinContent(i)<<"     -       -          -          -         -       "<<h_doubleR->GetBinContent(i)*h_HLRatio->GetBinContent(i)*h_MultiJPurity->GetBinContent(i)<<endl;
     else outf<<"MultiJ_b"<<i<<" gmN "<<h_MultiJCSraw->GetBinContent(i)<<"     -       -          -          -         -       "<<h_doubleR->GetBinContent(i)*h_HLRatio->GetBinContent(i)<<endl;
-    outf<<"MultiJdR_b"<<njbjCorr<<" lnN "<<"     -       -          -          -         -       "<<1+(h_HLRatio->GetBinError(i)/h_HLRatio->GetBinContent(i))<<endl;
-    outf<<"MultiJHL_b"<<njbjCorr<<" lnN "<<"     -       -          -          -         -       "<<1+(h_doubleR->GetBinError(i)/h_doubleR->GetBinContent(i))<<endl;
+    outf<<"MultiJHL_b"<<njbjCorr<<" lnN "<<"     -       -          -          -         -       "<<1+(h_HLRatio->GetBinError(i)/h_HLRatio->GetBinContent(i))<<endl;
+    outf<<"MultiJdR_b"<<njbjCorr<<" lnN "<<"     -       -          -          -         -       "<<1+(h_doubleR->GetBinError(i)/h_doubleR->GetBinContent(i))<<endl;
     if(h_MultiJPurity->GetBinContent(i) < 0.0001)
       outf<<"MultiJEW_b"<<i<<"  lnN "<<"     -       -          -          -         -        0.5/1.0"<<endl;
     else{

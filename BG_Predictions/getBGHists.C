@@ -572,7 +572,7 @@ void c_getBGHists::getMultiJHist(int i_f){
   for(int i=0;i<6;i++){
     cout<<dRatioUnc[i]<<" ";
     dRatioUnc[i] = sqrt((dRatioUnc[i]*dRatioUnc[i]) + (dRatio[i]*dRatio[i]*doubleRUncVR[i]*doubleRUncVR[i]));
-    cout<<dRatioUnc[i]<<endl;
+    //    cout<<dRatioUnc[i]<<endl;
   }
   for(int i=1;i<=h_doubleR->GetNbinsX();i++){
     if( i==1 || i==7 || i==12 || i==17 || i==22 || i==27 ){
