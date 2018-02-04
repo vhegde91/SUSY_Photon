@@ -18,15 +18,12 @@ sigStat_b9 lnN       1.15422    -       -       -       -       -
 LEle_b9 gmN 8        -     0.253907     -       -       -       -
 LEleTFUnc_b9 lnN     -     1.0972      -       -       -       -
 LEleDR_b lnN     -     1.12      -       -       -       -
-LLeptPDF_b lnN     -     1.05      -       -       -       -
-LElebTag_bA lnN     -     1.02      -       -       -       -
 LEleLeptSF_bM3 lnN     -     1.02      -       -       -       -
 LEleJEC_b lnN     -     1.02      -       -       -       -
 LMuTau_b9 gmN  5     -       -     0.643302     -       -       -
 LMuTauTFUnc_b9 lnN   -       -     1.06536      -       -       -
-LLeptPDF_b lnN     -     -     1.015       -       -       -
-LMubTag_bA lnN     -     -    1.02      -       -       -
 LMuLeptSF_bM3 lnN     -     -    1.01     -       -       -
+LLeptPDF_b lnN     -     1.05     1.015       -       -       -
 FakeUncRate_b9 lnN   -       -          -    1.17968    -       -
 FakeRate_SF_b lnN   -       -          -    1.1    -       -
 FakeRate_PU_b lnN   -       -          -    1.06    -       -
@@ -38,4 +35,4 @@ ZG_highOrdCorr_bMJ lnN  -       -          -      -     1.02       -
 MultiJ_b9 gmN 11     -       -          -          -         -       0.339253
 MultiJdR_bR2 lnN      -       -          -          -         -       1.05644
 MultiJHL_bR2 lnN      -       -          -          -         -       1.24364
-MultiJEW_b9  lnN      -       -          -          -         -        0.682357/0.86422
+MultiJEW_b9  lnN      -       -          -          -         -        0.682408/0.86417

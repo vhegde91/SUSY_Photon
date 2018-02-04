@@ -152,11 +152,11 @@ void c_getBGHists::getLEleHist(int i_f){
   if(!isLDP) hPdf=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_pdf");
   else hPdf=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_pdf_LDP");
   c1.assignPCuncAllBins(hPdf,5.0);
-  //------assign 2% unc for b-tagging
-  TH1D *hBTag;
-  if(!isLDP) hBTag=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_bTag");
-  else hBTag=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_bTag_LDP");
-  c1.assignPCuncAllBins(hBTag,2.0);
+  //------assign 2% unc for b-tagging.
+  // TH1D *hBTag;
+  // if(!isLDP) hBTag=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_bTag");
+  // else hBTag=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_bTag_LDP");
+  // c1.assignPCuncAllBins(hBTag,2.0);
   //------assign 2% unc for lepton SF
   TH1D *hLepSF;
   if(!isLDP) hLepSF=(TH1D*)hTF->Clone("AllSBins_v7_UncLEleTF_LepSF");
@@ -173,7 +173,7 @@ void c_getBGHists::getLEleHist(int i_f){
   else hTF_final=(TH1D*)hTF->Clone("LEleTFs_Final_LDP");
   hTF_final->Add(hdRLepPho);
   hTF_final->Add(hPdf);
-  hTF_final->Add(hBTag);
+  //  hTF_final->Add(hBTag);
   hTF_final->Add(hLepSF);
   hTF_final->Add(hJEC);
   //-----multiply DCS with final TF histogram with TF unc
@@ -191,7 +191,7 @@ void c_getBGHists::getLEleHist(int i_f){
   hTF->Write();
   hdRLepPho->Write();
   hPdf->Write();
-  hBTag->Write();
+  //  hBTag->Write();
   hLepSF->Write();
   hJEC->Write();
   hTF_final->Write();
@@ -252,11 +252,11 @@ void c_getBGHists::getLMuTauHist(int i_f){
   if(!isLDP) hPdf=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_pdf");
   else hPdf=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_pdf_LDP");
   c1.assignPCuncAllBins(hPdf,1.5);
-  //------assign 2% unc for b-tagging
-  TH1D *hBTag;
-  if(!isLDP) hBTag=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_bTag");
-  else hBTag=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_bTag_LDP");
-  c1.assignPCuncAllBins(hBTag,2.0);
+  // //------assign 2% unc for b-tagging
+  // TH1D *hBTag;
+  // if(!isLDP) hBTag=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_bTag");
+  // else hBTag=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_bTag_LDP");
+  // c1.assignPCuncAllBins(hBTag,2.0);
   //------assign 1% unc for lepton SF
   TH1D *hLepSF;
   if(!isLDP) hLepSF=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_LepSF");
@@ -267,7 +267,7 @@ void c_getBGHists::getLMuTauHist(int i_f){
   if(!isLDP) hTF_final=(TH1D*)hTF->Clone("LMuTFs_Final");
   else hTF_final=(TH1D*)hTF->Clone("LMuTFs_Final_LDP");
   hTF_final->Add(hPdf);
-  hTF_final->Add(hBTag);
+  //  hTF_final->Add(hBTag);
   hTF_final->Add(hLepSF);
   //-----multiply DCS with final TF histogram with TF unc
   if(!isLDP) hPred=(TH1D*)hCS->Clone("AllSBins_v7_LMuPred");
@@ -283,7 +283,7 @@ void c_getBGHists::getLMuTauHist(int i_f){
   hCS->Write();
   hTF->Write();
   hPdf->Write();
-  hBTag->Write();
+  //  hBTag->Write();
   hLepSF->Write();
   hTF_final->Write();
   hPred->Write();
@@ -376,7 +376,7 @@ void c_getBGHists::getFRHist(int i_f){
   // c1.printContents(hFR);
   // c1.printContents(hFakeSF);
   // c1.printContents(hPU);
-  c1.printContents(hStat);
+  //  c1.printContents(hStat);
   // c1.printContents(hISRWt);
   // c1.printContents(hFR_final);
   // c1.printContents(hPred);
@@ -548,7 +548,7 @@ void c_getBGHists::getMultiJHist(int i_f){
   // c1.printContents(h_pureUncDown);
   // c1.printContents(hCSraw);
   // c1.printContents(hEWSumLDP);
-  //  c1.printContents(hCS);
+  c1.printContents(hCS);
   //----------------do predictions for HDP ----------------------
   hTemp->Reset();
   hTemp = (TH1D*)fout->Get("AllSBins_v7_LElePred");
@@ -629,8 +629,8 @@ void c_getBGHists::getMultiJHist(int i_f){
  
   
   // c1.printContents(hHLR);
-  c1.printContents(h_doubleR);
-  //c1.printContents(h_MultiJPred);
+  //  c1.printContents(h_doubleR);
+  //  c1.printContents(h_MultiJPred);
     
 }
 
@@ -653,9 +653,9 @@ void c_getBGHists::getTotalBG(int i_f){
   hData->Write();
   hDataVsBG->Write();
 
-  // c1.printContents(hTot);
-  // c1.printContents(hData);
-  // c1.printContents(hDataVsBG);
+  c1.printContents(hTot);
+  c1.printContents(hData);
+  c1.printContents(hDataVsBG);
 }
 
 //------------------------------------------------

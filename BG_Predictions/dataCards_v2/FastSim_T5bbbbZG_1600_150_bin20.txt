@@ -18,15 +18,12 @@ sigStat_b20 lnN       1.08153    -       -       -       -       -
 LEle_b20 gmN 0        -     0.565142     -       -       -       -
 LEleTFUnc_b20 lnN     -     1.08899      -       -       -       -
 LEleDR_b lnN     -     1.12      -       -       -       -
-LLeptPDF_b lnN     -     1.05      -       -       -       -
-LElebTag_bB lnN     -     0.98      -       -       -       -
 LEleLeptSF_bM4 lnN     -     1.02      -       -       -       -
 LEleJEC_b lnN     -     1.02      -       -       -       -
 LMuTau_b20 gmN  1     -       -     1.11235     -       -       -
 LMuTauTFUnc_b20 lnN   -       -     1.09047      -       -       -
-LLeptPDF_b lnN     -     -     1.015       -       -       -
-LMubTag_bB lnN     -     -    0.98      -       -       -
 LMuLeptSF_bM4 lnN     -     -    1.01     -       -       -
+LLeptPDF_b lnN     -     1.05     1.015       -       -       -
 FakeUncRate_b20 lnN   -       -          -    1.16491    -       -
 FakeRate_SF_b lnN   -       -          -    1.1    -       -
 FakeRate_PU_b lnN   -       -          -    1.06    -       -
@@ -36,5 +33,5 @@ ZGTF_bB gmN 5         -       -          -      -     0.303563       -
 ZGPureOverLLG_bB lnN  -       -          -      -     1.19613     -
 ZG_highOrdCorr_bLJ lnN  -       -          -      -     0.875424       -
 MultiJ_b20 gmN 5     -       -          -          -         -       0.123746
-MultiJdR_bR4 lnN      -       -          -          -         -       1.04935
+MultiJdR_bR4 lnN      -       -          -          -         -       1.04933
 MultiJHL_bR4 lnN      -       -          -          -         -       1.25932

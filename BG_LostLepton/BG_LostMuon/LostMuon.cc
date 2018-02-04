@@ -121,6 +121,11 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       sampleName = inFileName[fCurrent];
       //----------- btags SFs-----------------
       if(applybTagSFs){
+	// btagcorr.SetBtagSFunc(1);
+	// btagcorr.SetMistagSFunc(1);
+	// btagcorr.SetBtagCFunc(1);
+	// btagcorr.SetMistagCFunc(1);
+
       	currFile = TFile::Open(sampleName);
       	btagcorr.SetEffs(currFile);
       	btagcorr.SetCalib("btag/CSVv2_Moriond17_B_H_mod.csv");
@@ -262,8 +267,9 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       if(jentry<3) cout<<"Non-Prompt, dR(pho,q/g/lep) < 0.3 ";
     }
     //    if(madMinPhotonDeltaR < 0.5 || gendRLepPho < 0.5) continue;    
-    int nGenMu=0,nGenEle=0,nGenTau=0,nGenMuFmTau=0,nGenEleFmTau=0;
+    int nGenMu=0,nGenEle=0,nGenTau=0,nGenMuFmTau=0,nGenEleFmTau=0,Windx=-1;
     vector<TLorentzVector> genMu;
+    TLorentzVector WKid1,WKid2;
     double Wmass=0;
     for(int i=0;i<GenParticles->size();i++){
       if((*GenParticles)[i].Pt()!=0){
@@ -271,10 +277,21 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	else if( abs((*GenParticles_PdgId)[i])==12 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {nGenEle++;}//electrons, count using neutrino
 	else if( abs((*GenParticles_PdgId)[i])==15 && (abs((*GenParticles_ParentId)[i])<=25) ) {nGenTau++;}//taus
 	if( abs((*GenParticles_PdgId)[i])==13 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {genMu.push_back((*GenParticles)[i]);}
-	if(abs((*GenParticles_PdgId)[i])==24) Wmass = (*GenParticles)[i].M();
+	if(abs((*GenParticles_PdgId)[i])==24){ Wmass = (*GenParticles)[i].M(); Windx=i;}
+	
       }
     }
-    h_WMass->Fill(Wmass,wt);
+    if(Windx>0){
+      for(int i=0;i<GenParticles->size();i++){
+	if((*GenParticles)[i].Pt()!=0){
+	  if( (abs((*GenParticles_PdgId)[i])==11 || abs((*GenParticles_PdgId)[i])==13 || abs((*GenParticles_PdgId)[i])==15) && (*GenParticles_ParentIdx)[i] == Windx) WKid1 = (*GenParticles)[i];
+	  if( (abs((*GenParticles_PdgId)[i])==12 || abs((*GenParticles_PdgId)[i])==14 || abs((*GenParticles_PdgId)[i])==16) && (*GenParticles_ParentIdx)[i] == Windx) WKid2 = (*GenParticles)[i];
+	}
+      }
+      h_WMass->Fill(Wmass,wt);
+      h2_WMassVsGenMT->Fill(Wmass,sqrt(2*WKid1.Pt()*WKid2.Pt()*(1-cos(WKid1.DeltaPhi(WKid2)))),wt);
+      //      if(sqrt(2*WKid1.Pt()*WKid2.Pt()*(1-cos(WKid1.DeltaPhi(WKid2)))) < 5){cout<<Wmass<<" "<<Windx<<" "<<WKid1.Pt()<<" "<<WKid2.Pt()<<" "<<sqrt(2*WKid1.Pt()*WKid2.Pt()*(1-cos(WKid1.DeltaPhi(WKid2))))<<endl; print(jentry);}
+    }
     if(nGenMu==0 && nGenEle==0 && nGenTau==0) continue;//to reject W->qq' type of events
 
     if(Muons->size()==0){
@@ -856,38 +873,37 @@ void LostMuon::print(Long64_t jentry){
   for(int i=0;i<Electrons->size();i++){
     cout<<"ElePt: "<<(*Electrons)[i].Pt()<<" Eta: "<<(*Electrons)[i].Eta()<<" Phi: "<<(*Electrons)[i].Phi()<<" M: "<<(*Electrons)[i].M()<<endl;
   }
-  TLorentzVector jetsVec,jetsVecJECdn,met;
-  met.SetPtEtaPhiE(MET,0.,METPhi,0.);
+  // TLorentzVector jetsVec,jetsVecJECdn,met;
+  // met.SetPtEtaPhiE(MET,0.,METPhi,0.);
   cout<<"Jets:"<<endl; 
   for(int i=0;i<Jets->size();i++){
     cout<<"JetPt:"<<(*Jets)[i].Pt()<<" JetEta:"<<(*Jets)[i].Eta()<<" JetPhi:"<<(*Jets)[i].Phi()<<endl;
-    jetsVec+=(*Jets)[i];
+    //    jetsVec+=(*Jets)[i];
   }
-  cout<<"Jets_jecFactor:"<<endl;
-  for(int i=0;i<Jets_jecFactor->size();i++){
-      cout<<(*Jets_jecFactor)[i]<<endl;
-  }
+  // cout<<"Jets_jecFactor:"<<endl;
+  // for(int i=0;i<Jets_jecFactor->size();i++){
+  //     cout<<(*Jets_jecFactor)[i]<<endl;
+  // }
 
-  cout<<"Jets_jecUnc:"<<endl;
-  for(int i=0;i<Jets_jecUnc->size();i++){
-      cout<<(*Jets_jecUnc)[i]<<endl;
-  }
-  Jets = JetsJECdown;
-  cout<<"JetsJECdown:"<<endl; 
-  for(int i=0;i<JetsJECdown->size();i++){
-    cout<<"JetPt:"<<(*JetsJECdown)[i].Pt()<<" JetEta:"<<(*JetsJECdown)[i].Eta()<<" JetPhi:"<<(*JetsJECdown)[i].Phi()<<endl;
-    jetsVecJECdn+=(*JetsJECdown)[i];
-  }
-  //  cout<<"METJECdown: "<<METJECdown<<endl;
-  cout<<"METDown: "<<endl;
-  for(int i=0;i<METDown->size();i++){
-    cout<<(*METDown)[i]<<endl;
-  }
-  cout<<"METUp: "<<endl;
-  for(int i=0;i<METUp->size();i++){
-    cout<<(*METUp)[i]<<endl;
-  }
-  cout<<"DownJEC MET: "<<(met+jetsVec-jetsVecJECdn).Pt()<<endl;
+  // cout<<"Jets_jecUnc:"<<endl;
+  // for(int i=0;i<Jets_jecUnc->size();i++){
+  //     cout<<(*Jets_jecUnc)[i]<<endl;
+  // }
+  // cout<<"JetsJECdown:"<<endl; 
+  // for(int i=0;i<JetsJECdown->size();i++){
+  //   cout<<"JetPt:"<<(*JetsJECdown)[i].Pt()<<" JetEta:"<<(*JetsJECdown)[i].Eta()<<" JetPhi:"<<(*JetsJECdown)[i].Phi()<<endl;
+  //   jetsVecJECdn+=(*JetsJECdown)[i];
+  // }
+  // //  cout<<"METJECdown: "<<METJECdown<<endl;
+  // cout<<"METDown: "<<endl;
+  // for(int i=0;i<METDown->size();i++){
+  //   cout<<(*METDown)[i]<<endl;
+  // }
+  // cout<<"METUp: "<<endl;
+  // for(int i=0;i<METUp->size();i++){
+  //   cout<<(*METUp)[i]<<endl;
+  // }
+  // cout<<"DownJEC MET: "<<(met+jetsVec-jetsVecJECdn).Pt()<<endl;
   //------------------------- MC only -------------------------------------------------
   for(int i=0;i<GenJets->size();i++){
     cout<<"GenJetPt:"<<(*GenJets)[i].Pt()<<" JetEta:"<<(*GenJets)[i].Eta()<<" JetPhi:"<<(*GenJets)[i].Phi()<<endl;
@@ -895,7 +911,7 @@ void LostMuon::print(Long64_t jentry){
   
   for(int i=0;i<GenParticles->size();i++){
     // cout<<EvtNum<<" "<<jentry<<" "<<GenParticles->size()<<" "<<i<<" parentId:"<<(*GenParticles_ParentId)[i]<<" parentIndx:"<<(*GenParticles_ParentIdx)[i]<<" PdgId:"<<(*GenParticles_PdgId)[i]<<" Status:"<<(*GenParticles_Status)[i]<<"\tPx:"<<(*GenParticles)[i].Px()<<" Py:"<<(*GenParticles)[i].Py()<<" Pz:"<<(*GenParticles)[i].Pz()<<" E:"<<(*GenParticles)[i].Energy()<<endl;
-    cout<<EvtNum<<" "<<jentry<<" "<<GenParticles->size()<<" "<<i<<" PdgId:"<<(*GenParticles_PdgId)[i]<<" parentId:"<<(*GenParticles_ParentId)[i]<<" parentIndx:"<<(*GenParticles_ParentIdx)[i]<<" Status:"<<(*GenParticles_Status)[i]<</*"\tPx:"<<(*GenParticles)[i].Px()<<" Py:"<<(*GenParticles)[i].Py()<<" Pz:"<<(*GenParticles)[i].Pz()<<*/"\tPt:"<<(*GenParticles)[i].Pt()<<" Eta:"<<(*GenParticles)[i].Eta()<<" Phi:"<<(*GenParticles)[i].Phi()<<" E:"<<(*GenParticles)[i].Energy()<<endl;
+    cout<<EvtNum<<" "<<jentry<<" "<<GenParticles->size()<<" "<<i<<" PdgId:"<<(*GenParticles_PdgId)[i]<<" parentId:"<<(*GenParticles_ParentId)[i]<<" parentIndx:"<<(*GenParticles_ParentIdx)[i]<<" Status:"<<(*GenParticles_Status)[i]<</*"\tPx:"<<(*GenParticles)[i].Px()<<" Py:"<<(*GenParticles)[i].Py()<<" Pz:"<<(*GenParticles)[i].Pz()<<*/"\tPt:"<<(*GenParticles)[i].Pt()<<" Eta:"<<(*GenParticles)[i].Eta()<<" Phi:"<<(*GenParticles)[i].Phi()<<" E:"<<(*GenParticles)[i].Energy()<<" M:"<<(*GenParticles)[i].M()<<endl;
   }
   //-------------------------------------------------------------------------
   cout<<"^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^"<<endl<<endl;

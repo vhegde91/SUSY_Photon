@@ -122,6 +122,10 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	currFile = TFile::Open(sampleName);
 	btagcorr.SetEffs(currFile);
 	btagcorr.SetCalib("btag/CSVv2_Moriond17_B_H_mod.csv");
+	btagcorr.SetBtagSFunc(1);
+        btagcorr.SetMistagSFunc(1);
+        btagcorr.SetBtagCFunc(1);
+        btagcorr.SetMistagCFunc(1);
       }
     }
     vector<double> prob;

@@ -18,15 +18,12 @@ sigStat_b11 lnN       1.12104    -       -       -       -       -
 LEle_b11 gmN 1        -     0.253907     -       -       -       -
 LEleTFUnc_b11 lnN     -     1.0972      -       -       -       -
 LEleDR_b lnN     -     1.12      -       -       -       -
-LLeptPDF_b lnN     -     1.05      -       -       -       -
-LElebTag_bA lnN     -     1.02      -       -       -       -
 LEleLeptSF_bM5 lnN     -     1.02      -       -       -       -
 LEleJEC_b lnN     -     1.02      -       -       -       -
 LMuTau_b11 gmN  3     -       -     0.643302     -       -       -
 LMuTauTFUnc_b11 lnN   -       -     1.06536      -       -       -
-LLeptPDF_b lnN     -     -     1.015       -       -       -
-LMubTag_bA lnN     -     -    1.02      -       -       -
 LMuLeptSF_bM5 lnN     -     -    1.01     -       -       -
+LLeptPDF_b lnN     -     1.05     1.015       -       -       -
 FakeUncRate_b11 lnN   -       -          -    1.18788    -       -
 FakeRate_SF_b lnN   -       -          -    1.1    -       -
 FakeRate_PU_b lnN   -       -          -    1.06    -       -

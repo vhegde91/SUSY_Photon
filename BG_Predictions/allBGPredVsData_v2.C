@@ -74,8 +74,8 @@ void allBGPredVsData_v2(TString iFname){
       h_hist[i]->SetLineWidth(3);
       if(i==nBGs) legend->AddEntry(h_hist[i],getLegName(histName[i]),"lp");
       else{
-	if(i==nBGs+1) legend->AddEntry(h_hist[i],"T5bbbbZg_1550","lp");
-	if(i==nBGs+2) legend->AddEntry(h_hist[i],"T5bbbbZg_150","lp");	
+	if(i==nBGs+1) legend->AddEntry(h_hist[i],getLegName(f[1]->GetName()),"lp");
+	if(i==nBGs+2) legend->AddEntry(h_hist[i],getLegName(f[2]->GetName()),"lp");
       }
     }
     // cout<<h_hist[i]->GetName()<<endl;
@@ -161,12 +161,14 @@ void allBGPredVsData_v2(TString iFname){
 }
 
 TString getLegName(TString fname){
-  if(fname.Contains("ZG")){return "Z( #rightarrow #nu #bar{#nu})#gamma+jets";}
+  if(fname.Contains("ZGPred")){return "Z( #rightarrow #nu #bar{#nu})#gamma+jets";}
   else if(fname.Contains("LEle")){return "Lost e";}
   else if(fname.Contains("LMu")){return "Lost #mu+ #tau_{had}";}
   else if(fname.Contains("FR")){return "e #rightarrow #gamma";}
   else if(fname.Contains("MultiJ") || fname.Contains("gjets")  ){return "#gamma+jets";}
-  else if(fname.Contains("CD") ){return "Data";}
+  else if(fname.Contains("T5bbbbZG_1600_150")){return "T5bbbbZG_150";}
+  else if(fname.Contains("T5bbbbZG_1600_1550")){return "T5bbbbZG_1550";}
+  else if(fname.Contains("v7_Obs") ){return "Data";}
   else return fname;
 }
 TString getXaxisName(TString axname){

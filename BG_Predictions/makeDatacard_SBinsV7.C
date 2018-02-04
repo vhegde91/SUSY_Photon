@@ -45,7 +45,7 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
   TH1D *h_LEleTFs = (TH1D*)f[1]->Get("LEleTFs");
   TH1D *h_LEleDr = (TH1D*)f[1]->Get("AllSBins_v7_UncTF_dRElePho");
   TH1D *h_LElePDF = (TH1D*)f[1]->Get("AllSBins_v7_UncLEleTF_pdf");
-  TH1D *h_LElebTag = (TH1D*)f[1]->Get("AllSBins_v7_UncLEleTF_bTag");
+  //  TH1D *h_LElebTag = (TH1D*)f[1]->Get("AllSBins_v7_UncLEleTF_bTag");
   TH1D *h_LEleLepSF = (TH1D*)f[1]->Get("AllSBins_v7_UncLEleTF_LepSF");
   TH1D *h_LEleJEC = (TH1D*)f[1]->Get("AllSBins_v7_UncLEleTF_JEC");
 
@@ -53,7 +53,7 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
   TH1D *h_LMuCS = (TH1D*)f[1]->Get("AllSBins_v7_LMuCS");
   TH1D *h_LMuTauTFs = (TH1D*)f[1]->Get("LMuTauTFs");
   TH1D *h_LMuPDF = (TH1D*)f[1]->Get("AllSBins_v7_UncLMuTF_pdf");
-  TH1D *h_LMubTag = (TH1D*)f[1]->Get("AllSBins_v7_UncLMuTF_bTag");
+  //  TH1D *h_LMubTag = (TH1D*)f[1]->Get("AllSBins_v7_UncLMuTF_bTag");
   TH1D *h_LMuLepSF = (TH1D*)f[1]->Get("AllSBins_v7_UncLMuTF_LepSF");
 
   //for fake
@@ -144,23 +144,25 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
     outf<<"LEle_b"<<i<<" gmN "<<h_LEleCS->GetBinContent(i)<<"        -     "<<h_LEleTFs->GetBinContent(i)<<"     -       -       -       -"<<endl;
     outf<<"LEleTFUnc_b"<<i<<" lnN     -     "<<1+h_LEleTFs->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
     outf<<"LEleDR_b"<<" lnN     -     "<<1+h_LEleDr->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
-    outf<<"LLeptPDF_b"<<" lnN     -     "<<1+h_LElePDF->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
-    if(i<=16)
-      outf<<"LElebTag_b"<<bTagCorr<<" lnN     -     "<<1+h_LElebTag->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
-    else       
-      outf<<"LElebTag_b"<<bTagCorr<<" lnN     -     "<<1-h_LElebTag->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
+    //    outf<<"LLeptPDF_b"<<" lnN     -     "<<1+h_LElePDF->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
+    // if(i<=16)
+    //   outf<<"LElebTag_b"<<bTagCorr<<" lnN     -     "<<1+h_LElebTag->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
+    // else       
+    //   outf<<"LElebTag_b"<<bTagCorr<<" lnN     -     "<<1-h_LElebTag->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
     outf<<"LEleLeptSF_b"<<metCorr<<" lnN     -     "<<1+h_LEleLepSF->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
     outf<<"LEleJEC_b"<<" lnN     -     "<<1+h_LEleJEC->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"      -       -       -       -"<<endl;
 
     //--------------- Lost Mu Had Tau-----------------
     outf<<"LMuTau_b"<<i<<" gmN  "<<h_LMuCS->GetBinContent(i)<<"     -       -     "<<h_LMuTauTFs->GetBinContent(i)<<"     -       -       -"<<endl;
     outf<<"LMuTauTFUnc_b"<<i<<" lnN   -       -     "<<1+h_LMuTauTFs->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"      -       -       -"<<endl;
-    outf<<"LLeptPDF_b"<<" lnN     -     -     "<<1+h_LMuPDF->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"       -       -       -"<<endl;
-    if(i<=16)
-      outf<<"LMubTag_b"<<bTagCorr<<" lnN     -     -    "<<1+h_LMubTag->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"      -       -       -"<<endl;
-    else       
-      outf<<"LMubTag_b"<<bTagCorr<<" lnN     -     -    "<<1-h_LMubTag->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"      -       -       -"<<endl;
+    //    outf<<"LLeptPDF_b"<<" lnN     -     -     "<<1+h_LMuPDF->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"       -       -       -"<<endl;
+    // if(i<=16)
+    //   outf<<"LMubTag_b"<<bTagCorr<<" lnN     -     -    "<<1+h_LMubTag->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"      -       -       -"<<endl;
+    // else       
+    //   outf<<"LMubTag_b"<<bTagCorr<<" lnN     -     -    "<<1-h_LMubTag->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"      -       -       -"<<endl;
     outf<<"LMuLeptSF_b"<<metCorr<<" lnN     -     -    "<<1+h_LMuLepSF->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"     -       -       -"<<endl;
+    //--------------- PDF unc for lost lepton --------------
+    outf<<"LLeptPDF_b"<<" lnN     -     "<<1+h_LElePDF->GetBinError(i)/h_LEleTFs->GetBinContent(i)<<"     "<<1+h_LMuPDF->GetBinError(i)/h_LMuTauTFs->GetBinContent(i)<<"       -       -       -"<<endl;
     //--------------- Fakerate -----------------
     outf<<"FakeUncRate_b"<<i<<" lnN   -       -          -    "<<1+h_FR_StatTrig->GetBinError(i)/h_FR_StatTrig->GetBinContent(i)<<"    -       -"<<endl;
     outf<<"FakeRate_SF_b"<<" lnN   -       -          -    "<<1+h_FRSF->GetBinError(i)/h_FR->GetBinContent(i)<<"    -       -"<<endl;

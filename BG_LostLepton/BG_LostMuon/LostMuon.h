@@ -108,6 +108,7 @@ class LostMuon : public NtupleVariables{
   TH1D *h_madMinPhotonDeltaR;
   TH1D *h_mindRPhoLep;
   TH1D *h_WMass;
+  TH2D *h2_WMassVsGenMT;
 
   TH1D *h_nVtx_Mu0;
   TH1D *h_ST_Mu0;
@@ -300,6 +301,7 @@ void LostMuon::BookHistogram(const char *outFileName) {
   h_madMinPhotonDeltaR=new TH1D("MadMinPhotonDeltaR","madMinPhotonDeltaR",1000,0,10);
   h_mindRPhoLep=new TH1D("mindRPhoLep","min dR(GenPho,lepton)",1000,0,10);
   h_WMass=new TH1D("WMass","Gen level mass of W",60,0,300);
+  h2_WMassVsGenMT=new TH2D("WMassVsGenMT","x:Gen level mass of W, y: mT(gen#mu,gen#nu)",60,0,300,60,0,300);
 
   h_nVtx_Mu0=new TH1D("nVtx_Mu0","no. of vertices for 0 Muon events",50,0,50);
   h_ST_Mu0=new TH1D("ST_Mu0","ST for 0 Muon events",400,0,4000);
