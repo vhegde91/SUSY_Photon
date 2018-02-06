@@ -1,0 +1,38 @@
+# - - - - - - - - - - - - - - - - - - -
+# Datacard for mGl= 2000 mNLSP= 200 with model FastSim_T5bbbbZg_2000_200
+# - - - - - - - - - - - - - - - - - - - 
+imax 1 number of channels
+jmax *  number of backgrounds('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin 30
+observation 1.1799
+------------
+bin 30 30 30 30 30 30 
+process FastSim_T5bbbbZg_2000_200_bin30 LEle_bin30 LMuTau_bin30 Fake_bin30 ZG_bin30 MultiJ_bin30 
+process 0 1 2 3 4 5 
+rate 0.874918 0.714539 0 0.435797 0.0295654 0 
+------------
+lumi lnN              1.023      -       -       -       -       -
+sigStat_b30 lnN       1.04805    -       -       -       -       -
+LEle_b30 gmN 2        -     0.357269     -       -       -       -
+LEleTFUnc_b30 lnN     -     1.16922      -       -       -       -
+LEleDR_b lnN     -     1.12      -       -       -       -
+LEleLeptSF_bM4 lnN     -     1.02      -       -       -       -
+LEleJEC_b lnN     -     1.02      -       -       -       -
+LMuTau_b30 gmN  0     -       -     0.664767     -       -       -
+LMuTauTFUnc_b30 lnN   -       -     1.14674      -       -       -
+LMuLeptSF_bM4 lnN     -     -    1.01     -       -       -
+LLeptPDF_b lnN     -     1.05     1.015       -       -       -
+FakeUncRate_b30 lnN   -       -          -    1.18075    -       -
+FakeRate_SF_b lnN   -       -          -    1.1    -       -
+FakeRate_PU_b lnN   -       -          -    1.06    -       -
+FakeRate_ISR_b lnN   -       -          -    1.02    -       -
+ZG_mcStat_b30 lnN     -       -          -      -     1.7       -
+ZGTF_bB gmN 5         -       -          -      -     0.00591308       -
+ZGPureOverLLG_bB lnN  -       -          -      -     1.19613     -
+ZG_highOrdCorr_bHJ lnN  -       -          -      -     0.98       -
+MultiJ_b30 gmN 0     -       -          -          -         -       0.618488
+MultiJHL_bR6 lnN      -       -          -          -         -       1.20008
+MultiJdR_bR6 lnN      -       -          -          -         -       1.71638
+MultiJEW_b30  lnN      -       -          -          -         -        0.5/1.0

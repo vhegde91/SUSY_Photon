@@ -1,0 +1,38 @@
+# - - - - - - - - - - - - - - - - - - -
+# Datacard for mGl= 2000 mNLSP= 200 with model FastSim_T5bbbbZg_2000_200
+# - - - - - - - - - - - - - - - - - - - 
+imax 1 number of channels
+jmax *  number of backgrounds('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin 2
+observation 153.75
+------------
+bin 2 2 2 2 2 2 
+process FastSim_T5bbbbZg_2000_200_bin2 LEle_bin2 LMuTau_bin2 Fake_bin2 ZG_bin2 MultiJ_bin2 
+process 0 1 2 3 4 5 
+rate 0.0143247 10.3981 31.2403 22.2688 29.7017 60.1412 
+------------
+lumi lnN              1.023      -       -       -       -       -
+sigStat_b2 lnN       1.38183    -       -       -       -       -
+LEle_b2 gmN 27        -     0.385113     -       -       -       -
+LEleTFUnc_b2 lnN     -     1.09246      -       -       -       -
+LEleDR_b lnN     -     1.12      -       -       -       -
+LEleLeptSF_bM2 lnN     -     1.02      -       -       -       -
+LEleJEC_b lnN     -     1.02      -       -       -       -
+LMuTau_b2 gmN  31     -       -     1.00775     -       -       -
+LMuTauTFUnc_b2 lnN   -       -     1.06123      -       -       -
+LMuLeptSF_bM2 lnN     -     -    1.01     -       -       -
+LLeptPDF_b lnN     -     1.05     1.015       -       -       -
+FakeUncRate_b2 lnN   -       -          -    1.18653    -       -
+FakeRate_SF_b lnN   -       -          -    1.1    -       -
+FakeRate_PU_b lnN   -       -          -    1.06    -       -
+FakeRate_ISR_b lnN   -       -          -    1.02    -       -
+ZG_mcStat_b2 lnN     -       -          -      -     1.05606       -
+ZGTF_bA gmN 31         -       -          -      -     0.958119       -
+ZGPureOverLLG_bA lnN  -       -          -      -     1.05016     -
+ZG_highOrdCorr_bLJ lnN  -       -          -      -     1.13286       -
+MultiJ_b2 gmN 286     -       -          -          -         -       0.210284
+MultiJHL_bR1 lnN      -       -          -          -         -       1.02394
+MultiJdR_bR1 lnN      -       -          -          -         -       1.17059
+MultiJEW_b2  lnN      -       -          -          -         -        0.891722/0.919938
