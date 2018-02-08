@@ -25,6 +25,8 @@ int col[10]={kBlack,kMagenta+2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlu
 TString name;
 bool saveCanvas=0;
 void setLastBinAsOverFlow(TH1D*);
+void setMyRange(TH1D*,double,double);
+void setMyRange(THStack*,double,double);
 TString getLegName(TString);
 TString getXaxisName(TString);
 double data_Integral=0,mc_Integral=0;
@@ -43,38 +45,39 @@ void stackedDataVsMC(TString iFname){
   
   vector<string> name1;
   vector<int> rebin;
-  name1.push_back("ST_Ele1");  rebin.push_back(10);         //name2.push_back("ST_Ele1");     
-  name1.push_back("MET_Ele1");    rebin.push_back(5);     //name2.push_back("MET_Ele1");     
-  name1.push_back("nBTags_Ele1");   rebin.push_back(1);    //name2.push_back("nBTags_Ele1");     
-  name1.push_back("nHadJets_Ele1");  rebin.push_back(1);  //name2.push_back("nHadJets_Ele1");
-  name1.push_back("BestPhotonPt_Ele1");   rebin.push_back(5);  //name2.push_back("BestPhotonPt_Ele1");      
-  name1.push_back("BestPhotonEta_Ele1"); rebin.push_back(5);  //name2.push_back("BestPhotonEta_Ele1");  
-  //  name1.push_back("BestPhotonPhi_Ele1"); rebin.push_back(1);  //name2.push_back("BestPhotonEta_Ele1");  
-  name1.push_back("METvarBin_Ele1");  rebin.push_back(1); //name2.push_back("METvarBin_Ele1");  
-  // name1.push_back("dPhi_METjet1_Pho_Ele1"); rebin.push_back(2);  //name2.push_back("dPhi_METjet1_Pho_Ele1");  
-  // name1.push_back("dPhi_METjet2_Pho_Ele1"); rebin.push_back(2);  //name2.push_back("dPhi_METjet2_Pho_Ele1");  
-  name1.push_back("dPhi_METBestPhoton_Ele1"); rebin.push_back(2);   //name2.push_back("dPhi_METBestPhoton_Ele1");  
-  name1.push_back("dPhi_Ele_Photon"); rebin.push_back(2);
-  name1.push_back("dPhiEleMET"); rebin.push_back(2);
-  name1.push_back("dR_ElePho");   rebin.push_back(1);
-  name1.push_back("invMassPhoEle"); rebin.push_back(5);
+  vector<double> xLow,xHigh;
+  name1.push_back("ST_Ele1");  rebin.push_back(10);   xLow.push_back(0); xHigh.push_back(3000); 
+  name1.push_back("MET_Ele1");    rebin.push_back(5);    xLow.push_back(0); xHigh.push_back(800); 
+  name1.push_back("nBTags_Ele1");   rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(8);  
+  name1.push_back("nHadJets_Ele1");  rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(12);
+  name1.push_back("BestPhotonPt_Ele1");   rebin.push_back(5); xLow.push_back(0); xHigh.push_back(1000);
+  name1.push_back("BestPhotonEta_Ele1"); rebin.push_back(5);  xLow.push_back(-100000); xHigh.push_back(100000);
+  //  name1.push_back("BestPhotonPhi_Ele1"); rebin.push_back(1);
+  name1.push_back("METvarBin_Ele1");  rebin.push_back(1); xLow.push_back(-100000); xHigh.push_back(1000000);
+  name1.push_back("dPhi_METjet1_Pho_Ele1"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
+  name1.push_back("dPhi_METjet2_Pho_Ele1"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
+  name1.push_back("dPhi_METBestPhoton_Ele1"); rebin.push_back(2);   xLow.push_back(0); xHigh.push_back(100000);
+  name1.push_back("dPhi_Ele_Photon"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
+  name1.push_back("dR_ElePho");   rebin.push_back(2);     xLow.push_back(0); xHigh.push_back(6);
+  name1.push_back("invMassPhoEle"); rebin.push_back(5);  xLow.push_back(0); xHigh.push_back(100000);
   //  name1.push_back("nBestPho_Ele1"); rebin.push_back(1);
-  name1.push_back("ElePt");   rebin.push_back(5);
-  name1.push_back("EleEta");   rebin.push_back(5);
-  name1.push_back("MT_Ele");   rebin.push_back(10);
-  name1.push_back("mTPho_Ele1");   rebin.push_back(5);
-  name1.push_back("mTPhoEleMET");   rebin.push_back(20);
+  name1.push_back("ElePt");   rebin.push_back(5);         xLow.push_back(0); xHigh.push_back(500);
+  name1.push_back("EleEta");   rebin.push_back(5); xLow.push_back(-100000); xHigh.push_back(100000);
+  name1.push_back("MT_Ele");   rebin.push_back(10);       xLow.push_back(0); xHigh.push_back(300);
+  name1.push_back("mTPho_Ele1");   rebin.push_back(5);    xLow.push_back(0); xHigh.push_back(800);
+  name1.push_back("mTPhoEleMET");   rebin.push_back(20); xLow.push_back(0); xHigh.push_back(800);
+
   // name1.push_back("MET_R1_v2_Ele1");   rebin.push_back(1);
   // name1.push_back("MET_R2_v2_Ele1");   rebin.push_back(1);
   // name1.push_back("MET_R3_v2_Ele1");   rebin.push_back(1);
   // name1.push_back("MET_R4_v2_Ele1");   rebin.push_back(1);
   // name1.push_back("MET_R5_v2_Ele1");   rebin.push_back(1);
-  name1.push_back("AllSBins_v4_Ele1");    rebin.push_back(1);
-  //  name1.push_back("nVtx_Ele1");   rebin.push_back(5);
-  // name1.push_back("isoEleTrack_Ele1");   rebin.push_back(1);
-  // name1.push_back("isoMuTrack_Ele1");   rebin.push_back(1);
-  // name1.push_back("isoPiTrack_Ele1");   rebin.push_back(1);
+  // name1.push_back("AllSBins_v4_Ele1");   rebin.push_back(1);   xLow.push_back(0); xHigh.push_back(300000);
 
+  name1.push_back("nVtx_Ele1");   rebin.push_back(5);           xLow.push_back(0); xHigh.push_back(100000);
+  // name1.push_back("isoEleTrack_Ele1");   rebin.push_back(1);
+  // name1.push_back("isoEleTrack_Ele1");   rebin.push_back(1);
+  // name1.push_back("isoPiTrack_Ele1");   rebin.push_back(1);
   // name1.push_back("MET_Ele1_R1");rebin.push_back(1);
   // name1.push_back("MET_Ele1_R2");rebin.push_back(1);
   // name1.push_back("MET_Ele1_R3");rebin.push_back(1);
@@ -99,7 +102,8 @@ void stackedDataVsMC(TString iFname){
     p_bot[i]->Draw();p_bot[i]->SetGridx();p_bot[i]->SetGridy();    
     name=name1[i]+"_Stack";
     hs_hist[i] = new THStack(name,name);
-    legend[i]=new TLegend(0.7, 0.90,  0.80, 0.45);
+    //    legend[i]=new TLegend(0.7, 0.90,  0.80, 0.45);
+    legend[i]=new TLegend(0.55, 0.90,  0.85, 0.65);
   }
   //cout<<getLegName(f[0]->GetName());
   TH1D *h_histG,*h_histE,*h_histGcopy;
@@ -109,6 +113,9 @@ void stackedDataVsMC(TString iFname){
     h_histG=(TH1D*)f[0]->FindObjectAny(name);
     h_histG->Rebin(rebin[i]);
     setLastBinAsOverFlow(h_histG);
+    setMyRange(h_histG,xLow[i],xHigh[i]);
+    if(xLow[i] > -5000 && xHigh[i] < 5000) h_histG->GetXaxis()->SetRangeUser(xLow[i],xHigh[i]);
+    //    if(name.Contains("ElePt")) setMyRange(h_histG,xLow[i],xHigh[i]);
     if(name1[i]=="nHadJets_Ele1") data_Integral=h_histG->Integral();
     c_cA[i]->cd();p_top[i]->cd();
     p_top[i]->SetTickx();p_top[i]->SetTicky();
@@ -130,6 +137,9 @@ void stackedDataVsMC(TString iFname){
       h_histE=(TH1D*)f[p]->FindObjectAny(name);
       h_histE->Rebin(rebin[i]);
       setLastBinAsOverFlow(h_histE);
+      setMyRange(h_histE,xLow[i],xHigh[i]);
+      if(xLow[i] > -5000 && xHigh[i] < 5000) h_histE->GetXaxis()->SetRangeUser(xLow[i],xHigh[i]);
+      //      if(name.Contains("ElePt")) setMyRange(h_histE,xLow[i],xHigh[i]);
       if(name1[i]=="nHadJets_Ele1"){
         mc_Integral+=h_histE->Integral();
         cout<<f[p]->GetName()<<" # events "<<h_histE->Integral()<<endl;
@@ -150,7 +160,12 @@ void stackedDataVsMC(TString iFname){
     }
     c_cA[i]->cd();    p_top[i]->cd();
     hs_hist[i]->SetMinimum(0.8);
+    hs_hist[i]->SetMaximum(5*hs_hist[i]->GetMaximum());
     hs_hist[i]->Draw("BAR");
+    name = h_histG->GetName();
+    if(xLow[i] > -5000 && xHigh[i] < 5000) hs_hist[i]->GetXaxis()->SetRangeUser(xLow[i],xHigh[i]);
+    hs_hist[i]->GetYaxis()->SetNdivisions(5);
+    //    if(name.Contains("ElePt")) setMyRange(hs_hist[i],xLow[i],xHigh[i]);
     h_histG->Draw("same");
     hs_hist[i]->SetTitle(";;Events");
     hs_hist[i]->GetYaxis()->SetTitleOffset(0.50);    
@@ -159,7 +174,7 @@ void stackedDataVsMC(TString iFname){
     
     c_cA[i]->Modified();
     c_cA[i]->Update();
-
+    legend[i]->SetNColumns(3);
     legend[i]->Draw();
 
     TH1D *h_numr=(TH1D*)h_histG->Clone();
@@ -188,11 +203,11 @@ void stackedDataVsMC(TString iFname){
     char name2[100];
     textOnTop.SetTextSize(0.06);
     intLumiE.SetTextSize(0.06);
-    textOnTop.DrawLatexNDC(0.1,0.91,"CMS #it{#bf{Preliminary}}");
+    textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
     intLumiE.SetTextSize(0.06);
     sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
     intLumiE.DrawLatexNDC(0.73,0.91,name2);
-    if(saveCanvas){name="c_"+name1[i]+".png";c_cA[i]->SaveAs(name);}
+    if(saveCanvas){name=name1[i]+".png";c_cA[i]->SaveAs(name);}
     
   }
   
@@ -209,14 +224,13 @@ TString getLegName(TString fname){
   else if(fname=="CS_TGZGDY_LostEle_v2.root") return "t#gamma+Z#gamma+DY";
   else return fname;
 }
-
 TString getXaxisName(TString axname){
   if(axname.Contains("nHadJets")) return "Jets";
-  else if(axname.Contains("ST")) return "ST(GeV)";
+  else if(axname.Contains("ST")) return "HT#gamma(GeV)";
   else if(axname.Contains("BTags")) return "b-Tags";
   else if(axname.Contains("ElePt")) return "e pT(GeV)";
+  else if(axname.Contains("ElePt")) return "e pT(GeV)";
   else if(axname.Contains("EleEta")) return "e #eta";
-  else if(axname.Contains("MuPt")) return "#mu pT(GeV)";
   else if(axname.Contains("PhotonPt")) return "#gamma pT(GeV)";
   else if(axname.Contains("PhotonEta")) return "#gamma #eta";
   else if(axname.Contains("mT")) return "mT_{#gamma,MET}(GeV)";
@@ -225,10 +239,37 @@ TString getXaxisName(TString axname){
   else if(axname.Contains("dPhi_METjet1") || axname.Contains("dphi1_METjet1")) return "#Delta#Phi_{1}";
   else if(axname.Contains("dPhi_METjet2") || axname.Contains("dphi2_METjet2")) return "#Delta#Phi_{2}";
   else if(axname.Contains("dPhi_METBestPhoton") ) return "#Delta#Phi(MET,#gamma)";
-  else if(axname.Contains("QMut") || axname.Contains("Qmut")) return "QMult";
+  else if(axname.Contains("QMult") || axname.Contains("Qmut")) return "QMult";
+  else if(axname.Contains("MT_Ele")) return "mT(e,MET)[GeV]";
   else if(axname.Contains("MET")) return "MET(GeV)";
   else return axname;
 
+}
+
+void setMyRange(TH1D *h1,double xLow,double xHigh){
+  double err=0;
+  if(xHigh > 13000) return;
+  if(xLow < 13000) return;
+  int nMax=h1->FindBin(xHigh);
+  h1->SetBinContent(nMax,h1->IntegralAndError(nMax,h1->GetNbinsX(),err));
+  h1->SetBinError(nMax,err);
+  for(int i=nMax+1;i<=h1->GetNbinsX()+1;i++){
+    h1->SetBinContent(i,0);
+    h1->SetBinError(i,0);
+  }
+  //  h1->GetXaxis()->SetRangeUser(xLow,xHigh);
+}
+void setMyRange(THStack *h1,double xLow,double xHigh){
+  // double err=0;
+  // if(xHigh > 13000) return;
+  // int nMax=h1->FindBin(xHigh);
+  // h1->SetBinContent(nMax,h1->IntegralAndError(nMax,h1->GetNbinsX(),err));
+  // h1->SetBinError(nMax,err);
+  // for(int i=nMax+1;i<=h1->GetNbinsX()+1;i++){
+  //   h1->SetBinContent(i,0);
+  //   h1->SetBinError(i,0);
+  // }
+  //h1->GetXaxis()->SetRangeUser(xLow,xHigh);
 }
 
 void setLastBinAsOverFlow(TH1D* h_hist){

@@ -24,7 +24,8 @@ void getExclusion(TString fName){
   TH2D *h2_r16pc=(TH2D*)f1->FindObjectAny("mGlmNLSP_16pc");
   TH2D *h2_r84pc=(TH2D*)f1->FindObjectAny("mGlmNLSP_84pc");
   TH2D *h2_XsecUL=(TH2D*)f1->FindObjectAny("mGlmNLSP_XsecUL");
-  
+  //  TH2D *h2_empty=new TH2D("h2","h2",110,1400,2500,300,0,3000);
+  //  gStyle->SetPalette(kTemperatureMap);
   TCanvas *c3=new TCanvas("c3","c3",1200,1500);
   //c3->SetBottomMargin(0.12);
   c3->SetLeftMargin(0.15);
@@ -62,6 +63,7 @@ void getExclusion(TString fName){
   //gr2dXsec->GetXaxis()->SetLabelSize(0.4);
   //  gr2dXsec->SetMaximum(1.0);
   gr2dXsec->SetMinimum(0.0);
+  //  h2_empty->Draw("text");
   gr2dXsec->Draw("COLZ");
   gr1d->Draw("C");
   gr1d_16pc->Draw("C");
@@ -106,9 +108,11 @@ void getExclusion(TString fName){
   c3->Update();
   fout->cd();
   gr2dXsec->Write();
-  TGraph *gr1d_cp=(TGraph*)gr1d->Clone("exp");
-  gr1d_cp->Write();
-  
+
+  h2_XsecUL->Write();
+  TGraph *gr1d_cp=(TGraph*)gr1d->Clone("exp");    gr1d_cp->Write();
+  TGraph *gr1d_16pccp=(TGraph*)gr1d_16pc->Clone("exp16pc");   gr1d_16pccp->Write();
+  TGraph *gr1d_84pccp=(TGraph*)gr1d_84pc->Clone("exp84pc");   gr1d_84pccp->Write();
 
   char name3[100];
   textOnTop.SetTextSize(0.04);

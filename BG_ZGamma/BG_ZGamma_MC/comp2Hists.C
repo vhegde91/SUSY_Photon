@@ -32,7 +32,7 @@ void comp2Hists(){
   TFile *fd=new TFile("CS_ZDYToLLG.root");
   // TFile *fd=new TFile("CS_ZGToLLG.root");
 
-  TString name2="MET";  rebin=10;
+  TString name2="METvarBin";  rebin=1;
   TString nameN=name2; legNames.push_back("NuNu");
   TString nameD=name2; legNames.push_back("LL");
   // TString nameN="BestPhotonPt";

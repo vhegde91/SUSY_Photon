@@ -46,10 +46,10 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
   //choose central, up, or down 
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
   cout<<"applying PU weights."<<endl
-      <<"applying ISR weights to ttbar? "<<applISRWtsTottbar<<endl
-
+      <<"applying ISR weights to ttbar? "<<applISRWtsTottbar<<endl;
+  
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
-   
+    
     // ==============print number of events done == == == == == == == =
     double progress = 10.0 * jentry / (1.0 * nentries);
     int k = int (progress);
@@ -64,12 +64,20 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     //    print(jentry);    
     //    wt=Weight*1000.0*lumiInfb;
     wt=Weight*1000.0*lumiInfb*(puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(TrueNumInteractions,puhist->GetBinLowEdge(puhist->GetNbinsX()+1)))));
+    //ISR weighting. Makes sense only if you have all the events in ntuples.
+    h_nEvts->Fill(1,wt);
+    double isrWt=0.;
+    vector<double> isrwt_arr={1., 0.920, 0.821, 0.715, 0.662, 0.561, 0.511};
+    if(NJetsISR>=6) isrWt = isrwt_arr[6];
+    else isrWt = isrwt_arr[NJetsISR];
+    h_nEvts->Fill(2,wt*isrWt);
+    //ISR weighting, end.
 
     if(s_data!="FastSim"){
       if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0) ) continue;
     }
     if(isoElectronTracks!=0 || isoMuonTracks!=0 || isoPionTracks!=0) continue;//apply iso track veto
-
+    
     TLorentzVector bestPhoton=getBestPhoton();
     if(bestPhotonIndxAmongPhotons<0) continue;
     bool bestPhoHasPxlSeed=true;
@@ -237,7 +245,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     if(photonMatchingJetIndx<0) continue;
 
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
-    process = process && !eMatchedG && !bestPhoHasPxlSeed && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100 && dphi1 > 0.3 && dphi2 > 0.3;
+    process = process && !eMatchedG && !bestPhoHasPxlSeed && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100;// && dphi1 > 0.3 && dphi2 > 0.3;
     //  process = process && ST>500 && nHadJets>=2 && MET>100 && dphi1 > 0.3 && dphi2 > 0.3;
     //    process = process && NJets>=3 && MET>100;// && dphi1 > 0.3;
     //if(process){process=HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0 && minDR<0.3;}

@@ -58,6 +58,7 @@ class AnalyzeLightBSM : public NtupleVariables{
   //vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,200,250,300,350,400,500,600};
   vector<TLorentzVector> allBestPhotons;
   //histograms
+  TH1D *h_nEvts;
   TH1I *h_RunNum;
   TH1D *h_intLumi;
   TH1D *h_ST;
@@ -198,6 +199,7 @@ void AnalyzeLightBSM::BookHistogram(const char *outFileName) {
  
   oFile = new TFile(outFileName, "recreate");
   TH1::SetDefaultSumw2(1);
+  h_nEvts=new TH1D("nEvents","no. of events in this tree",4,0,4);
   h_RunNum=new TH1I("runs","Run nos.",300000,0,300000);
   h_intLumi=new TH1D("intLumi","integrated luminosity in /fb",2500,25,50); 
   h_ST=new TH1D("ST","ST",400,0,4000);

@@ -201,11 +201,11 @@ void c_getBGHists::getLEleHist(int i_f){
   // c1.printContents(hTF);
   // c1.printContents(hdRLepPho);
   // c1.printContents(hPdf);
-  // c1.printContents(hBTag);
-  // c1.printContents(hLepSF);
+  //c1.printContents(hBTag);
+  //  c1.printContents(hLepSF);
   // c1.printContents(hJEC);
-  // c1.printContents(hTF_final);
-  // c1.printContents(hPred);
+  //  c1.printContents(hTF_final);
+  //  c1.printContents(hPred);
 }
 
 void c_getBGHists::getLMuTauHist(int i_f){
@@ -261,7 +261,7 @@ void c_getBGHists::getLMuTauHist(int i_f){
   TH1D *hLepSF;
   if(!isLDP) hLepSF=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_LepSF");
   else hLepSF=(TH1D*)hTF->Clone("AllSBins_v7_UncLMuTF_LepSF_LDP");
-  c1.assignPCuncAllBins(hLepSF,1.0);
+  c1.assignPCuncAllBins(hLepSF,3.0);
   //-------get final TF with all unc added in quadrature
   TH1D *hTF_final;
   if(!isLDP) hTF_final=(TH1D*)hTF->Clone("LMuTFs_Final");
@@ -470,7 +470,7 @@ void c_getBGHists::getZGHist(int i_f){
     // c1.printContents(hLLGdata);
     // c1.printContents(hPureOverLLGmc);
     // c1.printContents(h_highOrd);
-    // c1.printContents(hPred);
+    //  c1.printContents(hPred);
     // c1.printContents(hTF);
   }
   else{
@@ -498,7 +498,7 @@ void c_getBGHists::getZGHist(int i_f){
     // c1.printContents(hCS);
     // c1.printContents(hSF);
     // c1.printContents(h_highOrd);
-    // c1.printContents(hPred);
+    //    c1.printContents(hPred);
   }
 
 }
@@ -548,7 +548,7 @@ void c_getBGHists::getMultiJHist(int i_f){
   // c1.printContents(h_pureUncDown);
   // c1.printContents(hCSraw);
   // c1.printContents(hEWSumLDP);
-  c1.printContents(hCS);
+  // c1.printContents(hCS);
   //----------------do predictions for HDP ----------------------
   hTemp->Reset();
   hTemp = (TH1D*)fout->Get("AllSBins_v7_LElePred");
@@ -570,7 +570,7 @@ void c_getBGHists::getMultiJHist(int i_f){
   double doubleRUncVR[6] = {0.09, 0.07, 0.07, 0.13, 0.04, 0.04};//% unc coming from VR. Multiply with double R.
   //add unc obtained from VR to double ratio
   for(int i=0;i<6;i++){
-    cout<<dRatioUnc[i]<<" ";
+    //    cout<<dRatioUnc[i]<<" ";
     dRatioUnc[i] = sqrt((dRatioUnc[i]*dRatioUnc[i]) + (dRatio[i]*dRatio[i]*doubleRUncVR[i]*doubleRUncVR[i]));
     //    cout<<dRatioUnc[i]<<endl;
   }
@@ -628,9 +628,10 @@ void c_getBGHists::getMultiJHist(int i_f){
   h_MultiJPred->Write();
  
   
-  // c1.printContents(hHLR);
+  //  c1.printContents(hHLR);
   //  c1.printContents(h_doubleR);
-  //  c1.printContents(h_MultiJPred);
+  // c1.printContents(hEWSum);
+  // c1.printContents(h_MultiJPred);
     
 }
 

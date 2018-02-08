@@ -104,7 +104,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
       zvec =  ((*Muons)[0] + (*Electrons)[0]);
       zmass = zvec.M();
     }
-    //    if(zvec.M() < 80 || zvec.M() > 100) continue;
+    if(zvec.M() < 80 || zvec.M() > 100) continue;
     // if(Muons->size()==1){
     //   print(0);
     //   cout<<zmass<<endl;
@@ -197,8 +197,8 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
     if(hadJets.size() > 2 ) dphi3 = abs(DeltaPhi(metstar.Phi(),(hadJets)[2].Phi()));
     if(hadJets.size() > 3 ) dphi4 = abs(DeltaPhi(metstar.Phi(),(hadJets)[3].Phi()));
 
-    // if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
-    // if(phoMatchingJetIndx<0) continue;  
+    if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
+    if(phoMatchingJetIndx<0) continue;  
     //if(!(passPhoton165HE10Trigger || passPhoton135MET100Trigger)) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
     //apply baseline selections
@@ -446,7 +446,7 @@ TLorentzVector ZGamma::getBestPhoton(){
 bool ZGamma::check_eMatchedtoGamma(){
   if(bestPhotonIndxAmongPhotons>=0){
     for(int i=0;i<Electrons->size();i++){
-      if( (*Photons)[bestPhotonIndxAmongPhotons].DeltaR( (*Electrons)[i] ) < 0.4){
+      if( (*Photons)[bestPhotonIndxAmongPhotons].DeltaR( (*Electrons)[i] ) < 0.2){
 	//	cout<<(*Electrons)[i].Pt()<<" "<<(*Electrons)[i].Eta()<<" "<<(*Electrons)[i].Phi()<<" "<<(*Photons)[bestPhotonIndxAmongPhotons].Pt()<<" "<<(*Photons)[bestPhotonIndxAmongPhotons].Eta()<<" "<<(*Photons)[bestPhotonIndxAmongPhotons].Phi()<<" dR:"<<(*Photons)[bestPhotonIndxAmongPhotons].DeltaR( (*Electrons)[i])<<endl;
 	return true;
       }

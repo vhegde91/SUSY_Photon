@@ -52,10 +52,11 @@ void getSignificance(TString fName){
   gr2dXsec->GetXaxis()->SetLabelSize(0.05);
   gr2dXsec->GetYaxis()->SetTitleSize(0.05);
   gr2dXsec->GetYaxis()->SetLabelSize(0.05);
-  c3->SetLogz();
+  //  c3->SetLogz();
   //gr2dXsec->GetXaxis()->SetLabelSize(0.4);
   //  gr2dXsec->SetMaximum(1.0);
-  gr2dXsec->SetMinimum(0.0);
+
+  gr2dXsec->SetMinimum(1.0);
   gr2dXsec->Draw("COLZ");
   gr1d->Draw("C");
   gr2dXsec->GetZaxis()->SetTitle("Significance");

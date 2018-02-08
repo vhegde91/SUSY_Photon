@@ -1,6 +1,7 @@
 #!/bin/bash
 ./analyzeLightBSM runList_ZJetsToNuNu.txt ZJetsToNuNu.root ZJets
-./analyzeLightBSM runList_ZGJetsToNuNuG.txt ZGJetsToNuNuG.root ZG
+#./analyzeLightBSM runList_ZGJetsToNuNuG.txt ZGJetsToNuNuG.root ZG
+./analyzeLightBSM CS_runList_ZGToNuNuG.txt ZGJetsToNuNuG.root ZG
 ./analyzeLightBSM runList_QCD.txt QCD.root QCD
 ./analyzeLightBSM runList_GJets.txt GJets.root GJets
 ./analyzeLightBSM runList_WJetsToLNu.txt WJetsToLNu.root WJets

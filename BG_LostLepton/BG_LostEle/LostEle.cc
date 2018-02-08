@@ -63,7 +63,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   TH2F *h2_EGMSFMVA=(TH2F*)f_EGMSF1->Get("GsfElectronToMVAVLooseTightIP2D");
   TH2F *h2_EGMSFMiniIso=(TH2F*)f_EGMSF1->Get("MVAVLooseElectronToMini");
   TH2F *h2_EGMSF1=(TH2F*)h2_EGMSFV->Clone("EGMSF1");
-  h2_EGMSF1->Multiply(h2_EGMSFMiniIso); h2_EGMSF1->Divide(h2_EGMSFMVA);
+  h2_EGMSF1->Multiply(h2_EGMSFMiniIso);// h2_EGMSF1->Divide(h2_EGMSFMVA);
   TH2F *h2_EGMSF2=(TH2F*)f_EGMSF2->Get("EGamma_SF2D");
   cout<<"applying EGM SFs to electrons? "<<applyEGMSFs<<endl;
   if(jec2Use!=0) cout<<"!!!!!!!!!! Applying JECs. -1 for JEC down, 0 for CV, 1 for JEC up. I am using "<<jec2Use<<" !!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
@@ -122,10 +122,10 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	currFile = TFile::Open(sampleName);
 	btagcorr.SetEffs(currFile);
 	btagcorr.SetCalib("btag/CSVv2_Moriond17_B_H_mod.csv");
-	btagcorr.SetBtagSFunc(1);
-        btagcorr.SetMistagSFunc(1);
-        btagcorr.SetBtagCFunc(1);
-        btagcorr.SetMistagCFunc(1);
+	// btagcorr.SetBtagSFunc(1);
+        // btagcorr.SetMistagSFunc(1);
+        // btagcorr.SetBtagCFunc(1);
+        // btagcorr.SetMistagCFunc(1);
       }
     }
     vector<double> prob;
@@ -340,6 +340,16 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	float egmsf2 = (h2_EGMSF2->GetBinContent(h2_EGMSF2->GetXaxis()->FindBin(abs((*Electrons)[0].Eta())),h2_EGMSF2->GetYaxis()->FindBin((*Electrons)[0].Pt())));
 	if(egmsf1 > 0.001 && egmsf1 < 2) wt = wt*egmsf1;
 	if(egmsf2 > 0.001 && egmsf2 < 2) wt = wt*egmsf2;
+	//----------- for unc------------
+	// float sfUnc=0;
+	// float egmsf1Unc = (h2_EGMSF1->GetBinError(h2_EGMSF1->GetXaxis()->FindBin((*Electrons)[0].Pt()),h2_EGMSF1->GetYaxis()->FindBin(abs((*Electrons)[0].Eta()))));
+	// if(h2_EGMSF1->GetXaxis()->FindBin((*Electrons)[0].Pt()) > h2_EGMSF1->GetNbinsX())
+	//   egmsf1Unc = (h2_EGMSF1->GetBinError(h2_EGMSF1->GetXaxis()->FindBin((*Electrons)[0].Pt())-1,h2_EGMSF1->GetYaxis()->FindBin(abs((*Electrons)[0].Eta()))));
+	// float egmsf2Unc = (h2_EGMSF2->GetBinError(h2_EGMSF2->GetXaxis()->FindBin(abs((*Electrons)[0].Eta())),h2_EGMSF2->GetYaxis()->FindBin((*Electrons)[0].Pt())));
+	// if(egmsf1 > 0.001 && egmsf1 < 2) sfUnc = egmsf1Unc*egmsf1Unc;
+	// if(egmsf2 > 0.001 && egmsf2 < 2) sfUnc = sfUnc + egmsf2Unc*egmsf2Unc;
+	// if((*Electrons)[0].Pt() < 20 || (*Electrons)[0].Pt() > 80) sfUnc = sfUnc + 0.01*0.01;
+	// wt = wt*sfUnc;
       }
       h_ST->Fill(ST,wt);
       h_MET->Fill(MET,wt);

@@ -40,7 +40,8 @@ class ZGamma : public NtupleVariables{
   float Njets_EtaCut=2.4;
   double wt=0,lumiInfb=35.86;
   bool isSignal=false;
-  vector<double> METBinLowEdge={0,20,40,60,80,100,120,160,200,270,350,450,500};
+  //  vector<double> METBinLowEdge={0,20,40,60,80,100,120,160,200,270,350,450,500};
+  vector<double> METBinLowEdge={0,100,125,160,200,270,350,450,750,900};
   vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,180,200,220,250,280,320,380,450,550,650,750};
   vector <TLorentzVector> allBestPhotons;
   //histograms

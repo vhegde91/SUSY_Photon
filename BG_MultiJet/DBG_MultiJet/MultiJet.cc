@@ -147,9 +147,12 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     else if(MET >= 200 &&  (dphi1 > 0.3 && dphi2 > 0.3)) regType = 'D';
     else cout<<"AHHHH:Cannot assign region!!!"<<endl;
 
-    if(regType == 'D') continue;//this is SR, keep it blinded.
-    if(  dphi1 > 0.3 &&  dphi2 > 0.3 && MET > 200 ) continue;//this is SR, keep it blinded.
-
+    //    if(regType == 'D') continue;//this is SR, keep it blinded.
+    //    if(  dphi1 > 0.3 &&  dphi2 > 0.3 && MET > 270 ) continue;//this is SR, keep it blinded.
+    // if(regType == 'D'){
+    //   if(BTags==0 && MET > 270) continue;
+    //   if(BTags>=1 && MET > 200 && nHadJets<=6)continue;
+    // }
     // if(abs(dphiG_MET) < 0.5) continue;
     // if(mtPho<100) continue;
 
@@ -218,6 +221,8 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	h_dPhi_METBestPhoton_[r_i]->Fill(dphiG_MET,wt);
 	h_dPhiPhotonJet1_[r_i]->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
 	if(photonMatchingJetIndx>=0) h_RatioJetPhoPt_[r_i]->Fill( ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	h_mindPhi1dPhi2_[r_i]->Fill(min(dphi1,dphi2),wt);
+	h_mindPhi1dPhi2_ABCD->Fill(min(dphi1,dphi2),wt);
 
 	h2_dPhi1dPhi2_[r_i]->Fill(dphi1,dphi2,wt);
 	h2_PtPhotonvsMET_[r_i]->Fill( bestPhoton.Pt(),MET,wt);
@@ -264,6 +269,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_mTPho_AB->Fill(mtPho,wt);
 	  h_dPhi_METBestPhoton_AB->Fill(dphiG_MET,wt);
 	  h_dPhiPhotonJet1_AB->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
+	  h_mindPhi1dPhi2_AB->Fill(min(dphi1,dphi2),wt);
 	  if(photonMatchingJetIndx>=0) h_RatioJetPhoPt_AB->Fill( ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsdPhiG_AB->Fill(dphiG_MET,      ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 	  if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsMET_AB->Fill(MET,            ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
@@ -316,6 +322,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_mTPho_CD->Fill(mtPho,wt);
 	  h_dPhi_METBestPhoton_CD->Fill(dphiG_MET,wt);
 	  h_dPhiPhotonJet1_CD->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
+	  h_mindPhi1dPhi2_CD->Fill(min(dphi1,dphi2),wt);
 	  if(photonMatchingJetIndx>=0) h_RatioJetPhoPt_CD->Fill( ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	  h2_PtPhotonvsMET_CD->Fill( bestPhoton.Pt(),MET,wt);

@@ -24,8 +24,8 @@ TString name3;
 TLatex textOnTop,intLumiE;
 const int nfiles=10,nBG=8;    //Specify no. of files
 TFile *f[nfiles];
-//int col[11]={kPink+1,kTeal+9,kOrange,kYellow,kBlue,kCyan,kGreen,kMagenta+2,kRed,kMagenta,kBlue+2};  //Specify Colors
-int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kMagenta+2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
+//int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kMagenta+2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
+int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kPink-2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
 //char name[100],name2[100];
 TCanvas *c_cA=new TCanvas("MET_incl","MET for NJ>=2",1500,850);
 TCanvas *c_cB=new TCanvas("MET_SBins","MET for all search bins",1500,850);
@@ -83,9 +83,9 @@ void searchBinsStack(){
 	cout<<"Integarted lumi for "<<f[i]->GetName()<<" is "<<h_intLumi->GetMean()<<" and for other files it is different"<<endl;
     }
     
-    //    TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("AllSBins_v3");//MET_R1
-    TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("mindPhi1dPhi2");
-    h_MET->Rebin(5);
+    TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("AllSBins_v7_CD");//MET_R1
+    //    TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("mindPhi1dPhi2");
+    //    h_MET->Rebin(5);
     decorate(h_MET,i,f[i]->GetName());
     
     if(i<=(nBG-1))  hs_MET->Add(h_MET);
@@ -100,7 +100,8 @@ void searchBinsStack(){
       h_MET->Draw("HISTE sames");
     }
     drawlegend(h_MET,i,f[i]->GetName());
-    if(i==nfiles-1) hs_MET->SetTitle(";min(#Delta#Phi_{1},#Delta#Phi_{2});Events");
+    //    if(i==nfiles-1) hs_MET->SetTitle(";min(#Delta#Phi_{1},#Delta#Phi_{2});Events");
+    if(i==nfiles-1) hs_MET->SetTitle(";Bin Number;Events");
 
     //----------------------all search bins----------------------------
     for(int j=1;j<=3;j++){
@@ -241,15 +242,15 @@ void drawlegend(TH1D *hist,int i,const char* fname){
   string lName=fname;
   lName.pop_back();lName.pop_back();lName.pop_back();lName.pop_back();lName.pop_back();
   
-  if(lName=="ZJetsToNuNu"){lName="Z( #rightarrow #nu #bar{#nu})+jets";}
-  else if(lName=="DYJetsToLL"){lName="DY( #rightarrow l^{+}l^{-})";}
-  else if(lName=="WJetsToLNu"){lName="W( #rightarrow l  #nu)+jets";}
+  if(lName=="ZJetsToNuNu"){lName="Z(#nu #bar{#nu})+jets";}
+  else if(lName=="DYJetsToLL"){lName="DY(l^{+}l^{-})";}
+  else if(lName=="WJetsToLNu"){lName="W(l#nu)+jets";}
   else if(lName=="RareProcess"){}
   else if(lName=="TTJetsHT"){lName="t #bar{t}";}
   else if(lName=="QCD"){lName="QCD";}
   else if(lName=="GJets"){lName="#gamma +jets";}
-  else if(lName=="WGJetsToLNuG"){lName="W(#rightarrow l #nu)+ #gamma";}
-  else if(lName=="ZGJetsToNuNuG"){lName="Z(#rightarrow #nu #bar{#nu})+ #gamma";}
+  else if(lName=="WGJetsToLNuG"){lName="W( l #nu)+ #gamma";}
+  else if(lName=="ZGJetsToNuNuG"){lName="Z( #nu #bar{#nu})+ #gamma";}
   else if(lName=="TTGJets"){lName="t #bar{t}+ #gamma";}
   else if(lName=="T1bbbb_ZG_mGl1600_NLSP150"){lName="T5bbbb_ZG_150";}
   else if(lName=="T1bbbb_ZG_mGl1600_NLSP1000"){lName="T5bbbb_ZG_1000";}

@@ -69,7 +69,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     
     bool process=true;
     if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
-   
+    //    if(BadGlobalMuon && BadGlobalMuonLeadPt > 0.5) continue;
     //About photons
     bestPhoton=getBestPhoton();
     if(bestPhoton.Pt() <= 100) continue;
@@ -237,6 +237,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     //---------------------- MC only ends-------------------------
 */
     //    if(MET>200) continue;
+    // if(!(MET > 270 && MET < 350)) continue;
+    // if(BTags!=0) continue; if(nHadJets >=5) continue;
     if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
     if(phoMatchingJetIndx<0) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
@@ -248,6 +250,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       h_RunNum->Fill(RunNum);
       h_intLumi->Fill(lumiInfb);
       //      print(jentry);
+      //      cout<<"BadGlobalMuon:"<<BadGlobalMuon<<" BadGlobalMuonLeadPt:"<<BadGlobalMuonLeadPt<<" badMuonsFilter:"<<badMuonsFilter<<" BadPFMuonFilter:"<<BadPFMuonFilter<<" BadTrkGlobalMuon:"<<BadTrkGlobalMuon<<" BadTrkGlobalMuonLeadPt:"<<BadTrkGlobalMuonLeadPt<<endl;
       h_ST->Fill(ST,wt);
       h_MET->Fill(MET,wt);
       h_nHadJets->Fill(nHadJets,wt);
