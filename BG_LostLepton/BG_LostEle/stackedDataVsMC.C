@@ -47,7 +47,7 @@ void stackedDataVsMC(TString iFname){
   vector<int> rebin;
   vector<double> xLow,xHigh;
   name1.push_back("ST_Ele1");  rebin.push_back(10);   xLow.push_back(0); xHigh.push_back(3000); 
-  name1.push_back("MET_Ele1");    rebin.push_back(5);    xLow.push_back(0); xHigh.push_back(800); 
+  name1.push_back("MET_Ele1");    rebin.push_back(2);    xLow.push_back(0); xHigh.push_back(800); 
   name1.push_back("nBTags_Ele1");   rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(8);  
   name1.push_back("nHadJets_Ele1");  rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(12);
   name1.push_back("BestPhotonPt_Ele1");   rebin.push_back(5); xLow.push_back(0); xHigh.push_back(1000);
@@ -72,7 +72,7 @@ void stackedDataVsMC(TString iFname){
   // name1.push_back("MET_R3_v2_Ele1");   rebin.push_back(1);
   // name1.push_back("MET_R4_v2_Ele1");   rebin.push_back(1);
   // name1.push_back("MET_R5_v2_Ele1");   rebin.push_back(1);
-  // name1.push_back("AllSBins_v4_Ele1");   rebin.push_back(1);   xLow.push_back(0); xHigh.push_back(300000);
+  name1.push_back("AllSBins_v7_Ele1");   rebin.push_back(1);   xLow.push_back(-10000); xHigh.push_back(300000);
 
   name1.push_back("nVtx_Ele1");   rebin.push_back(5);           xLow.push_back(0); xHigh.push_back(100000);
   // name1.push_back("isoEleTrack_Ele1");   rebin.push_back(1);
@@ -104,6 +104,7 @@ void stackedDataVsMC(TString iFname){
     hs_hist[i] = new THStack(name,name);
     //    legend[i]=new TLegend(0.7, 0.90,  0.80, 0.45);
     legend[i]=new TLegend(0.55, 0.90,  0.85, 0.65);
+    //    legend[i]->SetBorderSize(0);
   }
   //cout<<getLegName(f[0]->GetName());
   TH1D *h_histG,*h_histE,*h_histGcopy;
@@ -144,11 +145,11 @@ void stackedDataVsMC(TString iFname){
         mc_Integral+=h_histE->Integral();
         cout<<f[p]->GetName()<<" # events "<<h_histE->Integral()<<endl;
       }
-      h_histE->SetLineColor(col[p]);
-      // h_histE->SetLineWidth(2);
-      h_histE->SetMarkerStyle(21);
-      h_histE->SetMarkerColor(h_histE->GetLineColor());
-      h_histE->SetFillColor(h_histE->GetLineColor());
+      h_histE->SetLineColor(kBlack);
+      h_histE->SetLineWidth(1);
+      //      h_histE->SetMarkerStyle(21);
+      h_histE->SetMarkerColor(col[p]);
+      h_histE->SetFillColor(col[p]);
      
       hs_hist[i]->Add(h_histE);
       if(p==1){
@@ -161,12 +162,17 @@ void stackedDataVsMC(TString iFname){
     c_cA[i]->cd();    p_top[i]->cd();
     hs_hist[i]->SetMinimum(0.8);
     hs_hist[i]->SetMaximum(5*hs_hist[i]->GetMaximum());
-    hs_hist[i]->Draw("BAR");
+    hs_hist[i]->Draw("HIST");
+    
+    h_sum[i]->SetFillColor(1);
+    h_sum[i]->SetFillStyle(3013);
+    h_sum[i]->Draw("e2 same");
+
     name = h_histG->GetName();
     if(xLow[i] > -5000 && xHigh[i] < 5000) hs_hist[i]->GetXaxis()->SetRangeUser(xLow[i],xHigh[i]);
     hs_hist[i]->GetYaxis()->SetNdivisions(5);
     //    if(name.Contains("ElePt")) setMyRange(hs_hist[i],xLow[i],xHigh[i]);
-    h_histG->Draw("same");
+    h_histG->Draw("e1 same");
     hs_hist[i]->SetTitle(";;Events");
     hs_hist[i]->GetYaxis()->SetTitleOffset(0.50);    
     hs_hist[i]->GetYaxis()->SetTitleSize(0.09);
@@ -183,9 +189,9 @@ void stackedDataVsMC(TString iFname){
     h_numr->SetMarkerColor(kBlack);
     h_numr->SetTitle(0); name=name1[i];
     h_numr->GetXaxis()->SetTitle(getXaxisName(name));
-    h_numr->GetXaxis()->SetTitleOffset(0.87);
+    h_numr->GetXaxis()->SetTitleOffset(0.96);
     h_numr->GetXaxis()->SetTitleSize(0.13);
-    h_numr->GetXaxis()->SetLabelSize(0.14);
+    h_numr->GetXaxis()->SetLabelSize(0.13);
 
     h_numr->GetYaxis()->SetTitle("#frac{Data}{MC}");
     h_numr->GetYaxis()->SetTitleOffset(0.35);
@@ -197,16 +203,16 @@ void stackedDataVsMC(TString iFname){
     c_cA[i]->cd();    p_bot[i]->cd();
     p_bot[i]->SetTickx();p_bot[i]->SetTicky();
     //    c_cB->cd(i+1);    p_bot[i]->cd();
-    h_numr->Draw("e0");
+    h_numr->Draw("e1");
 
     c_cA[i]->cd();    p_top[i]->cd(); gPad->RedrawAxis();
     char name2[100];
-    textOnTop.SetTextSize(0.06);
-    intLumiE.SetTextSize(0.06);
+    textOnTop.SetTextSize(0.08);
+    intLumiE.SetTextSize(0.08);
     textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
-    intLumiE.SetTextSize(0.06);
+    intLumiE.SetTextSize(0.08);
     sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
-    intLumiE.DrawLatexNDC(0.73,0.91,name2);
+    intLumiE.DrawLatexNDC(0.7,0.91,name2);
     if(saveCanvas){name=name1[i]+".png";c_cA[i]->SaveAs(name);}
     
   }
@@ -229,19 +235,18 @@ TString getXaxisName(TString axname){
   else if(axname.Contains("ST")) return "HT#gamma(GeV)";
   else if(axname.Contains("BTags")) return "b-Tags";
   else if(axname.Contains("ElePt")) return "e pT(GeV)";
-  else if(axname.Contains("ElePt")) return "e pT(GeV)";
-  else if(axname.Contains("EleEta")) return "e #eta";
+  else if(axname.Contains("MuPt")) return "e pT(GeV)";
+  else if(axname.Contains("MuEta")) return "e #eta";
   else if(axname.Contains("PhotonPt")) return "#gamma pT(GeV)";
-  else if(axname.Contains("PhotonEta")) return "#gamma #eta";
   else if(axname.Contains("mT")) return "mT_{#gamma,MET}(GeV)";
   else if(axname.Contains("dR_ElePho")) return "#DeltaR(e,#gamma)";
   else if(axname.Contains("AllSBin")) return "Bin Number";
   else if(axname.Contains("dPhi_METjet1") || axname.Contains("dphi1_METjet1")) return "#Delta#Phi_{1}";
   else if(axname.Contains("dPhi_METjet2") || axname.Contains("dphi2_METjet2")) return "#Delta#Phi_{2}";
   else if(axname.Contains("dPhi_METBestPhoton") ) return "#Delta#Phi(MET,#gamma)";
-  else if(axname.Contains("QMult") || axname.Contains("Qmut")) return "QMult";
+  else if(axname.Contains("QMut") || axname.Contains("Qmut")) return "QMult";
   else if(axname.Contains("MT_Ele")) return "mT(e,MET)[GeV]";
-  else if(axname.Contains("MET")) return "MET(GeV)";
+  else if(axname.Contains("MET")) return "p_{T}^{miss}(GeV)";
   else return axname;
 
 }

@@ -18,7 +18,7 @@
 #include"THStack.h"
 #include"TStyle.h"
 
-const int nfiles=1,nBG=1;    //Specify no. of files
+const int nfiles=2,nBG=1;    //Specify no. of files
 TFile *f[nfiles];
 //int col[10]={kOrange,kBlue,kTeal+9,kGray+1,kCyan,kOrange-9,kYellow+2,kRed,kMagenta+2,kMagenta};  //Specify Colors
 int col[10]={kOrange,kTeal+9,kBlue,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
@@ -31,37 +31,31 @@ double intLumi=35.9;
 
 double sr_Integral=0,cr_Integral=0;
 
-void testClosure(TString iFname){
+void testClosure(){
   TH1::SetDefaultSumw2(1);
   gStyle->SetOptStat(0);
- 
-  f[0] = new TFile(iFname);
+  
+  f[0] = new TFile("CS_TTWZ_LostMuHadTau_clsr_METnJbJ_v2.root");
+  f[1] = new TFile("CS_TTWZ_LostEle_clsr_METNJbJ_v2.root");
   TFile *fout = new TFile("forPull.root","recreate");
   //  gStyle->SetOptStat("nemri");
   
+  TH1D *h0=(TH1D*)f[0]->Get("AllSBins_v7_Mu0");
+  TH1D *h1=(TH1D*)f[0]->Get("AllSBins_v7_Mu1");
+  
+  TH1D *htemp=(TH1D*)f[1]->Get("AllSBins_v7_Ele0");
+  h0->Add(htemp);
+  htemp=(TH1D*)f[1]->Get("AllSBins_v7_Ele1");
+  h1->Add(htemp);
+
+  // h1->Draw();
+  // h0->Draw("same");
+  // return;
   vector<string> name1,name2;
   vector<int> rebin;
-  name1.push_back("ST_Mu0");          name2.push_back("ST_Mu1");      rebin.push_back(10);
-  name1.push_back("MET_Mu0");         name2.push_back("MET_Mu1");     rebin.push_back(5);
-  name1.push_back("nBTags_Mu0");       name2.push_back("nBTags_Mu1");     rebin.push_back(1);
-  name1.push_back("nHadJets_Mu0");    name2.push_back("nHadJets_Mu1");rebin.push_back(1);
-  name1.push_back("BestPhotonPt_Mu0");    name2.push_back("BestPhotonPt_Mu1");       rebin.push_back(5);
-  //  name1.push_back("BestPhotonEta_Mu0");   name2.push_back("BestPhotonEta_Mu1");  rebin.push_back(10);
-  name1.push_back("METvarBin_Mu0");   name2.push_back("METvarBin_Mu1");  rebin.push_back(1);
-  name1.push_back("dPhi_METjet1_Pho_Mu0");   name2.push_back("dPhi_METjet1_Pho_Mu1");  rebin.push_back(4);
-  name1.push_back("dPhi_METjet2_Pho_Mu0");   name2.push_back("dPhi_METjet2_Pho_Mu1");  rebin.push_back(4);
-  name1.push_back("dPhi_METBestPhoton_Mu0");   name2.push_back("dPhi_METBestPhoton_Mu1");  rebin.push_back(4);
-  name1.push_back("mTPho_Mu0");   name2.push_back("mTPho_Mu1");  rebin.push_back(10);
-  // name1.push_back("MET_R1_v2_Mu0");   name2.push_back("MET_R1_v2_Mu1");  rebin.push_back(1);
-  // name1.push_back("MET_R2_v2_Mu0");   name2.push_back("MET_R2_v2_Mu1");  rebin.push_back(1);
-  // name1.push_back("MET_R3_v2_Mu0");   name2.push_back("MET_R3_v2_Mu1");  rebin.push_back(1);
-  // name1.push_back("MET_R4_v2_Mu0");   name2.push_back("MET_R4_v2_Mu1");  rebin.push_back(1);
-  // name1.push_back("MET_R5_v2_Mu0");   name2.push_back("MET_R5_v2_Mu1");  rebin.push_back(1);
+ 
   name1.push_back("AllSBins_v7_Mu0");    name2.push_back("AllSBins_v7_Mu1");  rebin.push_back(1);
-  name1.push_back("AllSBins_v4_Mu0");    name2.push_back("AllSBins_v4_Mu1");  rebin.push_back(1);
-  // name1.push_back("MET_Mu0_R1");         name2.push_back("MET_Mu1_R1");rebin.push_back(1);
-  // name1.push_back("MET_Mu0_R2");         name2.push_back("MET_Mu1_R2");rebin.push_back(1);
-  // name1.push_back("MET_Mu0_R3");         name2.push_back("MET_Mu1_R3");rebin.push_back(1);
+ 
 
   TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
   TCanvas *c_cA[name1.size()];
@@ -98,12 +92,14 @@ void testClosure(TString iFname){
       c_cA[i]->cd();
       //c_cB->cd(i+1);
       name=name1[i];
-      h_histG=(TH1D*)f[j]->FindObjectAny(name);//h_histG->Rebin(2);
-      h_histG->Rebin(rebin[i]);//h_histG->Scale(1.0/h_histG->Integral());
+      // h_histG=(TH1D*)f[j]->FindObjectAny(name);
+      // h_histG->Rebin(rebin[i]);
           
-      name=name2[i];
-      h_histE=(TH1D*)f[j]->FindObjectAny(name);//h_histE->Scale(150.9/481.6);
-      h_histE->Rebin(rebin[i]);//h_histE->Scale(1.0/h_histE->Integral());
+      // name=name2[i];
+      // h_histE=(TH1D*)f[j]->FindObjectAny(name);//h_histE->Scale(150.9/481.6);
+      // h_histE->Rebin(rebin[i]);//h_histE->Scale(1.0/h_histE->Integral());
+      h_histG=(TH1D*)h0->Clone();
+      h_histE=(TH1D*)h1->Clone();
      
       if(h_histG && h_histE){
 	if(name1[i]=="nHadJets_Mu0"){
@@ -138,9 +134,9 @@ void testClosure(TString iFname){
 
 	legend[i]=new TLegend(0.65, 0.85,  0.87, 0.67);
 	name=name1[i];
-	legend[i]->AddEntry(h_histG,"Exp(0#mu,Had#tau+#gamma)","lp");
+	legend[i]->AddEntry(h_histG,"Exp","lp");
 	name=name2[i];
-	legend[i]->AddEntry(h_histE,"Pred(1#mu+#gamma)","lp");
+	legend[i]->AddEntry(h_histE,"Pred","lp");
 	legend[i]->Draw();
 	
 	TString name = h_histG->GetName();
@@ -163,7 +159,7 @@ void testClosure(TString iFname){
 
     h_numr->SetLineColor(kBlack);
     h_numr->SetMarkerColor(kBlack);
-    h_numr->SetTitle(";;#frac{0#mu,Had#tau+#gamma}{1#mu+#gamma}");
+    h_numr->SetTitle(";;#frac{Exp}{Pred }");
     h_numr->GetXaxis()->SetLabelSize(0.13);
     h_numr->GetXaxis()->SetTitle(xaxisName);
     h_numr->GetXaxis()->SetTitleSize(0.13);

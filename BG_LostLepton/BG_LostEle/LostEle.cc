@@ -49,7 +49,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   //  TFile *f_LP=new TFile("LstEle_CS_LDP_TTWZ_LostEle_v2.root");
   //TFile *f_LP=new TFile("LstEle_CS_TTW_LostEle_v2.root");
   TH2D *h2_LP;TH1D *h_LP;
-  bool do_prediction=0;
+  bool do_prediction=1,do_norm=0;
   int jec2Use = 0;//-1 for JEC down, 0 for CV, 1 for JEC up
   cout<<"Doing prediction from file |"<<f_LP->GetName()<<"|? "<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
@@ -67,8 +67,9 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   TH2F *h2_EGMSF2=(TH2F*)f_EGMSF2->Get("EGamma_SF2D");
   cout<<"applying EGM SFs to electrons? "<<applyEGMSFs<<endl;
   if(jec2Use!=0) cout<<"!!!!!!!!!! Applying JECs. -1 for JEC down, 0 for CV, 1 for JEC up. I am using "<<jec2Use<<" !!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
+  if(do_norm) cout<<"!!!!!! Normalizing CS according to data"<<endl;
   //----------- btags SFs-----------------  
-  bool applybTagSFs=1;
+  bool applybTagSFs=0;
   int fListIndxOld=-1;
   double prob0=-100,prob1=-100;
   vector<TString> inFileName;
@@ -567,6 +568,16 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	  //if(h2_LP) tf=(h2_LP->GetBinError(h2_LP->FindBin(parX,parY)))*h2_LP->GetBinError(h2_LP->FindBin(parX,parY));
 	  else cout<<"hist not found"<<endl;
 	  wt=tf*wt;
+	}
+	if(do_norm){
+	  double normFac[6] = {1.079808103,0.8710251313,1.308107212,1.681378731,1.17613559,1.089686378};
+	  if(nHadJets<=4 && BTags==0) wt = wt*normFac[0];
+          else if(nHadJets <=6 && BTags==0) wt = wt*normFac[1];
+          else if(nHadJets <=100 && BTags==0) wt = wt*normFac[2];
+          else if(nHadJets <=4 && BTags>=1) wt = wt*normFac[3];
+          else if(nHadJets <=6 && BTags>=1) wt = wt*normFac[4];
+          else if(nHadJets <=100 && BTags>=1) wt = wt*normFac[5];
+          else cout<<"Norm not assigned"<<endl;
 	}
 	//----------------------------------------------------------------
         h_nVtx_Ele1->Fill(NVtx,wt);

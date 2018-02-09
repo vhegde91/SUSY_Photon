@@ -285,6 +285,8 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	//	h2_RatioJetPhoPtVsPhoPt_[r_i]->Fill(bestPhoton.Pt(),MHT/MET,wt);
 	if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsdPhiG_[r_i]->Fill(dphiG_MET,      ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 	if(photonMatchingJetIndx>=0) h2_RatioJetPhoPtVsMET_[r_i]->Fill(MET,            ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	h_mindPhi1dPhi2_[r_i]->Fill(min(dphi1,dphi2),wt);
+	h_mindPhi1dPhi2_ABCD->Fill(min(dphi1,dphi2),wt);
 
 	h_HT_[r_i]->Fill(HT,wt);
 	h_MHT_[r_i]->Fill(MHT,wt);
@@ -331,6 +333,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_dPhi_METBestPhoton_AB->Fill(dphiG_MET,wt);
 	  h_dPhiPhotonJet1_AB->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
 	  if(photonMatchingJetIndx>=0) h_RatioJetPhoPt_AB->Fill( ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	  h_mindPhi1dPhi2_AB->Fill(min(dphi1,dphi2),wt);
 
 	  h2_PtPhotonvsMET_AB->Fill( bestPhoton.Pt(),MET,wt);
 	  h2_dPhi1dPhi2_AB->Fill(dphi1,dphi2,wt);
@@ -397,6 +400,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_dPhi_METBestPhoton_CD->Fill(dphiG_MET,wt);
 	  h_dPhiPhotonJet1_CD->Fill(bestPhoton.DeltaPhi(hadJets[0]),wt);
 	  if(photonMatchingJetIndx>=0) h_RatioJetPhoPt_CD->Fill( ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
+	  h_mindPhi1dPhi2_CD->Fill(min(dphi1,dphi2),wt);
 
 	  h2_PtPhotonvsMET_CD->Fill( bestPhoton.Pt(),MET,wt);
 	  h2_dPhi1dPhi2_CD->Fill(dphi1,dphi2,wt);

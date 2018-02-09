@@ -51,11 +51,11 @@ class LostEle : public NtupleVariables{
   vector<double> STBinLowEdge ={0,300,360,420,500,600,700,850,1000,1200,1500,2000,2500,3000};
   //  vector<double> METBinLowEdge={0,20,40,60,80,100,120,160,200,270,350,450,600,750,900,1200};
   //  vector<double> METBinLowEdge={0,20,40,60,80,100,120,160,200,270,350,450,500};//org
-  vector<double> METBinLowEdge={0,20,40,60,80,100,125,150,200,250,350,500,600};
-  vector<double> METBinLowEdge2bJ={0,20,40,60,80,100,125,150,200,250,350,500};
+  vector<double> METBinLowEdge={0,20,40,60,80,100,125,160,200,250,350,500,600};
+  vector<double> METBinLowEdge2bJ={0,20,40,60,80,100,125,160,200,250,350,500};
   //  vector<double> METBinLowEdgeMidNJ={0,20,40,60,80,100,120,160,200,270,350};
   //  vector<double> METBinLowEdgeHighNJ={0,20,40,60,80,100,120,160,200,250};
-  vector<double> METBinLowEdgeV4_njLow={0,100,125,150,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900};
+  vector<double> METBinLowEdgeV4_njLow={0,100,125,160,200,270,350,450,750,900};//{0,100,200,270,350,450,750,900};
   vector<double> METBinLowEdgeV4={0,100,125,160,200,270,350,450,750};
   vector<double> METBinLowEdgeV7_njLow={0,100,200,270,350,450,750,900};
   vector<double> METBinLowEdgeV7={0,100,200,270,350,450,750};

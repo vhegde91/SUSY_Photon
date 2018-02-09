@@ -52,7 +52,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   //TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuOnly_v2.root");
 
   TH2D *h2_LP;TH1D *h_LP;
-  bool do_prediction=0;
+  bool do_prediction=1,do_norm=0;
   cout<<"Doing prediction from file |"<<f_LP->GetName()<<"|? "<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
@@ -68,8 +68,9 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   cout<<"applying Muon SFs? "<<applyMuSFs<<endl;
   //https://twiki.cern.ch/twiki/bin/view/CMS/MuonWorkInProgressAndPagResults#Results_on_the_full_2016_data
   if(jec2Use!=0) cout<<"!!!!!!!!!! Applying JECs. -1 for JEC down, 0 for CV, 1 for JEC up. I am using "<<jec2Use<<" !!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
+  if(do_norm) cout<<"!!!!!! Normalizing CS according to data"<<endl;
   //----------- btags SFs-----------------  
-  bool applybTagSFs=1;
+  bool applybTagSFs=0;
   int fListIndxOld=-1;
   double prob0=-100,prob1=-100;
   vector<TString> inFileName;
@@ -333,6 +334,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     //---------------------- MC only ends-------------------------
     if(phoMatchingJetIndx>=0 && (jets[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
     if(phoMatchingJetIndx<0) continue;
+    int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
     process = process && ST>500 && MET > 100 && nHadJets >=2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
     
@@ -409,7 +411,6 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	else if(MET>=METBinLowEdge[METBinLowEdge.size()-1]){ sBin2 = sBin2+7  ;break; }
       }
       if(BTags>=2 && sBin2==35) sBin2=34;
-      int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
       
       if(Muons->size()==0){//MC only
 	//+++++++++++++++++++++++++ data only +++++++++++++++++++++++++++++
@@ -553,6 +554,16 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	  if(h2_LP) tf=h2_LP->GetBinContent(h2_LP->FindBin(parX,parY));
 	  else cout<<"hist not found"<<endl;
 	  wt=tf*wt;
+	}
+	if(do_norm){
+	  double normFac[6] = {1.022477,0.826365,1.165553,1.177148,1.054705,0.841006};
+	  if(nHadJets<=4 && BTags==0) wt = wt*normFac[0];
+	  else if(nHadJets <=6 && BTags==0) wt = wt*normFac[1];
+	  else if(nHadJets <=100 && BTags==0) wt = wt*normFac[2];
+	  else if(nHadJets <=4 && BTags>=1) wt = wt*normFac[3];
+	  else if(nHadJets <=6 && BTags>=1) wt = wt*normFac[4];
+	  else if(nHadJets <=100 && BTags>=1) wt = wt*normFac[5];
+	  else cout<<"Norm not assigned"<<endl;
 	}
 	//----------------------------------------------------------------
 	h_nVtx_Mu1->Fill(NVtx,wt);

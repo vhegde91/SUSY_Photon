@@ -91,6 +91,7 @@ class MultiJet : public NtupleVariables{
   TH1D *h_dPhi_METjet2_AB,*h_dPhi_METjet2_CD,*h_dPhi_METjet2_[4];
   TH1D *h_dPhi_METjet3_AB,*h_dPhi_METjet3_CD,*h_dPhi_METjet3_[4];
   TH1D *h_dPhi_METjet4_AB,*h_dPhi_METjet4_CD,*h_dPhi_METjet4_[4];
+  TH1D *h_mindPhi1dPhi2_AB,*h_mindPhi1dPhi2_CD,*h_mindPhi1dPhi2_[4],*h_mindPhi1dPhi2_ABCD;
 
   TH1D *h_BestPhotonPt_AB,*h_BestPhotonPt_CD,*h_BestPhotonPt_[4];
   TH1D *h_BestPhotonPtvBin_AB,*h_BestPhotonPtvBin_CD,*h_BestPhotonPtvBin_[4];
@@ -155,6 +156,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
   TH1::SetDefaultSumw2(1);
   h_RunNum=new TH1I("runs","Run nos.",300000,0,300000);
   h_intLumi=new TH1D("intLumi","integrated luminosity in /fb",2500,25,50); 
+  h_mindPhi1dPhi2_ABCD=new TH1D("mindPhi1dPhi2","min(#Delta#Phi1,#Delta#Phi2) for ABCD",400,0,4);
 
   h_ST_AB=new TH1D("ST_AB","ST_AB",400,0,4000);
   h_MET_AB=new TH1D("MET_AB","MET_AB",200,0,2000);
@@ -200,6 +202,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_dPhi_METjet4_AB=new TH1D("dPhi_METjet4_AB","dphi between MET Vec and Jet4_AB",40,0,4);
 
   h_dPhiPhotonJet1_AB=new TH1D("dPhiPhotonJet1_AB","dphi(jet1,photon)_AB",40,0,4);
+  h_mindPhi1dPhi2_AB=new TH1D("mindPhi1dPhi2_AB","min(#Delta#Phi1,#Delta#Phi2)_AB",400,0,4);
 
   h_ST_CD=new TH1D("ST_CD","ST_CD",400,0,4000);
   h_MET_CD=new TH1D("MET_CD","MET_CD",200,0,2000);
@@ -245,6 +248,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_dPhi_METjet4_CD=new TH1D("dPhi_METjet4_CD","dphi between MET Vec and Jet4_CD",40,0,4);
 
   h_dPhiPhotonJet1_CD=new TH1D("dPhiPhotonJet1_CD","dphi(jet1,photon)_CD",40,0,4);
+  h_mindPhi1dPhi2_CD=new TH1D("mindPhi1dPhi2_CD","min(#Delta#Phi1,#Delta#Phi2)_CD",400,0,4);
 
   for(int i=0;i<4;i++){
     TString regName;
@@ -271,6 +275,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
     h_RatioJetPhoPt_[i]=new TH1D("RatioJetPhoPt_"+regName,"ratio of matching jet Pt to photon Pt_"+regName,100,0,5);
 
     h_dPhiPhotonJet1_[i]=new TH1D("dPhiPhotonJet1_"+regName,"dphi(jet1,photon)_"+regName,40,0,4);
+    h_mindPhi1dPhi2_[i]=new TH1D("mindPhi1dPhi2_"+regName,"min(#Delta#Phi1,#Delta#Phi2)_"+regName,400,0,4);
 
     h_SBins_v1_[i] = new TH1D("AllSBins_v1_"+regName,"search bins:(NJ=2to4) (NJ:5or6) (NJ>=7)_"+regName,21,0.5,21.5);
   
