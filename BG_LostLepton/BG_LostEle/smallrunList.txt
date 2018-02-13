@@ -1,0 +1,11 @@
+/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/T5ttttZg_1800_150_UnSkimmed_Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_1800_150.root
+
+
+1.04	1.39
+1.17	1.17
+2.12	0.94
+0.99	1.74
+0.32	0.97
+0.40	1.32
+0.35	1.85
+0.81	1.42

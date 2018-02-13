@@ -48,7 +48,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
   //  TFile *f_TF = new TFile("TF_CS_ZGToNuNuG_PtG130_LO.root");
   TH1D *h_TF=(TH1D*)f_TF->FindObjectAny("Ratio_NuNuToLL");
 
-  bool do_prediction=0,reweightLO=0;
+  bool do_prediction=1,reweightLO=0;
   cout<<"Doing prediction from ZToLL sample from file |"<<f_TF->GetName()<<"|?"<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
@@ -282,7 +282,8 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
 	double parX=BTags;
 	double tf=0;
 	if(h_TF){
-	  tf=(37.0/37.8433)*h_TF->GetBinContent(h_TF->FindBin(parX));//37 events in data. 37.8433 events in ZGLLG MC
+	  //	  tf=(37.0/37.8433)*h_TF->GetBinContent(h_TF->FindBin(parX));//37 events in data. 37.8433 events in ZGLLG MC
+	  tf=h_TF->GetBinContent(h_TF->FindBin(parX));
 	  //	  cout<<"parX: "<<parX<<" TF: "<<tf<<" BinLowEdge: "<<h_TF->GetBinLowEdge(h_TF->FindBin(parX))<<" BinIndx: "<<(h_TF->FindBin(parX))<<endl;
 	}
 	else cout<<"hist not found"<<endl;

@@ -18,7 +18,7 @@
 #include"THStack.h"
 #include"TStyle.h"
 
-const int nfiles=2;    //Specify no. of files
+const int nfiles=6;    //Specify no. of files
 TFile *f[nfiles];
 //int col[10]={kOrange,kTeal+9,kBlue,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
 int col[11]={kBlack,kMagenta+2,kTeal+9,kGreen,kOrange,kCyan,kYellow,kPink+1,kBlue,kRed,kMagenta};  //Specify Colors
@@ -36,20 +36,20 @@ void stackedDataVsMC(TString iFname){
   gStyle->SetOptStat(0);
   //  gStyle->SetOptStat("nemri");
   vector<TString> suffixHist; 
-  //  f[0] = new TFile(iFname);                                          suffixHist.push_back("_AB");
-  // f[1] = new TFile("CS_LDP_ZGZJToNuNuG.root");                       suffixHist.push_back("");
-  // f[2] = new TFile("DCS_LDP_Run2016_LostEle_v2.root");               suffixHist.push_back("_Ele0");
-  // f[3] = new TFile("DCS_LDP_Run2016_LostMuHadTau_v2.root");          suffixHist.push_back("_Mu0");
-  // f[4] = new TFile("DCS_LDP_Run2016_SingleEle_v2.root");             suffixHist.push_back("_Pho");
-  // f[5] = new TFile("gjets_qcd.root");                                suffixHist.push_back("_AB");
+  f[0] = new TFile(iFname);                                          suffixHist.push_back("_AB");
+  f[1] = new TFile("CS_LDP_ZGZJToNuNuG.root");                       suffixHist.push_back("");
+  f[2] = new TFile("DCS_LDP_Run2016_LostEle_v2.root");               suffixHist.push_back("_Ele0");
+  f[3] = new TFile("DCS_LDP_Run2016_LostMuHadTau_v2.root");          suffixHist.push_back("_Mu0");
+  f[4] = new TFile("DCS_LDP_Run2016_SingleEle_v2.root");             suffixHist.push_back("_Pho");
+  f[5] = new TFile("gjets_qcd.root");                                suffixHist.push_back("_AB");
 
-  f[0] = new TFile(iFname);                                          suffixHist.push_back("_C");
+  //  f[0] = new TFile(iFname);                                          suffixHist.push_back("_C");
   // f[1] = new TFile("CS_c_ZGZJToNuNuG.root");                       suffixHist.push_back("");
   // f[2] = new TFile("DCS_c_Run2016_LostEle_v2.root");               suffixHist.push_back("_Ele0");
   // f[3] = new TFile("DCS_c_Run2016_LostMuHadTau_v2.root");          suffixHist.push_back("_Mu0");
   // f[4] = new TFile("DCS_c_Run2016_SingleEle_v2.root");             suffixHist.push_back("_Pho");
-  //  f[1] = new TFile("gjets_qcd.root");                                suffixHist.push_back("_AB");
-  f[1] = new TFile("gjets_qcd_diPhoton.root");                                suffixHist.push_back("_C");
+  //f[1] = new TFile("gjets_qcd.root");                                suffixHist.push_back("_AB");
+  //  f[1] = new TFile("gjets_qcd_diPhoton.root");                                suffixHist.push_back("_C");
 
   //f[5] = new TFile("GJetsQCD_LDPSFs.root");                          suffixHist.push_back("_AB");
 
@@ -72,8 +72,7 @@ void stackedDataVsMC(TString iFname){
   // name1.push_back("dPhi_METBestPhoton_Mu1"); rebin.push_back(2);   //name2.push_back("dPhi_METBestPhoton_Mu1");  
   name1.push_back("mTPho");   rebin.push_back(2);
   name1.push_back("dPhi_METBestPhoton");   rebin.push_back(1);
-  // name1.push_back("AllSBins_Mu1");   rebin.push_back(1);
-
+  name1.push_back("AllSBins_v7");   rebin.push_back(1);
 
   TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
   TCanvas *c_cA[name1.size()];

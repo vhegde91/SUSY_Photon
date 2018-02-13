@@ -52,8 +52,10 @@ void allBGPredVsData(TString iFname){
   vector<string> name1;
   vector<int> rebin;
   bool compAC=0;
-  name1.push_back("mindPhi1dPhi2");   rebin.push_back(10);
-  //  name1.push_back("AllSBins_v7");   rebin.push_back(1);
+  //  name1.push_back("mindPhi1dPhi2");   rebin.push_back(10);
+  //  name1.push_back("MET_CD");   rebin.push_back(10);
+  name1.push_back("nHadJets_CD");   rebin.push_back(1);
+  //  name1.push_back("AllSBins_v7_CD");   rebin.push_back(1);
 
 
   TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);

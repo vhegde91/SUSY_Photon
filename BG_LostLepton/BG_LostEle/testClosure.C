@@ -71,11 +71,11 @@ void testClosure(TString iFname){
   TLine *line3=new TLine(22.5,0.01, 22.5,50);
   TLine *line4=new TLine(29.5,0.01, 29.5,50);
   TLine *line5=new TLine(36.5,0.01, 36.5,8 );
-  TLine *line1V7=new TLine( 6.5,0.05,  6.5,150);
-  TLine *line2V7=new TLine(11.5,0.05, 11.5,150);
-  TLine *line3V7=new TLine(16.5,0.05, 16.5,150);
-  TLine *line4V7=new TLine(21.5,0.05, 21.5,150);
-  TLine *line5V7=new TLine(26.5,0.05, 26.5,15 );
+  TLine *line1V7=new TLine( 6.5,0.05,  6.5,100);
+  TLine *line2V7=new TLine(11.5,0.05, 11.5,100);
+  TLine *line3V7=new TLine(16.5,0.05, 16.5,100);
+  TLine *line4V7=new TLine(21.5,0.05, 21.5,100);
+  TLine *line5V7=new TLine(26.5,0.05, 26.5,10 );
   //  TCanvas *c_cB=new TCanvas("closure_test","closure test",1500,800); c_cB->Divide(4,2);
   TPad *p_top[name1.size()];
   TPad *p_bot[name1.size()];
@@ -129,10 +129,10 @@ void testClosure(TString iFname){
 
 	c_cA[i]->cd();p_top[i]->cd();
 	//c_cB->cd(i+1);p_top[i]->cd();
-	h_histG->Draw();
+	h_histG->Draw("e1");
 	// h_histE->SetFillStyle(3004);
 	// h_histE->SetFillColor(h_histE->GetLineColor());
- 	h_histE->Draw("same");
+ 	h_histE->Draw("e1same");
 	//	h_histE->Draw("L same");
 
 	legend[i]=new TLegend(0.72, 0.87,  0.87, 0.67);
@@ -159,13 +159,14 @@ void testClosure(TString iFname){
 
     h_numr->SetLineColor(kBlack);
     h_numr->SetMarkerColor(kBlack);
-    h_numr->SetTitle(";;#frac{0e+#gamma}{1e+#gamma}");
+    //    h_numr->SetTitle(";;#frac{0e+#gamma}{1e+#gamma}");
+    h_numr->SetTitle(";;#frac{Exp}{Pred }");
     h_numr->GetXaxis()->SetLabelSize(0.13);
     h_numr->GetXaxis()->SetTitle(xaxisName);
     h_numr->GetXaxis()->SetTitleSize(0.13);
     h_numr->GetXaxis()->SetTitleOffset(0.9);
 
-    h_numr->GetYaxis()->SetTitleOffset(0.29);
+    h_numr->GetYaxis()->SetTitleOffset(0.32);
     h_numr->GetYaxis()->SetTitleSize(0.13);
     h_numr->GetYaxis()->SetLabelSize(0.13);
     h_numr->GetYaxis()->SetNdivisions(505);
@@ -174,6 +175,7 @@ void testClosure(TString iFname){
     c_cA[i]->cd();    p_bot[i]->cd();
     //    c_cB->cd(i+1);    p_bot[i]->cd();
     h_numr->Draw("e0");
+    h_numr->Draw("e1same");
     TString name = h_histG->GetName();
     if(name.Contains("SBins_v4")){ 
       line1->Draw();line2->Draw();line3->Draw();line4->Draw();line5->Draw();

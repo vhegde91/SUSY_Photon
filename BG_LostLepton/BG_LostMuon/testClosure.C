@@ -130,15 +130,15 @@ void testClosure(TString iFname){
 
 	c_cA[i]->cd();p_top[i]->cd();
 	//c_cB->cd(i+1);p_top[i]->cd();
-	h_histG->Draw();
+	h_histG->Draw("e1");
 	// h_histE->SetFillStyle(3004);
 	// h_histE->SetFillColor(h_histE->GetLineColor());
- 	h_histE->Draw("same");
+ 	h_histE->Draw("e1same");
 	//	h_histE->Draw("L same");
 
 	legend[i]=new TLegend(0.65, 0.85,  0.87, 0.67);
 	name=name1[i];
-	legend[i]->AddEntry(h_histG,"Exp(0#mu,Had#tau+#gamma)","lp");
+	legend[i]->AddEntry(h_histG,"Exp(0#mu,#tau_{had}+#gamma)","lp");
 	name=name2[i];
 	legend[i]->AddEntry(h_histE,"Pred(1#mu+#gamma)","lp");
 	legend[i]->Draw();
@@ -163,7 +163,8 @@ void testClosure(TString iFname){
 
     h_numr->SetLineColor(kBlack);
     h_numr->SetMarkerColor(kBlack);
-    h_numr->SetTitle(";;#frac{0#mu,Had#tau+#gamma}{1#mu+#gamma}");
+    //    h_numr->SetTitle(";;#frac{0#mu,Had#tau+#gamma}{1#mu+#gamma}");
+    h_numr->SetTitle(";;#frac{Exp}{Pred }");
     h_numr->GetXaxis()->SetLabelSize(0.13);
     h_numr->GetXaxis()->SetTitle(xaxisName);
     h_numr->GetXaxis()->SetTitleSize(0.13);
@@ -177,7 +178,8 @@ void testClosure(TString iFname){
     h_numr->SetMinimum(0.01);
     c_cA[i]->cd();    p_bot[i]->cd();
     //    c_cB->cd(i+1);    p_bot[i]->cd();
-    h_numr->Draw("e0");
+    h_numr->Draw("e1");
+    h_numr->Draw("e0same");
 
     TString name = h_histG->GetName();
     if(name.Contains("SBins_v4")){ 

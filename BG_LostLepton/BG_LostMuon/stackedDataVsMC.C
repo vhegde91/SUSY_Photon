@@ -137,6 +137,7 @@ void stackedDataVsMC(TString iFname){
       name=name1[i];
       h_histE=(TH1D*)f[p]->FindObjectAny(name);
       h_histE->Rebin(rebin[i]);
+      //      h_histE->Scale(29.0/457.519);
       setLastBinAsOverFlow(h_histE);
       setMyRange(h_histE,xLow[i],xHigh[i]);
       if(xLow[i] > -5000 && xHigh[i] < 5000) h_histE->GetXaxis()->SetRangeUser(xLow[i],xHigh[i]);

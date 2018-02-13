@@ -1,28 +1,29 @@
 # - - - - - - - - - - - - - - - - - - -
-# Datacard for mGl= 1600 mNLSP= 150 with model FastSim_T5bbbbZG_1600_150
+# Datacard for mGl= 1900 mNLSP= 150 with model FastSim_T5bbbbZg_1900_150
 # - - - - - - - - - - - - - - - - - - - 
 imax 1 number of channels
 jmax *  number of backgrounds('*' = automatic)
 kmax *  number of nuisance parameters (sources of systematical uncertainties)
 ------------
 bin 20
-observation 5.2489
+observation 4
 ------------
 bin 20 20 20 20 20 20 
-process FastSim_T5bbbbZG_1600_150_bin20 LEle_bin20 LMuTau_bin20 Fake_bin20 ZG_bin20 MultiJ_bin20 
+process FastSim_T5bbbbZg_1900_150_bin20 LEle_bin20 LMuTau_bin20 Fake_bin20 ZG_bin20 MultiJ_bin20 
 process 0 1 2 3 4 5 
-rate 1.00888 0 1.11235 2 1.51782 0.61873 
+rate 0.175871 0 1.11235 2 1.51782 0.617742 
 ------------
 lumi lnN              1.023      -       -       -       -       -
-sigStat_b20 lnN       1.08153    -       -       -       -       -
-LEle_b20 gmN 0        -     0.565142     -       -       -       -
-LEleTFUnc_b20 lnN     -     1.08899      -       -       -       -
+sigStat_b20 lnN       1.09084    -       -       -       -       -
+trigEff_b20 lnN       1.02    -       -       -       -       -
+LEle_b20 gmN 0        -     0.571695     -       -       -       -
+LEleTFUnc_b20 lnN     -     1.08898      -       -       -       -
 LEleDR_b lnN     -     1.12      -       -       -       -
 LEleLeptSF_bM4 lnN     -     1.02      -       -       -       -
 LEleJEC_b lnN     -     1.02      -       -       -       -
 LMuTau_b20 gmN  1     -       -     1.11235     -       -       -
 LMuTauTFUnc_b20 lnN   -       -     1.09047      -       -       -
-LMuLeptSF_bM4 lnN     -     -    1.01     -       -       -
+LMuLeptSF_bM4 lnN     -     -    1.03     -       -       -
 LLeptPDF_b lnN     -     1.05     1.015       -       -       -
 FakeUncRate_b20 lnN   -       -          -    1.16491    -       -
 FakeRate_SF_b lnN   -       -          -    1.1    -       -
@@ -32,6 +33,6 @@ ZG_mcStat_b20 lnN     -       -          -      -     1.13812       -
 ZGTF_bB gmN 5         -       -          -      -     0.303563       -
 ZGPureOverLLG_bB lnN  -       -          -      -     1.19613     -
 ZG_highOrdCorr_bLJ lnN  -       -          -      -     0.875424       -
-MultiJ_b20 gmN 5     -       -          -          -         -       0.123746
-MultiJHL_bR4 lnN      -       -          -          -         -       1.04933
+MultiJ_b20 gmN 5     -       -          -          -         -       0.123548
+MultiJHL_bR4 lnN      -       -          -          -         -       1.04939
 MultiJdR_bR4 lnN      -       -          -          -         -       1.25932

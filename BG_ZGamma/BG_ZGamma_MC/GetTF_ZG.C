@@ -35,11 +35,12 @@ void GetTF_ZG(){
   vector<TString> legNames, name2;
   vector<int> rebin;
   double nunu_Integral=0,ll_Integral=0;
-  TFile *fn=new TFile("DCS_ZGToLL.root");  
+  //  TFile *fn=new TFile("DCS_ZGToLL.root");  
   //  TFile *fn=new TFile("DCS_ZGToLL_NoZMassWindow.root");  
 
-  // TFile *fn=new TFile("CS_ZGZJToNuNuG.root");
-  TFile *fd=new TFile("CS_ZDYToLLG.root");
+  TFile *fn=new TFile("CS_ZGZJToNuNuG.root");
+  //TFile *fd=new TFile("CS_ZDYToLLG.root");
+  TFile *fd=new TFile("CS_ZDYToLLG_AppTF.root");
 
   // TFile *fn=new TFile("CS_ZGToNuNuG_PtG130_NLO.root");
   // TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO.root");
@@ -50,7 +51,7 @@ void GetTF_ZG(){
   name="TF_"+name;
   TFile *fout=new TFile(name,"RECREATE");
   
-  TString histToSave="nHadJets";
+  TString histToSave="nBTagsvarBin";
   // TFile *fd=new TFile("CS_ZGToLLG.root");
 
   name2.push_back("MET");  rebin.push_back(5);
@@ -65,7 +66,7 @@ void GetTF_ZG(){
   // name2.push_back("nGenbs");  rebin.push_back(1);
   // name2.push_back("bParent_PdgId");  rebin.push_back(1);
   name2.push_back("ZMass");  rebin.push_back(2);
-  //  name2.push_back("nBTagsvarBin"); rebin.push_back(1);
+  name2.push_back("nBTagsvarBin"); rebin.push_back(1);
   //  name2.push_back("AllSBins_ZG"); rebin.push_back(1);
   //  name2.push_back("STvarBin"); rebin.push_back(1);
   // name2.push_back("MET_R1");  rebin.push_back(1);
@@ -81,12 +82,12 @@ void GetTF_ZG(){
   // name2.push_back("dPhi_METjet1");  rebin.push_back(1);
   // name2.push_back("dPhi_METjet2");  rebin.push_back(1);
   
-  //  TString nameN="Z#gamma#rightarrow#nu#bar{#nu}#gamma";
+  TString nameN="Z(#nu#bar{#nu})#gamma";
   //  TString nameN="NLO";
-  TString nameN="Data";
-  //  TString nameD="Z#gamma#rightarrow l^{+}l^{-}#gamma"; 
+  //  TString nameN="Data";
+  TString nameD="Z(l^{+}l^{-})#gamma"; 
   //  TString nameD="LO(Wted)"; 
-  TString nameD="MC";
+  //  TString nameD="MC";
   TLegend *legend[name2.size()];
   gStyle->SetOptStat(0);
   gStyle->SetLegendBorderSize(0);
@@ -122,7 +123,8 @@ void GetTF_ZG(){
     h_den=(TH1D*)fd->FindObjectAny(name2[i]);
     h_num->Rebin(rebin[i]);
     h_den->Rebin(rebin[i]);
-    //    h_den->Scale(6.0);
+    // h_den->Scale(1.0/h_den->Integral());
+    // h_num->Scale(1.0/h_num->Integral());
     if(h_num && h_den){
       if(name2[i]=="nHadJets"){
 	nunu_Integral=h_num->Integral();
@@ -146,7 +148,7 @@ void GetTF_ZG(){
       h_num->GetYaxis()->SetTitleSize(0.09);
       h_num->GetYaxis()->SetTitleOffset(0.45);
       
-      h_den->SetLineColor(kPink-2);//kMagenta+2
+      h_den->SetLineColor(kBlue);//kMagenta+2
       //      h_den->SetLineColor(kMagenta+2);//MC
       h_den->SetLineWidth(2);
       h_den->SetMarkerStyle(21);
@@ -162,7 +164,7 @@ void GetTF_ZG(){
       h_num->Draw("E1");
       h_den->Draw("E1 same");
 
-      legend[i]=new TLegend(0.74, 0.64,  0.94, 0.89);
+      legend[i]=new TLegend(0.7, 0.64,  0.90, 0.89);
       legend[i]->AddEntry(h_num,nameN,"elp");
       legend[i]->AddEntry(h_den,nameD,"elp");
       legend[i]->Draw();
@@ -181,17 +183,18 @@ void GetTF_ZG(){
       h_numCp->GetXaxis()->SetTitleSize(0.16);
       h_numCp->GetXaxis()->SetTitleOffset(0.90);
 
-      //      h_numCp->GetYaxis()->SetTitle("#frac{#nu#bar{#nu}}{l^{+}l^{-}}");
-      h_numCp->GetYaxis()->SetTitle("#frac{Data}{MC}");
+      h_numCp->GetYaxis()->SetTitle("#frac{#nu#bar{#nu}}{l^{+}l^{-}}");
+      //      h_numCp->GetYaxis()->SetTitle("#frac{Data}{MC}");
       //  h_numCp->GetYaxis()->SetTitle("#frac{NLO}{LO}");
-      h_numCp->GetYaxis()->SetTitleOffset(0.35);
-      h_numCp->GetYaxis()->SetTitleSize(0.13);
+      h_numCp->GetYaxis()->SetTitleOffset(0.32);
+      h_numCp->GetYaxis()->SetTitleSize(0.17);
       h_numCp->GetYaxis()->SetLabelSize(0.14);
       h_numCp->GetYaxis()->SetNdivisions(505);
 
       c_cA[i]->cd();    p_bot[i]->cd();
       p_bot[i]->SetTickx();p_bot[i]->SetTicky();
       h_numCp->Draw("e1");
+      h_numCp->Draw("e0same");
       c_cA[i]->cd();    p_top[i]->cd();
       char name3[100];
       textOnTop.SetTextSize(0.07);

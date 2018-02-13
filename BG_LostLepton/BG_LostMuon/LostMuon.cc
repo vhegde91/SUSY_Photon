@@ -52,7 +52,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   //TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuOnly_v2.root");
 
   TH2D *h2_LP;TH1D *h_LP;
-  bool do_prediction=1,do_norm=0;
+  bool do_prediction=0,do_norm=0;
   cout<<"Doing prediction from file |"<<f_LP->GetName()<<"|? "<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
@@ -70,7 +70,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   if(jec2Use!=0) cout<<"!!!!!!!!!! Applying JECs. -1 for JEC down, 0 for CV, 1 for JEC up. I am using "<<jec2Use<<" !!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
   if(do_norm) cout<<"!!!!!! Normalizing CS according to data"<<endl;
   //----------- btags SFs-----------------  
-  bool applybTagSFs=0;
+  bool applybTagSFs=1;
   int fListIndxOld=-1;
   double prob0=-100,prob1=-100;
   vector<TString> inFileName;
@@ -84,7 +84,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   cout<<"applying b-tag SFs? "<<applybTagSFs<<endl;
   BTagCorrector btagcorr;
   //if fastsim
-  // btagcorr.SetFastSim(true);
+  if(s_data=="FastSim") btagcorr.SetFastSim(true);
   //--------------------------------------
  
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
@@ -102,7 +102,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     nb = fChain->GetEntry(jentry);   nbytes += nb;
     
     bool process=true;
-    if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
+    if(s_data!="FastSim")
+      if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
 
     //----------------- for jets ----------------
     //    print(jentry);
@@ -145,6 +146,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     bestPhoton=getBestPhoton();
     if(bestPhoton.Pt() <= 100) continue;
     if(check_eMatchedtoGamma()) continue;
+    //    if(MET<100 || jets.size()<2) continue;
     //    if(isoMuonTracks!=0){
     // int myisoTrk=0;
     // for(int i=0;i<TAPMuonTracks->size();i++){
@@ -202,7 +204,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       ST=ST+bestPhoton.Pt();
     }
     sortTLorVec(&hadJets);
-    
+    if(s_data=="FastSim") hadJetID=true;
     //ST and HadJets have been determined. Now calulate dPhi b/w MET and leading HadJets.
     double dphi1=3.8,dphi2=3.8,dphi3=3.8,dphi4=3.8,dphiPho_MET=3.8;
     if(bestPhoton.Pt()>0.1) dphiPho_MET=abs(DeltaPhi(METPhi,bestPhoton.Phi()));
@@ -305,7 +307,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       else temp1=true;
       if(temp1==false) continue;
     }
-    if(nGenMu==0) {TLorentzVector v1;genMu.push_back(v1);}
+    if(genMu.size()==0) {TLorentzVector v1;genMu.push_back(v1);}
     sortTLorVec(&genMu);
     //check if the photon is real or fake
     bool realPho=true;
@@ -335,6 +337,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     if(phoMatchingJetIndx>=0 && (jets[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
     if(phoMatchingJetIndx<0) continue;
     int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
+    if(sBin7!=3) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
     process = process && ST>500 && MET > 100 && nHadJets >=2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
     

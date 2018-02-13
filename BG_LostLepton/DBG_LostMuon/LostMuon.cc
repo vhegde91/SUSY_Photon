@@ -239,6 +239,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     //    if(MET>200) continue;
     // if(!(MET > 270 && MET < 350)) continue;
     // if(BTags!=0) continue; if(nHadJets >=5) continue;
+    // int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
+    // if(sBin7!=3) continue;
     if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
     if(phoMatchingJetIndx<0) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
@@ -249,8 +251,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       double wt_org=wt;
       h_RunNum->Fill(RunNum);
       h_intLumi->Fill(lumiInfb);
-      //      print(jentry);
-      //      cout<<"BadGlobalMuon:"<<BadGlobalMuon<<" BadGlobalMuonLeadPt:"<<BadGlobalMuonLeadPt<<" badMuonsFilter:"<<badMuonsFilter<<" BadPFMuonFilter:"<<BadPFMuonFilter<<" BadTrkGlobalMuon:"<<BadTrkGlobalMuon<<" BadTrkGlobalMuonLeadPt:"<<BadTrkGlobalMuonLeadPt<<endl;
+      // print(jentry);
+      // cout<<"BadGlobalMuon:"<<BadGlobalMuon<<" BadGlobalMuonLeadPt:"<<BadGlobalMuonLeadPt<<" badMuonsFilter:"<<badMuonsFilter<<" BadPFMuonFilter:"<<BadPFMuonFilter<<" BadTrkGlobalMuon:"<<BadTrkGlobalMuon<<" BadTrkGlobalMuonLeadPt:"<<BadTrkGlobalMuonLeadPt<<endl;
       h_ST->Fill(ST,wt);
       h_MET->Fill(MET,wt);
       h_nHadJets->Fill(nHadJets,wt);

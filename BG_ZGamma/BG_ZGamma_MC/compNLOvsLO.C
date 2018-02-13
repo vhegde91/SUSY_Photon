@@ -28,57 +28,66 @@ double intLumi=35.9;
 TString getXaxisName(TString);
 void setLastBinAsOverFlow(TH1D*);
 
-void doubleR_dataMC(){
+void compNLOvsLO(){
   TH1::SetDefaultSumw2(1);
 
   bool saveCanvas=0;
   vector<TString> legNames, name2;
   vector<int> rebin;
   double nunu_Integral=0,ll_Integral=0;
-  double dRData[12] = {0.58973,0.50699,0.45871,0.42018,0.38011,0.36777,0.51577,0.45348,0.41057,0.36905,0.37032,0.33742};
-  double dRDataUnc[12] = {0.00782,0.00739,0.00832,0.01068,0.01501,0.01885,0.01280,0.01034,0.01034,0.01240,0.01711,0.02005};
-  double dRMC[12] = {0.52004,0.47255,0.44953,0.38988,0.35691,0.39278,0.43122,0.40502,0.38646,0.36713,0.35995,0.33724};
-  double dRMCUnc[12] = {0.01089,0.01008,0.01182,0.01369,0.01848,0.02445,0.01746,0.01325,0.01393,0.01610,0.02119,0.02243};
+  // TFile *fn=new TFile("DCS_ZGToLL.root");  
+  //  TFile *fn=new TFile("DCS_ZGToLL_NoZMassWindow.root");  
 
-  double dRatioUnc[12] = {0.09,0.09,0.09,  0.07,0.07,0.07,  0.13,0.13,0.13, 0.04,0.04,0.04};
+  // TFile *fn=new TFile("CS_ZGZJToNuNuG.root");
+  //  TFile *fd=new TFile("CS_ZDYToLLG.root");
 
-  TH1D *h_numCp;
-  TH1D *h_num = new TH1D("Data","data",12,0.5,12.5);
-  TH1D *h_den = new TH1D("MC","MC",12,0.5,12.5);
-  TH1D *h_DratioUnc = new TH1D("DratioUnc","DratioUnc",12,0.5,12.5);
-  for(int i=1;i<=12;i++){
-    h_num->SetBinContent(i,dRData[i-1]);
-    h_num->SetBinError(i,dRDataUnc[i-1]);
-    h_den->SetBinContent(i,dRMC[i-1]);
-    h_den->SetBinError(i,dRMCUnc[i-1]);
-    h_DratioUnc->SetBinContent(i,1);
-    h_DratioUnc->SetBinError(i,dRatioUnc[i-1]);
-  }
-  //  return;
-  //  name=fd->GetName();
+  TFile *fn=new TFile("CS_ZGToNuNuG_PtG130_NLO.root");
+  //  TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO.root");
+
+  TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO_reWtnJ_NLO.root");
+    
+  name=fd->GetName();
   name="TF_"+name;
+  TFile *fout=new TFile(name,"RECREATE");
   
-  TString histToSave="nHadJets";
+  TString histToSave="";
   // TFile *fd=new TFile("CS_ZGToLLG.root");
 
-  name2.push_back("Region no.");  rebin.push_back(5);
-  TString nameN="Data";
-  TString nameD="MC";
+  name2.push_back("MET");  rebin.push_back(5);
+  name2.push_back("METvarBin");  rebin.push_back(1);
+  //  name2.push_back("METvarBin_TF");  rebin.push_back(1);
+  name2.push_back("ST");  rebin.push_back(10);
+  name2.push_back("BestPhotonPt");  rebin.push_back(5);
+  name2.push_back("nHadJets");  rebin.push_back(1);
+  name2.push_back("nBTags");  rebin.push_back(1);
+  
+  //  TString nameN="Z#gamma#rightarrow#nu#bar{#nu}#gamma";
+  TString nameN="NLO";
+  //TString nameN="Data";
+  //  TString nameD="Z#gamma#rightarrow l^{+}l^{-}#gamma"; 
+  TString nameD="LO"; 
+  //TString nameD="MC";
   TLegend *legend[name2.size()];
   gStyle->SetOptStat(0);
   gStyle->SetLegendBorderSize(0);
 
+  // txtTop="CMS #it{#bf{Simulation}}";
+  // txtLumi="#bf{35.9 fb^{-1}(13TeV)}";
+  // textOnTop.SetTextSize(0.035);
+  // intLumiE.SetTextSize(0.035);
+  // textOnTop.DrawLatexNDC(0.1,0.91,txtTop);
+  //  sprintf(name2,"#bf{35.9 fb^{-1}(13TeV)}");
+  //  intLumiE.DrawLatexNDC(0.73,0.91,name2);
   TCanvas *c_cA[name2.size()];
   TPad *p_top[name2.size()],*p_bot[name2.size()];
 
   for(int i=0;i<name2.size();i++){
     //    name = name2[i]+"NuNu_LL";
-    //    name = name2[i]+"NLO_LO";
-    name = "DoubleRatio_VR_DataMC";
-    c_cA[i] = new TCanvas(name,name,1000,600);
+    name = name2[i]+"NLO_LO";
+    c_cA[i] = new TCanvas(name,name,1500,800);
     p_top[i] =new TPad(name+"top",name+"top",0,0.4,1,1);
     p_bot[i] =new TPad(name+"bot",name+"bot",0,0.0,1,0.4);
-    p_top[i]->Draw();p_top[i]->SetGridx();p_top[i]->SetGridy();//p_top[i]->SetLogy();
+    p_top[i]->Draw();p_top[i]->SetGridx();p_top[i]->SetGridy();p_top[i]->SetLogy();
     p_top[i]->SetBottomMargin(0);
     p_bot[i]->SetTopMargin(0);
     p_bot[i]->SetBottomMargin(0.35);
@@ -86,10 +95,21 @@ void doubleR_dataMC(){
     //    textOnTop.DrawLatexNDC(0.1,0.91,"CMS #it{#bf{Simulation}}");
   }
 
+  TH1D *h_num,*h_den,*h_numCp;
   for(int i=0;i<name2.size();i++){
-    // h_num=(TH1D*)fn->FindObjectAny(name2[i]);
-    // h_den=(TH1D*)fd->FindObjectAny(name2[i]);
+    h_num=(TH1D*)fn->FindObjectAny(name2[i]);
+    h_den=(TH1D*)fd->FindObjectAny(name2[i]);
+    h_num->Rebin(rebin[i]);
+    h_den->Rebin(rebin[i]);
+    //    h_den->Scale(6.0);
     if(h_num && h_den){
+      if(name2[i]=="nHadJets"){
+	nunu_Integral=h_num->Integral();
+	ll_Integral=h_den->Integral();
+      }
+      setLastBinAsOverFlow(h_num);
+      setLastBinAsOverFlow(h_den);
+
       if(nameN.Contains("Data")){
 	h_num->SetLineColor(kBlack);
 	h_num->SetMarkerStyle(20);
@@ -100,17 +120,17 @@ void doubleR_dataMC(){
       }
       h_num->SetLineWidth(2);
       h_num->SetMarkerColor(h_num->GetLineColor());
-      h_num->SetTitle(";;Double Ratio(K)");
+      h_num->SetTitle(";;Events");
       h_num->GetYaxis()->SetLabelSize(0.09);
       h_num->GetYaxis()->SetTitleSize(0.09);
       h_num->GetYaxis()->SetTitleOffset(0.45);
       
-      h_den->SetLineColor(kBlue);//kMagenta+2
-      //      h_den->SetLineColor(kMagenta+2);//MC
+      //      h_den->SetLineColor(kPink-2);//kMagenta+2
+      h_den->SetLineColor(kMagenta+2);//MC
       h_den->SetLineWidth(2);
       h_den->SetMarkerStyle(21);
       h_den->SetMarkerColor(h_den->GetLineColor());
-      h_num->GetYaxis()->SetNdivisions(5);
+      //  h_num->GetYaxis()->SetNdivisions(2);
 
       c_cA[i]->cd();p_top[i]->cd();
       // textOnTop.DrawLatexNDC(0.1,0.91,"CMS #it{#bf{Simulation}}");
@@ -118,8 +138,8 @@ void doubleR_dataMC(){
       // intLumiE.DrawLatexNDC(0.73,0.91,txtLumi);
       // gPad->Update();
       p_top[i]->SetTickx();p_top[i]->SetTicky();
-      h_num->Draw("E1X0");
-      h_den->Draw("E1X0 same");
+      h_num->Draw("E1");
+      h_den->Draw("E1 same");
 
       legend[i]=new TLegend(0.74, 0.64,  0.94, 0.89);
       legend[i]->AddEntry(h_num,nameN,"elp");
@@ -127,12 +147,13 @@ void doubleR_dataMC(){
       legend[i]->Draw();
       gPad->RedrawAxis();
       //---------------- for ratio ------------------
-      h_numCp=(TH1D*)h_num->Clone("Ratio_DataMC");
+      h_numCp=(TH1D*)h_num->Clone("Ratio_NuNuToLL");
       h_numCp->Divide(h_den);
+      if(name2[i]==histToSave){fout->cd();h_numCp->Write();}
       h_numCp->SetLineColor(kBlack);
       h_numCp->SetMarkerColor(kBlack);
       h_numCp->SetMaximum(1.99);////////////////////////////////////
-      h_numCp->SetMinimum(0.001);
+      h_numCp->SetMinimum(0.01);
 
       h_numCp->GetXaxis()->SetTitle(getXaxisName(name2[i]));
       h_numCp->GetXaxis()->SetLabelSize(0.15);
@@ -140,8 +161,8 @@ void doubleR_dataMC(){
       h_numCp->GetXaxis()->SetTitleOffset(0.90);
 
       //      h_numCp->GetYaxis()->SetTitle("#frac{#nu#bar{#nu}}{l^{+}l^{-}}");
-      h_numCp->GetYaxis()->SetTitle("#frac{Data}{MC}");
-      //  h_numCp->GetYaxis()->SetTitle("#frac{NLO}{LO}");
+      //      h_numCp->GetYaxis()->SetTitle("#frac{Data}{MC}");
+      h_numCp->GetYaxis()->SetTitle("#frac{NLO}{LO}");
       h_numCp->GetYaxis()->SetTitleOffset(0.35);
       h_numCp->GetYaxis()->SetTitleSize(0.13);
       h_numCp->GetYaxis()->SetLabelSize(0.14);
@@ -149,21 +170,20 @@ void doubleR_dataMC(){
 
       c_cA[i]->cd();    p_bot[i]->cd();
       p_bot[i]->SetTickx();p_bot[i]->SetTicky();
-      h_numCp->Draw("e1X0");
-      h_DratioUnc->SetFillStyle(3013);
-      h_DratioUnc->SetFillColor(1);
-      h_DratioUnc->Draw("E2same");
+      h_numCp->Draw("e1");
       c_cA[i]->cd();    p_top[i]->cd();
       char name3[100];
       textOnTop.SetTextSize(0.07);
       intLumiE.SetTextSize(0.07);
-      textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
+      textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation}}");
       sprintf(name3,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
       intLumiE.DrawLatexNDC(0.73,0.91,name3);
 
       if(saveCanvas){name="c_"+name2[i]+".png";c_cA[i]->SaveAs(name);}
     }
   }
+  cout<<"# of events in NuNu: "<<nunu_Integral<<endl;
+  cout<<"# of events in LL: "<<ll_Integral<<endl;
 }
 
 

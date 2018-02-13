@@ -49,7 +49,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   //  TFile *f_LP=new TFile("LstEle_CS_LDP_TTWZ_LostEle_v2.root");
   //TFile *f_LP=new TFile("LstEle_CS_TTW_LostEle_v2.root");
   TH2D *h2_LP;TH1D *h_LP;
-  bool do_prediction=0,do_norm=0;
+  bool do_prediction=1,do_norm=0;
   int jec2Use = 0;//-1 for JEC down, 0 for CV, 1 for JEC up
   cout<<"Doing prediction from file |"<<f_LP->GetName()<<"|? "<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
@@ -69,7 +69,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   if(jec2Use!=0) cout<<"!!!!!!!!!! Applying JECs. -1 for JEC down, 0 for CV, 1 for JEC up. I am using "<<jec2Use<<" !!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
   if(do_norm) cout<<"!!!!!! Normalizing CS according to data"<<endl;
   //----------- btags SFs-----------------  
-  bool applybTagSFs=1;
+  bool applybTagSFs=0;
   int fListIndxOld=-1;
   double prob0=-100,prob1=-100;
   vector<TString> inFileName;
@@ -83,7 +83,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   cout<<"applying b-tag SFs? "<<applybTagSFs<<endl;
   BTagCorrector btagcorr;
   //if fastsim
-  if(s_data=="FastSim") btagcorr.SetFastSim(true);
+  // btagcorr.SetFastSim(true);
   //--------------------------------------
   
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
@@ -101,8 +101,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     nb = fChain->GetEntry(jentry);   nbytes += nb;
     
     bool process=true;
-    if(s_data!="FastSim")
-      if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
+    //    if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
 
     //----------------- for jets ----------------
     int n_j = 0;
@@ -187,7 +186,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
       ST=ST+bestPhoton.Pt();
     }
     sortTLorVec(&hadJets);
-    if(s_data=="FastSim") hadJetID=true;
+    
     //ST and HadJets have been determined. Now calulate dPhi b/w MET and leading HadJets.
     double dphi1=3.8,dphi2=3.8,dphi3=3.8,dphi4=3.8,dphiPho_MET=3.8;
     if(bestPhoton.Pt()>0.1) dphiPho_MET=abs(DeltaPhi(METPhi,bestPhoton.Phi()));
@@ -272,7 +271,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
       if(nGenEle==0) continue;
       if(nGenMu!=0) continue;
     }
-    if(genEle.size()==0) {TLorentzVector v1;genEle.push_back(v1);}
+    if(nGenEle==0) {TLorentzVector v1;genEle.push_back(v1);}
     sortTLorVec(&genEle);
     //check if the photon is real or fake
     bool realPho=true;

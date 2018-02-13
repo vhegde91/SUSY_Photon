@@ -2,6 +2,7 @@
 ./analyzeLightBSM runList_ZJetsToNuNu.txt ZJetsToNuNu.root ZJets
 #./analyzeLightBSM runList_ZGJetsToNuNuG.txt ZGJetsToNuNuG.root ZG
 ./analyzeLightBSM CS_runList_ZGToNuNuG.txt ZGJetsToNuNuG.root ZG
+hadd -f ZGZJ_NuNuG.root ZJetsToNuNu.root ZGJetsToNuNuG.root
 ./analyzeLightBSM runList_QCD.txt QCD.root QCD
 ./analyzeLightBSM runList_GJets.txt GJets.root GJets
 ./analyzeLightBSM runList_WJetsToLNu.txt WJetsToLNu.root WJets
@@ -9,13 +10,13 @@
 ./analyzeLightBSM runList_TTJets.txt TTJetsHT.root TTJets
 ./analyzeLightBSM runList_TTGJets.txt TTGJets.root TTG
 
-./analyzeLightBSM runList_T5bbbbZg_1600_150.txt T5bbbbZg_1600_150_FastSim.root FastSim
-./analyzeLightBSM runList_T5bbbbZg_1600_1000.txt T5bbbbZg_1600_1000_FastSim.root FastSim
-./analyzeLightBSM runList_T5bbbbZg_1600_1550.txt T5bbbbZg_1600_1550_FastSim.root FastSim
+./analyzeLightBSM runList_T5bbbbZg_1600_150.txt T5bbbbZg_1600_150_FastSim.root FastSim_T5bbbbZg
+./analyzeLightBSM runList_T5bbbbZg_1600_1000.txt T5bbbbZg_1600_1000_FastSim.root FastSim_T5bbbbZg
+./analyzeLightBSM runList_T5bbbbZg_1600_1550.txt T5bbbbZg_1600_1550_FastSim.root FastSim_T5bbbbZg
 
-./analyzeLightBSM runList_T5qqqqHg_1600_150.txt T5qqqqHg_1600_150_FastSim.root FastSim
-./analyzeLightBSM runList_T5qqqqHg_1600_1000.txt T5qqqqHg_1600_1000_FastSim.root FastSim
-./analyzeLightBSM runList_T5qqqqHg_1600_1550.txt T5qqqqHg_1600_1550_FastSim.root FastSim
+./analyzeLightBSM runList_T5qqqqHg_1600_150.txt T5qqqqHg_1600_150_FastSim.root FastSim_T5qqqqHg
+./analyzeLightBSM runList_T5qqqqHg_1600_1000.txt T5qqqqHg_1600_1000_FastSim.root FastSim_T5qqqqHg
+./analyzeLightBSM runList_T5qqqqHg_1600_1550.txt T5qqqqHg_1600_1550_FastSim.root FastSim_T5qqqqHg
 
 ./analyzeLightBSM runList_T1bbbb_ZG_mGl1600_NLSP150.txt T1bbbb_ZG_mGl1600_NLSP150.root SignalZ
 ./analyzeLightBSM runList_T1bbbb_ZG_mGl1600_NLSP1000.txt T1bbbb_ZG_mGl1600_NLSP1000.root SignalZ

@@ -24,6 +24,11 @@ void getSignificance(TString fName){
   TH2D *h2_XsecUL=(TH2D*)f1->FindObjectAny("mGlmNLSP_XsecUL");
   //  TH2D *h2_XsecULup=(TH2D*)f1->FindObjectAny("mGlmNLSP_XsecULUncUp");
 
+  //-----------cheat here------------
+  // h2_rvalue->SetBinContent(h2_rvalue->GetXaxis()->FindBin(1750),h2_rvalue->GetYaxis()->FindBin(1450),4.85);
+  // h2_rvalue->SetBinContent(h2_rvalue->GetXaxis()->FindBin(1750),h2_rvalue->GetYaxis()->FindBin(1500),4.86);
+  // h2_rvalue->SetBinContent(h2_rvalue->GetXaxis()->FindBin(1750),h2_rvalue->GetYaxis()->FindBin(1520),4.88);
+  //---------------------------------
   //  TCanvas *c3=new TCanvas("c3","c3",1500,1500);
   TCanvas *c3=new TCanvas("c3","c3",1200,1500);
   c3->SetLeftMargin(0.15);

@@ -30,12 +30,11 @@ vector<TString> legName;
 vector<TString> histName1,histName2;
 TLatex textOnTop,intLumiE;
 
-TLegend *legend1=new TLegend(0.25,0.15,0.45,0.6);
-//TLegend *legend1=new TLegend(0.35,0.2,0.55,0.65);
-//TLegend *legend1=new TLegend(0.35,0.3,0.55,0.4);
+//TLegend *legend1=new TLegend(0.25,0.35,0.35,0.7);
+TLegend *legend1=new TLegend(0.35,0.2,0.55,0.65);
 TString xAxisLabel;
 char name[100];
-int col[9]={kBlue,kRed,kOrange-3,kTeal+9,kMagenta,kOrange,kCyan,kGray+2,kBlack};
+int col[9]={kBlue,kRed,kOrange-3,kTeal+9,kMagenta,kOrange,kGray+2,kCyan,kBlack};
 
 int rebin=1;
 
@@ -43,32 +42,27 @@ void GetEfficiency(){
   TH1::SetDefaultSumw2(1);
 
   FileList = new TList();
-  int nfiles=7;
+  int nfiles=9;
   TFile *f[nfiles];
-  TString saveFileName = "photon90_PFHT600_eff_versusPt_versusEra";
+  TString saveFileName = "Run2016_MET_HT800or900_2016H_HT800or900orCaloJet500";
   TString name="PhoTrg";
-  xAxisLabel="#gamma p^{T}(GeV)";
-  //xAxisLabel="ST(GeV)";
-  //  xAxisLabel="e pT(GeV)";
+  //  xAxisLabel="#gamma p^{T}(GeV)";
+  xAxisLabel="ST(GeV)";
+  //  xAxisLabel="";
   //  xAxisLabel="#Delta#Phi(Jet2,MET)";
   //  xAxisLabel="#sigma_{i#etai#eta}(EB)";
   // xAxisLabel="QIso(EB)";
-  //f[0] = new TFile("Run2016_MET_03Feb2017_PhoPtTrg.root");
-  // f[0] = new TFile("Run2016_MET_03Feb2017_HTPhoPtTrg.root");
-  //f[0] = new TFile("Run2016_MET_03Feb2017_HTPhoPtTrg_HT900.root");
-  //  f[0] = new TFile("Run2016_MET_03Feb2017_PhoTrgORHTPhoPtTrg_SR.root");
-  // f[0] = new TFile("Run2016_MET_03Feb2017_PhoxHT_OR_Pho165_1TightEleOnly.root");
+  //f[0] = new TFile("Run2016_MET_03Feb2017_SingEleTrg_NoIsoTightID_ST500_v2.root");
 
-  f[0] = new TFile("Run2016B_MET_03Feb2017_HTPhoPtTrg_HT900.root");
-  f[1] = new TFile("Run2016C_MET_03Feb2017_HTPhoPtTrg_HT900.root");
-  f[2] = new TFile("Run2016D_MET_03Feb2017_HTPhoPtTrg_HT900.root");
-  f[3] = new TFile("Run2016E_MET_03Feb2017_HTPhoPtTrg_HT900.root");
-  f[4] = new TFile("Run2016F_MET_03Feb2017_HTPhoPtTrg_HT900.root");
-  f[5] = new TFile("Run2016G_MET_03Feb2017_HTPhoPtTrg_HT900.root");
-  f[6] = new TFile("Run2016H_MET_03Feb2017_HTPhoPtTrg_HT900.root");
-
-  //  f[7] = new TFile("Run2016H_MET_03Feb2017_PhoPtTrg_v2orCaloJet500.root");
-  //  f[8] = new TFile("Run2016_MET_03Feb2017_PhoPtTrg_v2_2016H_HT800orHT900orCaloJet500.root");
+  f[0] = new TFile("Run2016B_MET_03Feb2017_HT800orHT900.root");
+  f[1] = new TFile("Run2016C_MET_03Feb2017_HT800orHT900.root");
+  f[2] = new TFile("Run2016D_MET_03Feb2017_HT800orHT900.root");
+  f[3] = new TFile("Run2016E_MET_03Feb2017_HT800orHT900.root");
+  f[4] = new TFile("Run2016F_MET_03Feb2017_HT800orHT900.root");
+  f[5] = new TFile("Run2016G_MET_03Feb2017_HT800orHT900.root");
+  f[6] = new TFile("Run2016H_MET_03Feb2017_HT800orHT900.root");
+  f[7] = new TFile("Run2016H_MET_03Feb2017_HT800orHT900orCaloJet500.root");
+  f[8] = new TFile("Run2016_MET_03Feb2017_HT800orHT900_2016H_HT800orHT900orCaloJet500.root");
 
   //  f[7] = new TFile("Run2016_MET_03Feb2017_HT800orHT900.root");
 
@@ -85,17 +79,17 @@ void GetEfficiency(){
   for(int i=0;i<nfiles;i++){
     // histName1.push_back("MET_Req");
     // histName2.push_back("MET");
-    histName1.push_back("PhoPtvBin_Req");
-    histName2.push_back("PhoPtvBin");
+    // histName1.push_back("PhoPtvBin_Req");
+    // histName2.push_back("PhoPtvBin");
     // histName1.push_back("BestPhotonPt_Req");
     // histName2.push_back("BestPhotonPt");
-    // histName1.push_back("ST_Req");
-    // histName2.push_back("ST");
+    histName1.push_back("ST_Req");
+    histName2.push_back("ST");
     // histName1.push_back("STvBin_Req");
     // histName2.push_back("STvBin");
     // histName1.push_back("Ele1PtvBin_Req");
     // histName2.push_back("Ele1PtvBin");
-    //histName1.push_back("Ele1Pt_Req");
+    // histName1.push_back("Ele1Pt_Req");
     // histName2.push_back("Ele1Pt");
     // histName1.push_back("MuPt_vBin_Req");
     // histName2.push_back("MuPt_vBin");
@@ -113,7 +107,7 @@ void GetEfficiency(){
 
   // histName1.push_back("MET_PhoPt"); 
   // histName2.push_back("MET_HT"); 
-  //  rebin=5;
+  rebin=5;
   legName.push_back("2016B (5.78 fb^{-1})");
   legName.push_back("2016C (2.57 fb^{-1})");
   legName.push_back("2016D (4.25 fb^{-1})");
@@ -121,8 +115,8 @@ void GetEfficiency(){
   legName.push_back("2016F (3.10 fb^{-1})");
   legName.push_back("2016G (7.54 fb^{-1})");
   legName.push_back("2016H (8.61 fb^{-1})");
-  // legName.push_back("2016H(HT or CaloJet)");
-  //legName.push_back("2016 (35.9 fb^{-1})");
+  legName.push_back("2016H(HT or CaloJet)");
+  legName.push_back("2016 (35.9 fb^{-1})");
   vector<double> STLowEdge={0,100,200,300,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,580,600,620,640,680,720,740,760,780,800,820,840,880,920,960,1000,1400,1800,2500,3500,5000};
   vector<double> PhoPtLowEdge={0,50,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,240,260,280,300,320,340,360,380,400,440,480,520,580,650,750,900,1050,1400,2000};
 

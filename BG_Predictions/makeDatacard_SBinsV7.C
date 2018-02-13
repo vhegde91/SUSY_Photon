@@ -117,8 +117,8 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
       "kmax *  number of nuisance parameters (sources of systematical uncertainties)"<<endl<<
       "------------"<<endl<<
       "bin "<<i<<endl<<
-      //      "observation "<<h_rate[jmax+2-1]->GetBinContent(i)<<endl<<//this is for data
-      "observation "<<h_totBG->GetBinContent(i)<<endl<<//this is for exp limit calc using BG predictions only, no data
+      "observation "<<h_rate[jmax+2-1]->GetBinContent(i)<<endl<<//this is for data
+      //"observation "<<h_totBG->GetBinContent(i)<<endl<<//this is for exp limit calc using BG predictions only, no data
       "------------"<<endl<<
       "bin ";
     for(int j=0;j<jmax+nSig;j++){outf<<i<<" ";}
@@ -138,6 +138,7 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
     
     outf<<"lumi lnN              1.023      -       -       -       -       -"<<endl;
     outf<<"sigStat_b"<<i<<" lnN       "<<1+((h_rate[0]->GetBinError(i))/(h_rate[0]->GetBinContent(i)))<<"    -       -       -       -       -"<<endl;
+    outf<<"trigEff_b"<<i<<" lnN       1.02    -       -       -       -       -"<<endl;
     //    outf<<"SigXsec"<<" lnN         "<<1+sigXsecUnc/sigXsec<<"    -       -       -       -       -"<<endl;
 
     //--------------- Lost Ele-----------------

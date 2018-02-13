@@ -28,25 +28,32 @@ double intLumi=35.9;
 TString getXaxisName(TString);
 void setLastBinAsOverFlow(TH1D*);
 
-void doubleR_dataMC(){
+void doubleR_dataMC_merged(){
   TH1::SetDefaultSumw2(1);
 
   bool saveCanvas=0;
   vector<TString> legNames, name2;
   vector<int> rebin;
   double nunu_Integral=0,ll_Integral=0;
-  double dRData[12] = {0.58973,0.50699,0.45871,0.42018,0.38011,0.36777,0.51577,0.45348,0.41057,0.36905,0.37032,0.33742};
-  double dRDataUnc[12] = {0.00782,0.00739,0.00832,0.01068,0.01501,0.01885,0.01280,0.01034,0.01034,0.01240,0.01711,0.02005};
-  double dRMC[12] = {0.52004,0.47255,0.44953,0.38988,0.35691,0.39278,0.43122,0.40502,0.38646,0.36713,0.35995,0.33724};
-  double dRMCUnc[12] = {0.01089,0.01008,0.01182,0.01369,0.01848,0.02445,0.01746,0.01325,0.01393,0.01610,0.02119,0.02243};
+  // double dRData[12] = {0.58973,0.50699,0.45871,0.42018,0.38011,0.36777,0.51577,0.45348,0.41057,0.36905,0.37032,0.33742};
+  // double dRDataUnc[12] = {0.00782,0.00739,0.00832,0.01068,0.01501,0.01885,0.01280,0.01034,0.01034,0.01240,0.01711,0.02005};
+  // double dRMC[12] = {0.52004,0.47255,0.44953,0.38988,0.35691,0.39278,0.43122,0.40502,0.38646,0.36713,0.35995,0.33724};
+  // double dRMCUnc[12] = {0.01089,0.01008,0.01182,0.01369,0.01848,0.02445,0.01746,0.01325,0.01393,0.01610,0.02119,0.02243};
 
-  double dRatioUnc[12] = {0.09,0.09,0.09,  0.07,0.07,0.07,  0.13,0.13,0.13, 0.04,0.04,0.04};
+  double dRData[6] = {0.525550,0.406994,0.367770,0.452054,0.369393,0.337416};
+  double dRDataUnc[6] = {0.004529,0.008697,0.018846,0.006319,0.010047,0.020047};
+
+  double dRMC[6] = {0.483443,0.378652,0.392778,0.401730,0.363947,0.337237};
+  double dRMCUnc[6] = {0.006280,0.011004,0.024448,0.008350,0.012786,0.022428};
+
+  double dRatioUnc[6] = {0.09,0.07,0.07, 0.13,0.04,0.04};
 
   TH1D *h_numCp;
-  TH1D *h_num = new TH1D("Data","data",12,0.5,12.5);
-  TH1D *h_den = new TH1D("MC","MC",12,0.5,12.5);
-  TH1D *h_DratioUnc = new TH1D("DratioUnc","DratioUnc",12,0.5,12.5);
-  for(int i=1;i<=12;i++){
+  TH1D *h_num = new TH1D("Data","data",6,0.5,6.5);
+  TH1D *h_den = new TH1D("MC","MC",6,0.5,6.5);
+  TH1D *h_DratioUnc = new TH1D("DratioUnc","assigned unc on double ratio",6,0.5,6.5);
+
+  for(int i=1;i<=6;i++){
     h_num->SetBinContent(i,dRData[i-1]);
     h_num->SetBinError(i,dRDataUnc[i-1]);
     h_den->SetBinContent(i,dRMC[i-1]);
@@ -108,7 +115,8 @@ void doubleR_dataMC(){
       h_den->SetLineColor(kBlue);//kMagenta+2
       //      h_den->SetLineColor(kMagenta+2);//MC
       h_den->SetLineWidth(2);
-      h_den->SetMarkerStyle(21);
+      h_den->SetMarkerStyle(4);
+      h_den->SetMarkerSize(1.12);
       h_den->SetMarkerColor(h_den->GetLineColor());
       h_num->GetYaxis()->SetNdivisions(5);
 
@@ -153,6 +161,7 @@ void doubleR_dataMC(){
       h_DratioUnc->SetFillStyle(3013);
       h_DratioUnc->SetFillColor(1);
       h_DratioUnc->Draw("E2same");
+
       c_cA[i]->cd();    p_top[i]->cd();
       char name3[100];
       textOnTop.SetTextSize(0.07);

@@ -14,7 +14,7 @@
 #include"THStack.h"
 #include"TStyle.h"
 
-const int nfiles=2;
+const int nfiles=3;
 TFile *f[nfiles];
 TH1D *h1[nfiles];
 TLegend *lg1;
@@ -23,6 +23,8 @@ vector<TString> fNames,histName,legName;
 vector<int> rebin;
 TString xAxisName="QMult";
 TString yAxisName="Events";
+TLatex textOnTop,intLumiE;
+double intLumi=35.9;
 
 void makeRatioPlot();
 void plotManyHists(){
@@ -34,10 +36,10 @@ void plotManyHists(){
   legName.push_back("t#bar{t}");
   rebin.push_back(1);
   //-------------------------------------
-  // fNames.push_back("CS_WJets_FR_NoTrg_v2.root");
-  // histName.push_back("Qmulti_Ele");
-  // legName.push_back("W+Jets");
-  // rebin.push_back(1);
+  fNames.push_back("CS_WJets_FR_NoTrg_v2.root");
+  histName.push_back("Qmulti_Ele");
+  legName.push_back("W+Jets");
+  rebin.push_back(1);
   //-------------------------------------
   fNames.push_back("MS_FR_DYJetsToLL_v2.root");
   histName.push_back("QMultJetElef_Ele");
@@ -55,11 +57,12 @@ void plotManyHists(){
   TCanvas *c1=new TCanvas("canvasA",yAxisName+" vs "+xAxisName,1500,850);
   c1->SetLeftMargin(0.11);
   c1->SetBottomMargin(0.13);
-  lg1=new TLegend(0.7, 0.90,  0.90, 0.65);
+  lg1=new TLegend(0.65, 0.88,  0.83, 0.65);
   for(int i=0;i<nfiles;i++){
     f[i] = new TFile(fNames[i]);
     h1[i] = (TH1D*)f[i]->FindObjectAny(histName[i]);
     h1[i]->Rebin(rebin[i]);
+    h1[i]->Scale(1.0/h1[i]->Integral());
     h1[i]->SetTitle(0);
     h1[i]->SetLineWidth(2);
     h1[i]->SetLineColor(col[i]);
@@ -75,7 +78,16 @@ void plotManyHists(){
     }
     else h1[i]->Draw("sames histe");
   }
+  
   lg1->Draw();
+  char name2[100];
+  textOnTop.SetTextSize(0.05);
+  intLumiE.SetTextSize(0.05);
+  textOnTop.DrawLatexNDC(0.1,0.91,"CMS #it{#bf{Simulation}}");
+  intLumiE.SetTextSize(0.05);
+  sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
+  intLumiE.DrawLatexNDC(0.7,0.91,name2);
+
   if(nfiles==2) makeRatioPlot();
   // c1->SaveAs("a.png");
 }

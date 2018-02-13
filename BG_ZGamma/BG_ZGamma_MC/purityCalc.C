@@ -29,3 +29,24 @@ void purityCalc(){
 
   
 }
+void purityCalc(int i){
+  vector<double> den={32.409+0.111,5.332+0.4718};
+  vector<double> num={32.409,5.332};
+  vector<double> denErr={sqrt(1.485*1.485+0.096*0.096), sqrt(0.812*0.812+0.227*0.227)};
+  vector<double> numErr={1.485,0.812};
+  TH1D *hNum=new TH1D("hNum","hNum",10,0.5,10.5);
+  TH1D *hDen=new TH1D("hDen","hDen",10,0.5,10.5);
+  for(int i=0;i<den.size();i++){
+    hNum->SetBinContent(i+1,num[i]);
+    hNum->SetBinError(i+1,numErr[i]);
+    cout<<hNum->GetBinContent(i+1)<<" "<<hNum->GetBinError(i+1)<<endl;
+    hDen->SetBinContent(i+1,den[i]);
+    hDen->SetBinError(i+1,denErr[i]);
+    cout<<hDen->GetBinContent(i+1)<<" "<<hDen->GetBinError(i+1)<<endl;
+  }
+  hNum->Rebin(2);
+  hDen->Rebin(2);
+  TGraphAsymmErrors *gr = new TGraphAsymmErrors(hNum,hDen);
+  gr->Draw();
+  gr->Print("ALL");
+}

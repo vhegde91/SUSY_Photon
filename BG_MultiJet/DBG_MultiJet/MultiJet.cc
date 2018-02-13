@@ -41,7 +41,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
  
   Long64_t nbytes = 0, nb = 0;
   int decade = 0;
-  bool do_AB_reweighting=1;
+  bool do_AB_reweighting=0;
   int evtSurvived=0;
   TFile *f_HLR=TFile::Open("HLR_gjets_qcd.root");
   // TH1D *h_HLratio=(TH1D*)f_HLR->Get("HLratio_1D");
@@ -155,7 +155,10 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     // }
     // if(abs(dphiG_MET) < 0.5) continue;
     // if(mtPho<100) continue;
-
+    // int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
+    // if(sBin7!=3) continue;
+    // if(photonMatchingJetIndx<0) continue;
+    // if(((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()) > 1.0) continue;//slewrate affected events
     if(photonMatchingJetIndx>=0 && ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
     if(photonMatchingJetIndx<0) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
@@ -303,6 +306,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	}
 	if(regType=='C' || regType=='D'){
 	  //	  print(jentry);
+	  //	  if(sBin7==3) cout<<RunNum<<":"<<LumiBlockNum<<":"<<EvtNum<<endl;
 	  h_ST_CD->Fill(ST,wt);
 	  h_MET_CD->Fill(MET,wt);
 	  h_nHadJets_CD->Fill(nHadJets,wt);

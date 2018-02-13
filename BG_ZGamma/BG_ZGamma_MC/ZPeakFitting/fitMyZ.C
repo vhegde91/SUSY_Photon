@@ -22,6 +22,7 @@ void fitMyZ(){
   //  TFile *f1 = new TFile("DCS_ZGToLL_NoZMassWindow.root");
   TFile *f1 = new TFile("DCS_ZGToLL_NoZMassWindow_v2.root");
   TH1D *h_zmass=(TH1D*)f1->FindObjectAny("ZMass");
+  h_zmass->Rebin(4);
   int nBins = h_zmass->GetNbinsX();
   double data[nBins];
   h_zmass->SetLineColor(kBlack);

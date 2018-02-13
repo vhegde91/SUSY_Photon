@@ -22,7 +22,7 @@ char name[100];
 char name2[100];
 TString name3;
 TLatex textOnTop,intLumiE;
-const int nfiles=10,nBG=8;    //Specify no. of files
+const int nfiles=9,nBG=7;    //Specify no. of files
 TFile *f[nfiles];
 //int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kMagenta+2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
 int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kPink-2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
@@ -47,14 +47,15 @@ void searchBinsStack(){
   f[1] = new TFile("TTGJets.root");
   f[2] = new TFile("TTJetsHT.root");
   f[3] = new TFile("WJetsToLNu.root");
-  f[4] = new TFile("ZJetsToNuNu.root");
-  f[5] = new TFile("ZGJetsToNuNuG.root");
-  f[6] = new TFile("QCD.root");
-  f[7] = new TFile("GJets.root");
+  // f[4] = new TFile("ZJetsToNuNu.root");
+  // f[5] = new TFile("ZGJetsToNuNuG.root");
+  f[4] = new TFile("ZGZJ_NuNuG.root");
+  f[5] = new TFile("QCD.root");
+  f[6] = new TFile("GJets.root");
   //FastSim_T5qqqqHg_1600_1000.root  FastSim_T5qqqqHg_1600_150.root  FastSim_T5ttttZg_1600_1000.root  FastSim_T5ttttZg_1600_150.roo
-  f[8] = new TFile("T5qqqqHg_1600_150_FastSim.root");
+  f[7] = new TFile("T5qqqqHg_1600_150_FastSim.root");
   //  f[9] = new TFile("T5qqqqHg_1600_1000_FastSim.root");
-  f[9] = new TFile("T5qqqqHg_1600_1550_FastSim.root");
+  f[8] = new TFile("T5qqqqHg_1600_1550_FastSim.root");
   //  f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
   // f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
   // f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
@@ -64,7 +65,7 @@ void searchBinsStack(){
   THStack *hs_MET=new THStack("MET_Stack","MET Stacked");
   THStack *hs_MET_SB=new THStack("MET_SB","MET for all search bins");
   //TH1D *h_R;
-  TH1D *h_MET_R[nfiles];
+  TH1D *h_MET_R[nfiles],*h_sum;
   for(int i=0;i<nfiles;i++){
     sprintf(name,"hist_file%i",i);
     h_MET_R[i]=new TH1D(name,name,21,0.5,21.5);
@@ -86,6 +87,9 @@ void searchBinsStack(){
     TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("AllSBins_v7_CD");//MET_R1
     //    TH1D *h_MET=(TH1D*)f[i]->FindObjectAny("mindPhi1dPhi2");
     //    h_MET->Rebin(5);
+    if(i==0) h_sum=(TH1D*)h_MET->Clone("sumBG");
+    else if(i<=(nBG-1)) h_sum->Add(h_MET);
+
     decorate(h_MET,i,f[i]->GetName());
     
     if(i<=(nBG-1))  hs_MET->Add(h_MET);
@@ -102,7 +106,10 @@ void searchBinsStack(){
     drawlegend(h_MET,i,f[i]->GetName());
     //    if(i==nfiles-1) hs_MET->SetTitle(";min(#Delta#Phi_{1},#Delta#Phi_{2});Events");
     if(i==nfiles-1) hs_MET->SetTitle(";Bin Number;Events");
-
+    cout<<f[i]->GetName()<<endl;
+    for(int i=1;i<=h_sum->GetNbinsX();i++){
+      cout<<h_MET->GetBinContent(i)<<"\t"<<h_MET->GetBinError(i)<<endl;    
+    }
     //----------------------all search bins----------------------------
     for(int j=1;j<=3;j++){
       name3="MET_R"+to_string(j);
@@ -128,14 +135,18 @@ void searchBinsStack(){
       h_MET_R[i]->Draw("HIST sames");
     }
     if(i==nfiles-1) hs_MET_SB->SetTitle(";Bin No.;Events");
-    cout<<f[i]->GetName()<<"\t";
-    for(int j=1;j<=h_MET_R[i]->GetNbinsX();j++){
-      cout<<h_MET_R[i]->GetBinContent(j)<<"\t";
-    }cout<<endl;
+    // cout<<f[i]->GetName()<<"\t";
+    // for(int j=1;j<=h_MET_R[i]->GetNbinsX();j++){
+    //   cout<<h_MET_R[i]->GetBinContent(j)<<"\t";
+    // }cout<<endl;
   }
   c_cA->cd(); gPad->SetLogy();legend1->Draw();legend2->Draw();
   gPad->RedrawAxis();
 
+  cout<<"---------------- Total BG -------------------"<<endl;
+  for(int i=1;i<=h_sum->GetNbinsX();i++){
+    cout<<h_sum->GetBinContent(i)<<"\t"<<h_sum->GetBinError(i)<<endl;    
+  }
   textOnTop.SetTextSize(0.05);
   intLumiE.SetTextSize(0.05);
   textOnTop.DrawLatexNDC(0.1,0.91,"CMS #it{#bf{Simulation}}");

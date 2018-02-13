@@ -37,16 +37,46 @@ void testClosure(){
   
   f[0] = new TFile("CS_TTWZ_LostMuHadTau_clsr_METnJbJ_v2.root");
   f[1] = new TFile("CS_TTWZ_LostEle_clsr_METNJbJ_v2.root");
-  TFile *fout = new TFile("forPull.root","recreate");
+
+  // TFile *fTF = new TFile("SBinHists.root");
+  //  TH1D *h_tfe = (TH1D*)fTF->Get("LEleTFs_Final");
+  // TH1D *h_tfm = (TH1D*)fTF->Get("LMuTFs_Final");
+  
+  double pcUncLEleTF = sqrt((0.12*0.12) + (0.05*0.05) + (0.02*0.02) + (0.02*0.02));//12% for dR(l,phootn), 5% for PDF, 2% each for JEC & ele SF
+  double pcUncLMuTF  = sqrt((0.015*0.015) + (0.03*0.03));//1.5% for PDF, 3% each for mu SF
+
+  //  TFile *fout = new TFile("forPull.root","recreate");
   //  gStyle->SetOptStat("nemri");
   
+  cout<<pcUncLEleTF<<" muUnc: "<<pcUncLMuTF<<endl;
+
   TH1D *h0=(TH1D*)f[0]->Get("AllSBins_v7_Mu0");
   TH1D *h1=(TH1D*)f[0]->Get("AllSBins_v7_Mu1");
-  
   TH1D *htemp=(TH1D*)f[1]->Get("AllSBins_v7_Ele0");
-  h0->Add(htemp);
+  h0->Add(htemp);//add LMu and LEle
   htemp=(TH1D*)f[1]->Get("AllSBins_v7_Ele1");
   h1->Add(htemp);
+  
+  TH1D *h_LEleTFUnc=(TH1D*)h0->Clone("LEleTFUnc");
+  TH1D *h_LMuTFUnc=(TH1D*)h0->Clone("LMuTFUnc");
+  for(int i=1;i<=h0->GetNbinsX();i++){
+    //    h0->SetBinError(i, sqrt(pow((h0->GetBinContent(i)*pcUncLMuTF),2) + pow(h0->GetBinError(i),2)) );
+    h_LEleTFUnc->SetBinError(i,pcUncLEleTF);
+    h_LMuTFUnc->SetBinError(i,pcUncLMuTF);
+    h_LEleTFUnc->SetBinContent(i,0);
+    h_LMuTFUnc->SetBinContent(i,1);
+  }
+  h_LMuTFUnc->Add(h_LEleTFUnc);
+  
+  //add LMu TF unc to prediction unc
+  // for(int i=1;i<=h0->GetNbinsX();i++){
+  //   h0->SetBinError(i, sqrt(pow((h0->GetBinContent(i)*pcUncLMuTF),2) + pow(h0->GetBinError(i),2)) );
+  // }
+  //add LEle TF unc to prediction unc
+  //  TH1D *htemp=(TH1D*)f[1]->Get("AllSBins_v7_Ele0");
+  // for(int i=1;i<=htemp->GetNbinsX();i++){
+  //   htemp->SetBinError(i, sqrt(pow((htemp->GetBinContent(i)*pcUncLEleTF),2) + pow(htemp->GetBinError(i),2)) );
+  // }
 
   // h1->Draw();
   // h0->Draw("same");
@@ -64,11 +94,11 @@ void testClosure(){
   TLine *line3=new TLine(22.5,0.05, 22.5,100);
   TLine *line4=new TLine(29.5,0.05, 29.5,100);
   TLine *line5=new TLine(36.5,0.05, 36.5,10 );
-  TLine *line1V7=new TLine( 6.5,0.05,  6.5,300);
-  TLine *line2V7=new TLine(11.5,0.05, 11.5,300);
-  TLine *line3V7=new TLine(16.5,0.05, 16.5,300);
-  TLine *line4V7=new TLine(21.5,0.05, 21.5,300);
-  TLine *line5V7=new TLine(26.5,0.05, 26.5,30 );
+  TLine *line1V7=new TLine( 6.5,0.05,  6.5,400);
+  TLine *line2V7=new TLine(11.5,0.05, 11.5,400);
+  TLine *line3V7=new TLine(16.5,0.05, 16.5,400);
+  TLine *line4V7=new TLine(21.5,0.05, 21.5,400);
+  TLine *line5V7=new TLine(26.5,0.05, 26.5,40 );
   
   //  TCanvas *c_cB=new TCanvas("closure_test","closure test",1500,800); c_cB->Divide(4,2);
   TPad *p_top[name1.size()];
@@ -114,8 +144,8 @@ void testClosure(){
 	h_histG->SetMarkerStyle(21);
 	h_histG->SetMarkerColor(h_histG->GetLineColor());
 	h_histG->SetTitle(";;Events");
-	h_histG->GetYaxis()->SetLabelSize(0.10);
-	h_histG->GetYaxis()->SetTitleSize(0.10);
+	h_histG->GetYaxis()->SetLabelSize(0.09);
+	h_histG->GetYaxis()->SetTitleSize(0.09);
 	h_histG->GetYaxis()->SetTitleOffset(0.45);
 	h_histG->GetYaxis()->SetNdivisions(10);
 	
@@ -126,27 +156,27 @@ void testClosure(){
 
 	c_cA[i]->cd();p_top[i]->cd();
 	//c_cB->cd(i+1);p_top[i]->cd();
-	h_histG->Draw();
+	h_histG->Draw("e1");
 	// h_histE->SetFillStyle(3004);
 	// h_histE->SetFillColor(h_histE->GetLineColor());
- 	h_histE->Draw("same");
+ 	h_histE->Draw("e1 same");
 	//	h_histE->Draw("L same");
 
-	legend[i]=new TLegend(0.65, 0.85,  0.87, 0.67);
+	legend[i]=new TLegend(0.69, 0.66,  0.85, 0.86);
 	name=name1[i];
-	legend[i]->AddEntry(h_histG,"Exp","lp");
+	legend[i]->AddEntry(h_histG,"Expected","lep");
 	name=name2[i];
-	legend[i]->AddEntry(h_histE,"Pred","lp");
+	legend[i]->AddEntry(h_histE,"Prediction","lep");
 	legend[i]->Draw();
 	
 	TString name = h_histG->GetName();
 	if(name.Contains("SBins_v4")){ 
 	  line1->Draw();	line2->Draw();	line3->Draw();	line4->Draw();	line5->Draw();
-	  p_top[i]->SetGridx(0);
+	  p_top[i]->SetGridx(0); p_bot[i]->SetGridx(0);
 	}
 	else if(name.Contains("SBins_v7")){ 
 	  line1V7->Draw();	line2V7->Draw();	line3V7->Draw();	line4V7->Draw();	line5V7->Draw();
-	  p_top[i]->SetGridx(0);
+	  p_top[i]->SetGridx(0); 	  p_bot[i]->SetGridx(0);
 	}
 	
       }
@@ -165,21 +195,24 @@ void testClosure(){
     h_numr->GetXaxis()->SetTitleSize(0.13);
     h_numr->GetXaxis()->SetTitleOffset(0.9);
 
-    h_numr->GetYaxis()->SetTitleOffset(0.29);
-    h_numr->GetYaxis()->SetTitleSize(0.13);
-    h_numr->GetYaxis()->SetLabelSize(0.13);
+    h_numr->GetYaxis()->SetTitleOffset(0.36);
+    h_numr->GetYaxis()->SetTitleSize(0.14);
+    h_numr->GetYaxis()->SetLabelSize(0.14);
     h_numr->GetYaxis()->SetNdivisions(505);
     h_numr->SetMaximum(1.90);
     h_numr->SetMinimum(0.01);
     c_cA[i]->cd();    p_bot[i]->cd();
     //    c_cB->cd(i+1);    p_bot[i]->cd();
-    h_numr->Draw("e0");
+    h_numr->Draw("e1");
+    h_LMuTFUnc->SetFillStyle(3013);
+    h_LMuTFUnc->SetFillColor(1); 
+    h_LMuTFUnc->Draw("E2same");
+    h_numr->Draw("e0 same");
+    h_LMuTFUnc->Print("all");
 
     TString name = h_histG->GetName();
     if(name.Contains("SBins_v4")){ 
       line1->Draw();	line2->Draw();	line3->Draw();	line4->Draw();	line5->Draw();
-      fout->cd();
-      h_numr->Write();
       TH1D *h_pullHist = new TH1D("pull_lostMuHadTau","1D pull for lost Mu+hadTau",50,-2.5,7.5);
       //TH1D *h_pullHist = new TH1D("pull_lostMuHadTau","1D pull for lost Mu+hadTau",43,0.5,43.5);
       for(int p=1;p<=h_numr->GetNbinsX();p++){
@@ -194,10 +227,9 @@ void testClosure(){
     }
     c_cA[i]->cd();    p_top[i]->cd();
     char name2[100];
-    textOnTop.SetTextSize(0.06);
-    intLumiE.SetTextSize(0.06);
+    textOnTop.SetTextSize(0.07);
+    intLumiE.SetTextSize(0.07);
     textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation}}");
-    intLumiE.SetTextSize(0.06);
     sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
     intLumiE.DrawLatexNDC(0.73,0.91,name2);
 

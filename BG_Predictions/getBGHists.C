@@ -95,9 +95,10 @@ void c_getBGHists::setFileNames(){
   fName[7] = "DCS_LDP_Run2016_SingleEle_v2.root";
   fName[8] = "CS_LDP_ZGZJToNuNuG.root";
 
-  fName[9] = "DCS_LDP_Run2016_Multijet_v2.root";
+  //  fName[9] = "DCS_LDP_Run2016_Multijet_v2.root";
+  fName[9] = "Slewed_DCS_LDP_Run2016_Multijet_v2.root";
 
-  fOutName = "SBinHists.root";
+  fOutName = "SBinHists_slew.root";
 
   fout = new TFile(fOutName,"recreate");
 }
