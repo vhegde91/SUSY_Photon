@@ -20,11 +20,16 @@
 using namespace std;
 string getfname(const char *fname1){string fname=fname1;fname.pop_back();fname.pop_back();fname.pop_back();fname.pop_back();fname.pop_back();return fname;}
 void setLastBinAsOverFlow(TH1D*);
+void clearSidebandBins(TH1D*);
+void setSigSystHists(TString);
 
-void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
+TH1D *h_sigbTag, *h_sigGenMET, *h_sigISR, *h_sigJEC, *h_sigRateAvgGenRecoMET, *h_sigUncorr;
+void makeDatacard_SBinsV7_v3(double mGl,double mNLSP,TString sigFile){
+  cout<<"This code needs other files: 'bTagSFupFile.root', 'genRecoMET.root'. If these files are absent then comment out gen MET syst and bTag SF syst. Or set useAllSigSyst = false."<<endl;
   char name[100];
   const int jmax=5;//no. of backgrounds
   int nSig=1;//1 signal
+  bool useAllSigSyst = 0;
   //  int nFiles=nSig+1;
   double sigXsec = 0.0, sigXsecUnc = 0.0;
   TFile *fXsec = TFile::Open("mGl_Xsecpb_absUnc.root");
@@ -35,7 +40,9 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
   TFile *f[2];
   f[0] = new TFile(sigFile);
   f[1] = new TFile("SBinHists.root");
-  
+
+  if(useAllSigSyst) setSigSystHists(sigFile);
+
   TString rateHistName[jmax+2]={"AllSBins_v7_CD","AllSBins_v7_LElePred","AllSBins_v7_LMuPred","AllSBins_v7_FRPred","AllSBins_v7_ZGPred","AllSBins_v7_MultiJPred","AllSBins_v7_Obs"};
   TString processName[jmax+2]={getfname(sigFile),"LEle","LMuTau","Fake","ZG","MultiJ","dataObs"};
   TH1D *h_rate[jmax+2];
@@ -89,12 +96,6 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
   ofstream outf;
   for(int i=1;i<=imax;i++){
     if( i==1 || i==7 || i==12 || i==17 || i==22 || i==27 ) continue;
-    //////////////////////////
-    //    if(!(i==2 || i==8 || i==13 || i==28 || i==29 || i==30 || i==31)) continue;
-    //    if(!(i==2 || i==8 || i==13)) continue;
-    //    if(!(i==28 || i==29 || i==30 || i==31)) continue;
-    //    if(!(i==2 || i==8 || i==13 || i==28 || i==29 || i==30 || i==31)) continue;
-    /////////////////////////
     string bTagCorr, njbjCorr,nJCorr,metCorr;
     if(i<=16) bTagCorr = "A";
     else bTagCorr = "B";
@@ -137,13 +138,30 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
     outf<<endl<<
       "rate ";
     for(int j=0;j<jmax+nSig;j++){
-      if(h_rate[j]->GetBinContent(i) >= 0) outf<<h_rate[j]->GetBinContent(i)<<" ";
+      if(h_rate[j]->GetBinContent(i) >= 0){
+	if(j==0) {
+	  if(useAllSigSyst) outf<<0.98*0.5*h_sigRateAvgGenRecoMET->GetBinContent(i)<<" ";//for singal, correct for trig eff and take avg of gen & reco MET
+	  else              outf<<0.98*h_rate[j]->GetBinContent(i)<<" ";//for singal, correct for trig eff
+	  //outf<<0.98*h_rate[j]->GetBinContent(i)<<" ";//for singal, correct for trig eff
+	}
+	else outf<<h_rate[j]->GetBinContent(i)<<" ";
+	//	cout<<j<<" "<<h_rate[j]->GetBinContent(i)<<endl;
+      }
       else{cout<<"!!!! found -ve events in bin "<<i<<" of hist "<<rateHistName[j]<<". setting as 0 events"<<endl; outf<<"0 ";}
     }
     outf<<endl<<"------------"<<endl;
     
-    outf<<"lumi lnN              1.023      -       -       -       -       -"<<endl;
-    outf<<"sigStat_b"<<i<<" lnN       "<<1+((h_rate[0]->GetBinError(i))/(h_rate[0]->GetBinContent(i)))<<"    -       -       -       -       -"<<endl;
+    outf<<"sigLumiTrig lnN              1.032      -       -       -       -       -"<<endl;//2.5% lumi and 2% trigger
+    if(h_rate[0]->GetBinContent(i) > 0.000001)    outf<<"sigStat_b"<<i<<" lnN       "<<1+((h_rate[0]->GetBinError(i))/(h_rate[0]->GetBinContent(i)))<<"    -       -       -       -       -"<<endl;
+    if(useAllSigSyst){
+      if(h_sigbTag->GetBinContent(i) > 1. && h_sigbTag->GetBinContent(i) < 10.)
+	outf<<"sigbTag_b"  <<bTagCorr<<" lnN     "<<h_sigbTag->GetBinContent(i)  <<"    -       -       -       -       -"<<endl;
+      if(h_sigGenMET->GetBinContent(i) > 1. && h_sigGenMET->GetBinContent(i) < 10.)
+	outf<<"sigGenMET_b"<<metCorr <<" lnN     "<<h_sigGenMET->GetBinContent(i)<<"    -       -       -       -       -"<<endl;
+      if(h_sigISR->GetBinContent(i) > 1. && h_sigISR->GetBinContent(i) < 10.)
+	outf<<"sigISR_b"   <<nJCorr  <<" lnN     "<<1.0+(sqrt( pow((1.0-h_sigISR->GetBinContent(i)),2) + 0.0004 ))<<"    -       -       -       -       -"<<endl;//ISR unc & 2% scale unc
+      outf<<"sigOther_b" <<i       <<" lnN     1.058    -       -       -       -       -"<<endl;//JEC(5%), JER(2%), IsoTrkVeto(2%), JetID(1%)
+    }
     //    outf<<"SigXsec"<<" lnN         "<<1+sigXsecUnc/sigXsec<<"    -       -       -       -       -"<<endl;
 
     //--------------- Lost Ele-----------------
@@ -203,7 +221,90 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
   }
 }
 
+void setSigSystHists(TString sigFile){
+  TString fileLoc = "";
+  TString sfUpFile = "bTagSFupFile.root";
+  double num1=0,num2=0,num3=0,den1=0,den2=0,den3=0;
 
+  TFile *f1 = TFile::Open(sigFile);
+  TFile *f2 = TFile::Open(sfUpFile);
+
+  TH1D *h_temp = (TH1D*)f1->Get("AllSBins_v7_CD");
+  TH1D *h_rate = (TH1D*)h_temp->Clone("sigRate1");
+  clearSidebandBins(h_rate);
+
+  //------------ bTag -------------------
+  h_sigbTag = (TH1D*)f2->Get("AllSBins_v7_CD");
+  clearSidebandBins(h_sigbTag);
+  num1 = h_sigbTag->Integral(1,16);
+  num2 = h_sigbTag->Integral(17,31);
+
+  den1 = h_rate->Integral(1,16);
+  den2 = h_rate->Integral(17,31);
+
+  //  h_sigbTag->Add(h_rate,-1);
+  for(int i=1;i<=h_sigbTag->GetNbinsX();i++){
+    if(i<=16)
+      h_sigbTag->SetBinContent(i,1.0+(abs(num1-den1)/den1));
+    else
+      h_sigbTag->SetBinContent(i,1.0-(abs(num2-den2)/den2));
+    h_sigbTag->SetBinError(i,0);
+  }
+  //  for(int i=1;i<=h_sigbTag->GetNbinsX();i++) cout<<h_sigbTag->GetName()<<" "<<h_sigbTag->GetBinContent(i)<<endl;
+  //------------ gen MET -------------------
+  TH1D *h_met = (TH1D*)f1->Get("METvarBin_CD");
+  TH1D *h_gmet = (TH1D*)f1->Get("GenMETvarBin_CD");
+  h_sigGenMET = (TH1D*)h_rate->Clone("sigGenMETUnc");
+  setLastBinAsOverFlow(h_met);
+  setLastBinAsOverFlow(h_gmet);
+  vector<float> gmetUnc;
+  for(int i=1;i<=h_gmet->GetNbinsX();i++){
+    if(h_gmet->GetBinLowEdge(i) < 199.99) continue;
+    gmetUnc.push_back(1.0+abs(h_gmet->GetBinContent(i)-h_met->GetBinContent(i))/(h_met->GetBinContent(i)));
+  }
+  for(int i=1;i<=h_rate->GetNbinsX();i++){
+    h_sigGenMET->SetBinContent(i,0.);
+    h_sigGenMET->SetBinError(i,0.);
+    if     ( i==1 || i==7  || i==12 || i==17 || i==22 || i==27 ) continue;
+    else if( i==2 || i==8  || i==13 || i==18 || i==23 || i==28 ) h_sigGenMET->SetBinContent(i,gmetUnc[0]);
+    else if( i==3 || i==9  || i==14 || i==19 || i==24 || i==29 ) h_sigGenMET->SetBinContent(i,gmetUnc[1]);
+    else if( i==4 || i==10 || i==15 || i==20 || i==25 || i==30 ) h_sigGenMET->SetBinContent(i,gmetUnc[2]);
+    else if( i==5 || i==11 || i==16 || i==21 || i==26 || i==31 ) h_sigGenMET->SetBinContent(i,gmetUnc[3]);
+    else if( i==6                                              ) h_sigGenMET->SetBinContent(i,gmetUnc[4]);
+  }
+  TFile *f_genReco = TFile::Open("genRecoMET.root");
+  h_sigRateAvgGenRecoMET = (TH1D*)f_genReco->Get("AllSBins_v7_CD");
+  //  for(int i=1;i<=h_sigGenMET->GetNbinsX();i++) cout<<h_sigGenMET->GetName()<<" "<<h_sigGenMET->GetBinContent(i)<<endl;
+  //------------------ ISR ------------------
+  h_sigISR = (TH1D*)h_rate->Clone("sigISRUnc");
+  TH1D *h_nJISRwt = (TH1D*)f1->Get("nHadJets_SBin_v7_D");
+  TH1D *h_isrWts = (TH1D*)h_nJISRwt->Clone("isrWts");
+  h_isrWts->Divide((TH1D*)f1->Get("nHadJets_NoISRWt_SBin_v7_D"));
+  //  h_isrWts->Print("all");
+  TH1D *h_isrWtUncSq = (TH1D*)f1->Get("nHadJets_ISRUncSq_SBin_v7_D");
+  h_isrWtUncSq->Divide(h_nJISRwt);//sqrt(bin content) = ISR Wt unc
+ 
+  for(int i=1;i<=h_sigISR->GetNbinsX();i++){
+    h_sigISR->SetBinContent(i,0.);
+    h_sigISR->SetBinError(i,0.);
+    if( i==1 || i==7 || i==12 || i==17 || i==22 || i==27 ) continue;
+    if(i<7)   h_sigISR->SetBinContent(i, 1.0+(sqrt(h_isrWtUncSq->GetBinContent(h_isrWtUncSq->FindBin(2.1)))/(h_isrWts->GetBinContent(h_isrWts->FindBin(2.1)))));
+    else if(i<12) h_sigISR->SetBinContent(i, 1.0+(sqrt(h_isrWtUncSq->GetBinContent(h_isrWtUncSq->FindBin(5.1)))/(h_isrWts->GetBinContent(h_isrWts->FindBin(5.1)))));
+    else if(i<17) h_sigISR->SetBinContent(i, 1.0+(sqrt(h_isrWtUncSq->GetBinContent(h_isrWtUncSq->FindBin(7.1)))/(h_isrWts->GetBinContent(h_isrWts->FindBin(7.1)))));
+    else if(i<22) h_sigISR->SetBinContent(i, 1.0+(sqrt(h_isrWtUncSq->GetBinContent(h_isrWtUncSq->FindBin(2.1)))/(h_isrWts->GetBinContent(h_isrWts->FindBin(2.1)))));
+    else if(i<27) h_sigISR->SetBinContent(i, 1.0+(sqrt(h_isrWtUncSq->GetBinContent(h_isrWtUncSq->FindBin(5.1)))/(h_isrWts->GetBinContent(h_isrWts->FindBin(5.1)))));
+    else h_sigISR->SetBinContent(i, 1.0+(sqrt(h_isrWtUncSq->GetBinContent(h_isrWtUncSq->FindBin(7.1)))/(h_isrWts->GetBinContent(h_isrWts->FindBin(7.1)))));
+  }
+  //  for(int i=1;i<=h_sigISR->GetNbinsX();i++) cout<<h_sigISR->GetName()<<" "<<h_sigISR->GetBinContent(i)<<endl;
+}
+void clearSidebandBins(TH1D* h1){
+  for(int i=1;i<=h1->GetNbinsX();i++){
+    if( i==1 || i==7 || i==12 || i==17 || i==22 || i==27 ){
+      h1->SetBinContent(i,0);
+      h1->SetBinError(i,0);
+    }    
+  }
+}
 void setLastBinAsOverFlow(TH1D* h_hist){
   double lastBinCt =h_hist->GetBinContent(h_hist->GetNbinsX()),overflCt =h_hist->GetBinContent(h_hist->GetNbinsX()+1);
   double lastBinErr=h_hist->GetBinError(h_hist->GetNbinsX()),  overflErr=h_hist->GetBinError(h_hist->GetNbinsX()+1);

@@ -21,11 +21,37 @@ using namespace std;
 string getfname(const char *fname1){string fname=fname1;fname.pop_back();fname.pop_back();fname.pop_back();fname.pop_back();fname.pop_back();return fname;}
 void setLastBinAsOverFlow(TH1D*);
 
-void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
+void makeDatacard_SBinsV7_v2(int mGl,int mNLSP,TString sigFile){
   char name[100];
   const int jmax=5;//no. of backgrounds
   int nSig=1;//1 signal
   //  int nFiles=nSig+1;
+  bool do_allSigSyst = 1;
+  TString rateSigFile, bTagUncFile;
+  string sampleName;
+  if(sigFile.Contains("5bbbbZg"))     {
+    rateSigFile = sigFile+"FastSim_T5bbbbZg_bTagSF_"+to_string(mGl)+"_"+to_string(mNLSP)+".root"; 
+    bTagUncFile = sigFile+"FastSim_T5bbbbZg_bTagSFup_"+to_string(mGl)+"_"+to_string(mNLSP)+".root"; 
+    sampleName = "T5bbbbZg";
+  }
+  else if(sigFile.Contains("5ttttZg"))     {
+    rateSigFile = sigFile+"FastSim_T5ttttZg_bTagSF_"+to_string(mGl)+"_"+to_string(mNLSP)+".root"; 
+    bTagUncFile = sigFile+"FastSim_T5ttttZg_bTagSFup_"+to_string(mGl)+"_"+to_string(mNLSP)+".root"; 
+    sampleName = "T5ttttZg";
+  }
+  else if(sigFile.Contains("5qqqqHg"))     {
+    rateSigFile = sigFile+"FastSim_T5qqqqHg_bTagSF_"+to_string(mGl)+"_"+to_string(mNLSP)+".root"; 
+    bTagUncFile = sigFile+"FastSim_T5qqqqHg_bTagSFup_"+to_string(mGl)+"_"+to_string(mNLSP)+".root"; 
+    sampleName = "T5qqqqHg";
+  }
+  else if(sigFile.Contains("6ttZg"))     {
+    rateSigFile = sigFile+"FastSim_T6ttZg_bTagSF_"+to_string(mGl)+"_"+to_string(mNLSP)+".root"; 
+    bTagUncFile = sigFile+"FastSim_T6ttZg_bTagSFup_"+to_string(mGl)+"_"+to_string(mNLSP)+".root"; 
+    sampleName = "T6ttZg";
+  }
+  else {cout<<"Cannot find sig rate file"<<endl;return;}
+  sampleName = sampleName+"_"+to_string(mGl)+"_"+to_string(mNLSP);
+
   double sigXsec = 0.0, sigXsecUnc = 0.0;
   TFile *fXsec = TFile::Open("mGl_Xsecpb_absUnc.root");
   TH1D *hXsec = (TH1D*)fXsec->Get("mGlXsec");
@@ -33,13 +59,59 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
   sigXsecUnc = hXsec->GetBinError(hXsec->FindBin(mGl));
   cout<<mGl<<" xsec: "<<sigXsec<<" unc: "<<sigXsecUnc<<endl;
   TFile *f[2];
-  f[0] = new TFile(sigFile);
+  f[0] = new TFile(rateSigFile);
   f[1] = new TFile("SBinHists.root");
   
   TString rateHistName[jmax+2]={"AllSBins_v7_CD","AllSBins_v7_LElePred","AllSBins_v7_LMuPred","AllSBins_v7_FRPred","AllSBins_v7_ZGPred","AllSBins_v7_MultiJPred","AllSBins_v7_Obs"};
-  TString processName[jmax+2]={getfname(sigFile),"LEle","LMuTau","Fake","ZG","MultiJ","dataObs"};
+  //  TString processName[jmax+2]={getfname(sigFile),"LEle","LMuTau","Fake","ZG","MultiJ","dataObs"};
+  TString processName[jmax+2]={sampleName,"LEle","LMuTau","Fake","ZG","MultiJ","dataObs"};
   TH1D *h_rate[jmax+2];
+  for(int i=0;i<jmax+2;i++){
+    if(i==0) h_rate[i] = (TH1D*)f[0]->Get(rateHistName[i]); //h_rate[i]->Draw();}
+    else{
+      h_rate[i] = (TH1D*)f[1]->Get(rateHistName[i]);
+    }
+    //h_rate[i]->Draw("same");
+  }
+  
+  //***************** setup signal syst ****************
+  TString systFile;
+  TFile *f_sigSystA, *f_sigSystB;
+  TH1D *h_sigSystAcentral, *h_sigJECup, *h_sigJERup, *h_sigISRup, *h_sigGenMET, *h_sigBtagUp;
+  if(do_allSigSyst){
+    if(sigFile.Contains("5bbbbZg")) systFile = sigFile+"FastSim_T5bbbbZg_SystA_"+to_string(mGl)+"_"+to_string(mNLSP)+".root";
+    else if(sigFile.Contains("5ttttZg")) systFile = sigFile+"FastSim_T5ttttZg_SystA_"+to_string(mGl)+"_"+to_string(mNLSP)+".root";
+    else if(sigFile.Contains("5qqqqHg")) systFile = sigFile+"FastSim_T5qqqqHg_SystA_"+to_string(mGl)+"_"+to_string(mNLSP)+".root";
+    else if(sigFile.Contains("6ttZg")) systFile = sigFile+"FastSim_T6ttZg_SystA_"+to_string(mGl)+"_"+to_string(mNLSP)+".root";
+    else {cout<<"Cannot find sig syst file"<<endl;return;}
+    f_sigSystA = new TFile(systFile);
+    f_sigSystB = new TFile(bTagUncFile);
 
+    h_sigSystAcentral = (TH1D*)f_sigSystA->Get("AllSBins_v7_CD");
+
+    h_sigJECup = (TH1D*)f_sigSystA->Get("AllSBins_v7_JECup_CD");
+    h_sigJERup = (TH1D*)f_sigSystA->Get("AllSBins_v7_JERup_CD");
+    h_sigGenMET = (TH1D*)f_sigSystA->Get("AllSBins_v7_genMET_CD");
+    h_sigISRup = (TH1D*)f_sigSystA->Get("AllSBins_v7_ISRup_CD");
+
+    h_sigBtagUp = (TH1D*)f_sigSystB->Get("AllSBins_v7_CD");
+
+    h_sigJECup->Add(h_sigSystAcentral,-1); h_sigJECup->Divide(h_sigSystAcentral);
+    h_sigJERup->Add(h_sigSystAcentral,-1); h_sigJERup->Divide(h_sigSystAcentral);
+    h_sigISRup->Add(h_sigSystAcentral,-1); h_sigISRup->Divide(h_sigSystAcentral);
+    
+    h_sigGenMET->Add(h_sigSystAcentral,-1);
+    h_sigGenMET->Scale(0.5);//unc is 0.5 x diff(GenMET,MET)
+    h_sigGenMET->Divide(h_sigSystAcentral);
+
+    h_sigBtagUp->Add(h_rate[0],-1);
+    h_sigBtagUp->Divide(h_rate[0]);
+
+    cout<<f_sigSystA->GetName()<<endl;
+    cout<<f_sigSystB->GetName()<<endl;
+    cout<<h_sigJECup->Integral()<<" "<<h_sigJERup->Integral()<<" "<<h_sigGenMET->Integral()<<" "<<h_sigISRup->Integral()<<" "<<h_sigBtagUp->Integral()<<endl;
+  }
+  //****************************************************
   //for lost ele
   TH1D *h_LEleCS = (TH1D*)f[1]->Get("AllSBins_v7_LEleCS");
   TH1D *h_LEleTFs = (TH1D*)f[1]->Get("LEleTFs");
@@ -77,24 +149,11 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
   TH1D *h_MultiJPurity = (TH1D*)f[1]->Get("MultiJLDPpurity");
   //total BG
   TH1D *h_totBG = (TH1D*)f[1]->Get("AllSBins_v7_TotalBG");
-  for(int i=0;i<jmax+2;i++){
-    if(i==0) h_rate[i] = (TH1D*)f[0]->Get(rateHistName[i]); //h_rate[i]->Draw();}
-    else{
-      h_rate[i] = (TH1D*)f[1]->Get(rateHistName[i]);
-    }
-    //h_rate[i]->Draw("same");
-  }
 
   int imax=h_rate[0]->GetNbinsX();
   ofstream outf;
   for(int i=1;i<=imax;i++){
     if( i==1 || i==7 || i==12 || i==17 || i==22 || i==27 ) continue;
-    //////////////////////////
-    //    if(!(i==2 || i==8 || i==13 || i==28 || i==29 || i==30 || i==31)) continue;
-    //    if(!(i==2 || i==8 || i==13)) continue;
-    //    if(!(i==28 || i==29 || i==30 || i==31)) continue;
-    //    if(!(i==2 || i==8 || i==13 || i==28 || i==29 || i==30 || i==31)) continue;
-    /////////////////////////
     string bTagCorr, njbjCorr,nJCorr,metCorr;
     if(i<=16) bTagCorr = "A";
     else bTagCorr = "B";
@@ -110,7 +169,8 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
     else if(i==5 || i==11 || i==16 || i==21 || i==26 || i==31) metCorr = "M5";
     else if(i==6)                                              metCorr = "M7";
 
-    string name2="dataCards/"+getfname(f[0]->GetName())+"_"+"bin"+to_string(i)+".txt";
+    //    string name2="dataCards/"+getfname(f[0]->GetName())+"_"+"bin"+to_string(i)+".txt";
+    string name2="dataCards/card_"+sampleName+"_"+"bin"+to_string(i)+".txt";
     //    cout<<name2;
     sprintf(name,"%s",name2.c_str());
     cout<<name<<endl;
@@ -137,13 +197,17 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
     outf<<endl<<
       "rate ";
     for(int j=0;j<jmax+nSig;j++){
-      if(h_rate[j]->GetBinContent(i) >= 0) outf<<h_rate[j]->GetBinContent(i)<<" ";
+      if(h_rate[j]->GetBinContent(i) >= 0){
+	if(j==0) outf<<0.98*h_rate[j]->GetBinContent(i)<<" ";//98% trigger effieciency. apply for signal only.
+	else outf<<h_rate[j]->GetBinContent(i)<<" ";
+      }
       else{cout<<"!!!! found -ve events in bin "<<i<<" of hist "<<rateHistName[j]<<". setting as 0 events"<<endl; outf<<"0 ";}
     }
     outf<<endl<<"------------"<<endl;
     
-    outf<<"lumi lnN              1.023      -       -       -       -       -"<<endl;
+    outf<<"lumi lnN              1.025      -       -       -       -       -"<<endl;
     outf<<"sigStat_b"<<i<<" lnN       "<<1+((h_rate[0]->GetBinError(i))/(h_rate[0]->GetBinContent(i)))<<"    -       -       -       -       -"<<endl;
+    outf<<"trigEff_b"<<i<<" lnN       1.02    -       -       -       -       -"<<endl;
     //    outf<<"SigXsec"<<" lnN         "<<1+sigXsecUnc/sigXsec<<"    -       -       -       -       -"<<endl;
 
     //--------------- Lost Ele-----------------

@@ -89,12 +89,6 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
   ofstream outf;
   for(int i=1;i<=imax;i++){
     if( i==1 || i==7 || i==12 || i==17 || i==22 || i==27 ) continue;
-    //////////////////////////
-    //    if(!(i==2 || i==8 || i==13 || i==28 || i==29 || i==30 || i==31)) continue;
-    //    if(!(i==2 || i==8 || i==13)) continue;
-    //    if(!(i==28 || i==29 || i==30 || i==31)) continue;
-    //    if(!(i==2 || i==8 || i==13 || i==28 || i==29 || i==30 || i==31)) continue;
-    /////////////////////////
     string bTagCorr, njbjCorr,nJCorr,metCorr;
     if(i<=16) bTagCorr = "A";
     else bTagCorr = "B";
@@ -144,6 +138,7 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
     
     outf<<"lumi lnN              1.023      -       -       -       -       -"<<endl;
     outf<<"sigStat_b"<<i<<" lnN       "<<1+((h_rate[0]->GetBinError(i))/(h_rate[0]->GetBinContent(i)))<<"    -       -       -       -       -"<<endl;
+    outf<<"trigEff_b"<<i<<" lnN       1.02    -       -       -       -       -"<<endl;
     //    outf<<"SigXsec"<<" lnN         "<<1+sigXsecUnc/sigXsec<<"    -       -       -       -       -"<<endl;
 
     //--------------- Lost Ele-----------------

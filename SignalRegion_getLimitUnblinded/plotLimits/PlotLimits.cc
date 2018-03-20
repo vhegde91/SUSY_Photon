@@ -37,13 +37,8 @@ void PlotLimits::EventLoop(const char *data,const char *inputFileList) {
   cout << "nentries " << nentries << endl;
   cout << "Analyzing dataset " << data << " " << endl;
 
-  double minMomMass = 0;
-  //  TFile *fxsec=TFile::Open("mGl_Xsecpb_absUnc.root");
-  //  TH1D *h1_xsec=(TH1D*)fxsec->FindObjectAny("mGlXsec");
-  TFile *fxsec=TFile::Open("T6ttZg_MassScan.root"); minMomMass = 700.0;
-  TH1D *h1_xsec=(TH1D*)fxsec->FindObjectAny("mStopXsec");
-
-  cout<<"Taking xsec from "<<fxsec->GetName()<<" and this hist"<<h1_xsec->GetName()<<" "<<h1_xsec->GetTitle()<<endl;
+  TFile *fxsec=TFile::Open("mGl_Xsecpb_absUnc.root");
+  TH1D *h1_xsec=(TH1D*)fxsec->FindObjectAny("mGlXsec");
 
   string s_data=data;
   Long64_t nbytes = 0, nb = 0;
@@ -81,11 +76,13 @@ void PlotLimits::EventLoop(const char *data,const char *inputFileList) {
     double mGl=m1,mNLSP=round(m2),xsec=0,xsecUnc=0;
     xsec = h1_xsec->GetBinContent(h1_xsec->FindBin(mGl));
     xsecUnc = h1_xsec->GetBinError(h1_xsec->FindBin(mGl));
-    if(mGl < minMomMass) continue;
+    if(mGl < 649) continue;
+    if(limit > 100. || limit < 0.0000001) cout<<"Limit:"<<limit<<" (mGl,mNLSP):"<<mGl<<" "<<mNLSP<<endl;
 
     if(quantileExpected < 0){
       h2_mGlmNLSP_r->Fill(mGl,mNLSP,limit);
       h2_mGlmNLSP_XsecUL->Fill(mGl,mNLSP,xsec/limit);
+      h2_mGlmNLSP_XsecUL_v1->Fill(mGl,mNLSP,xsec/limit);
       h2_mGlmNLSP_r_fb->Fill(mGl,mNLSP,limit);
       h2_mGlmNLSP_XsecUL_fb->Fill(mGl,mNLSP,xsec/limit);
 

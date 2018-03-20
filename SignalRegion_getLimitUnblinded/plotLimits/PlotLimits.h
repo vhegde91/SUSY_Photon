@@ -26,6 +26,7 @@ class PlotLimits : public NtupleVariables{
   TH2D *h2_mGlmNLSP_r;
   TH2D *h2_mGlmNLSP_rUnc;
   TH2D *h2_mGlmNLSP_XsecUL;
+  TH2D *h2_mGlmNLSP_XsecUL_v1;
 
   TH2D *h2_mGlmNLSP_r_fb;
   TH2D *h2_mGlmNLSP_XsecUL_fb;
@@ -51,18 +52,20 @@ void PlotLimits::BookHistogram(const char *outFileName) {
  
   oFile = new TFile(outFileName, "recreate");
   TH1::SetDefaultSumw2(1);
-  h2_mGlmNLSP_r = new TH2D("mGlmNLSP_r","x: mass of gluino, y: mass of neutralino, z: r-value",100,12.5,2512.5,300,5,3005);
-  h2_mGlmNLSP_XsecUL = new TH2D("mGlmNLSP_XsecUL","x: mass of gluino, y: mass of neutralino, z: 95% CL UpLimit xsec(fb)",100,12.5,2512.5,300,5,3005);
+  h2_mGlmNLSP_r = new TH2D("mGlmNLSP_r","x: mass of gluino, y: mass of neutralino, z: r-value",100,12.5,2512.5,350,5,3505);
+  h2_mGlmNLSP_XsecUL = new TH2D("mGlmNLSP_XsecUL","x: mass of gluino, y: mass of neutralino, z: 95% CL UpLimit xsec(fb)",100,12.5,2512.5,350,5,3505);
   h2_mGlmNLSP_r_fb = new TH2D("mGlmNLSP_r_fb","x: mass of gluino, y: mass of neutralino, z: r-value fine binned",3000,-0.5,2999.5,3000,-0.5,2999.5);
   h2_mGlmNLSP_XsecUL_fb = new TH2D("mGlmNLSP_XsecUL_fb","x: mass of gluino, y: mass of neutralino, z: 95% CL UpLimit xsec(fb) fine binned",3000,-0.5,2999.5,3000,-0.5,2999.5);
+  ///////////////////////
+  h2_mGlmNLSP_XsecUL_v1 = new TH2D("mGlmNLSP_XsecUL_v1","x: mass of gluino, y: mass of neutralino, z: 95% CL UpLimit xsec(fb)",60,25,3025,350,5,3505);
+  //////////////////////
+  h2_mGlmNLSP_rUnc = new TH2D("mGlmNLSP_rUnc","x: mass of gluino, y: mass of neutralino, z: unc r-value",100,12.5,2512.5,350,5,3505);
+  h2_mGlmNLSP_r_XsecUp = new TH2D("mGlmNLSP_r_XsecUp","x: mass of gluino, y: mass of neutralino, z: r-value with #sigma+#sigma_{up}(fb)",100,12.5,2512.5,350,5,3505);
+  h2_mGlmNLSP_r_XsecDn = new TH2D("mGlmNLSP_r_XsecDn","x: mass of gluino, y: mass of neutralino, z: r-value with #sigma-#sigma_{down}(fb)",100,12.5,2512.5,350,5,3505);
 
-  h2_mGlmNLSP_rUnc = new TH2D("mGlmNLSP_rUnc","x: mass of gluino, y: mass of neutralino, z: unc r-value",100,12.5,2512.5,300,5,3005);
-  h2_mGlmNLSP_r_XsecUp = new TH2D("mGlmNLSP_r_XsecUp","x: mass of gluino, y: mass of neutralino, z: r-value with #sigma+#sigma_{up}(fb)",100,12.5,2512.5,300,5,3005);
-  h2_mGlmNLSP_r_XsecDn = new TH2D("mGlmNLSP_r_XsecDn","x: mass of gluino, y: mass of neutralino, z: r-value with #sigma-#sigma_{down}(fb)",100,12.5,2512.5,300,5,3005);
-
-  h2_mGlmNLSP_median = new TH2D("mGlmNLSP_median","x: mass of gluino, y: mass of neutralino, z: median exp limit xsec(fb)",100,12.5,2512.5,300,5,3005);
-  h2_mGlmNLSP_16pc = new TH2D("mGlmNLSP_16pc","x: mass of gluino, y: mass of neutralino, z: 16pc exp limit xsec(fb)",100,12.5,2512.5,300,5,3005);
-  h2_mGlmNLSP_84pc = new TH2D("mGlmNLSP_84pc","x: mass of gluino, y: mass of neutralino, z: 84pc exp limit xsec(fb)",100,12.5,2512.5,300,5,3005);
+  h2_mGlmNLSP_median = new TH2D("mGlmNLSP_median","x: mass of gluino, y: mass of neutralino, z: median exp limit xsec(fb)",100,12.5,2512.5,350,5,3505);
+  h2_mGlmNLSP_16pc = new TH2D("mGlmNLSP_16pc","x: mass of gluino, y: mass of neutralino, z: 16pc exp limit xsec(fb)",100,12.5,2512.5,350,5,3505);
+  h2_mGlmNLSP_84pc = new TH2D("mGlmNLSP_84pc","x: mass of gluino, y: mass of neutralino, z: 84pc exp limit xsec(fb)",100,12.5,2512.5,350,5,3505);
 }
 
 

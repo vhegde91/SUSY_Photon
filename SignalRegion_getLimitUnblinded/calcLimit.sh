@@ -1,11 +1,11 @@
 #!/bin/sh
 input_Scan=$1
-anaExe="analyzeLightBSM"
-anaArg="FastSim"
+anaExe="multijet"
+anaArg="FastSim_T5bbbbZg"
 exeAtWorker="worker2.sh"
-dataSetType="T6ttZg"
+dataSetType="T5bbbbZg"
 #filesToTransfer="GJets.root,QCD.root,TTGJets.root,TTJetsHT.root,WGJetsToLNuG.root,WJetsToLNu.root,ZGJetsToNuNuG.root,ZJetsToNuNu.root,makeDatacard_SBins.C,${anaExe},combineCards.py,higgsCombine.tar"
-filesToTransfer="makeDatacard_SBinsV7.C,SBinHists.root,mGl_Xsecpb_absUnc.root,${anaExe},combineCards.py,higgsCombine.tar,PileupHistograms_0121_69p2mb_pm4p6.root"
+filesToTransfer="makeDatacard_SBinsV7_v3.C,SBinHists.root,mGl_Xsecpb_absUnc.root,${anaExe},combineCards.py,higgsCombine.tar,PileupHistograms_0121_69p2mb_pm4p6.root,T5bbbbZg_MassScan.root,T5qqqqHg_MassScan.root,T5ttttZg_MassScan.root,T6ttZg_MassScan.root,btagFiles.tar"
 
 while read -a massP
 do 

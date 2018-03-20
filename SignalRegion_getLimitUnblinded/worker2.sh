@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#analyzeLightBSM 800 127 FastSim T5qqqqHg
+#multijet 800 127 FastSim T5bbbbZg
 executable=$1
 gluinoMass=$2
 nlspMass=$3
@@ -27,18 +27,30 @@ scram b clean
 scram b -j4
 
 cd $currDir
+tar -xf btagFiles.tar
 pwd
 outRootFile="${anaArg}_${outName}_${gluinoMass}_${nlspMass}.root"
+########### run with genMET #################
+./$executable runFileList.txt $outRootFile ${anaArg}_GenMET
+mv $outRootFile genMET.root
+########### run with recoMET #################
 ./$executable runFileList.txt $outRootFile ${anaArg}
+cp $outRootFile recoMET.root
 
+hadd genRecoMET.root recoMET.root genMET.root
+rm recoMET.root genMET.root
 rm runFileList.txt
+
+echo "getting bTag SF up file"
+xrdcp root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/signalSystematics/hists_${outName}/FastSim_${outName}_bTagSFup_${gluinoMass}_${nlspMass}.root .
+mv FastSim_${outName}_bTagSFup_${gluinoMass}_${nlspMass}.root bTagSFupFile.root
 
 echo "ls"
 ls
 echo "making datacards"
 mkdir dataCards
 #root -l -q -b 'makeDatacard_SBins.C('${gluinoMass}','${nlspMass}',"'${outRootFile}'")'
-root -l -q -b 'makeDatacard_SBinsV7.C('${gluinoMass}','${nlspMass}',"'${outRootFile}'")'
+root -l -q -b 'makeDatacard_SBinsV7_v3.C('${gluinoMass}','${nlspMass}',"'${outRootFile}'")'
 
 echo "ls dataCards"
 ls dataCards
@@ -54,4 +66,5 @@ combine -M Asymptotic dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.tx
 #combine -M HybridNew --frequentist --testStat LHC dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -H ProfileLikelihood --fork 4 -n ${outName}_${gluinoMass}_${nlspMass} -m ${mH}
 #combine -M ProfileLikelihood FastSim_T5bbbbZg_1600_150_bin31.txt -t 10
 rm dataCard_*.txt
+rm bTagSFupFile.root genRecoMET.root
 #rm ${outRootFile}

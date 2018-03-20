@@ -42,9 +42,6 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
   int decade = 0;
   
   int evtSurvived=0,minbtags=0;
-  TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
-  //choose central, up, or down 
-  TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
   
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
    
@@ -60,16 +57,13 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
     //    print(jentry);    
-    //    wt=Weight*1000.0*lumiInfb;
-    // CrossSection = 8.100780e-03+1.965889e-03;
-    // Weight = CrossSection/NumEvents;
-    wt=Weight*1000.0*lumiInfb*(puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(TrueNumInteractions,puhist->GetBinLowEdge(puhist->GetNbinsX()+1)))));
-
+    wt=Weight*1000.0*lumiInfb;
+  
     if(s_data!="FastSim"){
       if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0) ) continue;
     }
     if(isoElectronTracks!=0 || isoMuonTracks!=0 || isoPionTracks!=0) continue;//apply iso track veto
-    
+
     TLorentzVector bestPhoton=getBestPhoton();
     if(bestPhotonIndxAmongPhotons<0) continue;
     bool bestPhoHasPxlSeed=true;
@@ -156,6 +150,13 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
       }
     }
 
+    // bool fullyHadDecay=true;
+    // for(int i=0;i<GenParticles->size();i++){
+    //   if( (abs((*GenParticles_PdgId)[i])==12 || abs((*GenParticles_PdgId)[i])==14 || abs((*GenParticles_PdgId)[i])==16) && (abs((*GenParticles_ParentId)[i])==24 || abs((*GenParticles_ParentId)[i])==23))
+    // 	fullyHadDecay=false;
+    // }
+    // if(!fullyHadDecay){continue;}
+
     if( eMatchedG || bestPhoHasPxlSeed || !process || (bestPhoton.Pt()<100) || (Electrons->size() > 0) || (Muons->size() > 0) )
       continue;
 
@@ -214,10 +215,8 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     // if(BTags!=0) continue;
     // if(nHadJets>4) continue;
     //    if(MET<=200) continue;
-    if(photonMatchingJetIndx>=0 && ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
-    if(photonMatchingJetIndx<0) continue;
-
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
+    //    process = process && !eMatchedG && !bestPhoHasPxlSeed && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100 && dphi1 > 0.3 && dphi2 > 0.3;
     process = process && !eMatchedG && !bestPhoHasPxlSeed && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100 && dphi1 > 0.3 && dphi2 > 0.3;
     //  process = process && ST>500 && nHadJets>=2 && MET>100 && dphi1 > 0.3 && dphi2 > 0.3;
     //    process = process && NJets>=3 && MET>100;// && dphi1 > 0.3;
@@ -273,7 +272,6 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
 	  else if(MET>=METBinLowEdge[METBinLowEdge.size()-1]){ sBin2 = sBin2+7  ;break; }
 	}
 	if(BTags>=2 && sBin2==35) sBin2=34;
-	int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
 	
 	h_STvBin->Fill(ST,wt);
 	h_METvBin->Fill(MET,wt);
@@ -315,15 +313,61 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
 	  else if(nHadJets==5 || nHadJets==6) sBin3=49;
 	  else sBin3=56;
 	}
-	for(int i=0;i<METBinLowEdge2.size()-1;i++){
-	  if(METBinLowEdge2[i]<99.99) continue;
-	  m_i3++;
-	  if(MET>=METBinLowEdge2[i] && MET<METBinLowEdge2[i+1]){ sBin3 = sBin3+m_i3;break; }
-	  else if(MET>=METBinLowEdge2[METBinLowEdge2.size()-1]){ sBin3 = sBin3+7   ;break; }
+	if(nHadJets<=4 && BTags==0){
+	  for(int i=0;i<METBinLowEdge_v4.size()-1;i++){
+	    if(METBinLowEdge_v4[i]<99.99) continue;
+	    m_i3++;
+	    if(MET>=METBinLowEdge_v4[i] && MET<METBinLowEdge_v4[i+1]){ sBin3 = sBin3+m_i3;break; }
+	    else if(MET>=METBinLowEdge_v4[METBinLowEdge_v4.size()-1]){ sBin3 = sBin3+7   ;break; }
+	  }
+	}
+	else{
+	  for(int i=0;i<METBinLowEdge2.size()-1;i++){
+	    if(METBinLowEdge2[i]<99.99) continue;
+	    m_i3++;
+	    if(MET>=METBinLowEdge2[i] && MET<METBinLowEdge2[i+1]){ sBin3 = sBin3+m_i3;break; }
+	    else if(MET>=METBinLowEdge2[METBinLowEdge2.size()-1]){ sBin3 = sBin3+7   ;break; }
+	  }
 	}
 	h_SBins_v3->Fill(sBin3,wt);
-	h_SBins_v4_CD->Fill(sBin4,wt);
-	h_SBins_v7_CD->Fill(sBin7,wt);
+	if(BTags<2) h_SBins_v4->Fill(sBin3,wt);
+	else h_SBins_v4->Fill(sBin3-21,wt);
+	int sBin5=-100;
+	if(sBin3<=18) sBin5=sBin3;
+	else if(sBin3>18 && sBin3<=21) sBin5=19;
+	else if(sBin3>21 && sBin3<=28) sBin5=sBin3-2;
+	else if(sBin3>28 && sBin3<=33) sBin5=sBin3-2;
+	else if(sBin3>33 && sBin3<=35) sBin5=32;
+	else if(sBin3>35 && sBin3<=40) sBin5=sBin3-3;
+	else if(sBin3>40 && sBin3<=42) sBin5=37;
+	else if(sBin3>42 && sBin3<=45) sBin5=sBin3-5;
+	else if(sBin3>45 && sBin3<=49) sBin5=41;
+	else if(sBin3>49 && sBin3<=54) sBin5=sBin3-8;
+	else if(sBin3>54 && sBin3<=56) sBin5=47;
+	else if(sBin3>56 && sBin3<=59) sBin5=sBin3-9;
+	else sBin5=51;
+	h_SBins_v5->Fill(sBin5,wt);
+	int sBin6=-100,m_i6=0;
+	if(nHadJets>=2 && nHadJets<=6){
+	  if(BTags==0){
+	    if(nHadJets>=2 && nHadJets<=4) sBin6=0;
+	    else if(nHadJets==5 || nHadJets==6) sBin6=7;
+	  }
+	  else if(BTags>=1){
+	    if(nHadJets>=2 && nHadJets<=4) sBin6=14;
+	    else if(nHadJets==5 || nHadJets==6) sBin6=21;
+	  }
+	}
+	else if(nHadJets>=7){
+	  sBin6=28;
+	}
+	for(int i=0;i<METBinLowEdge2.size()-1;i++){
+	  if(METBinLowEdge2[i]<99.99) continue;
+	  m_i6++;
+	  if(MET>=METBinLowEdge2[i] && MET<METBinLowEdge2[i+1]){ sBin6 = sBin6+m_i6;break; }
+	  else if(MET>=METBinLowEdge2[METBinLowEdge2.size()-1]){ sBin6 = sBin6+7   ;break; }
+	}
+	h_SBins_v6->Fill(sBin6,wt);
 	//------------------------ Sbins-----------------------------
 	h_BestG_Eta->Fill(bestPhoton.Eta(),wt);
 	h_BestG_Phi->Fill(bestPhoton.Phi(),wt);
@@ -350,7 +394,6 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
 	if(hadJets.size() > 1 ) h_dPhi_METjet2->Fill( dphi2,wt );
 	if(hadJets.size() > 2 ) h_dPhi_METjet3->Fill( dphi3,wt );
 	if(hadJets.size() > 3 ) h_dPhi_METjet4->Fill( dphi4,wt );
-	h_mindPhi1dPhi2->Fill(min(dphi1,dphi2),wt);
 	//	if(hadJets.size() > 3 ) h_dPhi_METjet4->Fill( abs(DeltaPhi(METPhi,( ((hadJets)[0]+(hadJets)[1]+(hadJets)[2]+(hadJets)[3]).Phi()))) );
 	for(int i=0;i<hadJets.size() && i<4;i++){
 	  h_jetPt[i] ->Fill(hadJets[i].Pt());
@@ -471,67 +514,6 @@ TLorentzVector AnalyzeLightBSM::getBestPhoton(){
   }
 }
 
-int AnalyzeLightBSM::getBinNoV4(int nHadJets){
-  int sBin=-100,m_i=0;
-  if(BTags==0){
-    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
-    else if(nHadJets==5 || nHadJets==6){ sBin=8;}
-    else if(nHadJets>=7)               { sBin=15;}
-  }
-  else{
-    if(nHadJets>=2 && nHadJets<=4)     { sBin=22;}
-    else if(nHadJets==5 || nHadJets==6){ sBin=29;}
-    else if(nHadJets>=7)               { sBin=36;}
-  }
-  if(sBin==0){
-    for(int i=0;i<METBinLowEdgeV4_njLow.size()-1;i++){
-      if(METBinLowEdgeV4_njLow[i]<99.99) continue;
-      m_i++;
-      if(MET >= METBinLowEdgeV4_njLow[i] && MET < METBinLowEdgeV4_njLow[i+1]){ sBin = sBin+m_i;break; }
-      else if(MET >= METBinLowEdgeV4_njLow[METBinLowEdgeV4_njLow.size()-1])  { sBin = 8         ;break; }
-    }
-  }
-  else{
-    for(int i=0;i<METBinLowEdgeV4.size()-1;i++){
-      if(METBinLowEdgeV4[i]<99.99) continue;
-      m_i++;
-      if(MET >= METBinLowEdgeV4[i] && MET < METBinLowEdgeV4[i+1]){ sBin = sBin+m_i;break; }
-      else if(MET >= METBinLowEdgeV4[METBinLowEdgeV4.size()-1])  { sBin = sBin+7   ;break; }
-    }
-  }
-  return sBin;
-}
-
-int AnalyzeLightBSM::getBinNoV7(int nHadJets){
-  int sBin=-100,m_i=0;
-  if(BTags==0){
-    if(nHadJets>=2 && nHadJets<=4)     { sBin=0;}
-    else if(nHadJets==5 || nHadJets==6){ sBin=6;}
-    else if(nHadJets>=7)               { sBin=11;}
-  }
-  else{
-    if(nHadJets>=2 && nHadJets<=4)     { sBin=16;}
-    else if(nHadJets==5 || nHadJets==6){ sBin=21;}
-    else if(nHadJets>=7)               { sBin=26;}
-  }
-  if(sBin==0){
-    for(int i=0;i<METBinLowEdgeV7_njLow.size()-1;i++){
-      if(METBinLowEdgeV7_njLow[i]<99.99) continue;
-      m_i++;
-      if(MET >= METBinLowEdgeV7_njLow[i] && MET < METBinLowEdgeV7_njLow[i+1]){ sBin = sBin+m_i;break; }
-      else if(MET >= METBinLowEdgeV7_njLow[METBinLowEdgeV7_njLow.size()-1])  { sBin = 6         ;break; }
-    }
-  }
-  else{
-    for(int i=0;i<METBinLowEdgeV7.size()-1;i++){
-      if(METBinLowEdgeV7[i]<99.99) continue;
-      m_i++;
-      if(MET >= METBinLowEdgeV7[i] && MET < METBinLowEdgeV7[i+1]){ sBin = sBin+m_i;break; }
-      else if(MET >= METBinLowEdgeV7[METBinLowEdgeV7.size()-1])  { sBin = sBin+5   ;break; }
-    }
-  }
-  return sBin;
-}
 
 bool AnalyzeLightBSM::check_eMatchedtoGamma(){
   for(int i=0;i<Electrons->size();i++){
