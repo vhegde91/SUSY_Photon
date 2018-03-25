@@ -48,12 +48,15 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
   //  TFile *f_TF = new TFile("TF_CS_ZGToNuNuG_PtG130_LO.root");
   TH1D *h_TF=(TH1D*)f_TF->FindObjectAny("Ratio_NuNuToLL");
 
-  bool do_prediction=1,reweightLO=0;
+  bool do_prediction=0,reweightLO=0;
   cout<<"Doing prediction from ZToLL sample from file |"<<f_TF->GetName()<<"|?"<<do_prediction<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
-    
+  
+  TFile *f_ewCorr = TFile::Open("ewk_corr.root");
+  TH1D *h_ewCorr = (TH1D*)f_ewCorr->FindObjectAny("znng-130-o");
+
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
 
     // ==============print number of events done == == == == == == == =
@@ -254,16 +257,32 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
     }
 
     if(phoMatchingJetIndx>=0 && ((*Jets)[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
-    if(phoMatchingJetIndx<0) continue;   
+    if(phoMatchingJetIndx<0) continue;
+    
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
     wt=wt*0.98;
     //apply baseline selections
     //    process = process && ST>500 && MET > 100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
     //process = process && ST>500 &&  nHadJets >=2 && bestPhoton.Pt() > 100;//&& metstar.Pt() > 100 && dphi1 > 0.3 && dphi2 > 0.3 ;
     //    if(MET>200) continue;
-    process = process && ST>500 && metstar.Pt()>100 && nHadJets >= 2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
+    process = process && ST>500 && metstar.Pt()>100 && nHadJets >= 2 && !(dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
     //process = process && ST>500 && nHadJets >=2 && bestPhoton.Pt() > 100;
-    //    if(bestPhoton.Pt() < 200) continue;
+    //    if(bestPhoton.Pt() < 190) continue;
+    //    if(BTags!=0) continue;
+    //------------------ NNLO corr --------------------
+    //    if(genPho1.Pt() < 175) continue;
+    //    double ewCorr = h_ewCorr->GetBinContent(h_ewCorr->FindBin(bestPhoton.Pt()));
+    //    if(bestPhoton.Pt()>1000) ewCorr = 0.5879;
+    // double qcdCorr = 0.;
+    // if(bestPhoton.Pt() < 190) qcdCorr = 1.44;
+    // else if(bestPhoton.Pt() < 250) qcdCorr = 1.41;
+    // else if(bestPhoton.Pt() < 400) qcdCorr = 1.35;
+    // else if(bestPhoton.Pt() < 700) qcdCorr = 1.29;
+    // else qcdCorr = 1.15;
+    //    wt=wt*1.44*ewCorr;
+    //    wt=wt*qcdCorr;//for LO sample
+    //    wt=wt*1.14;//for NLO sample
+    //--------------------------------------
     if(process && hadJetID){
       evtSurvived++;
       h_RunNum->Fill(RunNum);

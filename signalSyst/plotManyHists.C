@@ -32,14 +32,14 @@ void plotManyHists(){
   //-------------------------------------
   gStyle->SetOptStat(0);
 
-  fNames.push_back("FastSim_T5bbbbZg_1600_150_Syst.root"); 
+  fNames.push_back("FastSim_T5bbbbZG_1600_1550.root");
   histName.push_back("AllSBins_v7_CD");
   legName.push_back("Central");
   rebin.push_back(1);
   //-------------------------------------
-  fNames.push_back("FastSim_T5bbbbZg_1600_150_Syst.root");
-  histName.push_back("AllSBins_v7_JERdn_CD");
-  legName.push_back("JER dn");
+  fNames.push_back("FastSim_T5bbbbZG_1600_1550_bTagUnc.root");
+  histName.push_back("AllSBins_v7_CD");
+  legName.push_back("Btags SF up");
   rebin.push_back(1);
   //-------------------------------------
   //-------------------------------------

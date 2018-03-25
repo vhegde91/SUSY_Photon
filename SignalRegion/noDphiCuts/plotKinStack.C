@@ -43,8 +43,8 @@ void plotKinStack(){
   double sr_Integral=0,cr_Integral=0;
   TH1::SetDefaultSumw2(1);
   gStyle->SetOptStat(0);
-  TString varName = "nHadJets";//mindPhi1dPhi2
-  TString xLabel = "Jets";//min(#Delta#Phi_{1},#Delta#Phi_{2})
+  TString varName = "AllSBins_v7_CD";//mindPhi1dPhi2
+  TString xLabel = "Bin no.";//min(#Delta#Phi_{1},#Delta#Phi_{2})
   int rebin=1;
 
   f[0] = new TFile("ZGZJ_NuNuG.root");
@@ -55,9 +55,11 @@ void plotKinStack(){
   f[5] = new TFile("QCD.root");
   f[6] = new TFile("GJets.root");
   //  f[7] = new TFile("DCS_LDP_Run2016_Multijet_v2.root");
-  f[7] = new TFile("T5bbbbZg_1600_150_FastSim.root");
+  //  f[7] = new TFile("T5bbbbZg_1600_150_FastSim.root");
+  f[7] = new TFile("T6ttZg_900_100_FastSim.root");
   //f[8] = new TFile("T5qqqqHg_1600_1000_FastSim.root");
-  f[8] = new TFile("T5bbbbZg_1600_1550_FastSim.root");
+  //  f[8] = new TFile("T5bbbbZg_1600_1550_FastSim.root");
+  f[8] = new TFile("T6ttZg_900_750_FastSim.root");
   //  f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
   // f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
   // f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
@@ -112,14 +114,14 @@ void plotKinStack(){
       //      h_MET->GetYaxis()->SetRangeUser(100.5,20000);
     }
     drawlegend(h_MET,i,f[i]->GetName());
-    if(i==nfiles-1) hs_var->SetTitle(";;Events");
-    if(i==nfiles-1) hs_var->GetXaxis()->SetTitle("ST(GeV)");
+    if(i==nfiles-1) hs_var->GetYaxis()->SetTitle("Events");
+    if(i==nfiles-1) hs_var->GetXaxis()->SetTitle(xLabel);
   }
   legend1->SetNColumns(2);
   legend1->SetBorderSize(0);
   c_cA->cd(); gPad->SetLogy();legend1->Draw();
   //  gPad->RedrawAxis();
-  //  hs_var->GetXaxis()->SetTitle(xLabel);
+  hs_var->SetTitle(0);
  
   textOnTop.SetTextSize(0.05);
   intLumiE.SetTextSize(0.05);
@@ -188,8 +190,10 @@ void drawlegend(TH1D *hist,int i,const char* fname){
   else if(lName.Contains("TTGJets")){lName="t #bar{t}+ #gamma";}
   else if(lName.Contains("GJets")){lName="#gamma +jets";}
   else if(lName.Contains("Run2016")){lName="Data";}
-  else if(lName.Contains("T5bbbbZg_1600_150")){lName="T5bbbb_ZG_150";}
-  else if(lName.Contains("T5bbbbZg_1600_1550")){lName="T5bbbb_ZG_1550";}
+  else if(lName.Contains("T5bbbbZg_1600_150")){lName="T5bbbb_Zg_150";}
+  else if(lName.Contains("T5bbbbZg_1600_1550")){lName="T5bbbb_Zg_1550";}
+  else if(lName.Contains("T6ttZg_900_100")){lName="T6ttZg_100";}
+  else if(lName.Contains("T6ttZg_900_750")){lName="T6ttZg_750";}
 
   // const char *l_name=lName.c_str();
   if(i<nBG)legend1->AddEntry(hist,lName,"f");

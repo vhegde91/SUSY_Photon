@@ -89,7 +89,7 @@ void UncCompSignal(TString iFname){
       //c_cB->cd(i+1);
       name=name1[i];
       h_histG=(TH1D*)f[j]->FindObjectAny(name);//h_histG->Rebin(2);
-      h_histG->Scale(1/h_histG->Integral());
+      //      h_histG->Scale(1/h_histG->Integral());
       name=name2[i];
       // if(name=="AllSBins_v7_JEC_CD"){
       // 	h_histE=(TH1D*)f[j]->FindObjectAny("AllSBins_v7_JECup_CD");
@@ -104,26 +104,26 @@ void UncCompSignal(TString iFname){
       if(name=="AllSBins_v7_ISRup_CD"){
       	TH1D *h_tempisr=(TH1D*)f[j]->Get("ISRCorrFactors");
       	h_histE=(TH1D*)f[j]->FindObjectAny(name);
-	//h_histE->Scale(h_tempisr->GetBinContent(1)/h_tempisr->GetBinContent(3));
+	h_histE->Scale(h_tempisr->GetBinContent(1)/h_tempisr->GetBinContent(3));
       }
       else if(name=="AllSBins_v7_ISRdn_CD"){
       	TH1D *h_tempisr=(TH1D*)f[j]->Get("ISRCorrFactors");
       	h_histE=(TH1D*)f[j]->FindObjectAny(name);
-	//	h_histE->Scale(h_tempisr->GetBinContent(1)/h_tempisr->GetBinContent(4));
+	h_histE->Scale(h_tempisr->GetBinContent(1)/h_tempisr->GetBinContent(4));
       }
       // else if(name=="AllSBins_v7_ISR_CD"){
       // 	TH1D *h_tempisr=(TH1D*)f[j]->Get("ISRCorrFactors");
       // 	h_histE=(TH1D*)f[j]->FindObjectAny("AllSBins_v7_ISRup_CD");
-      // 	h_histE->Scale(h_tempisr->GetBinContent(1)/h_tempisr->GetBinContent(3));
+      // 	//      	h_histE->Scale(h_tempisr->GetBinContent(1)/h_tempisr->GetBinContent(3));
 
       // 	TH1D *temp2=(TH1D*)f[j]->FindObjectAny("AllSBins_v7_ISRdn_CD");
-      //  	temp2->Scale(h_tempisr->GetBinContent(1)/h_tempisr->GetBinContent(4));
+      // 	//       	temp2->Scale(h_tempisr->GetBinContent(1)/h_tempisr->GetBinContent(4));
       // 	h_histE->Add(temp2);
       // 	h_histE->Scale(0.5);
       // }
       //      else h_histE=(TH1D*)f[j]->FindObjectAny(name);//h_histE->Scale(150.9/481.6);
       else h_histE=(TH1D*)f[j]->FindObjectAny(name);//h_histE->Scale(150.9/481.6);
-      h_histE->Scale(1/h_histE->Integral());
+      //      h_histE->Scale(1/h_histE->Integral());
      
       if(h_histG && h_histE){
 	if(name1[i]=="nHadJets_Mu0"){

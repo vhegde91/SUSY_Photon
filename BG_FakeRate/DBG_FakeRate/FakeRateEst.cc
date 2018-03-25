@@ -254,6 +254,8 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
       if(minDRHadJ > bestEMObj.DeltaR((hadJets)[i])) minDRHadJ=bestEMObj.DeltaR(hadJets[i]);
     }
     //    if(MET>200) continue;
+    int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
+    if(sBin7!=4) continue;
     if(emObjMatchingJetIndx>=0 && ((*Jets)[emObjMatchingJetIndx].Pt())/(bestEMObj.Pt()) < 1.0) continue; 
     if(emObjMatchingJetIndx<0) continue;
     process = process && ST>500 && nHadJets>=2 && MET>100 && (dphi1 > 0.3 && dphi2 > 0.3) && bestEMObj.Pt()>100;
@@ -281,9 +283,9 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	if(MET>=METBinLowEdge[i] && MET<METBinLowEdge[i+1]){ sBin2 = sBin2+m_i;break; }
 	else if(MET>=METBinLowEdge[METBinLowEdge.size()-1]){ sBin2 = sBin2+7  ;break; }
       }
-      int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
+
       //------------------------ Sbins----------------------------
-      
+     
       int nTracksNearEM = 0;
       for(int i=0;i<TAPElectronTracks->size();i++){
 	if(bestEMObj.DeltaR((*TAPElectronTracks)[i]) < 0.3) nTracksNearEM++;

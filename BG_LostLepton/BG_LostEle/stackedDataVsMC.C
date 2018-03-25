@@ -21,7 +21,7 @@
 const int nfiles=6;    //Specify no. of files
 TFile *f[nfiles];
 //int col[10]={kOrange,kTeal+9,kBlue,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
-int col[10]={kBlack,kMagenta+2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed};  //Specify Colors
+int col[10]={kBlack,kPink-2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed};  //Specify Colors
 TString name;
 bool saveCanvas=0;
 void setLastBinAsOverFlow(TH1D*);
@@ -47,25 +47,25 @@ void stackedDataVsMC(TString iFname){
   vector<int> rebin;
   vector<double> xLow,xHigh;
   name1.push_back("ST_Ele1");  rebin.push_back(10);   xLow.push_back(0); xHigh.push_back(3000); 
-  name1.push_back("MET_Ele1");    rebin.push_back(2);    xLow.push_back(0); xHigh.push_back(800); 
+  //  name1.push_back("MET_Ele1");    rebin.push_back(2);    xLow.push_back(0); xHigh.push_back(800); 
   name1.push_back("nBTags_Ele1");   rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(8);  
   name1.push_back("nHadJets_Ele1");  rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(12);
   name1.push_back("BestPhotonPt_Ele1");   rebin.push_back(5); xLow.push_back(0); xHigh.push_back(1000);
-  name1.push_back("BestPhotonEta_Ele1"); rebin.push_back(5);  xLow.push_back(-100000); xHigh.push_back(100000);
+  //  name1.push_back("BestPhotonEta_Ele1"); rebin.push_back(5);  xLow.push_back(-100000); xHigh.push_back(100000);
   //  name1.push_back("BestPhotonPhi_Ele1"); rebin.push_back(1);
   name1.push_back("METvarBin_Ele1");  rebin.push_back(1); xLow.push_back(-100000); xHigh.push_back(1000000);
-  name1.push_back("dPhi_METjet1_Pho_Ele1"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
-  name1.push_back("dPhi_METjet2_Pho_Ele1"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
-  name1.push_back("dPhi_METBestPhoton_Ele1"); rebin.push_back(2);   xLow.push_back(0); xHigh.push_back(100000);
-  name1.push_back("dPhi_Ele_Photon"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
+  //  name1.push_back("dPhi_METjet1_Pho_Ele1"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
+  //  name1.push_back("dPhi_METjet2_Pho_Ele1"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
+  //  name1.push_back("dPhi_METBestPhoton_Ele1"); rebin.push_back(2);   xLow.push_back(0); xHigh.push_back(100000);
+  //  name1.push_back("dPhi_Ele_Photon"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
   name1.push_back("dR_ElePho");   rebin.push_back(2);     xLow.push_back(0); xHigh.push_back(6);
-  name1.push_back("invMassPhoEle"); rebin.push_back(5);  xLow.push_back(0); xHigh.push_back(100000);
+  //  name1.push_back("invMassPhoEle"); rebin.push_back(5);  xLow.push_back(0); xHigh.push_back(100000);
   //  name1.push_back("nBestPho_Ele1"); rebin.push_back(1);
   name1.push_back("ElePt");   rebin.push_back(5);         xLow.push_back(0); xHigh.push_back(500);
-  name1.push_back("EleEta");   rebin.push_back(5); xLow.push_back(-100000); xHigh.push_back(100000);
+  //  name1.push_back("EleEta");   rebin.push_back(5); xLow.push_back(-100000); xHigh.push_back(100000);
   name1.push_back("MT_Ele");   rebin.push_back(10);       xLow.push_back(0); xHigh.push_back(300);
-  name1.push_back("mTPho_Ele1");   rebin.push_back(5);    xLow.push_back(0); xHigh.push_back(800);
-  name1.push_back("mTPhoEleMET");   rebin.push_back(20); xLow.push_back(0); xHigh.push_back(800);
+  //  name1.push_back("mTPho_Ele1");   rebin.push_back(5);    xLow.push_back(0); xHigh.push_back(800);
+  //  name1.push_back("mTPhoEleMET");   rebin.push_back(20); xLow.push_back(0); xHigh.push_back(800);
 
   // name1.push_back("MET_R1_v2_Ele1");   rebin.push_back(1);
   // name1.push_back("MET_R2_v2_Ele1");   rebin.push_back(1);
@@ -74,7 +74,7 @@ void stackedDataVsMC(TString iFname){
   // name1.push_back("MET_R5_v2_Ele1");   rebin.push_back(1);
   name1.push_back("AllSBins_v7_Ele1");   rebin.push_back(1);   xLow.push_back(-10000); xHigh.push_back(300000);
 
-  name1.push_back("nVtx_Ele1");   rebin.push_back(5);           xLow.push_back(0); xHigh.push_back(100000);
+  //  name1.push_back("nVtx_Ele1");   rebin.push_back(5);           xLow.push_back(0); xHigh.push_back(100000);
   // name1.push_back("isoEleTrack_Ele1");   rebin.push_back(1);
   // name1.push_back("isoEleTrack_Ele1");   rebin.push_back(1);
   // name1.push_back("isoPiTrack_Ele1");   rebin.push_back(1);
@@ -213,7 +213,7 @@ void stackedDataVsMC(TString iFname){
     intLumiE.SetTextSize(0.08);
     sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
     intLumiE.DrawLatexNDC(0.7,0.91,name2);
-    if(saveCanvas){name=name1[i]+".png";c_cA[i]->SaveAs(name);}
+    if(saveCanvas){name=name1[i]+".pdf";c_cA[i]->SaveAs(name);}
     
   }
   
@@ -232,23 +232,29 @@ TString getLegName(TString fname){
 }
 TString getXaxisName(TString axname){
   if(axname.Contains("nHadJets")) return "Jets";
-  else if(axname.Contains("ST")) return "HT#gamma(GeV)";
-  else if(axname.Contains("BTags")) return "b-Tags";
+  else if(axname.Contains("ST")) return "ST(GeV)";
+  else if(axname.Contains("BTags")) return "b tags";
   else if(axname.Contains("ElePt")) return "e pT(GeV)";
-  else if(axname.Contains("MuPt")) return "e pT(GeV)";
-  else if(axname.Contains("MuEta")) return "e #eta";
+  else if(axname.Contains("EleEta")) return "e #eta";
+  else if(axname.Contains("ElePhi")) return "e #Phi";
+  else if(axname.Contains("MuPt")) return "#mu pT(GeV)";
+  else if(axname.Contains("MuEta")) return "#mu #eta";
   else if(axname.Contains("PhotonPt")) return "#gamma pT(GeV)";
-  else if(axname.Contains("mT")) return "mT_{#gamma,MET}(GeV)";
+  else if(axname.Contains("PhotonEta")) return "#gamma #eta";
+  else if(axname.Contains("PhotonPhi")) return "#gamma #Phi";
+  else if(axname.Contains("mTPhoEleMET")) return "mT(#gamma+e,p_{T}^{miss})(GeV)";
+  else if(axname.Contains("mTPho")) return "mT(#gamma,p_{T}^{miss})(GeV)";
   else if(axname.Contains("dR_ElePho")) return "#DeltaR(e,#gamma)";
   else if(axname.Contains("AllSBin")) return "Bin Number";
+  else if(axname.Contains("nVtx")) return "No. of primary vertices";
   else if(axname.Contains("dPhi_METjet1") || axname.Contains("dphi1_METjet1")) return "#Delta#Phi_{1}";
   else if(axname.Contains("dPhi_METjet2") || axname.Contains("dphi2_METjet2")) return "#Delta#Phi_{2}";
   else if(axname.Contains("dPhi_METBestPhoton") ) return "#Delta#Phi(MET,#gamma)";
+  else if(axname.Contains("dPhi_Muon_Photon") ) return "#Delta#Phi(#mu,#gamma)";
   else if(axname.Contains("QMut") || axname.Contains("Qmut")) return "QMult";
-  else if(axname.Contains("MT_Ele")) return "mT(e,MET)[GeV]";
+  else if(axname.Contains("MT_Ele")) return "mT(e,p_{T}^{miss})(GeV)";
   else if(axname.Contains("MET")) return "p_{T}^{miss}(GeV)";
   else return axname;
-
 }
 
 void setMyRange(TH1D *h1,double xLow,double xHigh){

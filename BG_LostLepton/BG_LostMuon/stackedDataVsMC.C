@@ -20,8 +20,12 @@
 
 const int nfiles=6;    //Specify no. of files
 TFile *f[nfiles];
-//int col[10]={kOrange,kTeal+9,kBlue,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
+//int col[10]={kBlack,kPink-2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed};  //Specify Colors
 int col[10]={kBlack,kMagenta+2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed};  //Specify Colors
+
+//int col[10]={kBlack,kBlue,kOrange,kYellow,kGreen,kCyan,kPink+1,kTeal+9,kBlue,kRed};  //Specify Colors
+//int col[10]={kBlack,kPink-2,kGreen,kYellow,kBlue,kCyan,kPink+1,kCyan,kBlue,kRed};  //Specify Colors
+
 TString name;
 bool saveCanvas=0;
 void setLastBinAsOverFlow(TH1D*);
@@ -47,40 +51,29 @@ void stackedDataVsMC(TString iFname){
   vector<int> rebin;
   vector<double> xLow,xHigh;
   name1.push_back("ST_Mu1");  rebin.push_back(10);   xLow.push_back(0); xHigh.push_back(3000); 
-  name1.push_back("MET_Mu1");    rebin.push_back(2);    xLow.push_back(0); xHigh.push_back(800); 
+  // name1.push_back("MET_Mu1");    rebin.push_back(2);    xLow.push_back(0); xHigh.push_back(800); 
   name1.push_back("nBTags_Mu1");   rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(8);  
   name1.push_back("nHadJets_Mu1");  rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(12);
   name1.push_back("BestPhotonPt_Mu1");   rebin.push_back(5); xLow.push_back(0); xHigh.push_back(1000);
-  name1.push_back("BestPhotonEta_Mu1"); rebin.push_back(5);  xLow.push_back(-100000); xHigh.push_back(100000);
+  //  name1.push_back("BestPhotonEta_Mu1"); rebin.push_back(5);  xLow.push_back(-100000); xHigh.push_back(100000);
   //  name1.push_back("BestPhotonPhi_Mu1"); rebin.push_back(1);
   name1.push_back("METvarBin_Mu1");  rebin.push_back(1); xLow.push_back(-100000); xHigh.push_back(1000000);
-  name1.push_back("dPhi_METjet1_Pho_Mu1"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
-  name1.push_back("dPhi_METjet2_Pho_Mu1"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
-  name1.push_back("dPhi_METBestPhoton_Mu1"); rebin.push_back(2);   xLow.push_back(0); xHigh.push_back(100000);
-  name1.push_back("dPhi_Muon_Photon"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
+  //  name1.push_back("dPhi_METjet1_Pho_Mu1"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
+  //  name1.push_back("dPhi_METjet2_Pho_Mu1"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
+  //  name1.push_back("dPhi_METBestPhoton_Mu1"); rebin.push_back(2);   xLow.push_back(0); xHigh.push_back(100000);
+  //  name1.push_back("dPhi_Muon_Photon"); rebin.push_back(2); xLow.push_back(0); xHigh.push_back(100000);
   name1.push_back("dR_MuPho");   rebin.push_back(2);     xLow.push_back(0); xHigh.push_back(6);
-  name1.push_back("invMassPhoMu"); rebin.push_back(5);  xLow.push_back(0); xHigh.push_back(100000);
+  //  name1.push_back("invMassPhoMu"); rebin.push_back(5);  xLow.push_back(0); xHigh.push_back(100000);
   //  name1.push_back("nBestPho_Mu1"); rebin.push_back(1);
   name1.push_back("MuPt");   rebin.push_back(5);         xLow.push_back(0); xHigh.push_back(500);
-  name1.push_back("MuEta");   rebin.push_back(5); xLow.push_back(-100000); xHigh.push_back(100000);
+  //  name1.push_back("MuEta");   rebin.push_back(5); xLow.push_back(-100000); xHigh.push_back(100000);
   name1.push_back("MT_Mu");   rebin.push_back(10);       xLow.push_back(0); xHigh.push_back(300);
-  name1.push_back("mTPho_Mu1");   rebin.push_back(5);    xLow.push_back(0); xHigh.push_back(800);
-  name1.push_back("mTPhoMuMET");   rebin.push_back(20); xLow.push_back(0); xHigh.push_back(800);
+  //  name1.push_back("mTPho_Mu1");   rebin.push_back(5);    xLow.push_back(0); xHigh.push_back(800);
+  //  name1.push_back("mTPhoMuMET");   rebin.push_back(20); xLow.push_back(0); xHigh.push_back(800);
 
-  // name1.push_back("MET_R1_v2_Mu1");   rebin.push_back(1);
-  // name1.push_back("MET_R2_v2_Mu1");   rebin.push_back(1);
-  // name1.push_back("MET_R3_v2_Mu1");   rebin.push_back(1);
-  // name1.push_back("MET_R4_v2_Mu1");   rebin.push_back(1);
-  // name1.push_back("MET_R5_v2_Mu1");   rebin.push_back(1);
   name1.push_back("AllSBins_v7_Mu1");   rebin.push_back(1);   xLow.push_back(-10000); xHigh.push_back(300000);
 
-  name1.push_back("nVtx_Mu1");   rebin.push_back(5);           xLow.push_back(0); xHigh.push_back(100000);
-  // name1.push_back("isoEleTrack_Mu1");   rebin.push_back(1);
-  // name1.push_back("isoMuTrack_Mu1");   rebin.push_back(1);
-  // name1.push_back("isoPiTrack_Mu1");   rebin.push_back(1);
-  // name1.push_back("MET_Mu1_R1");rebin.push_back(1);
-  // name1.push_back("MET_Mu1_R2");rebin.push_back(1);
-  // name1.push_back("MET_Mu1_R3");rebin.push_back(1);
+  //  name1.push_back("nVtx_Mu1");   rebin.push_back(5);           xLow.push_back(0); xHigh.push_back(100000);
 
   TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
   TCanvas *c_cA[name1.size()];
@@ -103,8 +96,8 @@ void stackedDataVsMC(TString iFname){
     name=name1[i]+"_Stack";
     hs_hist[i] = new THStack(name,name);
     //    legend[i]=new TLegend(0.7, 0.90,  0.80, 0.45);
-    legend[i]=new TLegend(0.55, 0.90,  0.85, 0.65);
-    //    legend[i]->SetBorderSize(0);
+    legend[i]=new TLegend(0.55, 0.88,  0.85, 0.63);
+    //legend[i]->SetBorderSize(0);
   }
   //cout<<getLegName(f[0]->GetName());
   TH1D *h_histG,*h_histE,*h_histGcopy;
@@ -214,7 +207,7 @@ void stackedDataVsMC(TString iFname){
     intLumiE.SetTextSize(0.08);
     sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
     intLumiE.DrawLatexNDC(0.7,0.91,name2);
-    if(saveCanvas){name=name1[i]+".png";c_cA[i]->SaveAs(name);}
+    if(saveCanvas){name=name1[i]+".pdf";c_cA[i]->SaveAs(name);}
     
   }
   
@@ -233,20 +226,24 @@ TString getLegName(TString fname){
 }
 TString getXaxisName(TString axname){
   if(axname.Contains("nHadJets")) return "Jets";
-  else if(axname.Contains("ST")) return "HT#gamma(GeV)";
-  else if(axname.Contains("BTags")) return "b-Tags";
+  else if(axname.Contains("ST")) return "ST(GeV)";
+  else if(axname.Contains("BTags")) return "b tags";
   else if(axname.Contains("ElePt")) return "e pT(GeV)";
   else if(axname.Contains("MuPt")) return "#mu pT(GeV)";
   else if(axname.Contains("MuEta")) return "#mu #eta";
   else if(axname.Contains("PhotonPt")) return "#gamma pT(GeV)";
-  else if(axname.Contains("mT")) return "mT_{#gamma,MET}(GeV)";
+  else if(axname.Contains("PhotonEta")) return "#gamma #eta";
+  else if(axname.Contains("PhotonPhi")) return "#gamma #Phi";
+  else if(axname.Contains("mT")) return "mT(#gamma,p_{T}^{miss})(GeV)";
   else if(axname.Contains("dR_MuPho")) return "#DeltaR(#mu,#gamma)";
   else if(axname.Contains("AllSBin")) return "Bin Number";
+  else if(axname.Contains("nVtx")) return "No. of primary vertices";
   else if(axname.Contains("dPhi_METjet1") || axname.Contains("dphi1_METjet1")) return "#Delta#Phi_{1}";
   else if(axname.Contains("dPhi_METjet2") || axname.Contains("dphi2_METjet2")) return "#Delta#Phi_{2}";
   else if(axname.Contains("dPhi_METBestPhoton") ) return "#Delta#Phi(MET,#gamma)";
+  else if(axname.Contains("dPhi_Muon_Photon") ) return "#Delta#Phi(#mu,#gamma)";
   else if(axname.Contains("QMut") || axname.Contains("Qmut")) return "QMult";
-  else if(axname.Contains("MT_Mu")) return "mT(#mu,MET)[GeV]";
+  else if(axname.Contains("MT_Mu")) return "mT(#mu,p_{T}^{miss})(GeV)";
   else if(axname.Contains("MET")) return "p_{T}^{miss}(GeV)";
   else return axname;
 

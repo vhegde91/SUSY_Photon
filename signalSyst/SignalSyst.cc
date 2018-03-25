@@ -42,10 +42,10 @@ void SignalSyst::EventLoop(const char *data,const char *inputFileList,const doub
   cout << "nentries " << nentries << endl;
   cout << "Analyzing dataset " << data << " " << endl;
 
-  bool do_JECup = 1;
-  bool do_JECdn = 1;
-  bool do_JERup = 1;
-  bool do_JERdn = 1;
+  bool do_JECup = 0;
+  bool do_JECdn = 0;
+  bool do_JERup = 0;
+  bool do_JERdn = 0;
   TString s_data=data;
 
   Long64_t nbytes = 0, nb = 0;
@@ -79,7 +79,7 @@ void SignalSyst::EventLoop(const char *data,const char *inputFileList,const doub
   bool isrReweight = 0;
   TFile *fSampleInfo;  TH2D *h2_isrWtCorr;
   vector<double> isrwt_arr={1., 0.920, 0.821, 0.715, 0.662, 0.561, 0.511};
-  vector<double> isrwtUnc_arr={1., 0.04, 0.09, 0.143, 0.169, 0.219, 0.244};//if applying unc
+  vector<double> isrwtUnc_arr={0., 0.04, 0.09, 0.143, 0.169, 0.219, 0.244};//if applying unc
   if(s_data.Contains("FastSim")){
     isrReweight = 1;//set here for doing ISR weighting. Reset for not applying.
     cout<<"Applying ISR weights to these signal samples? "<<isrReweight<<endl;
@@ -138,8 +138,13 @@ void SignalSyst::EventLoop(const char *data,const char *inputFileList,const doub
 
     process = true;
     wt=Weight*1000.0*lumiInfb;
+    
+    for(int j=0;j<ScaleWeights->size();j++){
+      h_ScaleIdx->Fill(j, wt*(*ScaleWeights)[j]);
+    }
+
     h_cutFlow->Fill(0);
-        
+    h_nVtxEvts->Fill(NVtx);        
     //-----------ISR reweighting for signal ------------------
     double isrWt = 0,isrWtCorr = 0.;
     if(s_data.Contains("FastSim") && isrReweight){
@@ -147,11 +152,11 @@ void SignalSyst::EventLoop(const char *data,const char *inputFileList,const doub
       isrWtCorr = h2_isrWtCorr->GetBinContent(h2_isrWtCorr->GetXaxis()->FindBin(SusyMotherMass),h2_isrWtCorr->GetYaxis()->FindBin(SusyLSPMass));
 
       if(NJetsISR>=6) isrWt = isrwt_arr[6]+isrwtUnc_arr[6];//if applying unc, +isrwtUnc_arr[6];
-      else isrWt = isrwt_arr[NJetsISR]+isrwtUnc_arr[6];//if applying unc, +isrwtUnc_arr[NJetsISR];
+      else isrWt = isrwt_arr[NJetsISR]+isrwtUnc_arr[NJetsISR];//if applying unc, +isrwtUnc_arr[NJetsISR];
       h_ISRCorrFactors->Fill(2,wt*isrWt);
 
       if(NJetsISR>=6) isrWt = isrwt_arr[6]-isrwtUnc_arr[6];//if applying unc, -isrwtUnc_arr[6];
-      else isrWt = isrwt_arr[NJetsISR]-isrwtUnc_arr[6];//if applying unc, -isrwtUnc_arr[NJetsISR];
+      else isrWt = isrwt_arr[NJetsISR]-isrwtUnc_arr[NJetsISR];//if applying unc, -isrwtUnc_arr[NJetsISR];
       h_ISRCorrFactors->Fill(3,wt*isrWt);
 
       if(NJetsISR>=6) isrWt = isrwt_arr[6];
@@ -160,7 +165,7 @@ void SignalSyst::EventLoop(const char *data,const char *inputFileList,const doub
       wt = wt*isrWt*isrWtCorr;
     }
     //--------------------------------------------------------
-    wt=wt*(puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(TrueNumInteractions,puhist->GetBinLowEdge(puhist->GetNbinsX()+1)))));    
+    //    wt=wt*(puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(TrueNumInteractions,puhist->GetBinLowEdge(puhist->GetNbinsX()+1)))));    
     TLorentzVector bestPhoton=getBestPhoton();
     bool eMatchedG=check_eMatchedtoGamma();//this may not be necessary since e veto is there.
     if(bestPhoton.Pt()<99.9) continue;
@@ -276,21 +281,29 @@ void SignalSyst::EventLoop(const char *data,const char *inputFileList,const doub
       h_ST_CD->Fill(ST,wt);
       h_MET_CD->Fill(MET,wt);
       h_nHadJets_CD->Fill(nHadJets,wt);
+      h_nISRjets_CD->Fill(NJetsISR,wt);
       h_BTags_CD->Fill(BTags,wt);
       
       h_nVtx_CD->Fill(NVtx,wt);
+      h_nVtxEvts_CD->Fill(NVtx);
       h_GenMET_CD->Fill(GenMET,wt);
       h_METPhi_CD->Fill(METPhi,wt);
       h_SBins_v7_CD->Fill(sBin7,wt);
       h_SBins_v7_ISRup_CD->Fill(sBin7, (wt/(isrWt*isrWtCorr)) * (isrWt + (abs(1-isrWt)/2) ));//isr up
       h_SBins_v7_ISRdn_CD->Fill(sBin7, (wt/(isrWt*isrWtCorr)) * (isrWt - (abs(1-isrWt)/2) ));//isr down
 
+      h_SBins_v7_ISRUncSq_CD->Fill(sBin7,wt*(abs(1-isrWt)/2)*(abs(1-isrWt)/2));
+      h_SBins_v7_NoISRWt_CD->Fill(sBin7,wt/(isrWt*isrWtCorr));
+      h_SBins_v7_ISRUncSqNoISRwt_CD->Fill(sBin7,wt*((abs(1-isrWt)/2)*(abs(1-isrWt)/2)) / (isrWt*isrWtCorr));
+
       h_BestPhotonPt_CD->Fill( bestPhoton.Pt(),wt );
       h_METvBin_CD->Fill(MET,wt);
       h_mindPhi1dPhi2_CD->Fill(min(dphi1,dphi2),wt);
 
-      for(int j=0;j<ScaleWeights->size();j++)
-	h2_SBins_v7_CD_vs_ScaleIdx->Fill(sBin7, j, wt*(*ScaleWeights)[j]);
+      for(int j=0;j<ScaleWeights->size();j++){
+	h_ScaleIdx_CD->Fill(j, wt*(*ScaleWeights)[j]);
+     	h2_SBins_v7_CD_vs_ScaleIdx->Fill(sBin7, j, wt*(*ScaleWeights)[j]);
+      }
       h_madHT->Fill(madHT,wt);
     }//process
   }// loop over entries

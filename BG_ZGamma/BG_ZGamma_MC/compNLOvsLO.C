@@ -35,31 +35,36 @@ void compNLOvsLO(){
   vector<TString> legNames, name2;
   vector<int> rebin;
   double nunu_Integral=0,ll_Integral=0;
-  // TFile *fn=new TFile("DCS_ZGToLL.root");  
-  //  TFile *fn=new TFile("DCS_ZGToLL_NoZMassWindow.root");  
 
-  // TFile *fn=new TFile("CS_ZGZJToNuNuG.root");
-  //  TFile *fd=new TFile("CS_ZDYToLLG.root");
-
-  TFile *fn=new TFile("CS_ZGToNuNuG_PtG130_NLO.root");
+  //  TFile *fn=new TFile("CS_ZGToNuNuG_PtG130_NLO.root");
   //  TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO.root");
 
-  TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO_reWtnJ_NLO.root");
-    
+  //  TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO_reWtnJ_NLO.root");
+
+  TFile *fn=new TFile("CS_ZGToNuNuG_LO_PtG150.root");//CS_ZGZJToNuNuG_LO_PtG150.root");
+  TFile *fd=new TFile("CS_ZGToLLG_LO_PtG150.root");//CS_ZDYToLLG_LO_PtG150.root");
+
+  // TFile *fn=new TFile("/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_ZGamma/CS_ZGToNuNuG_Summer16.ZGTo2NuG_PtG-130_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root");
+  // TFile *fd=new TFile("/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_ZGamma/CS_ZJetsToNuNu_Summer16.ZNuNuGJets_MonoPhoton_PtG-130_TuneCUETP8M1_13TeV-madgraph.root");
+  
+
   name=fd->GetName();
   name="TF_"+name;
   TFile *fout=new TFile(name,"RECREATE");
   
-  TString histToSave="";
+  TString histToSave="AllSBins_v7";
   // TFile *fd=new TFile("CS_ZGToLLG.root");
 
   name2.push_back("MET");  rebin.push_back(5);
   name2.push_back("METvarBin");  rebin.push_back(1);
-  //  name2.push_back("METvarBin_TF");  rebin.push_back(1);
   name2.push_back("ST");  rebin.push_back(10);
   name2.push_back("BestPhotonPt");  rebin.push_back(5);
   name2.push_back("nHadJets");  rebin.push_back(1);
   name2.push_back("nBTags");  rebin.push_back(1);
+  name2.push_back("AllSBins_v7");  rebin.push_back(1);
+
+  // name2.push_back("LeadGenPhoPt");  rebin.push_back(100);
+  // name2.push_back("BestPhotonPt");  rebin.push_back(10);
   
   //  TString nameN="Z#gamma#rightarrow#nu#bar{#nu}#gamma";
   TString nameN="NLO";
@@ -153,7 +158,7 @@ void compNLOvsLO(){
       h_numCp->SetLineColor(kBlack);
       h_numCp->SetMarkerColor(kBlack);
       h_numCp->SetMaximum(1.99);////////////////////////////////////
-      h_numCp->SetMinimum(0.01);
+      h_numCp->SetMinimum(0.5);
 
       h_numCp->GetXaxis()->SetTitle(getXaxisName(name2[i]));
       h_numCp->GetXaxis()->SetLabelSize(0.15);
@@ -182,8 +187,8 @@ void compNLOvsLO(){
       if(saveCanvas){name="c_"+name2[i]+".png";c_cA[i]->SaveAs(name);}
     }
   }
-  cout<<"# of events in NuNu: "<<nunu_Integral<<endl;
-  cout<<"# of events in LL: "<<ll_Integral<<endl;
+  cout<<"# of events in NLO: "<<nunu_Integral<<endl;
+  cout<<"# of events in LO: "<<ll_Integral<<endl;
 }
 
 

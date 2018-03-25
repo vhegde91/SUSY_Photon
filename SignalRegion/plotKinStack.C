@@ -22,12 +22,12 @@ char name[100];
 char name2[100];
 TString name3;
 TLatex textOnTop,intLumiE;
-const int nfiles=9,nBG=7;    //Specify no. of files
+const int nfiles=11,nBG=7;    //Specify no. of files
 TFile *f[nfiles];
 //int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kMagenta+2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
 ////int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kPink-2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
 //int col[11]={kPink-2,kTeal+9,kGreen,kYellow,kOrange,kBlue,kCyan,kRed,kBlue+2,kMagenta,kPink+1};  //Specify Colors b's
-int col[11]={kPink+1,kTeal+9,kGreen,kYellow,kOrange,kBlue,kCyan,kRed,kBlue+2,kMagenta,kPink+1};  //Specify Colors b's
+int col[11]={kPink+1,kTeal+9,kGreen,kYellow,kOrange,kBlue,kCyan,kRed,kBlue+2,kMagenta,kCyan};  //Specify Colors b's
 
 TCanvas *c_cA=new TCanvas("kinVar","plot of a kin var",1500,900);
 
@@ -35,7 +35,7 @@ void decorate(TH1D*,int,const char*);
 void decorate(THStack*,int,const char*);
 void drawlegend(TH1D*,int,const char*);
 void printInt(TH1D*,int,const char*);
-TLegend *legend1=new TLegend(0.4501, 0.65,  0.88, 0.88);
+TLegend *legend1=new TLegend(0.4501, 0.65,  0.87, 0.88);
 
 //TLegend *legend2=new TLegend(0.7, 0.9,  0.90, 0.65);
 //TLegend *legend2=new TLegend(0.6, 0.90,  0.98, 0.45);
@@ -60,6 +60,9 @@ void plotKinStack(){
   f[7] = new TFile("T5bbbbZg_1600_150_FastSim.root");
   //f[8] = new TFile("T5qqqqHg_1600_1000_FastSim.root");
   f[8] = new TFile("T5bbbbZg_1600_1550_FastSim.root");
+  f[9] = new TFile("T5qqqqHg_1600_150_FastSim.root");
+  f[10] = new TFile("T5qqqqHg_1600_1550_FastSim.root");
+
   //  f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
   // f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
   // f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
@@ -110,6 +113,7 @@ void plotKinStack(){
       h_MET->SetMarkerColor(col[i]);
       h_MET->SetLineColor(col[i]);
       h_MET->SetLineWidth(3);
+      if(i>=9)  h_MET->SetLineStyle(2);
       h_MET->Draw("hist same");
       //      h_MET->GetYaxis()->SetRangeUser(0.5,20000);
       //      h_MET->GetYaxis()->SetRangeUser(100.5,20000);
@@ -143,16 +147,58 @@ void plotKinStack(){
   //  c_cB->SaveAs("searchBins.png");
   cout<<"*****************************************************"<<endl;
   cout<<"Int Lumi(inv.fb) for file1:"<<setprecision(4)<<intLumi<<endl;
+  //------------------------------------
+  if(0){
+    TLine *line1V7=new TLine( 7.5,0.5,  7.5,3000);
+    TLine *line2V7=new TLine(14.5,0.5, 14.5,3000);
+    TLine *line3V7=new TLine(21.5,0.5, 21.5,3000);
+    TLine *line4V7=new TLine(28.5,0.5, 28.5,300);
+    TLine *line5V7=new TLine(35.5,0.5, 35.5,300);
+    TLine *line6V7=new TLine(42.5,0.5, 42.5,300);
+    TLine *line7V7=new TLine(49.5,0.5, 49.5,300);
+    TLine *line8V7=new TLine(56.5,0.5, 56.5,300);
+
+    c_cA->cd(); c_cA->SetGridx(0); c_cA->SetGridy(0);
+    line1V7->Draw();      line2V7->Draw();  line3V7->Draw();
+    line4V7->Draw();      line5V7->Draw();  line6V7->Draw();
+    line7V7->Draw();      line8V7->Draw();
+    TArrow *arrow1 = new TArrow(0.5,1500,7.5,1500,0.01,"<|>");
+    TArrow *arrow2 = new TArrow(7.5,1500,14.5,1500,0.01,"<|>");
+    TArrow *arrow3 = new TArrow(14.5,1500,21.5,1500,0.01,"<|>");
+    TArrow *arrow4 = new TArrow(21.5,150,28.5,150,0.01,"<|>");
+    TArrow *arrow5 = new TArrow(28.5,150,35.5,150,0.01,"<|>");
+    TArrow *arrow6 = new TArrow(35.5,150,42.5,150,0.01,"<|>");
+    TArrow *arrow7 = new TArrow(42.5,150,49.5,150,0.01,"<|>");
+    TArrow *arrow8 = new TArrow(49.5,150,56.5,150,0.01,"<|>");
+    TArrow *arrow9 = new TArrow(56.5,150,63.5,150,0.01,"<|>");
+
+
+    arrow1->Draw(); arrow2->Draw(); arrow3->Draw();
+    arrow4->Draw(); arrow5->Draw(); arrow6->Draw();
+    arrow7->Draw(); arrow8->Draw(); arrow9->Draw();
+    TLatex Tl;
+    Tl.SetTextSize(0.04);
+    Tl.DrawLatex(3.,2000,"N^{0}_{2-4}");
+    Tl.DrawLatex(10,2000,"N^{0}_{5-6}");
+    Tl.DrawLatex(17,2000,"N^{0}_{#geq7}");
+    Tl.DrawLatex(24,200,"N^{1}_{2-4}");
+    Tl.DrawLatex(31,200,"N^{1}_{5-6}");
+    Tl.DrawLatex(38,200,"N^{1}_{#geq7}");
+    Tl.DrawLatex(45,200,"N^{#geq2}_{2-4}");
+    Tl.DrawLatex(52,200,"N^{#geq2}_{5-6}");
+    Tl.DrawLatex(59,200,"N^{#geq2}_{#geq7}");
+  }
+  //------------------------------------
     
 }
 
 void decorate(THStack *hs,int i,const char* fname){
   //  hs->SetMinimum(0.5);
   //hs->SetTitle(0);
-  hs->GetXaxis()->SetLabelSize(.06);
-  hs->GetYaxis()->SetLabelSize(.06);
-  hs->GetXaxis()->SetTitleSize(0.06);
-  hs->GetYaxis()->SetTitleSize(0.06);
+  hs->GetXaxis()->SetLabelSize(.05);
+  hs->GetYaxis()->SetLabelSize(.05);
+  hs->GetXaxis()->SetTitleSize(0.05);
+  hs->GetYaxis()->SetTitleSize(0.05);
   //  drawlegend(hist,i,fname);
   //  gPad->Update();
   gStyle->SetOptStat(0);
@@ -193,10 +239,12 @@ void drawlegend(TH1D *hist,int i,const char* fname){
   else if(lName.Contains("TTGJets")){lName="t #bar{t}+ #gamma";}
   else if(lName.Contains("GJets")){lName="#gamma +jets";}
   else if(lName.Contains("Run2016")){lName="Data";}
-  else if(lName.Contains("T5bbbbZg_1600_150")){lName="T5bbbb_ZG_150";}
+  else if(lName.Contains("T5bbbbZg_1600_150")){lName="T5bbbbZg_150";}
   //  else if(lName.Contains("T5bbbbZg_1600_150")){lName="T5bbbbZG(1.6,0.15)";}
   //  else if(lName.Contains("T5bbbbZg_1600_150")){lName="#tilde{g}_{1600}#rightarrow b#bar{b}#tilde{#chi}_{1,150}^{0}";}
-  else if(lName.Contains("T5bbbbZg_1600_1550")){lName="T5bbbb_ZG_1550";}
+  else if(lName.Contains("T5bbbbZg_1600_1550")){lName="T5bbbbZg_1550";}
+  else if(lName.Contains("T5qqqqHg_1600_1550")){lName="T5qqqqHg_1550";}
+  else if(lName.Contains("T5qqqqHg_1600_150")){lName="T5qqqqHg_150";}
 
   // const char *l_name=lName.c_str();
   if(i<nBG)legend1->AddEntry(hist,lName,"f");

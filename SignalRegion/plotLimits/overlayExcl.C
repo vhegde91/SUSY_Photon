@@ -15,20 +15,29 @@
 #include"TCanvas.h"
 #include"TGraph2D.h"
 
-
+TLatex textOnTop,intLumiE;
+double intLumi = 35.9;
 void overlayExcl(){
-  const int nFiles=3;
-  int col[7]={kRed,kBlue,kTeal+9,kBlack,kOrange,kPink,kMagenta};
+  const int nFiles=6;
+  int col[7]={kRed,kBlue,kTeal+9,kBlack,kOrange,kCyan,kMagenta};
   gStyle->SetOptStat(0);
   TCanvas *c1=new TCanvas("c1","c1",1200,1000);
   c1->SetLogz();
   TFile *f[nFiles];
+  f[0]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV3.root"); 
+  f[1]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV5.root");
+  f[2]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV1.root");
+  f[3]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV2.root");
+  f[4]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV4.root");
+  f[5]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV6.root");
+  //  f[6]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV7.root");
+
   // f[0]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV4.root");
   // f[1]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV7.root");
   // f[2]=new TFile("EMHT_Limits_Knut/T5qqqqHg_v20/saved_graphs1d_limit.root");
-  f[0]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7.root");
-  f[1]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7_ObsTotBG.root");
-  f[2]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7_ObsTotBG_r.root");
+  // f[0]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7.root");
+  // f[1]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7_ObsTotBG.root");
+  // f[2]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7_ObsTotBG_r.root");
   //  f[2]=new TFile("EMHT_Limits_Knut/T5bbbbZg_v20/saved_graphs1d_limit.root");
   // f[5]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV6.root");
   //  f[1]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV4_mT100.root");
@@ -37,7 +46,8 @@ void overlayExcl(){
   // f[2]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV4.root");
   //  f[2]=new TFile("EMHT_Limits_Knut/T5ttttZg_v20/saved_graphs1d_limit.root");
   //TFile *f1=new TFile("EMHT_Limits_Knut/T5ttttZg_v20/saved_graphs1d_limit.root");
-  TLegend *leg = new TLegend(0.8,0.6,0.9,0.9);
+  //  TLegend *leg = new TLegend(0.8,0.6,0.9,0.9);
+  TLegend *leg = new TLegend(0.17,0.76,0.85,0.89);
   // TH2D *h2=(TH2D*)f[0]->FindObjectAny("mGlmNLSP_XsecUL");
   // h2->Draw("colz");
   TH2D *h2 = new TH2D("mGlmNLSPPlane","mGlmNLSPPlane",100,12.5,2512.5,250,5,2505);
@@ -61,17 +71,33 @@ void overlayExcl(){
     gr[i]->Draw("same");
     TString fName=f[i]->GetName();
     if(fName.Contains("EMHT")) fName = "HT#gamma";
-    if(fName.Contains("SbinV1")) fName = "V1:NJ bins, Incl b's";
-    if(fName.Contains("SbinV2")) fName = "V2:nj x (0b,1b,>=2b)";
-    if(fName.Contains("SbinV3")) fName = "V3:NJ x (0b,1b,>=2b)";
-    if(fName.Contains("SbinV4_mT100")) fName = "V4(mT>100):NJ x (0b,>=1b)";
-    if(fName.Contains("SbinV4")) fName = "V4:NJ x (0b,>=1b)";
-    if(fName.Contains("SbinV5")) fName = "V5:NJ x (0b,1b,>=2b), Merged MET";
-    if(fName.Contains("SbinV6")) fName = "V6:Incl b for NJ>=7";
-    leg->AddEntry(gr[i],fName,"l");
-  }
+    if(fName.Contains("SbinV1")) fName = "(N_{2-4}, N_{5-6}, N_{#geq7}) x (N^{#geq0})";//"B1:N^{#geq0}_{2-4}, N^{#geq0}_{5-6}, N^{#geq0}_{#geq7},";
+    if(fName.Contains("SbinV2")) fName = "(N_{2-4}, N_{#geq5}) x (N^{0}, N^{1}, N^{#geq2})";//"B2:N^{0}_{2-4}, N^{0}_{#geq5}, N^{1}_{2-4}, N^{1}_{#geq5}, N^{#geq2}_{2-4}, N^{#geq2}_{#geq5}";
+    if(fName.Contains("SbinV3")) fName = "(N_{2-4}, N_{5-6}, N_{#geq7}) x (N^{0}, N^{1}, N^{#geq2})";
+    if(fName.Contains("SbinV4")) fName = "(N_{2-4}, N_{5-6}, N_{#geq7}) x (N^{0}, N^{#geq1})";
+    if(fName.Contains("SbinV5")) fName = "Merged MET";
+    if(fName.Contains("SbinV6")) fName = "(N_{2-4}, N_{5-6}) x (N^{0}, N^{1}) + N_{#geq7} ";
 
+    // if(fName.Contains("EMHT")) fName = "HT#gamma";
+    // if(fName.Contains("SbinV1")) fName = "V1:NJ bins, Incl b's";
+    // if(fName.Contains("SbinV2")) fName = "V2:nj x (0b,1b,>=2b)";
+    // if(fName.Contains("SbinV3")) fName = "V3:NJ x (0b,1b,>=2b)";
+    // if(fName.Contains("SbinV4_mT100")) fName = "V4(mT>100):NJ x (0b,>=1b)";
+    // if(fName.Contains("SbinV4")) fName = "V4:NJ x (0b,>=1b)";
+    // if(fName.Contains("SbinV5")) fName = "V5:NJ x (0b,1b,>=2b), Merged MET";
+    // if(fName.Contains("SbinV6")) fName = "V6:Incl b for NJ>=7";
+    leg->AddEntry(gr[i],fName,"l");
+    leg->SetBorderSize(0);
+  }
+  leg->SetNColumns(2);
   leg->Draw();
+  char name3[100];
+  textOnTop.SetTextSize(0.045);
+  intLumiE.SetTextSize(0.045);
+  textOnTop.DrawLatexNDC(0.16,0.91,"CMS #it{#bf{Simulation}}");
+  sprintf(name3,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
+  intLumiE.DrawLatexNDC(0.65,0.91,name3);
+
 
 }
 

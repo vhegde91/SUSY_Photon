@@ -20,12 +20,12 @@ class sms():
         self.label= "pp #rightarrow #tilde{g} #tilde{g}, #tilde{g} #rightarrow t #bar{t} "+lsp_s;
         self.label2= "";
         # scan range to plot
-        self.Xmin = 600.
-        self.Xmax = 2200.
+        self.Xmin = 1600.
+        self.Xmax = 2500.
         self.Ymin = 0.
-        self.Ymax = 1900.
-        self.Zmin = 0.001
-        self.Zmax = 2.
+        self.Ymax = 3000.
+        self.Zmin = 0.00001
+        self.Zmax = 0.1
         # produce sparticle
         self.sParticle = "m#kern[0.1]{_{#lower[-0.12]{#tilde{g}}}} [GeV]"
         # LSP
@@ -158,6 +158,27 @@ class sms():
         self.Ymax = 1900.
         self.Zmin = 0.001
         self.Zmax = 2.
+        # produce sparticle
+        self.sParticle = "m#kern[0.1]{_{#lower[-0.12]{#tilde{g}}}} [GeV]"
+        # LSP
+        self.LSP = "m#kern[0.1]{_{"+lsp_s+"}} [GeV]"
+        # turn off diagonal lines
+        self.diagOn = False
+        self.boxOn = False
+    def T5bbbbZg(self):
+        # model name
+        self.modelname = "T5bbbbZg"
+        # decay chain
+        lsp_s = "#lower[-0.12]{#tilde{#chi}}#lower[0.2]{#scale[0.85]{^{0}}}#kern[-1.3]{#scale[0.85]{_{1}}}"
+        self.label= "pp#rightarrow#tilde{g}#tilde{g}, #tilde{g}#rightarrow b#bar{b}#tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0}#rightarrow #gamma/Z#tilde{G}";
+        self.label2= "";
+        # plot boundary. The top 1/4 of the y axis is taken by the legend
+        self.Xmin = 1600.
+        self.Xmax = 2500.
+        self.Ymin = 0.
+        self.Ymax = 3000.
+        self.Zmin = 0.0001
+        self.Zmax = 0.01
         # produce sparticle
         self.sParticle = "m#kern[0.1]{_{#lower[-0.12]{#tilde{g}}}} [GeV]"
         # LSP

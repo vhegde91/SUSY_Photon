@@ -20,9 +20,13 @@
 
 void quickPlot(TString fName,TString histName){
 
-  TString xName = "#Delta#Phi(#gamma,MET)";
+  //  TString xName = "#Delta#Phi(#gamma,MET)";
+  TString xName = "#gamma pT(GeV)";
   TString yName = "#frac{PhotonJet pT}{#gamma pT}";
   gStyle->SetOptStat(0);
+  TLatex textOnTop,intLumiE;
+  double intLumi=35.9;
+
   TString name = fName,name1 = fName;
   name = name.ReplaceAll(".root","")+yName+"_Vs_"+xName;
   name1 = name1.ReplaceAll(".root","");
@@ -40,16 +44,24 @@ void quickPlot(TString fName,TString histName){
     h1->Draw("histe");
   }
   if(h2){
-    h2->GetYaxis()->SetRangeUser(0.5,1.5);
-    h2->SetTitle(fName.ReplaceAll(".root",""));
+    h2->GetYaxis()->SetRangeUser(0.0,2.5);
+    //    h2->SetTitle(fName.ReplaceAll(".root",""));
     h2->GetXaxis()->SetTitle(xName);
     h2->GetYaxis()->SetTitle(yName);
     h2->GetYaxis()->SetTitleOffset(0.9);
     h2->Draw("colz");
-    c1->SetLogz();
+    //    c1->SetLogz();
   }
   if(!h1 && !h2) {cout<<"Hist Not found"<<endl;}
 
-  c1->SaveAs(name1+"_RpTvsdPhiG.png");
+  char name2[100];
+  textOnTop.SetTextSize(0.05);
+  intLumiE.SetTextSize(0.05);
+  textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
+  sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
+  intLumiE.DrawLatexNDC(0.7,0.91,name2);
+
+  c1->SaveAs(name1+"_RpTvsPhoPt.png");
+  c1->SaveAs(name1+"_RpTvsPhoPt.pdf");
 
 }

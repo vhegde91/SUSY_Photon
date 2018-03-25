@@ -66,6 +66,7 @@ class MultiJet : public NtupleVariables{
 
   TH1D *h_ST_AB,*h_ST_CD,*h_ST_[4];
   TH1D *h_MET_AB,*h_MET_CD,*h_MET_[4];
+  TH1D *h_METclean_AB,*h_METclean_CD,*h_METclean_[4];
   TH1D *h_nHadJets_AB,*h_nHadJets_CD,*h_nHadJets_[4];
   TH1D *h_BTags_AB,*h_BTags_CD,*h_BTags_[4];
   TH1D *h_nVtx_AB,*h_nVtx_CD,*h_nVtx_[4];
@@ -160,6 +161,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
 
   h_ST_AB=new TH1D("ST_AB","ST_AB",400,0,4000);
   h_MET_AB=new TH1D("MET_AB","MET_AB",200,0,2000);
+  h_METclean_AB=new TH1D("METclean_AB","METclean_AB",200,0,2000);
   h_nHadJets_AB=new TH1D("nHadJets_AB","no. of jets(only hadronic jets,not counting photon)_AB",25,0,25);
   h_BTags_AB=new TH1D("nBTags_AB","no. of B tags_AB",10,0,10);
   h_nVtx_AB=new TH1D("nVtx_AB","no. of priary vertices_AB",50,0,50);
@@ -206,6 +208,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
 
   h_ST_CD=new TH1D("ST_CD","ST_CD",400,0,4000);
   h_MET_CD=new TH1D("MET_CD","MET_CD",200,0,2000);
+  h_METclean_CD=new TH1D("METclean_CD","METclean_CD",200,0,2000);
   h_nHadJets_CD=new TH1D("nHadJets_CD","no. of jets(only hadronic jets,not counting photon)_CD",25,0,25);
   h_BTags_CD=new TH1D("nBTags_CD","no. of B tags_CD",10,0,10);
   h_nVtx_CD=new TH1D("nVtx_CD","no. of priary vertices_CD",50,0,50);
@@ -259,6 +262,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
 
     h_ST_[i]=new TH1D("ST_"+regName,"ST_"+regName,400,0,4000);
     h_MET_[i]=new TH1D("MET_"+regName,"MET_"+regName,200,0,2000);
+    h_METclean_[i]=new TH1D("METclean_"+regName,"METclean_"+regName,200,0,2000);
     h_nHadJets_[i]=new TH1D("nHadJets_"+regName,"no. of jets(only hadronic jets,not counting photon)_"+regName,25,0,25);
     h_BTags_[i]=new TH1D("nBTags_"+regName,"no. of B tags_"+regName,10,0,10);
     h_nVtx_[i]=new TH1D("nVtx_"+regName,"no. of priary vertices_"+regName,50,0,50);

@@ -69,7 +69,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     
     bool process=true;
     if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
-    //    if(BadGlobalMuon && BadGlobalMuonLeadPt > 0.5) continue;
+    if(BadGlobalMuon && BadGlobalMuonLeadPt > 20.) continue;
     //About photons
     bestPhoton=getBestPhoton();
     if(bestPhoton.Pt() <= 100) continue;
@@ -251,8 +251,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       double wt_org=wt;
       h_RunNum->Fill(RunNum);
       h_intLumi->Fill(lumiInfb);
-      // print(jentry);
-      // cout<<"BadGlobalMuon:"<<BadGlobalMuon<<" BadGlobalMuonLeadPt:"<<BadGlobalMuonLeadPt<<" badMuonsFilter:"<<badMuonsFilter<<" BadPFMuonFilter:"<<BadPFMuonFilter<<" BadTrkGlobalMuon:"<<BadTrkGlobalMuon<<" BadTrkGlobalMuonLeadPt:"<<BadTrkGlobalMuonLeadPt<<endl;
+      //      print(jentry);
+      //      cout<<"BadGlobalMuon:"<<BadGlobalMuon<<" BadGlobalMuonLeadPt:"<<BadGlobalMuonLeadPt<<" badMuonsFilter:"<<badMuonsFilter<<" BadPFMuonFilter:"<<BadPFMuonFilter<<" BadTrkGlobalMuon:"<<BadTrkGlobalMuon<<" BadTrkGlobalMuonLeadPt:"<<BadTrkGlobalMuonLeadPt<<endl;
       h_ST->Fill(ST,wt);
       h_MET->Fill(MET,wt);
       h_nHadJets->Fill(nHadJets,wt);
@@ -524,7 +524,47 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 TLorentzVector LostMuon::getBestPhoton(){
   vector<TLorentzVector> goodPho;
   vector<int> goodPhoIndx;
-
+  bool passID=false;
+  bool passIso=false;
+  //----------------------------
+  // for(int iPho=0;iPho<Photons->size();iPho++){
+  //   if ((*Photons_isEB)[iPho]) {
+  //     if ((*Photons_hadTowOverEM)[iPho] < 0.05 ){
+  // 	//	if ((*Photons_sigmaIetaIeta)[iPho] < 0.0102) {//lose
+  // 	if ((*Photons_sigmaIetaIeta)[iPho] < 0.010) {//tight
+  // 	  passID = true;
+  // 	}
+  //     }
+  //   } else {
+  //     if ((*Photons_hadTowOverEM)[iPho] < 0.05 ) {
+  // 	//	if ((*Photons_sigmaIetaIeta)[iPho] < 0.0274) {//lose
+  // 	if ((*Photons_sigmaIetaIeta)[iPho] < 0.0268) {//tight
+  // 	  passID = true;
+  // 	}
+  //     }
+  //   }
+ 
+  //   // apply isolation cuts
+  //   if ((*Photons_isEB)[iPho]) {
+  //     //      if ((*Photons_pfNeutralIsoRhoCorr)[iPho] < (1.92 + 0.014*(*Photons)[iPho].Pt() + 0.000019*(*Photons)[iPho].Pt()*(*Photons)[iPho].Pt()) && (*Photons_pfGammaIsoRhoCorr)[iPho] < (0.81 + 0.0053*(*Photons)[iPho].Pt())) {//loose
+  //     if ((*Photons_pfNeutralIsoRhoCorr)[iPho] < (0.97 + 0.014*(*Photons)[iPho].Pt() + 0.000019*(*Photons)[iPho].Pt()*(*Photons)[iPho].Pt()) && (*Photons_pfGammaIsoRhoCorr)[iPho] < (0.8 + 0.0053*(*Photons)[iPho].Pt())) {//tight
+  // 	if ((*Photons_pfChargedIsoRhoCorr)[iPho] < 0.76) {
+  // 	  passIso = true;
+  // 	}
+  //     }
+  //   } else {
+  //     //      if ((*Photons_pfNeutralIsoRhoCorr)[iPho] < (11.86 + 0.0139*(*Photons)[iPho].Pt() + 0.000025*(*Photons)[iPho].Pt()*(*Photons)[iPho].Pt())  && (*Photons_pfGammaIsoRhoCorr)[iPho] < (0.83 + 0.0034*(*Photons)[iPho].Pt())) {//loose
+  //     if ((*Photons_pfNeutralIsoRhoCorr)[iPho] < (2.09 + 0.0139*(*Photons)[iPho].Pt() + 0.000025*(*Photons)[iPho].Pt()*(*Photons)[iPho].Pt())  && (*Photons_pfGammaIsoRhoCorr)[iPho] < (0.16 + 0.0034*(*Photons)[iPho].Pt())) {//tight
+  // 	if ((*Photons_pfChargedIsoRhoCorr)[iPho] < 0.56) {
+  // 	  passIso = true;
+  // 	}
+  //     }
+  //   }
+  //   if(!passIso || !passID || (*Photons_hasPixelSeed)[iPho] > 0.01) continue;
+  //   goodPho.push_back( (*Photons)[iPho] );
+  //   goodPhoIndx.push_back(iPho);
+  // }
+  //-------------------------
   for(int iPho=0;iPho<Photons->size();iPho++){
     if( ((*Photons_fullID)[iPho]) && ((*Photons_hasPixelSeed)[iPho]<0.001) ) {
       goodPho.push_back( (*Photons)[iPho] );
@@ -536,7 +576,7 @@ TLorentzVector LostMuon::getBestPhoton(){
     if(i==0) highPtIndx=0;
     else if( (goodPho[highPtIndx].Pt()) < (goodPho[i].Pt()) ){highPtIndx=i;}
   }
-
+  
   if(highPtIndx>=0){
     bestPhotonIndxAmongPhotons = goodPhoIndx[highPtIndx];
     return goodPho[highPtIndx];

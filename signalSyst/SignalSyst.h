@@ -57,17 +57,19 @@ class SignalSyst : public NtupleVariables{
   TH1I *h_RunNum;
   TH1D *h_intLumi;
   TH1D *h_madHT;
-
+  TH1D *h_nVtxEvts,*h_nVtxEvts_CD;
   TH1D *h_ST_CD;
   TH1D *h_MET_CD;
   TH1D *h_nHadJets_CD;
+  TH1D *h_nISRjets_CD;
   TH1D *h_BTags_CD;
   TH1D *h_nVtx_CD;
   TH1D *h_GenMET_CD;
   TH1D *h_METPhi_CD;
 
   TH1D *h_METvBin_CD;
-  TH1D *h_SBins_v7_CD,*h_SBins_v7_genMET_CD,*h_SBins_v7_JECup_CD,*h_SBins_v7_JECdn_CD,*h_SBins_v7_ISRup_CD,*h_SBins_v7_ISRdn_CD,*h_SBins_v7_JERup_CD,*h_SBins_v7_JERdn_CD;
+  TH1D *h_SBins_v7_CD,*h_SBins_v7_genMET_CD,*h_SBins_v7_JECup_CD,*h_SBins_v7_JECdn_CD,*h_SBins_v7_JERup_CD,*h_SBins_v7_JERdn_CD;
+  TH1D *h_SBins_v7_NoISRWt_CD,*h_SBins_v7_ISRup_CD,*h_SBins_v7_ISRdn_CD,*h_SBins_v7_ISRUncSq_CD,*h_SBins_v7_ISRUncSqNoISRwt_CD;
 
   TH1D *h_mindPhi1dPhi2_CD;
 
@@ -75,7 +77,7 @@ class SignalSyst : public NtupleVariables{
 
   TH1D *h_ISRCorrFactors;
   TH1D *h_cutFlow;
-
+  TH1D *h_ScaleIdx_CD,*h_ScaleIdx;
   TH2D *h2_SBins_v7_CD_vs_ScaleIdx;
 
   TFile *oFile;
@@ -96,16 +98,19 @@ void SignalSyst::BookHistogram(const char *outFileName) {
   TH1::SetDefaultSumw2(1);
   h_RunNum=new TH1I("runs","Run nos.",300000,0,300000);
   h_intLumi=new TH1D("intLumi","integrated luminosity in /fb",2500,25,50); 
+  h_nVtxEvts=new TH1D("nVtxEvts","nVtx no weights applied",80,0,80);
 
   h_ISRCorrFactors = new TH1D("ISRCorrFactors","Bin 0: No ISR weights, Bin 1: ISR wts, 2: ISR wt + unc, 3: ISR wt - unc",5,-0.5,4.5);
 
   h_ST_CD=new TH1D("ST_CD","ST_CD",400,0,4000);
   h_MET_CD=new TH1D("MET_CD","MET_CD",200,0,2000);
   h_nHadJets_CD=new TH1D("nHadJets_CD","no. of jets(only hadronic jets,not counting photon)_CD",25,0,25);
+  h_nISRjets_CD=new TH1D("nISRjets_CD","no. of ISR jets_CD",25,0,25);
   h_BTags_CD=new TH1D("nBTags_CD","no. of B tags_CD",10,0,10);
-  h_nVtx_CD=new TH1D("nVtx_CD","no. of priary vertices_CD",50,0,50);
+  h_nVtx_CD=new TH1D("nVtx_CD","no. of priary vertices_CD",80,0,80);
   h_GenMET_CD=new TH1D("GenMET_CD","GenMET_CD",200,0,2000);
   h_METPhi_CD=new TH1D("METPhi_CD","METPhi_CD",40,0,4);
+  h_nVtxEvts_CD=new TH1D("nVtxEvts_CD","nVtx no weights applied_CD",80,0,80);
 
   h_BestPhotonPt_CD=new TH1D("BestPhotonPt_CD","Pt of the Best Photon_CD",150,0,1500);
   h_METvBin_CD=new TH1D("METvarBin_CD","MET with variable bin size_CD",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
@@ -115,11 +120,17 @@ void SignalSyst::BookHistogram(const char *outFileName) {
   h_cutFlow=new TH1D("cutFlow","cut flow 0:all events, 1:passed 100GeV photon, 2:passed e/mu veto, 3:passed iso track veto, 4:passed PtRatio, 5:passed trigger like cuts, 6:passed dPhi and MET",11,-0.5,10.5);
 
   h2_SBins_v7_CD_vs_ScaleIdx = new TH2D("SBins_v7_CD_ScaleIdx","x:search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD, y: scale weight index",31,0.5,31.5,12,-0.5,11.5);
-  h_madHT=new TH1D("madHT","madHT",300,0,3000);
+   h_ScaleIdx = new TH1D("ScaleIdx","events with no cut for different scale weight indices",12,-0.5,11.5);
+   h_ScaleIdx_CD = new TH1D("ScaleIdx_CD","events with cut for different scale weight indices_CD",12,-0.5,11.5);
+   h_madHT=new TH1D("madHT","madHT",300,0,3000);
   //---------------Search Bins ----------------------------
   h_SBins_v7_CD = new TH1D("AllSBins_v7_CD","search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
+  h_SBins_v7_NoISRWt_CD = new TH1D("AllSBins_v7_NoISRWt_CD","No ISR weights applied search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
   h_SBins_v7_ISRup_CD = new TH1D("AllSBins_v7_ISRup_CD","ISR up, search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
   h_SBins_v7_ISRdn_CD = new TH1D("AllSBins_v7_ISRdn_CD","ISR down, search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
+  h_SBins_v7_ISRUncSq_CD = new TH1D("AllSBins_v7_ISRUncSq_CD","ISR Unc square, search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
+  h_SBins_v7_ISRUncSqNoISRwt_CD = new TH1D("AllSBins_v7_ISRUncSqNoISRwt_CD","ISR Unc sq, no ISR weights applied search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
+
   h_SBins_v7_genMET_CD = new TH1D("AllSBins_v7_genMET_CD","GenMET, search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
   h_SBins_v7_JECup_CD = new TH1D("AllSBins_v7_JECup_CD","JECup, search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
   h_SBins_v7_JECdn_CD = new TH1D("AllSBins_v7_JECdn_CD","JECdn, search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);

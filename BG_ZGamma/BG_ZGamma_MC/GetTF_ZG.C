@@ -39,11 +39,14 @@ void GetTF_ZG(){
   //  TFile *fn=new TFile("DCS_ZGToLL_NoZMassWindow.root");  
 
   TFile *fn=new TFile("CS_ZGZJToNuNuG.root");
-  //TFile *fd=new TFile("CS_ZDYToLLG.root");
-  TFile *fd=new TFile("CS_ZDYToLLG_AppTF.root");
+  TFile *fd=new TFile("CS_ZDYToLLG.root");
+  //TFile *fd=new TFile("CS_ZDYToLLG_AppTF.root");
 
   // TFile *fn=new TFile("CS_ZGToNuNuG_PtG130_NLO.root");
   // TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO.root");
+
+  // TFile *fn=new TFile("CS_ZGZJToNuNuG_LO_PtG190.root");
+  // TFile *fd=new TFile("CS_ZDYToLLG_LO_PtG190.root");
 
   //  TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO_reWtnJ_NLO.root");
     
@@ -54,18 +57,18 @@ void GetTF_ZG(){
   TString histToSave="nBTagsvarBin";
   // TFile *fd=new TFile("CS_ZGToLLG.root");
 
-  name2.push_back("MET");  rebin.push_back(5);
+  name2.push_back("MET");  rebin.push_back(10);
   name2.push_back("METvarBin");  rebin.push_back(1);
   //  name2.push_back("METvarBin_TF");  rebin.push_back(1);
   name2.push_back("ST");  rebin.push_back(10);
   name2.push_back("BestPhotonPt");  rebin.push_back(5);
   name2.push_back("nHadJets");  rebin.push_back(1);
   name2.push_back("nBTags");  rebin.push_back(1);
-  //name2.push_back("AllSBins_v7");  rebin.push_back(1);
+  name2.push_back("AllSBins_v7");  rebin.push_back(1);
   //name2.push_back("mTPho");  rebin.push_back(2);
   // name2.push_back("nGenbs");  rebin.push_back(1);
   // name2.push_back("bParent_PdgId");  rebin.push_back(1);
-  name2.push_back("ZMass");  rebin.push_back(2);
+  //  name2.push_back("ZMass");  rebin.push_back(2);
   name2.push_back("nBTagsvarBin"); rebin.push_back(1);
   //  name2.push_back("AllSBins_ZG"); rebin.push_back(1);
   //  name2.push_back("STvarBin"); rebin.push_back(1);
@@ -103,9 +106,9 @@ void GetTF_ZG(){
   TPad *p_top[name2.size()],*p_bot[name2.size()];
 
   for(int i=0;i<name2.size();i++){
-    //    name = name2[i]+"NuNu_LL";
+    name = name2[i]+"NuNu_LL_LO";
     //    name = name2[i]+"NLO_LO";
-    name = name2[i]+"DataMC_LL";
+    //name = name2[i]+"DataMC_LL";
     c_cA[i] = new TCanvas(name,name,1500,800);
     p_top[i] =new TPad(name+"top",name+"top",0,0.4,1,1);
     p_bot[i] =new TPad(name+"bot",name+"bot",0,0.0,1,0.4);
@@ -123,8 +126,10 @@ void GetTF_ZG(){
     h_den=(TH1D*)fd->FindObjectAny(name2[i]);
     h_num->Rebin(rebin[i]);
     h_den->Rebin(rebin[i]);
-    // h_den->Scale(1.0/h_den->Integral());
-    // h_num->Scale(1.0/h_num->Integral());
+    h_den->Scale(1.0/h_den->Integral());
+    h_num->Scale(1.0/h_num->Integral());
+    // cout<<h_den->Integral()<<endl;
+    // cout<<h_num->Integral()<<endl;
     if(h_num && h_den){
       if(name2[i]=="nHadJets"){
 	nunu_Integral=h_num->Integral();
@@ -143,7 +148,7 @@ void GetTF_ZG(){
       }
       h_num->SetLineWidth(2);
       h_num->SetMarkerColor(h_num->GetLineColor());
-      h_num->SetTitle(";;Events");
+      h_num->SetTitle(";;");
       h_num->GetYaxis()->SetLabelSize(0.09);
       h_num->GetYaxis()->SetTitleSize(0.09);
       h_num->GetYaxis()->SetTitleOffset(0.45);
@@ -153,7 +158,7 @@ void GetTF_ZG(){
       h_den->SetLineWidth(2);
       h_den->SetMarkerStyle(21);
       h_den->SetMarkerColor(h_den->GetLineColor());
-      h_num->GetYaxis()->SetNdivisions(2);
+      //      h_num->GetYaxis()->SetNdivisions(2);
 
       c_cA[i]->cd();p_top[i]->cd();
       // textOnTop.DrawLatexNDC(0.1,0.91,"CMS #it{#bf{Simulation}}");

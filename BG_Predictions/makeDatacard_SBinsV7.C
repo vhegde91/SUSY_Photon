@@ -65,10 +65,10 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
 
   //for ZG
   TH1D *h_ZGCS = (TH1D*)f[1]->Get("AllSBins_v7_ZGCS");
-  TH1D *h_PureOverLLG_MC = (TH1D*)f[1]->Get("PureOverLLG_MC");
-  TH1D *h_dataLLG = (TH1D*)f[1]->Get("dataLLG");
-  TH1D *h_ZGTF = (TH1D*)f[1]->Get("AllSBins_v7_ZGTF");
   TH1D *h_highOrd = (TH1D*)f[1]->Get("ZG_HighOrd");
+  TH1D *h_dataLLG = (TH1D*)f[1]->Get("dataLLG");
+  TH1D *h_ZGTFfinal = (TH1D*)f[1]->Get("AllSBins_v7_ZGTFfinal");
+  TH1D *h_ZGTFpurity = (TH1D*)f[1]->Get("ZGTFpurity");
 
   //for MultiJ
   TH1D *h_MultiJCSraw = (TH1D*)f[1]->Get("AllSBins_v7_rawMultiJCS");
@@ -172,12 +172,9 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
     outf<<"FakeRate_ISR_b"<<" lnN   -       -          -    "<<1+h_FRISR->GetBinError(i)/h_FR->GetBinContent(i)<<"    -       -"<<endl;
     //--------------- ZG -----------------------
     outf<<"ZG_mcStat_b"<<i<<" lnN     -       -          -      -     "<<1+(h_ZGCS->GetBinError(i)/h_ZGCS->GetBinContent(i))<<"       -"<<endl;
-    outf<<"ZGTF_b"<<bTagCorr<<" gmN "<<h_dataLLG->GetBinContent(i)<<"         -       -          -      -     "<<h_ZGTF->GetBinContent(i)<<"       -"<<endl;
-    outf<<"ZGPureOverLLG_b"<<bTagCorr<<" lnN  -       -          -      -     "<<1+(h_PureOverLLG_MC->GetBinError(i)/h_PureOverLLG_MC->GetBinContent(i))<<"     -"<<endl;
-    if(i<=16)
-      outf<<"ZG_highOrdCorr_b"<<nJCorr<<" lnN  -       -          -      -     "<<1+(h_highOrd->GetBinError(i)/h_ZGCS->GetBinContent(i))<<"       -"<<endl;
-    else
-      outf<<"ZG_highOrdCorr_b"<<nJCorr<<" lnN  -       -          -      -     "<<1-(h_highOrd->GetBinError(i)/h_ZGCS->GetBinContent(i))<<"       -"<<endl;
+    outf<<"ZGTF_b"<<bTagCorr<<" gmN "<<h_dataLLG->GetBinContent(i)<<"         -       -          -      -     "<<h_ZGTFfinal->GetBinContent(i)<<"       -"<<endl;
+    outf<<"ZGTFpurity_b"<<bTagCorr<<" lnN  -       -          -      -     "<<1+(h_ZGTFpurity->GetBinError(i)/h_ZGTFpurity->GetBinContent(i))<<"     -"<<endl;
+    outf<<"ZG_highOrdCorr_b"<<metCorr<<" lnN  -       -          -      -     "<<1+(h_highOrd->GetBinError(i)/h_ZGCS->GetBinContent(i))<<"       -"<<endl;
     //------------------ MultiJ -------------------
     if(h_MultiJPurity->GetBinContent(i) > 0.0)
       outf<<"MultiJ_b"<<i<<" gmN "<<h_MultiJCSraw->GetBinContent(i)<<"     -       -          -          -         -       "<<h_doubleR->GetBinContent(i)*h_HLRatio->GetBinContent(i)*h_MultiJPurity->GetBinContent(i)<<endl;

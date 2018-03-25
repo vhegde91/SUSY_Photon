@@ -58,6 +58,7 @@ class MultiJet : public NtupleVariables{
   vector<double> nJBinLow={0,2,5,7,20};
   vector<double> STBinLow2={0,400,500,600,700,800,950,1200,1500,1800,2400,3000,4000,15000};
   vector<double> dPhiBinLow={0,0.3,0.6,2,2.3,2.6,2.9,3.15};
+
   vector<TLorentzVector> allBestPhotons;
   //histograms
   TH1I *h_RunNum;
@@ -66,6 +67,7 @@ class MultiJet : public NtupleVariables{
 
   TH1D *h_ST_AB,*h_ST_CD,*h_ST_[4];
   TH1D *h_MET_AB,*h_MET_CD,*h_MET_[4];
+  TH1D *h_METclean_AB,*h_METclean_CD,*h_METclean_[4];
   TH1D *h_nHadJets_AB,*h_nHadJets_CD,*h_nHadJets_[4];
   TH1D *h_BTags_AB,*h_BTags_CD,*h_BTags_[4];
   TH1D *h_nVtx_AB,*h_nVtx_CD,*h_nVtx_[4];
@@ -79,9 +81,13 @@ class MultiJet : public NtupleVariables{
 
   TH1D *h_STvBin_AB,*h_STvBin_CD,*h_STvBin_[4];
   TH1D *h_METvBin_AB,*h_METvBin_CD,*h_METvBin_[4];
+  TH1D *h_GenMETvBin_CD;
   TH1D *h_SBins_v1_AB,*h_SBins_v1_CD,*h_SBins_v1_[4];
   TH1D *h_SBins_v4_AB,*h_SBins_v4_CD,*h_SBins_v4_[4];
   TH1D *h_SBins_v7_AB,*h_SBins_v7_CD,*h_SBins_v7_[4];
+  TH1D *h_SBins_v7_ISRwtNoBtagSF,*h_SBins_v7_NoISRWt_CD,*h_SBins_v7_ISRUncSq_CD,*h_SBins_v7_ISRUncSqNoISRwt_CD;
+  TH1D *h_SBins_v7_bTagSFup_[4],*h_SBins_v7_bTagSFup_AB,*h_SBins_v7_bTagSFup_CD;
+  TH1D *h_nHadJets_SBin_v7_[4],*h_nHadJets_ISRUncSq_SBin_v7_[4],*h_nHadJets_NoISRWt_SBin_v7_[4];
 
   TH1D *h_jet1Pt_AB,*h_jet1Pt_CD,*h_jet1Pt_[4];
   TH1D *h_jet2Pt_AB,*h_jet2Pt_CD,*h_jet2Pt_[4];
@@ -101,6 +107,9 @@ class MultiJet : public NtupleVariables{
   TH1D *h_mTPho_AB,*h_mTPho_CD,*h_mTPho_[4];
   TH1D *h_dPhiPhotonJet1_AB,*h_dPhiPhotonJet1_CD,*h_dPhiPhotonJet1_[4];
   TH1D *h_RatioJetPhoPt_AB,*h_RatioJetPhoPt_CD,*h_RatioJetPhoPt_[4];
+
+  TH1D *h_PhoPt_nJ2to4_AB,*h_PhoPt_nJ2to4_CD,*h_PhoPt_nJ2to4_[4];
+  TH1D *h_PhoPt_minNJ5_AB,*h_PhoPt_minNJ5_CD,*h_PhoPt_minNJ5_[4];
 
   TH2D *h2_PtPhotonvsMET_AB,*h2_PtPhotonvsMET_CD,*h2_PtPhotonvsMET_[4];
   TH2D *h2_dPhi1dPhi2_AB,*h2_dPhi1dPhi2_CD,*h2_dPhi1dPhi2_[4];
@@ -160,6 +169,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
 
   h_ST_AB=new TH1D("ST_AB","ST_AB",400,0,4000);
   h_MET_AB=new TH1D("MET_AB","MET_AB",200,0,2000);
+  h_METclean_AB=new TH1D("METclean_AB","METclean_AB",200,0,2000);
   h_nHadJets_AB=new TH1D("nHadJets_AB","no. of jets(only hadronic jets,not counting photon)_AB",25,0,25);
   h_BTags_AB=new TH1D("nBTags_AB","no. of B tags_AB",10,0,10);
   h_nVtx_AB=new TH1D("nVtx_AB","no. of priary vertices_AB",50,0,50);
@@ -200,12 +210,15 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_dPhi_METjet2_AB=new TH1D("dPhi_METjet2_AB","dphi between MET Vec and Jet2_AB",40,0,4);
   h_dPhi_METjet3_AB=new TH1D("dPhi_METjet3_AB","dphi between MET Vec and Jet3_AB",40,0,4);
   h_dPhi_METjet4_AB=new TH1D("dPhi_METjet4_AB","dphi between MET Vec and Jet4_AB",40,0,4);
+  h_mindPhi1dPhi2_AB=new TH1D("mindPhi1dPhi2_AB","min(#Delta#Phi1,#Delta#Phi2)_AB",400,0,4);
 
   h_dPhiPhotonJet1_AB=new TH1D("dPhiPhotonJet1_AB","dphi(jet1,photon)_AB",40,0,4);
-  h_mindPhi1dPhi2_AB=new TH1D("mindPhi1dPhi2_AB","min(#Delta#Phi1,#Delta#Phi2)_AB",400,0,4);
+  h_PhoPt_nJ2to4_AB=new TH1D("PhoPt_nJ2to4_AB","Photon Pt for nJ:2-4_AB",150,0,1500);
+  h_PhoPt_minNJ5_AB=new TH1D("PhoPt_minNJ5_AB","Photon Pt for nJ>=5_AB",150,0,1500);
 
   h_ST_CD=new TH1D("ST_CD","ST_CD",400,0,4000);
   h_MET_CD=new TH1D("MET_CD","MET_CD",200,0,2000);
+  h_METclean_CD=new TH1D("METclean_CD","METclean_CD",200,0,2000);
   h_nHadJets_CD=new TH1D("nHadJets_CD","no. of jets(only hadronic jets,not counting photon)_CD",25,0,25);
   h_BTags_CD=new TH1D("nBTags_CD","no. of B tags_CD",10,0,10);
   h_nVtx_CD=new TH1D("nVtx_CD","no. of priary vertices_CD",50,0,50);
@@ -237,6 +250,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
 
   h_STvBin_CD=new TH1D("STvarBin_CD","STvarBin_CD",STBinLowEdge.size()-1,&(STBinLowEdge[0]));
   h_METvBin_CD=new TH1D("METvarBin_CD","MET with variable bin size_CD",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
+  h_GenMETvBin_CD=new TH1D("GenMETvarBin_CD","GenMET with variable bin size_CD",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
 
   h_jet1Pt_CD=new TH1D("jet1Pt_CD","Leading Jet Pt_CD",200,0,2000);
   h_jet2Pt_CD=new TH1D("jet2Pt_CD","2nd Leading Jet Pt_CD",200,0,2000);
@@ -246,9 +260,11 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_dPhi_METjet2_CD=new TH1D("dPhi_METjet2_CD","dphi between MET Vec and Jet2_CD",40,0,4);
   h_dPhi_METjet3_CD=new TH1D("dPhi_METjet3_CD","dphi between MET Vec and Jet3_CD",40,0,4);
   h_dPhi_METjet4_CD=new TH1D("dPhi_METjet4_CD","dphi between MET Vec and Jet4_CD",40,0,4);
+  h_mindPhi1dPhi2_CD=new TH1D("mindPhi1dPhi2_CD","min(#Delta#Phi1,#Delta#Phi2)_CD",400,0,4);
 
   h_dPhiPhotonJet1_CD=new TH1D("dPhiPhotonJet1_CD","dphi(jet1,photon)_CD",40,0,4);
-  h_mindPhi1dPhi2_CD=new TH1D("mindPhi1dPhi2_CD","min(#Delta#Phi1,#Delta#Phi2)_CD",400,0,4);
+  h_PhoPt_nJ2to4_CD=new TH1D("PhoPt_nJ2to4_CD","Photon Pt for nJ:2-4_CD",150,0,1500);
+  h_PhoPt_minNJ5_CD=new TH1D("PhoPt_minNJ5_CD","Photon Pt for nJ>=5_CD",150,0,1500);
 
   for(int i=0;i<4;i++){
     TString regName;
@@ -259,6 +275,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
 
     h_ST_[i]=new TH1D("ST_"+regName,"ST_"+regName,400,0,4000);
     h_MET_[i]=new TH1D("MET_"+regName,"MET_"+regName,200,0,2000);
+    h_METclean_[i]=new TH1D("METclean_"+regName,"METclean_"+regName,200,0,2000);
     h_nHadJets_[i]=new TH1D("nHadJets_"+regName,"no. of jets(only hadronic jets,not counting photon)_"+regName,25,0,25);
     h_BTags_[i]=new TH1D("nBTags_"+regName,"no. of B tags_"+regName,10,0,10);
     h_nVtx_[i]=new TH1D("nVtx_"+regName,"no. of priary vertices_"+regName,50,0,50);
@@ -275,7 +292,9 @@ void MultiJet::BookHistogram(const char *outFileName) {
     h_RatioJetPhoPt_[i]=new TH1D("RatioJetPhoPt_"+regName,"ratio of matching jet Pt to photon Pt_"+regName,100,0,5);
 
     h_dPhiPhotonJet1_[i]=new TH1D("dPhiPhotonJet1_"+regName,"dphi(jet1,photon)_"+regName,40,0,4);
-    h_mindPhi1dPhi2_[i]=new TH1D("mindPhi1dPhi2_"+regName,"min(#Delta#Phi1,#Delta#Phi2)_"+regName,400,0,4);
+
+    h_PhoPt_nJ2to4_[i]=new TH1D("PhoPt_nJ2to4_"+regName,"Photon Pt for nJ:2-4_"+regName,150,0,1500);
+    h_PhoPt_minNJ5_[i]=new TH1D("PhoPt_minNJ5_"+regName,"Photon Pt for nJ>=5_"+regName,150,0,1500);
 
     h_SBins_v1_[i] = new TH1D("AllSBins_v1_"+regName,"search bins:(NJ=2to4) (NJ:5or6) (NJ>=7)_"+regName,21,0.5,21.5);
   
@@ -302,8 +321,15 @@ void MultiJet::BookHistogram(const char *outFileName) {
     h_dPhi_METjet2_[i]=new TH1D("dPhi_METjet2_"+regName,"dphi between MET Vec and Jet2_"+regName,40,0,4);
     h_dPhi_METjet3_[i]=new TH1D("dPhi_METjet3_"+regName,"dphi between MET Vec and Jet3_"+regName,40,0,4);
     h_dPhi_METjet4_[i]=new TH1D("dPhi_METjet4_"+regName,"dphi between MET Vec and Jet4_"+regName,40,0,4);
+    h_mindPhi1dPhi2_[i]=new TH1D("mindPhi1dPhi2_"+regName,"min(#Delta#Phi1,#Delta#Phi2)_"+regName,400,0,4);
+
     h_SBins_v4_[i] = new TH1D("AllSBins_v4_"+regName,"search bins:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_"+regName,43,0.5,43.5);
     h_SBins_v7_[i] = new TH1D("AllSBins_v7_"+regName,"search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_"+regName,31,0.5,31.5);
+    h_SBins_v7_bTagSFup_[i] = new TH1D("AllSBins_v7_bTagSFup_"+regName,"search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_"+regName,31,0.5,31.5);
+
+    h_nHadJets_ISRUncSq_SBin_v7_[i] = new TH1D("nHadJets_ISRUncSq_SBin_v7_"+regName,"nHadJets, sq of ISR unc",nJBinLow.size()-1,&(nJBinLow[0]));
+    h_nHadJets_NoISRWt_SBin_v7_[i] = new TH1D("nHadJets_NoISRWt_SBin_v7_"+regName,"nHadJets, No ISR wts applied",nJBinLow.size()-1,&(nJBinLow[0]));
+    h_nHadJets_SBin_v7_[i] = new TH1D("nHadJets_SBin_v7_"+regName,"nHadJets, ISR wt applied",nJBinLow.size()-1,&(nJBinLow[0]));
   }
 
   h_nBestPho=new TH1D("nBestPhotons","no. of best photons",5,0,5);
@@ -344,6 +370,13 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_SBins_v7_AB = new TH1D("AllSBins_v7_AB","search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_AB",31,0.5,31.5);
   h_SBins_v7_CD = new TH1D("AllSBins_v7_CD","search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
 
+  h_SBins_v7_ISRwtNoBtagSF = new TH1D("AllSBins_v7_ISRwtNoBtagSF_CD","ISR weighted, no Btag SF, search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
+  h_SBins_v7_NoISRWt_CD = new TH1D("AllSBins_v7_NoISRWt_CD","No ISR weights applied, no Btag SF, search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
+  h_SBins_v7_ISRUncSq_CD = new TH1D("AllSBins_v7_ISRUncSq_CD","ISR Unc square, no Btag SF, search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
+  h_SBins_v7_ISRUncSqNoISRwt_CD = new TH1D("AllSBins_v7_ISRUncSqNoISRwt_CD","ISR Unc sq, no Btag SF, no ISR weights applied search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
+
+  h_SBins_v7_bTagSFup_AB = new TH1D("AllSBins_v7_bTagSFup_AB","bTagSFup, search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_AB",31,0.5,31.5);
+  h_SBins_v7_bTagSFup_CD = new TH1D("AllSBins_v7_bTagSFup_CD","bTagSFup, search bins v7:[0b,1b] x [(NJ=2to4),(NJ:5or6),(NJ>=7)]_CD",31,0.5,31.5);
 }
 
 

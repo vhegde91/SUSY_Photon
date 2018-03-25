@@ -337,7 +337,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     if(phoMatchingJetIndx>=0 && (jets[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
     if(phoMatchingJetIndx<0) continue;
     int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
-    if(sBin7!=3) continue;
+    // if(sBin7!=3) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
     process = process && ST>500 && MET > 100 && nHadJets >=2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
     
@@ -704,7 +704,6 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 TLorentzVector LostMuon::getBestPhoton(){
   vector<TLorentzVector> goodPho;
   vector<int> goodPhoIndx;
-
   for(int iPho=0;iPho<Photons->size();iPho++){
     if( ((*Photons_fullID)[iPho]) && ((*Photons_hasPixelSeed)[iPho]<0.001) ) {
       goodPho.push_back( (*Photons)[iPho] );
@@ -930,3 +929,48 @@ void LostMuon::print(Long64_t jentry){
   //-------------------------------------------------------------------------
   cout<<"^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^"<<endl<<endl;
 }
+
+/*
+
+  bool passID=false;
+  bool passIso=false;
+  //----------------------------
+  for(int iPho=0;iPho<Photons->size();iPho++){
+    if ((*Photons_isEB)[iPho]) {
+      if ((*Photons_hadTowOverEM)[iPho] < 0.05 ){
+	//	if ((*Photons_sigmaIetaIeta)[iPho] < 0.0102) {//lose
+	if ((*Photons_sigmaIetaIeta)[iPho] < 0.010) {//tight
+	  passID = true;
+	}
+      }
+    } else {
+      if ((*Photons_hadTowOverEM)[iPho] < 0.05 ) {
+	//	if ((*Photons_sigmaIetaIeta)[iPho] < 0.0274) {//lose
+	if ((*Photons_sigmaIetaIeta)[iPho] < 0.0268) {//tight
+	  passID = true;
+	}
+      }
+    }
+ 
+    // apply isolation cuts
+    if ((*Photons_isEB)[iPho]) {
+      //      if ((*Photons_pfNeutralIsoRhoCorr)[iPho] < (1.92 + 0.014*(*Photons)[iPho].Pt() + 0.000019*(*Photons)[iPho].Pt()*(*Photons)[iPho].Pt()) && (*Photons_pfGammaIsoRhoCorr)[iPho] < (0.81 + 0.0053*(*Photons)[iPho].Pt())) {//loose
+      if ((*Photons_pfNeutralIsoRhoCorr)[iPho] < (0.97 + 0.014*(*Photons)[iPho].Pt() + 0.000019*(*Photons)[iPho].Pt()*(*Photons)[iPho].Pt()) && (*Photons_pfGammaIsoRhoCorr)[iPho] < (0.8 + 0.0053*(*Photons)[iPho].Pt())) {//tight
+	if ((*Photons_pfChargedIsoRhoCorr)[iPho] < 0.76) {
+	  passIso = true;
+	}
+      }
+    } else {
+      //      if ((*Photons_pfNeutralIsoRhoCorr)[iPho] < (11.86 + 0.0139*(*Photons)[iPho].Pt() + 0.000025*(*Photons)[iPho].Pt()*(*Photons)[iPho].Pt())  && (*Photons_pfGammaIsoRhoCorr)[iPho] < (0.83 + 0.0034*(*Photons)[iPho].Pt())) {//loose
+      if ((*Photons_pfNeutralIsoRhoCorr)[iPho] < (2.09 + 0.0139*(*Photons)[iPho].Pt() + 0.000025*(*Photons)[iPho].Pt()*(*Photons)[iPho].Pt())  && (*Photons_pfGammaIsoRhoCorr)[iPho] < (0.16 + 0.0034*(*Photons)[iPho].Pt())) {//tight
+	if ((*Photons_pfChargedIsoRhoCorr)[iPho] < 0.56) {
+	  passIso = true;
+	}
+      }
+    }
+    if(!passIso || !passID || (*Photons_hasPixelSeed)[iPho] > 0.01) continue;
+    goodPho.push_back( (*Photons)[iPho] );
+    goodPhoIndx.push_back(iPho);
+  }
+  //-------------------------
+*/

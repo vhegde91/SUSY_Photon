@@ -59,7 +59,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
-    wt=1.0;
+    wt=1.0;//Weight*1000.*lumiInfb;
     
     bool process=true;
     if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
@@ -202,9 +202,10 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
     //if(!(passPhoton165HE10Trigger || passPhoton135MET100Trigger)) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
     //apply baseline selections
-    process = process && ST>500 && metstar.Pt() > 100 && nHadJets >=2 && bestPhoton.Pt() > 100 && dphi1 > 0.3 && dphi2 > 0.3 ;
+    process = process && ST>500 && metstar.Pt() > 100 && nHadJets >=2 && bestPhoton.Pt() > 100 && (dphi1 > 0.3 && dphi2 > 0.3) ;
     //    process = process && ST>500 && nHadJets >=2 && bestPhoton.Pt() > 100 && dphi1 > 0.3 && dphi2 > 0.3 ;
     if(ignoreLeps && MET > 100) continue;
+    if(bestPhoton.Pt() < 190) continue;
 
     if(process && hadJetID){
       evtSurvived++;

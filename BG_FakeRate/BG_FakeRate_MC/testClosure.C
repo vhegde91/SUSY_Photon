@@ -70,16 +70,16 @@ void testClosure(TString iFname){
   
   TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
   TCanvas *c_cA[name1.size()];
-  TLine *line1=new TLine( 8.5,0.05,  8.5,100);
-  TLine *line2=new TLine(15.5,0.05, 15.5,100);
-  TLine *line3=new TLine(22.5,0.05, 22.5,100);
-  TLine *line4=new TLine(29.5,0.05, 29.5,100);
-  TLine *line5=new TLine(36.5,0.05, 36.5,10 );
-  TLine *line1V7=new TLine( 6.5,0.01,  6.5,200);
-  TLine *line2V7=new TLine(11.5,0.01, 11.5,200);
-  TLine *line3V7=new TLine(16.5,0.01, 16.5,200);
-  TLine *line4V7=new TLine(21.5,0.01, 21.5,200);
-  TLine *line5V7=new TLine(26.5,0.01, 26.5,20 );
+  TLine *line1=new TLine( 8.5,0.01,  8.5,90);
+  TLine *line2=new TLine(15.5,0.01, 15.5,90);
+  TLine *line3=new TLine(22.5,0.01, 22.5,90);
+  TLine *line4=new TLine(29.5,0.01, 29.5,90);
+  TLine *line5=new TLine(36.5,0.01, 36.5,9 );
+  TLine *line1V7=new TLine( 6.5,0.01,  6.5,100);
+  TLine *line2V7=new TLine(11.5,0.01, 11.5,100);
+  TLine *line3V7=new TLine(16.5,0.01, 16.5,100);
+  TLine *line4V7=new TLine(21.5,0.01, 21.5,100);
+  TLine *line5V7=new TLine(26.5,0.01, 26.5,10 );
   //  TCanvas *c_cB=new TCanvas("closure_test","closure test",1500,800); c_cB->Divide(4,2);
   TPad *p_top[name1.size()];
   TPad *p_bot[name1.size()];
@@ -110,7 +110,7 @@ void testClosure(TString iFname){
       h_histE->Rebin(rebin[i]);//h_histE->Scale(1.0/h_histE->Integral());
      
       if(h_histG && h_histE){
-	if(name1[i]=="nHadJets_Mu0"){
+	if(name1[i]=="nHadJets_Pho"){
 	  sr_Integral=h_histG->Integral();
 	  cr_Integral=h_histE->Integral();
 	}
@@ -134,13 +134,16 @@ void testClosure(TString iFname){
 
 	c_cA[i]->cd();p_top[i]->cd();
 	//c_cB->cd(i+1);p_top[i]->cd();
-	h_histG->Draw("histe");
+	h_histG->Draw("e1");
+	h_histG->Draw("same e0");
 	// h_histE->SetFillStyle(3004);
 	// h_histE->SetFillColor(h_histE->GetLineColor());
- 	h_histE->Draw("same histe");
+ 	h_histE->Draw("same e1");
+ 	h_histE->Draw("same e0");
 	//	h_histE->Draw("L same");
 
-	legend[i]=new TLegend(0.65, 0.85,  0.87, 0.67);
+	legend[i]=new TLegend(0.65, 0.88,  0.87, 0.7);
+	legend[i]->SetBorderSize(0);
 	name=name1[i];
 	legend[i]->AddEntry(h_histG,"Exp(MC Truth)","lp");
 	name=name2[i];
@@ -167,13 +170,13 @@ void testClosure(TString iFname){
 
     h_numr->SetLineColor(kBlack);
     h_numr->SetMarkerColor(kBlack);
-    h_numr->SetTitle(";;#frac{Exp}{Pred}");
+    h_numr->SetTitle(";;#frac{Exp}{Pred  }");
     h_numr->GetXaxis()->SetLabelSize(0.13);
     h_numr->GetXaxis()->SetTitle(xaxisName);
     h_numr->GetXaxis()->SetTitleSize(0.13);
-    h_numr->GetXaxis()->SetTitleOffset(0.9);
+    h_numr->GetXaxis()->SetTitleOffset(0.95);
 
-    h_numr->GetYaxis()->SetTitleOffset(0.29);
+    h_numr->GetYaxis()->SetTitleOffset(0.35);
     h_numr->GetYaxis()->SetTitleSize(0.13);
     h_numr->GetYaxis()->SetLabelSize(0.13);
     h_numr->GetYaxis()->SetNdivisions(505);
@@ -182,6 +185,7 @@ void testClosure(TString iFname){
     c_cA[i]->cd();    p_bot[i]->cd();
     //    c_cB->cd(i+1);    p_bot[i]->cd();
     h_numr->Draw("e0");
+    h_numr->Draw("e1 same");
 
     TString name = h_histG->GetName();
     if(name.Contains("SBins_v4")){ 
@@ -201,10 +205,9 @@ void testClosure(TString iFname){
     
     c_cA[i]->cd();    p_top[i]->cd();
     char name2[100];
-    textOnTop.SetTextSize(0.06);
-    intLumiE.SetTextSize(0.06);
+    textOnTop.SetTextSize(0.07);
+    intLumiE.SetTextSize(0.07);
     textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation}}");
-    intLumiE.SetTextSize(0.06);
     sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
     intLumiE.DrawLatexNDC(0.73,0.91,name2);
 
@@ -221,18 +224,28 @@ void testClosure(TString iFname){
 TString getXaxisName(TString axname){
   if(axname.Contains("nHadJets")) return "Jets";
   else if(axname.Contains("ST")) return "ST(GeV)";
-  else if(axname.Contains("BTags")) return "b-Tags";
+  else if(axname.Contains("BTags")) return "b tags";
   else if(axname.Contains("ElePt")) return "e pT(GeV)";
+  else if(axname.Contains("EleEta")) return "e #eta";
+  else if(axname.Contains("ElePhi")) return "e #Phi";
+  else if(axname.Contains("MuPt")) return "#mu pT(GeV)";
+  else if(axname.Contains("MuEta")) return "#mu #eta";
   else if(axname.Contains("PhotonPt")) return "#gamma pT(GeV)";
-  else if(axname.Contains("mT_")) return "mT(GeV)";
+  else if(axname.Contains("PhotonEta")) return "#gamma #eta";
+  else if(axname.Contains("PhotonPhi")) return "#gamma #Phi";
+  else if(axname.Contains("mTPhoEleMET")) return "mT(#gamma+e,p_{T}^{miss})(GeV)";
+  else if(axname.Contains("mTPho")) return "mT(#gamma,p_{T}^{miss})(GeV)";
+  else if(axname.Contains("dR_ElePho")) return "#DeltaR(e,#gamma)";
   else if(axname.Contains("AllSBin")) return "Bin Number";
+  else if(axname.Contains("nVtx")) return "No. of primary vertices";
   else if(axname.Contains("dPhi_METjet1") || axname.Contains("dphi1_METjet1")) return "#Delta#Phi_{1}";
   else if(axname.Contains("dPhi_METjet2") || axname.Contains("dphi2_METjet2")) return "#Delta#Phi_{2}";
   else if(axname.Contains("dPhi_METBestPhoton") ) return "#Delta#Phi(MET,#gamma)";
-  else if(axname.Contains("QMut") || axname.Contains("Qmut")) return "QMult";
-  else if(axname.Contains("MET")) return "MET(GeV)";
+  else if(axname.Contains("dPhi_Muon_Photon") ) return "#Delta#Phi(#mu,#gamma)";
+  else if(axname.Contains("QMut") || axname.Contains("Qmult")) return "QMult";
+  else if(axname.Contains("MT_Ele")) return "mT(e,p_{T}^{miss})(GeV)";
+  else if(axname.Contains("MET")) return "p_{T}^{miss}(GeV)";
   else return axname;
-
 }
 
 

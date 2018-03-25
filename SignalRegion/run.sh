@@ -18,9 +18,12 @@ hadd -f ZGZJ_NuNuG.root ZJetsToNuNu.root ZGJetsToNuNuG.root
 ./analyzeLightBSM runList_T5qqqqHg_1600_1000.txt T5qqqqHg_1600_1000_FastSim.root FastSim_T5qqqqHg
 ./analyzeLightBSM runList_T5qqqqHg_1600_1550.txt T5qqqqHg_1600_1550_FastSim.root FastSim_T5qqqqHg
 
-./analyzeLightBSM runList_T1bbbb_ZG_mGl1600_NLSP150.txt T1bbbb_ZG_mGl1600_NLSP150.root SignalZ
-./analyzeLightBSM runList_T1bbbb_ZG_mGl1600_NLSP1000.txt T1bbbb_ZG_mGl1600_NLSP1000.root SignalZ
-./analyzeLightBSM runList_T1bbbb_ZG_mGl1600_NLSP1550.txt T1bbbb_ZG_mGl1600_NLSP1550.root SignalZ
+./analyzeLightBSM runList_T6ttZg_900_100.txt T6ttZg_900_100_FastSim.root FastSim_T6ttZg
+./analyzeLightBSM runList_T6ttZg_900_750.txt T6ttZg_900_750_FastSim.root FastSim_T6ttZg
+
+#./analyzeLightBSM runList_T1bbbb_ZG_mGl1600_NLSP150.txt T1bbbb_ZG_mGl1600_NLSP150.root SignalZ
+#./analyzeLightBSM runList_T1bbbb_ZG_mGl1600_NLSP1000.txt T1bbbb_ZG_mGl1600_NLSP1000.root SignalZ
+#./analyzeLightBSM runList_T1bbbb_ZG_mGl1600_NLSP1550.txt T1bbbb_ZG_mGl1600_NLSP1550.root SignalZ
 
 
 #./analyzeLightBSM runList_ZJetsToNuNu.txt ZJetsToNuNu.root nonprompt

@@ -18,7 +18,7 @@
 #include"THStack.h"
 #include"TStyle.h"
 
-const int nfiles=11,nBG=8;    //Specify no. of files
+const int nfiles=10,nBG=8;    //Specify no. of files
 TFile *f[nfiles];
 //int col[10]={kOrange,kBlue,kTeal+9,kGray+1,kCyan,kOrange-9,kYellow+2,kRed,kMagenta+2,kMagenta};  //Specify Colors
 //int col[11]={kOrange,kBlue,kTeal+9,kOrange-9,kGray+1,kCyan,kMagenta+2,kPink+1,kRed,kMagenta,kBlue+2};  //Specify Colors
@@ -46,12 +46,12 @@ void StackHists(){
   f[5] = new TFile("ZGJetsToNuNuG.root");
   f[6] = new TFile("QCD.root");
   f[7] = new TFile("GJets.root");
-  //f[8] = new TFile("HG_NLSP150.root");
-  //  f[9] = new TFile("HG_NLSP1000.root");
-  //  f[8] = new TFile("HG_NLSP150.root");
-  f[8] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
-  f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
-  f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
+  // f[8] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
+  // f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
+  // f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
+  f[8] = new TFile("T6ttZg_900_100_FastSim.root");
+  f[9] = new TFile("T6ttZg_900_750_FastSim.root");
+
   //  f[10] = new TFile("T5qqqqHg_2000_127.root");
   //  f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
   

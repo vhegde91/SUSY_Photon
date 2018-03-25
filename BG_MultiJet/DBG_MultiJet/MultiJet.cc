@@ -155,10 +155,11 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     // }
     // if(abs(dphiG_MET) < 0.5) continue;
     // if(mtPho<100) continue;
-    // int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
-    // if(sBin7!=3) continue;
+    int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
+    //    if(sBin7!=4) continue;
     // if(photonMatchingJetIndx<0) continue;
     // if(((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()) > 1.0) continue;//slewrate affected events
+
     if(photonMatchingJetIndx>=0 && ((*Jets)[photonMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
     if(photonMatchingJetIndx<0) continue;
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
@@ -167,6 +168,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     if(process){
       h_RunNum->Fill(RunNum);
       h_intLumi->Fill(lumiInfb,wt);
+      
       //------------------------ Sbins----------------------------
       int searchRegion=0,sBin1=-100,m_i1=0;
       if     (nHadJets >= 2 && nHadJets <= 4 ){ searchRegion=1; sBin1 = 0;}
@@ -206,6 +208,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	
 	h_ST_[r_i]->Fill(ST,wt);
 	h_MET_[r_i]->Fill(MET,wt);
+	h_METclean_[r_i]->Fill(METclean,wt);
 	h_nHadJets_[r_i]->Fill(nHadJets,wt);
 	h_BTags_[r_i]->Fill(BTags,wt);
 	h_nVtx_[r_i]->Fill(NVtx,wt);
@@ -255,6 +258,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	if(regType=='A' || regType=='B'){
 	  h_ST_AB->Fill(ST,wt);
 	  h_MET_AB->Fill(MET,wt);
+	  h_METclean_AB->Fill(METclean,wt);
 	  h_nHadJets_AB->Fill(nHadJets,wt);
 	  h_BTags_AB->Fill(BTags,wt);
 	  h_nVtx_AB->Fill(NVtx,wt);
@@ -309,6 +313,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  //	  if(sBin7==3) cout<<RunNum<<":"<<LumiBlockNum<<":"<<EvtNum<<endl;
 	  h_ST_CD->Fill(ST,wt);
 	  h_MET_CD->Fill(MET,wt);
+	  h_METclean_CD->Fill(METclean,wt);
 	  h_nHadJets_CD->Fill(nHadJets,wt);
 	  h_BTags_CD->Fill(BTags,wt);
 	  h_nVtx_CD->Fill(NVtx,wt);

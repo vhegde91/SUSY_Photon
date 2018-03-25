@@ -328,7 +328,7 @@ void FakeRateEst::BookHistogram(const char *outFileName) {
   h_MET_Ele=new TH1D("MET_Ele","MET_Ele",200,0,2000);
   h_nHadJets_Ele=new TH1D("nHadJets_Ele","no. of jets(only hadronic jets,not counting photon)_Ele",25,0,25);
   h_BTags_Ele=new TH1D("nBTags_Ele","no. of B tags_Ele",10,0,10);
-  h_mT_Ele = new TH1D("mT_Ele","mT(MET, electron)",150,0,1500);
+  h_mT_Ele = new TH1D("mT_Ele","mT(MET, electron)",200,0,2000);
   h_METvBin_Ele=new TH1D("METvarBin_Ele","MET with variable bin size_Ele",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_MET_Ele_R[0] = new TH1D("MET_Ele_R1","MET: NJ=2to4 for electron events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_MET_Ele_R[1] = new TH1D("MET_Ele_R2","MET: NJ=5or6 for electron events",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
