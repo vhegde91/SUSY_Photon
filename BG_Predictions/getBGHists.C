@@ -449,7 +449,18 @@ void c_getBGHists::getZGHist(int i_f){
     TH1D *hTFfinal = (TH1D*)hCS->Clone("AllSBins_v7_ZGTFfinal");
     hTFfinal->Add(h_highOrd);//mc stat unc+high order unc
     hTFfinal->Multiply(hTFpurity);
-    hTFfinal->Scale(1.0/(hCS->Integral()));
+    double intgl0b=hCS->Integral(1,16),intgl1b=hCS->Integral(17,31);
+    //    cout<<intgl0b<<"---------"<<intgl1b<<endl;
+    for(int i=1;i<=hTFfinal->GetNbinsX();i++){
+      if(i<=16) {
+	hTFfinal->SetBinContent(i,hTFfinal->GetBinContent(i)/intgl0b);
+	hTFfinal->SetBinError(i,hTFfinal->GetBinError(i)/intgl0b);
+      }
+      else{
+	hTFfinal->SetBinContent(i,hTFfinal->GetBinContent(i)/intgl1b);
+	hTFfinal->SetBinError(i,hTFfinal->GetBinError(i)/intgl1b);
+      }
+    }
 
     TH1D *hPred = (TH1D*)hTFfinal->Clone("AllSBins_v7_ZGPred");
     hPred->Multiply(hLLGdata);
@@ -470,7 +481,7 @@ void c_getBGHists::getZGHist(int i_f){
     // c1.printContents(hTFpurity);
     // c1.printContents(hLLGdata);
     // c1.printContents(hTFfinal);
-    // c1.printContents(hPred);
+    //    c1.printContents(hPred);
   }
   else{
     TH1D *hSF=(TH1D*)hLLGdata->Clone("ZGSF_LDP");
@@ -496,6 +507,7 @@ void c_getBGHists::getZGHist(int i_f){
     hSF->Multiply(hLLGpurity);
     
     TH1D *hTemp = (TH1D*)fl->Get("AllSBins_v7");
+    TH1D *hCS_MC = (TH1D*)hTemp->Clone("AllSBins_v7_ZGCS_LDP_StatUncOnly");
     TH1D *hCS = (TH1D*)hTemp->Clone("AllSBins_v7_ZGCS_LDP");
     hCS->Add(h_highOrd);
     
@@ -503,14 +515,16 @@ void c_getBGHists::getZGHist(int i_f){
     hPred->Multiply(hSF);
    
     fout->cd();
+    hCS_MC->Write();
     hCS->Write();
     hSF->Write();
     hPred->Write();
    
+    //    c1.printContents(hCS_MC);
     // c1.printContents(hCS);
     // c1.printContents(hSF);
     // c1.printContents(h_highOrd);
-    // c1.printContents(hPred);
+    //    c1.printContents(hPred);
   }
 
 }
@@ -559,8 +573,8 @@ void c_getBGHists::getMultiJHist(int i_f){
   // c1.printContents(h_pureUncUp);
   // c1.printContents(h_pureUncDown);
   // c1.printContents(hCSraw);
-  // c1.printContents(hEWSumLDP);
-  // c1.printContents(hCS);
+  //c1.printContents(hEWSumLDP);
+  //  c1.printContents(hCS);
   //----------------do predictions for HDP ----------------------
   hTemp->Reset();
   hTemp = (TH1D*)fout->Get("AllSBins_v7_LElePred");

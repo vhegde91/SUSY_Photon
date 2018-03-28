@@ -18,12 +18,12 @@
 TLatex textOnTop,intLumiE;
 double intLumi = 35.9;
 void getSignificance(TString fName){
-  bool obsSignif = 0;
+  bool obsSignif = 1;
+  if(fName.Contains("Obs")) obsSignif = 1;
+  else obsSignif = 0;
   TFile *f1=new TFile(fName);
   TFile *fout =new TFile("Excl_"+fName,"recreate");
   TH2D *h2_rvalue=(TH2D*)f1->FindObjectAny("mGlmNLSP_r");
-  TH2D *h2_XsecUL=(TH2D*)f1->FindObjectAny("mGlmNLSP_XsecUL");
-  //  TH2D *h2_XsecULup=(TH2D*)f1->FindObjectAny("mGlmNLSP_XsecULUncUp");
  //---------------- set styles----------------
   gStyle->SetOptStat(0);
   gStyle->SetTitle(0);
@@ -44,14 +44,13 @@ void getSignificance(TString fName){
   // h2_rvalue->SetBinContent(h2_rvalue->GetXaxis()->FindBin(1750),h2_rvalue->GetYaxis()->FindBin(1520),4.88);
   //---------------------------------
   //  TCanvas *c3=new TCanvas("c3","c3",1500,1500);
-  TCanvas *c3=new TCanvas("c3","c3",1200,1500);
+  TCanvas *c3=new TCanvas("c3","c3",1600,1200);
   c3->SetLeftMargin(0.15);
   c3->SetRightMargin(0.2);
   // c3->SetBottomMargin(0.12);
   // c3->SetLeftMargin(0.12);
   // c3->SetRightMargin(0.12);
   TGraph2D *gr2d_r = new TGraph2D(h2_rvalue);
-  //  TGraph2D *gr2dXsec = new TGraph2D(h2_XsecUL);
   TGraph2D *gr2dXsec = new TGraph2D(h2_rvalue);
   gr2dXsec->SetNpx(500);
   gr2dXsec->SetNpy(500);
@@ -80,12 +79,16 @@ void getSignificance(TString fName){
   //  c3->SetLogz();
   //gr2dXsec->GetXaxis()->SetLabelSize(0.4);
   //  gr2dXsec->SetMaximum(1.0);
-
-  gr2dXsec->SetMinimum(0.0001);
-  gr2dXsec->SetMaximum(3);
+  //h2_rvalue->Draw();
+  gr2dXsec->SetMinimum(0.00001);
+  //  gr2dXsec->SetMinimum(-1.0);
+  if(!obsSignif) gr2dXsec->SetMaximum(10.);
+  else gr2dXsec->SetMaximum(0.4);
+  
   gr2dXsec->Draw("COLZ");
   if(!obsSignif)  gr1d->Draw("C");
-  gr2dXsec->GetZaxis()->SetTitle("Significance");
+  if(!obsSignif) gr2dXsec->GetZaxis()->SetTitle("Expected Significance");
+  else gr2dXsec->GetZaxis()->SetTitle("Observed Significance");
   gr2dXsec->GetZaxis()->SetTitleSize(0.05);
   gr2dXsec->GetZaxis()->SetTitleOffset(1.1);
 
@@ -109,18 +112,12 @@ void getSignificance(TString fName){
   // TPaveText *text2=new TPaveText(1450,2100,1700,2400,"NB");
   // text2->AddText(binType);   text2->Draw();
 
-  c3->Update();
-  fout->cd();
-  gr2dXsec->Write();
-  TGraph *gr1d_cp=(TGraph*)gr1d->Clone("exp");
-  gr1d_cp->Write();
-
   //----------------------
   //  TPaveText *decayMode = new TPaveText(0.15,0.7, 0.8,0.9,"NDC");
   TPaveText *decayMode = new TPaveText(0.15,0.8, 0.8,0.9,"NDC");
   decayMode->SetShadowColor(0);   decayMode->SetFillColor(0);
   decayMode->SetLineWidth(3);
-  decayMode->AddText(" ");
+  if(!obsSignif) decayMode->AddText(" ");
   if(modelName.Contains("T5qqqqHg")){
     decayMode->AddText("#bf{pp #rightarrow #tilde{g} #tilde{g}, #tilde{g} #rightarrow q #bar{q} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/H #tilde{G}}");
     modelName="T5qqqqHg";}
@@ -142,9 +139,10 @@ void getSignificance(TString fName){
   legText->SetTextSize(0.04);
   legText->SetBorderSize(0);
   legText->SetFillColor(0);
-  legText->AddEntry(gr1d,"Expected 5#sigma","l");
-  //  legText->AddEntry(gr1d_Median,"Expected #pm 1#sigma_{experiment}","l");
-  legText->Draw();
+  if(!obsSignif){
+    legText->AddEntry(gr1d,"Expected 5#sigma","l");
+    legText->Draw();
+  }
 
   //----------------------
   char name3[100];
@@ -153,5 +151,17 @@ void getSignificance(TString fName){
   textOnTop.DrawLatexNDC(0.15,0.91,"CMS #it{#bf{Preliminary}}");
   sprintf(name3,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.63,0.91,name3);
-  
+
+  c3->Update();
+  fout->cd();
+  gr2dXsec->Write();
+  TGraph *gr1d_cp;
+  if(!obsSignif){ 
+    gr1d_cp=(TGraph*)gr1d->Clone("exp");
+    gr1d_cp->Write();
+  }
+  if(obsSignif)c3->SaveAs(modelName+"_ObsSignif.pdf");
+  else c3->SaveAs(modelName+"_ExpSignif.pdf");
 }
+
+

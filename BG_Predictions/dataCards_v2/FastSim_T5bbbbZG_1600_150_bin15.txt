@@ -36,3 +36,4 @@ ZG_highOrdCorr_bM4 lnN  -       -          -      -     1.25       -
 MultiJ_b15 gmN 1     -       -          -          -         -       0.073254
 MultiJHL_bR3 lnN      -       -          -          -         -       1.15972
 MultiJdR_bR3 lnN      -       -          -          -         -       1.28034
+MultiJEW_b15  lnN      -       -          -          -         -        0.176472/0.829194

@@ -36,3 +36,4 @@ ZG_highOrdCorr_bM5 lnN  -       -          -      -     1.35       -
 MultiJ_b11 gmN 1     -       -          -          -         -       0.0663303
 MultiJHL_bR2 lnN      -       -          -          -         -       1.05648
 MultiJdR_bR2 lnN      -       -          -          -         -       1.24364
+MultiJEW_b11  lnN      -       -          -          -         -        0.15128/0.785203

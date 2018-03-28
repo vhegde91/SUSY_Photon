@@ -38,15 +38,15 @@ void GetTF_ZG(){
   //  TFile *fn=new TFile("DCS_ZGToLL.root");  
   //  TFile *fn=new TFile("DCS_ZGToLL_NoZMassWindow.root");  
 
-  TFile *fn=new TFile("CS_ZGZJToNuNuG.root");
-  TFile *fd=new TFile("CS_ZDYToLLG.root");
+  // TFile *fn=new TFile("CS_ZGZJToNuNuG.root");
+  // TFile *fd=new TFile("CS_ZDYToLLG.root");
   //TFile *fd=new TFile("CS_ZDYToLLG_AppTF.root");
 
   // TFile *fn=new TFile("CS_ZGToNuNuG_PtG130_NLO.root");
   // TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO.root");
 
-  // TFile *fn=new TFile("CS_ZGZJToNuNuG_LO_PtG190.root");
-  // TFile *fd=new TFile("CS_ZDYToLLG_LO_PtG190.root");
+  TFile *fn=new TFile("CS_ZGZJToNuNuG_LO_PtG190.root");
+  TFile *fd=new TFile("CS_ZDYToLLG_LO_PtG190.root");
 
   //  TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO_reWtnJ_NLO.root");
     

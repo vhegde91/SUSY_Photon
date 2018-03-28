@@ -1,9 +1,12 @@
 void purityCalc(){
   //data inc, data 0b, data >=1b, mc incl, mc 0b, mc >=1b
-  vector<double> den={31.+5., 31., 5., 32.409+0.111+5.332+0.4718, 32.409+0.111, 5.332+0.4718};
-  vector<double> num={36-0.11101-0.4718, 31-0.11101, 5-0.4718, 32.409+5.332, 32.409, 5.332};
-  vector<double> denErr={6.,sqrt(31.),sqrt(5.),sqrt(1.485*1.485+0.812*0.812+0.0961*0.0961+0.2272*0.2272),sqrt(1.485*1.485+0.0961*0.0961),sqrt(0.812*0.812+0.2272*0.2272)};
-  vector<double> numErr={sqrt(36+0.0961*0.0961+0.2272*0.2272),sqrt(31+0.0961*0.0961),sqrt(5+0.2272*0.2272),sqrt(1.485*1.485+0.812*0.812),1.485,0.8120};
+  //  vector<double> den={31.+5., 31., 5., 32.409+0.111+5.332+0.4718, 32.409+0.111, 5.332+0.4718};
+  vector<double> den={31.+5.,            31.,        5.,       23.53+0.11, 2.55+0.47, 26.08+0.58};
+  vector<double> num={36-0.11101-0.4718, 31-0.11101, 5-0.4718, 23.53,      2.55,      26.08};
+  //  vector<double> denErr={6.,sqrt(31.),sqrt(5.),sqrt(1.485*1.485+0.812*0.812+0.0961*0.0961+0.2272*0.2272),sqrt(1.485*1.485+0.0961*0.0961),sqrt(0.812*0.812+0.2272*0.2272)};
+  vector<double> denErr={6.,               0,         0,sqrt(0.53*0.53+0.1*0.1), sqrt(0.17*0.17+0.23*0.23), sqrt(0.56*0.56+0.25*0.25)};
+  //  vector<double> numErr={sqrt(36+0.0961*0.0961+0.2272*0.2272),sqrt(31+0.0961*0.0961),sqrt(5+0.2272*0.2272),sqrt(1.485*1.485+0.812*0.812),1.485,0.8120};
+  vector<double> numErr={0.,               0.,        0,0.53, 0.17, 0.56};
   
   TH1D *hNum=new TH1D("hNum","hNum",10,0.5,10.5);
   TH1D *hDen=new TH1D("hDen","hDen",10,0.5,10.5);
@@ -22,7 +25,7 @@ void purityCalc(){
   hDen->SetBinContent(8,5);
   // //  hDen->SetBinError(1,sqrt(36));
 
-  TGraphAsymmErrors *gr = new TGraphAsymmErrors(hNum,hDen,"pois");
+  TGraphAsymmErrors *gr = new TGraphAsymmErrors(hNum,hDen);
   //  TGraphAsymmErrors *gr = new TGraphAsymmErrors(den.size(),&(den[0]),&(num[0]),&(numErr[0]),&(numErr[0]),&(denErr[0]),&(denErr[0]));
   gr->Draw();
   gr->Print("ALL");

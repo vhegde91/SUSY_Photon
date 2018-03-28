@@ -18,18 +18,22 @@
 TLatex textOnTop,intLumiE;
 double intLumi = 35.9;
 void overlayExcl(){
-  const int nFiles=6;
+  const int nFiles=2;
   int col[7]={kRed,kBlue,kTeal+9,kBlack,kOrange,kCyan,kMagenta};
   gStyle->SetOptStat(0);
   TCanvas *c1=new TCanvas("c1","c1",1200,1000);
   c1->SetLogz();
   TFile *f[nFiles];
-  f[0]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV3.root"); 
-  f[1]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV5.root");
-  f[2]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV1.root");
-  f[3]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV2.root");
-  f[4]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV4.root");
-  f[5]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV6.root");
+  f[0]=new TFile("Excl_T5ttttZg_LimitPlots_Obs_V7_v3.root"); 
+  f[1]=new TFile("Excl_T5ttttZg_LimitPlots_Obs_V7_v5.root");
+
+  // f[0]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV3.root"); 
+  // f[1]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV5.root");
+  // f[2]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV1.root");
+  // f[3]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV2.root");
+  // f[4]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV4.root");
+  // f[5]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV6.root");
+
   //  f[6]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV7.root");
 
   // f[0]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV4.root");

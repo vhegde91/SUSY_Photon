@@ -36,13 +36,16 @@ void compNLOvsLO(){
   vector<int> rebin;
   double nunu_Integral=0,ll_Integral=0;
 
-  //  TFile *fn=new TFile("CS_ZGToNuNuG_PtG130_NLO.root");
-  //  TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO.root");
+  // TFile *fn=new TFile("CS_ZGToNuNuG_PtG130_NLO.root");
+  // TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO.root");
+
+  // TFile *fn=new TFile("CS_ZDYToLLG_NLO_PtG190.root");
+  // TFile *fd=new TFile("CS_ZDYToLLG_LO_PtG190.root");
+
+  TFile *fn=new TFile("CS_ZGZJToNuNuG_NLO_PtG190.root");
+  TFile *fd=new TFile("CS_ZGZJToNuNuG_LO_PtG190.root");
 
   //  TFile *fd=new TFile("CS_ZGToNuNuG_PtG130_LO_reWtnJ_NLO.root");
-
-  TFile *fn=new TFile("CS_ZGToNuNuG_LO_PtG150.root");//CS_ZGZJToNuNuG_LO_PtG150.root");
-  TFile *fd=new TFile("CS_ZGToLLG_LO_PtG150.root");//CS_ZDYToLLG_LO_PtG150.root");
 
   // TFile *fn=new TFile("/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_ZGamma/CS_ZGToNuNuG_Summer16.ZGTo2NuG_PtG-130_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root");
   // TFile *fd=new TFile("/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_ZGamma/CS_ZJetsToNuNu_Summer16.ZNuNuGJets_MonoPhoton_PtG-130_TuneCUETP8M1_13TeV-madgraph.root");
@@ -106,7 +109,7 @@ void compNLOvsLO(){
     h_den=(TH1D*)fd->FindObjectAny(name2[i]);
     h_num->Rebin(rebin[i]);
     h_den->Rebin(rebin[i]);
-    //    h_den->Scale(6.0);
+
     if(h_num && h_den){
       if(name2[i]=="nHadJets"){
 	nunu_Integral=h_num->Integral();

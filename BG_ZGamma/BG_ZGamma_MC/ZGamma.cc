@@ -265,9 +265,9 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
     //    process = process && ST>500 && MET > 100 && nHadJets >=2 && dphi1 > 0.3 && dphi2 > 0.3 && bestPhoton.Pt() > 100;
     //process = process && ST>500 &&  nHadJets >=2 && bestPhoton.Pt() > 100;//&& metstar.Pt() > 100 && dphi1 > 0.3 && dphi2 > 0.3 ;
     //    if(MET>200) continue;
-    process = process && ST>500 && metstar.Pt()>100 && nHadJets >= 2 && !(dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
+    process = process && ST>500 && metstar.Pt()>100 && nHadJets >= 2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
     //process = process && ST>500 && nHadJets >=2 && bestPhoton.Pt() > 100;
-    //    if(bestPhoton.Pt() < 190) continue;
+    if(bestPhoton.Pt() < 190) continue;
     //    if(BTags!=0) continue;
     //------------------ NNLO corr --------------------
     //    if(genPho1.Pt() < 175) continue;

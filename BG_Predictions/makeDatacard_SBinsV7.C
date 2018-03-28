@@ -188,8 +188,12 @@ void makeDatacard_SBinsV7(double mGl,double mNLSP,TString sigFile){
       double uncDn = h_MultiJPurity->GetBinContent(i)-h_MultiJPurity->GetBinError(i);
       if(uncUp < 1.0 && uncDn > 0.) 
 	outf<<"MultiJEW_b"<<i<<"  lnN "<<"     -       -          -          -         -        "<<uncDn<<"/"<<uncUp<<endl;
-      if(uncUp > 1.0) uncUp = uncUp - 1;
-      if(uncDn < 0.0) uncDn = h_MultiJPurity->GetBinContent(i);
+      else{
+	if(uncUp > 1.0) uncUp = uncUp - 1;
+	if(uncDn < 0.0) uncDn = h_MultiJPurity->GetBinContent(i);
+	outf<<"MultiJEW_b"<<i<<"  lnN "<<"     -       -          -          -         -        "<<uncDn<<"/"<<uncUp<<endl;
+      }
+      
     }
     outf.close();
   }

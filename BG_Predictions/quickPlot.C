@@ -25,10 +25,11 @@ void quickPlot(TString fName,TString histName){
 
   TString xName = "Bin number";
   TString yName = "Events";
-  TString legName = "#gamma+jets Pred";
+  TString legName1 = "Total Pred New";
+  TString legName2 = "Total Pred Old";
   int lineColor = kCyan;
   gStyle->SetOptStat(0);
-  TLegend *leg = new TLegend(0.7, 0.88,  0.86, 0.8);
+  TLegend *leg = new TLegend(0.65, 0.88,  0.84, 0.75);
   TString name = fName,name1 = fName;
   //  name = name.ReplaceAll(".root","")+yName+"_Vs_"+xName;
   name1 = name1.ReplaceAll(".root","");
@@ -38,30 +39,25 @@ void quickPlot(TString fName,TString histName){
   TCanvas *c1 = new TCanvas("c1",name,1500,800);
   c1->SetLogy();
   TFile *f1 = new TFile(fName);
+  TFile *f2 = new TFile("old_pred/"+fName);
   TH1D *h1 = (TH1D*)f1->Get(histName);
-  TH2D *h2 = (TH2D*)f1->Get(histName);
+  TH1D *h1_f2 = (TH1D*)f2->Get(histName);
+
   if(h1){
     h1->GetXaxis()->SetTitle(xName);
     h1->GetYaxis()->SetTitle(yName);
     h1->SetTitle(0);
     //    h1->Draw("histe");
   }
-  if(h2){
-    //    h2->GetYaxis()->SetRangeUser(0.5,1.5);
-    //    h2->SetTitle(fName.ReplaceAll(".root",""));
-    h2->GetXaxis()->SetTitle(xName);
-    h2->GetYaxis()->SetTitle(yName);
-    h2->GetYaxis()->SetTitleOffset(0.9);
-    h2->Draw("colz");
-    c1->SetLogz();
-  }
-  if(!h1 && !h2) {cout<<"Hist Not found"<<endl;}
-  h1->SetLineColor(kBlack);
-  //  h1->SetLineColor(kBlack);
-  h1->Draw("e0 histe");
-  h1->SetFillColor(lineColor);
+  
+  h1->SetLineColor(kRed);
+  h1_f2->SetLineColor(kBlue);
+  h1->Draw("e0");
+  h1_f2->Draw("same");
+  //  h1->SetFillColor(lineColor);
   h1->Draw("same");
-  leg->AddEntry(h1,legName,"f");
+  leg->AddEntry(h1,legName1,"lpe");
+  leg->AddEntry(h1_f2,legName2,"lpe");
   leg->Draw();
   char name2[100];
   textOnTop.SetTextSize(0.04);
@@ -71,6 +67,6 @@ void quickPlot(TString fName,TString histName){
   sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.73,0.91,name2);
 
-  c1->SaveAs(name1+"_.png");
+  //  c1->SaveAs(name1+"_.png");
 
 }
