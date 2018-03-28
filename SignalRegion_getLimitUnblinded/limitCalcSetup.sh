@@ -7,6 +7,7 @@ done
 mv genRecoMET_T5bbbbZg_1600_150.root genRecoMET.root
 mv bTagSFupFile_T5bbbbZg_1600_150.root bTagSFupFile.root
 echo "Copied reqiured files to your area from /uscms/home/vhegde/nobackup/Physics/skims_Run2ProductionV12/SignalRegion_getLimitUnblinded/ ......"
+echo "makeDatacard_SBinsV7_v4.C makes datacards. SBinHists.root contains all the BG hists and their uncertainties. Signal files will be read from eos area when you submit condor jobs. Just one example signal file is present here: FastSim_T5bbbbZg_1600_150.root. You need more files for signal systematics. They are taken from eos for condor jobs. For the example signal, these are the syst files: genRecoMET*.root and bTagSFupFile*.root"
 echo "Setup  CMSSW_7_4_7 . Then if you want to calculate limit for a sample mass point (T5bbbbZg_1600_150) run the following commands:"
 echo "\$\$\$\$\$\$\$\$\$\$\$"
 echo "mkdir dataCards"
