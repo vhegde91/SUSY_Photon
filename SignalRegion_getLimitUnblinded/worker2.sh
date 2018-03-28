@@ -50,7 +50,7 @@ ls
 echo "making datacards"
 mkdir dataCards
 #root -l -q -b 'makeDatacard_SBins.C('${gluinoMass}','${nlspMass}',"'${outRootFile}'")'
-root -l -q -b 'makeDatacard_SBinsV7_v3.C('${gluinoMass}','${nlspMass}',"'${outRootFile}'")'
+root -l -q -b 'makeDatacard_SBinsV7_v4.C('${gluinoMass}','${nlspMass}',"'${outRootFile}'")'
 
 echo "ls dataCards"
 ls dataCards
@@ -59,12 +59,16 @@ combineCards.py dataCards/*.txt > dataCard_${anaArg}_${outName}_${gluinoMass}_${
 echo "calculating limit"
 mH="$(echo "${gluinoMass}+${nlspMass}*0.0001" | bc)"
 echo $mH
+#combine -M Asymptotic dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -n ${outName}_${gluinoMass}_${nlspMass} -m ${mH}
+combine -M ProfileLikelihood --significance dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -n ObsSignif_${outName}_${gluinoMass}_${nlspMass} -m ${mH} -s -1
+combine -M ProfileLikelihood --significance dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -t -1 --expectSignal=1 -n ExpSignif_${outName}_${gluinoMass}_${nlspMass} -m ${mH} -s -1
+##########################
 #combine -M Asymptotic dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -t -1 -n ${outName}_${gluinoMass}_${nlspMass} -m ${mH}
-combine -M Asymptotic dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -n ${outName}_${gluinoMass}_${nlspMass} -m ${mH}
+
 #combine -M ProfileLikelihood dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -t 400 -n ${outName}_${gluinoMass}_${nlspMass} -m ${mH}
 #combine -M ProfileLikelihood dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -t -1 --significance --expectSignal 1 -n ${outName}_${gluinoMass}_${nlspMass} -m ${mH}
 #combine -M HybridNew --frequentist --testStat LHC dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -H ProfileLikelihood --fork 4 -n ${outName}_${gluinoMass}_${nlspMass} -m ${mH}
 #combine -M ProfileLikelihood FastSim_T5bbbbZg_1600_150_bin31.txt -t 10
 rm dataCard_*.txt
 rm bTagSFupFile.root genRecoMET.root
-#rm ${outRootFile}
+rm ${outRootFile}
