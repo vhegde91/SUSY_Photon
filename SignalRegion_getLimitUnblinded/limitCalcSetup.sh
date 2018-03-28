@@ -2,10 +2,10 @@
 for i in makeDatacard_SBinsV7_v4.C SBinHists.root mGl_Xsecpb_absUnc.root multijet combineCards.py higgsCombine.tar PileupHistograms_0121_69p2mb_pm4p6.root T5bbbbZg_MassScan.root T5qqqqHg_MassScan.root T5ttttZg_MassScan.root T6ttZg_MassScan.root btagFiles.tar genRecoMET_T5bbbbZg_1600_150.root bTagSFupFile_T5bbbbZg_1600_150.root worker2.sh *_MassScan_subset.txt calcLimit.sh FastSim_T5bbbbZg_1600_150.root
 do
     echo $i
-#    cp /uscms/home/vhegde/nobackup/Physics/skims_Run2ProductionV12/SignalRegion_getLimitUnblinded/$i .
+    cp /uscms/home/vhegde/nobackup/Physics/skims_Run2ProductionV12/SignalRegion_getLimitUnblinded/$i .
 done
-#mv genRecoMET_T5bbbbZg_1600_150.root genRecoMET.root
-#mv bTagSFupFile_T5bbbbZg_1600_150.root bTagSFupFile.root
+mv genRecoMET_T5bbbbZg_1600_150.root genRecoMET.root
+mv bTagSFupFile_T5bbbbZg_1600_150.root bTagSFupFile.root
 echo "Copied reqiured files to your area from /uscms/home/vhegde/nobackup/Physics/skims_Run2ProductionV12/SignalRegion_getLimitUnblinded/ ......"
 echo "Setup  CMSSW_7_4_7 . Then if you want to calculate limit for a sample mass point (T5bbbbZg_1600_150) run the following commands:"
 echo "\$\$\$\$\$\$\$\$\$\$\$"
