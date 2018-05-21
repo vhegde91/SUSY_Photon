@@ -8,6 +8,7 @@
 #include <cstring>
 #include <string>
 #include <fstream>
+#include "btag/BTagCorrector.h"
 
 using namespace std;
 
@@ -56,7 +57,23 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
   
   TFile *f_ewCorr = TFile::Open("ewk_corr.root");
   TH1D *h_ewCorr = (TH1D*)f_ewCorr->FindObjectAny("znng-130-o");
-
+  
+  //----------- btags SFs-----------------
+  bool applybTagSFs=1;
+  int fListIndxOld=-1;
+  double prob0=-100,prob1=-100;
+  vector<TString> inFileName;
+  TString sampleName;
+  string str1;
+  ifstream runListFile(inputFileList);
+  TFile *currFile;
+  while (std::getline(runListFile, str1)) {
+    inFileName.push_back(str1);
+  }runListFile.close();
+  cout<<"applying b-tag SFs to NuNu+Gamma? "<<applybTagSFs<<endl;
+  BTagCorrector btagcorr;
+  //--------------------------------------
+  
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
 
     // ==============print number of events done == == == == == == == =
@@ -75,6 +92,29 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
     bool process=true;
     if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
 
+    if(!((s_data=="ZGToNuNuG") || (s_data=="ZJetsToNuNu"))) applybTagSFs=false;
+    if(fListIndxOld!=fCurrent){
+      fListIndxOld = fCurrent;
+      sampleName = inFileName[fCurrent];
+      //----------- btags SFs----------------- 
+      if(applybTagSFs){
+        currFile = TFile::Open(sampleName);
+        btagcorr.SetEffs(currFile);
+        btagcorr.SetCalib("btag/CSVv2_Moriond17_B_H_mod.csv");
+      }
+    }
+    vector<double> prob;
+    if(applybTagSFs){
+      //get prob with SF up 
+      // btagcorr.SetBtagSFunc(1); 
+      // btagcorr.SetMistagSFunc(1); 
+      // btagcorr.SetBtagCFunc(1); 
+      // btagcorr.SetMistagCFunc(1); 
+      prob = btagcorr.GetCorrections(Jets,Jets_hadronFlavor,Jets_HTMask);
+      prob0 = prob[0]; prob1 = prob[1]+prob[2]+prob[3];
+      //double corr = btagcorr.GetSimpleCorrection(Jets,Jets_hadronFlavor,Jets_HTMask,Jets_bDiscriminatorCSV); 
+    }
+    
     //    About photons
     TLorentzVector bestPhoton=getBestPhoton();
     if(bestPhotonIndxAmongPhotons<0) continue;
@@ -174,7 +214,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
     }
 
     h_GenPho1Pt->Fill(genPho1.Pt(),wt); 
-    
+   
     //calulate ST and HadJets by cleaning the matching jet.
     bool hadJetID=true;
     int minDRindx=-100,phoMatchingJetIndx=-100,nHadJets=0, minDRindxl1=-100, minDRindxl2=-100;
@@ -267,7 +307,7 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
     //    if(MET>200) continue;
     process = process && ST>500 && metstar.Pt()>100 && nHadJets >= 2 && (dphi1 > 0.3 && dphi2 > 0.3) && bestPhoton.Pt() > 100;
     //process = process && ST>500 && nHadJets >=2 && bestPhoton.Pt() > 100;
-    if(bestPhoton.Pt() < 190) continue;
+    //    if(bestPhoton.Pt() < 190) continue;
     //    if(BTags!=0) continue;
     //------------------ NNLO corr --------------------
     //    if(genPho1.Pt() < 175) continue;
@@ -337,7 +377,13 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
       h_ST->Fill(ST,wt);
       h_MET->Fill(metstar.Pt(),wt);
       h_nHadJets->Fill(nHadJets,wt);
-      h_BTags->Fill(BTags,wt);
+      if(!applybTagSFs) h_BTags->Fill(BTags,wt);
+      else{
+	h_BTags->Fill(0.0,wt*prob[0]);
+	h_BTags->Fill(1.0,wt*prob[1]);
+	h_BTags->Fill(2.0,wt*prob[2]);
+	h_BTags->Fill(3.0,wt*prob[3]);
+      }
       h_BestPhotonPt->Fill(bestPhoton.Pt(),wt);
       h_BestPhotonEta->Fill(bestPhoton.Eta(),wt);
       h_BestPhotonPhi->Fill(bestPhoton.Phi(),wt);
@@ -349,7 +395,13 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
       h_METvBin->Fill(metstar.Pt(),wt);
       h_METvBin_TF->Fill(metstar.Pt(),wt);
       h_STvBin->Fill(ST,wt);
-      h_nBTagsvBin->Fill(BTags,wt);
+      if(!applybTagSFs) h_nBTagsvBin->Fill(BTags,wt);
+      else{
+	h_nBTagsvBin->Fill(0.0,wt*prob[0]);
+	h_nBTagsvBin->Fill(1.0,wt*prob[1]);
+	h_nBTagsvBin->Fill(2.0,wt*prob[2]);
+	h_nBTagsvBin->Fill(3.0,wt*prob[3]);
+      }
 
       h_nVtx->Fill(NVtx,wt);
       h_ZMass->Fill(zmass,wt);
@@ -396,7 +448,19 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
       else if(BTags>=2)                                   h_MET_R_v2[4]->Fill(metstar.Pt(),wt);
       h_SBins->Fill(sBin2,wt);
       h_SBins_v4->Fill(sBin4,wt);
-      h_SBins_v7->Fill(sBin7,wt);
+      if(!applybTagSFs)
+	h_SBins_v7->Fill(sBin7,wt);
+      else{
+	int nBtagsOrg = BTags;
+	BTags = 0;
+	int binNum0 = getBinNoV7(nHadJets);
+	BTags = 1;
+	int binNum1 = getBinNoV7(nHadJets);
+	h_SBins_v7->Fill(binNum0,wt*prob0);
+	h_SBins_v7->Fill(binNum1,wt*prob1);
+	BTags = nBtagsOrg;
+      }
+      
 
       h2_SBinsv7VsnJ->Fill(sBin7,nHadJets,wt);
       //    if(Muons->size()==0){
@@ -405,7 +469,14 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
 	h_ST_2Mu->Fill(ST,wt);
 	h_MET_2Mu->Fill(metstar.Pt(),wt);
 	h_nHadJets_2Mu->Fill(nHadJets,wt);
-	h_BTags_2Mu->Fill(BTags,wt);
+	if(!applybTagSFs) h_BTags_2Mu->Fill(BTags,wt);
+	else{
+	  h_BTags_2Mu->Fill(0.0,wt*prob[0]);
+	  h_BTags_2Mu->Fill(1.0,wt*prob[1]);
+	  h_BTags_2Mu->Fill(2.0,wt*prob[2]);
+	  h_BTags_2Mu->Fill(3.0,wt*prob[3]);
+	}
+	
 	h_METvBin_2Mu->Fill(metstar.Pt(),wt);
 	h_BestPhotonPt_2Mu->Fill(bestPhoton.Pt(),wt);
 	h_BestPhotonEta_2Mu->Fill(bestPhoton.Eta(),wt);
@@ -467,13 +538,31 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
         else if(BTags>=2)                                   h_MET_R_v2_2Mu[4]->Fill(metstar.Pt(),wt);
         h_SBins_2Mu->Fill(sBin2,wt);
 	h_SBins_v4_2Mu->Fill(sBin4,wt);
-	h_SBins_v7_2Mu->Fill(sBin7,wt);
+	if(!applybTagSFs)
+	  h_SBins_v7_2Mu->Fill(sBin7,wt);
+	else{
+	  int nBtagsOrg = BTags;
+	  BTags = 0;
+	  int binNum0 = getBinNoV7(nHadJets);
+	  BTags = 1;
+	  int binNum1 = getBinNoV7(nHadJets);
+	  h_SBins_v7_2Mu->Fill(binNum0,wt*prob0);
+	  h_SBins_v7_2Mu->Fill(binNum1,wt*prob1);
+	  BTags = nBtagsOrg;
+	}
       }
       else if(Electrons->size()==2){
 	h_ST_2Ele->Fill(ST,wt);
 	h_MET_2Ele->Fill(metstar.Pt(),wt);
 	h_nHadJets_2Ele->Fill(nHadJets,wt);
-	h_BTags_2Ele->Fill(BTags,wt);
+	if(!applybTagSFs) h_BTags_2Ele->Fill(BTags,wt);
+	else{
+	  h_BTags_2Ele->Fill(0.0,wt*prob[0]);
+	  h_BTags_2Ele->Fill(1.0,wt*prob[1]);
+	  h_BTags_2Ele->Fill(2.0,wt*prob[2]);
+	  h_BTags_2Ele->Fill(3.0,wt*prob[3]);
+	}
+
 	h_METvBin_2Ele->Fill(metstar.Pt(),wt);
 	h_BestPhotonPt_2Ele->Fill(bestPhoton.Pt(),wt);
 	h_BestPhotonEta_2Ele->Fill(bestPhoton.Eta(),wt);
@@ -534,7 +623,18 @@ void ZGamma::EventLoop(const char *data,const char *inputFileList) {
         else if(BTags>=2)                                   h_MET_R_v2_2Ele[4]->Fill(metstar.Pt(),wt);
         h_SBins_2Ele->Fill(sBin2,wt);
 	h_SBins_v4_2Ele->Fill(sBin4,wt);
-	h_SBins_v7_2Ele->Fill(sBin7,wt);
+	if(!applybTagSFs)
+	  h_SBins_v7_2Ele->Fill(sBin7,wt);
+	else{
+	  int nBtagsOrg = BTags;
+	  BTags = 0;
+	  int binNum0 = getBinNoV7(nHadJets);
+	  BTags = 1;
+	  int binNum1 = getBinNoV7(nHadJets);
+	  h_SBins_v7_2Ele->Fill(binNum0,wt*prob0);
+	  h_SBins_v7_2Ele->Fill(binNum1,wt*prob1);
+	  BTags = nBtagsOrg;
+	}
       }//e-e + photon events
     }
   } // loop over entries

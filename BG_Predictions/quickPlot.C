@@ -25,8 +25,8 @@ void quickPlot(TString fName,TString histName){
 
   TString xName = "Bin number";
   TString yName = "Events";
-  TString legName1 = "Total Pred New";
-  TString legName2 = "Total Pred Old";
+  TString legName1 = "Z(#nu#bar{#nu})+#gamma Pred New";
+  TString legName2 = "Z(#nu#bar{#nu})+#gamma Pred Old";
   int lineColor = kCyan;
   gStyle->SetOptStat(0);
   TLegend *leg = new TLegend(0.65, 0.88,  0.84, 0.75);
@@ -39,7 +39,7 @@ void quickPlot(TString fName,TString histName){
   TCanvas *c1 = new TCanvas("c1",name,1500,800);
   c1->SetLogy();
   TFile *f1 = new TFile(fName);
-  TFile *f2 = new TFile("old_pred/"+fName);
+  TFile *f2 = new TFile("SBinHists_0b1bNorm.root");
   TH1D *h1 = (TH1D*)f1->Get(histName);
   TH1D *h1_f2 = (TH1D*)f2->Get(histName);
 

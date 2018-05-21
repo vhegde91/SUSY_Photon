@@ -24,8 +24,8 @@ void overlayExcl(){
   TCanvas *c1=new TCanvas("c1","c1",1200,1000);
   c1->SetLogz();
   TFile *f[nFiles];
-  f[0]=new TFile("Excl_T5ttttZg_LimitPlots_Obs_V7_v3.root"); 
-  f[1]=new TFile("Excl_T5ttttZg_LimitPlots_Obs_V7_v5.root");
+  // f[0]=new TFile("Excl_T5ttttZg_LimitPlots_Obs_V7_v3.root"); 
+  // f[1]=new TFile("Excl_T5ttttZg_LimitPlots_Obs_V7_v5.root");
 
   // f[0]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV3.root"); 
   // f[1]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV5.root");
@@ -38,14 +38,15 @@ void overlayExcl(){
 
   // f[0]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV4.root");
   // f[1]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV7.root");
-  // f[2]=new TFile("EMHT_Limits_Knut/T5qqqqHg_v20/saved_graphs1d_limit.root");
+  // f[0]=new TFile("Excl_T5ttttZg_LimitPlots_Obs_V7_v7.root"); 
+  // f[1]=new TFile("EMHT_Limits_Knut/T5ttttZg_v20/saved_graphs1d_limit.root");
   // f[0]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7.root");
   // f[1]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7_ObsTotBG.root");
   // f[2]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7_ObsTotBG_r.root");
   //  f[2]=new TFile("EMHT_Limits_Knut/T5bbbbZg_v20/saved_graphs1d_limit.root");
   // f[5]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV6.root");
-  //  f[1]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV4_mT100.root");
-  //  f[1]=new TFile("a.root");
+  f[0]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV7_v2.root");
+  f[1]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV7_HybridNew.root");
   // f[1]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV4.root");
   // f[2]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV4.root");
   //  f[2]=new TFile("EMHT_Limits_Knut/T5ttttZg_v20/saved_graphs1d_limit.root");
@@ -81,6 +82,8 @@ void overlayExcl(){
     if(fName.Contains("SbinV4")) fName = "(N_{2-4}, N_{5-6}, N_{#geq7}) x (N^{0}, N^{#geq1})";
     if(fName.Contains("SbinV5")) fName = "Merged MET";
     if(fName.Contains("SbinV6")) fName = "(N_{2-4}, N_{5-6}) x (N^{0}, N^{1}) + N_{#geq7} ";
+    if(fName.Contains("V7_v2")) fName = "Asymptotic";//"Photon+(b)Jets";
+    if(fName.Contains("HybridNew")) fName = "HybridNew";
 
     // if(fName.Contains("EMHT")) fName = "HT#gamma";
     // if(fName.Contains("SbinV1")) fName = "V1:NJ bins, Incl b's";

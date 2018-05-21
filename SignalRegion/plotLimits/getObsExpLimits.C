@@ -115,7 +115,8 @@ void getObsExpLimits(TString fName){
   h2_XsecUL->SetMinimum(zMin);
   h2_XsecUL->SetMaximum(zMax);
   h2_XsecUL->Draw();
-  if(modelName!="T6ttZg")  h2_XsecUL->SetTitle(";m_{#tilde{g}}(GeV);m_{#tilde{#chi}_{1}^{0}}(GeV)");
+  cout<<modelName<<endl;
+  if(!(modelName.Contains("T6ttZg")))  h2_XsecUL->SetTitle(";m_{#tilde{g}}(GeV);m_{#tilde{#chi}_{1}^{0}}(GeV)");
   else                     h2_XsecUL->SetTitle(";m_{ #tilde{t} }(GeV);m_{#tilde{#chi}_{1}^{0}}(GeV)");
 
   //  gr2dXsec->SetHistogram(h2_XsecUL);
