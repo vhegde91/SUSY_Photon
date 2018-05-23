@@ -11,7 +11,7 @@ observation 0
 bin 15 15 15 15 15 15 
 process FastSim_T5bbbbZg_1600_150_bin15 LEle_bin15 LMuTau_bin15 Fake_bin15 ZG_bin15 MultiJ_bin15 
 process 0 1 2 3 4 5 
-rate 0.292814 0.336931 0.727376 0.168161 0.172947 0.0731853 
+rate 0.292814 0.336931 0.727376 0.168161 0.160427 0.0706857 
 ------------
 sigLumiTrig lnN              1.032      -       -       -       -       -
 sigStat_b15 lnN       1.03549    -       -       -       -       -
@@ -29,14 +29,15 @@ LMuTauTFUnc_b15 lnN   -       -     1.13628      -       -       -
 LMuLeptSF_bM4 lnN     -     -    1.03     -       -       -
 LLeptPDF_b lnN     -     1.05     1.015       -       -       -
 FakeUncRate_b15 lnN   -       -          -    1.25412    -       -
-FakeRate_SF_b lnN   -       -          -    1.1    -       -
+FakeRate_SF_b lnN   -       -          -    1.14    -       -
 FakeRate_PU_b lnN   -       -          -    1.06    -       -
 FakeRate_ISR_b lnN   -       -          -    1.02    -       -
-ZG_mcStat_b15 lnN     -       -          -      -     1.34731       -
-ZGTF_bA gmN 31         -       -          -      -     0.00557895       -
-ZGTFpurity_bA lnN  -       -          -      -     1.02532     -
-ZG_highOrdCorr_bR3 lnN  -       -          -      -     1.25       -
-MultiJ_b15 gmN 1     -       -          -          -         -       0.0731853
+ZG_mcStat_b15 lnN     -       -          -      -     1.29969       -
+ZGTF_b gmN 36         -       -          -      -     0.0044563       -
+ZGTFpurity_b lnN  -       -          -      -     1.03608     -
+ZG_highOrdCorr_bM4 lnN  -       -          -      -     1.25       -
+ZG_bTagSF_bA lnN  -       -          -      -     1.02       -
+MultiJ_b15 gmN 1     -       -          -          -         -       0.0706857
 MultiJHL_bR3 lnN      -       -          -          -         -       1.1598
 MultiJdR_bR3 lnN      -       -          -          -         -       1.28034
-MultiJEW_b15  lnN      -       -          -          -         -        0.176472/0.829194
+MultiJEW_b15  lnN      -       -          -          -         -        0.170458/0.823215

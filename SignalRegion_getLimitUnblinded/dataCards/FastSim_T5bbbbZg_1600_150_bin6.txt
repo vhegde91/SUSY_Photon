@@ -11,7 +11,7 @@ observation 6
 bin 6 6 6 6 6 6 
 process FastSim_T5bbbbZg_1600_150_bin6 LEle_bin6 LMuTau_bin6 Fake_bin6 ZG_bin6 MultiJ_bin6 
 process 0 1 2 3 4 5 
-rate 0.102079 0 1.22868 0.792792 2.67592 0.412958 
+rate 0.102079 0 1.22868 0.792792 2.7986 0.410947 
 ------------
 sigLumiTrig lnN              1.032      -       -       -       -       -
 sigStat_b6 lnN       1.09843    -       -       -       -       -
@@ -29,14 +29,15 @@ LMuTauTFUnc_b6 lnN   -       -     1.06265      -       -       -
 LMuLeptSF_bM7 lnN     -     -    1.03     -       -       -
 LLeptPDF_b lnN     -     1.05     1.015       -       -       -
 FakeUncRate_b6 lnN   -       -          -    1.17955    -       -
-FakeRate_SF_b lnN   -       -          -    1.1    -       -
+FakeRate_SF_b lnN   -       -          -    1.14    -       -
 FakeRate_PU_b lnN   -       -          -    1.06    -       -
 FakeRate_ISR_b lnN   -       -          -    1.02    -       -
-ZG_mcStat_b6 lnN     -       -          -      -     1.05279       -
-ZGTF_bA gmN 31         -       -          -      -     0.0863201       -
-ZGTFpurity_bA lnN  -       -          -      -     1.02532     -
-ZG_highOrdCorr_bR1 lnN  -       -          -      -     1.4       -
-MultiJ_b6 gmN 2     -       -          -          -         -       0.206479
-MultiJHL_bR1 lnN      -       -          -          -         -       1.02382
+ZG_mcStat_b6 lnN     -       -          -      -     1.05066       -
+ZGTF_b gmN 36         -       -          -      -     0.0777388       -
+ZGTFpurity_b lnN  -       -          -      -     1.03608     -
+ZG_highOrdCorr_bM7 lnN  -       -          -      -     1.4       -
+ZG_bTagSF_bA lnN  -       -          -      -     1.02       -
+MultiJ_b6 gmN 2     -       -          -          -         -       0.205474
+MultiJHL_bR1 lnN      -       -          -          -         -       1.02394
 MultiJdR_bR1 lnN      -       -          -          -         -       1.17059
-MultiJEW_b6  lnN      -       -          -          -         -        0.338449/0.440526
+MultiJEW_b6  lnN      -       -          -          -         -        0.334437/0.436772
