@@ -15,7 +15,7 @@ rate 0.137589 1.67905 13.9474 6.586 16.9818 4.10965
 ------------
 sigLumiTrig lnN              1.032      -       -       -       -       -
 sigStat_b4 lnN       1.08647    -       -       -       -       -
-sigbTag_bA lnN     1.15934    -       -       -       -       -
+sigbTag_b lnN     1.15934    -       -       -       -       -
 sigGenMET_bM4 lnN     1.00327    -       -       -       -       -
 sigISR_bLJ lnN     1.05808    -       -       -       -       -
 sigOther_b4 lnN     1.058    -       -       -       -       -
@@ -35,8 +35,8 @@ FakeRate_ISR_b lnN   -       -          -    1.02    -       -
 ZG_mcStat_b4 lnN     -       -          -      -     1.0194       -
 ZGTF_b gmN 36         -       -          -      -     0.471717       -
 ZGTFpurity_b lnN  -       -          -      -     1.03608     -
-ZG_highOrdCorr_bM4 lnN  -       -          -      -     1.25       -
-ZG_bTagSF_bA lnN  -       -          -      -     1.02       -
+ZG_highOrdCorr_bR1 lnN  -       -          -      -     1.25       -
+ZG_bTagSF_b lnN  -       -          -      -     1.02       -
 MultiJ_b4 gmN 26     -       -          -          -         -       0.158063
 MultiJHL_bR1 lnN      -       -          -          -         -       1.02394
 MultiJdR_bR1 lnN      -       -          -          -         -       1.17059

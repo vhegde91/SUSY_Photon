@@ -1,9 +1,9 @@
 #!/bin/sh
 input_Scan=$1
 anaExe="multijet"
-anaArg="FastSim_T5ttttZg"
+anaArg="FastSim_T6ttZg"
 exeAtWorker="worker2.sh"
-dataSetType="T5ttttZg"
+dataSetType="T6ttZg"
 #filesToTransfer="GJets.root,QCD.root,TTGJets.root,TTJetsHT.root,WGJetsToLNuG.root,WJetsToLNu.root,ZGJetsToNuNuG.root,ZJetsToNuNu.root,makeDatacard_SBins.C,${anaExe},combineCards.py,higgsCombine.tar"
 filesToTransfer="makeDatacard_SBinsV7_v6.C,SBinHists.root,mGl_Xsecpb_absUnc.root,${anaExe},combineCards.py,higgsCombine.tar,PileupHistograms_0121_69p2mb_pm4p6.root,T5bbbbZg_MassScan.root,T5qqqqHg_MassScan.root,T5ttttZg_MassScan.root,T6ttZg_MassScan.root,SignalCont_T6ttZg_LostMu.root,SignalCont_T5ttttZg_LostMu.root,btagFiles.tar"
 
