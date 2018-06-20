@@ -40,4 +40,4 @@ ZG_bTagSF_b lnN  -       -          -      -     0.94       -
 MultiJ_b20 gmN 5     -       -          -          -         -       0.118534
 MultiJHL_bR4 lnN      -       -          -          -         -       1.04921
 MultiJdR_bR4 lnN      -       -          -          -         -       1.25932
-MultiJEW_b20  lnN      -       -          -          -         -        0.491035/0.9999
+MultiJEW_b20  lnN      -       -          -          -         -        0.652438/1.3287
