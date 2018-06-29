@@ -1,0 +1,1 @@
+root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/CS_EleFakes_v2/CS_FR_Summer16.TTJets_HT-2500toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job0.root

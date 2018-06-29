@@ -1,0 +1,45 @@
+#!/bin/sh
+
+condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job10.jdl
+condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job14.jdl
+
+condor_submit Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job47.jdl
+
+condor_submit Spring16Fast.SMS-T5qqqqHg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job20.jdl
+condor_submit Spring16Fast.SMS-T5qqqqHg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job23.jdl
+
+
+#condor_submit Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job32.jdl
+#condor_submit Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job39.jdl
+#condor_submit Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job40.jdl
+#condor_submit Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job44.jdl
+#condor_submit Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job46.jdl
+#condor_submit Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job47.jdl
+#condor_submit Spring16Fast.SMS-T5bbbbZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job50.jdl
+#
+#condor_submit Spring16Fast.SMS-T5qqqqHg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job4.jdl
+#condor_submit Spring16Fast.SMS-T5qqqqHg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job19.jdl
+#condor_submit Spring16Fast.SMS-T5qqqqHg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job20.jdl
+#condor_submit Spring16Fast.SMS-T5qqqqHg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job23.jdl
+#condor_submit Spring16Fast.SMS-T5qqqqHg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job24.jdl
+#condor_submit Spring16Fast.SMS-T5qqqqHg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job25.jdl
+#condor_submit Spring16Fast.SMS-T5qqqqHg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job26.jdl
+#condor_submit Spring16Fast.SMS-T5qqqqHg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job29.jdl
+#
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job8.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job9.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job10.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job14.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job15.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job16.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job17.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job18.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job19.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job21.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job22.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job33.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job34.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job35.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job36.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job37.jdl
+#condor_submit Spring16Fast.SMS-T5ttttZg_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_job42.jdl

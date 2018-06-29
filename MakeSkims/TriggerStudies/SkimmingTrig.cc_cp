@@ -1,0 +1,263 @@
+#define SkimmingTrig_cxx
+#include "SkimmingTrig.h"
+#include <TH2.h>
+#include <TStyle.h>
+#include <TCanvas.h>
+#include <iostream>
+#include <vector>
+#include <cstring>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+int main(int argc, char* argv[])
+{
+
+  if (argc < 2) {
+    cerr << "Please give 3 arguments " << "runList " << " " << "outputFileName" << " " << "dataset" << endl;
+    return -1;
+  }
+  const char *inputFileList = argv[1];
+  const char *outFileName   = argv[2];
+  const char *data          = argv[3];
+
+  SkimmingTrig ana(inputFileList, outFileName, data);
+  cout << "dataset " << data << " " << endl;
+
+  ana.EventLoop(data,inputFileList);
+
+  return 0;
+}
+
+void SkimmingTrig::EventLoop(const char *data,const char *inputFileList) {
+  if (fChain == 0) return;
+
+  Long64_t nentries = fChain->GetEntriesFast();
+  cout << "nentries " << nentries << endl;
+  cout << "Analyzing dataset " << data << " " << endl;
+
+  Long64_t nbytes = 0, nb = 0;
+  int decade = 0;
+  TTree *newtree = fChain->CloneTree(0);
+
+  string s_data=data;
+
+  for (Long64_t jentry=0; jentry<nentries;jentry++) {
+
+    // ==============print number of events done == == == == == == == =
+    // double progress = 10.0 * jentry / (1.0 * nentries);
+    // int k = int (progress);
+    // if (k > decade)
+    //   cout << 10 * k << " %" <<endl;
+    // decade = k;
+    // cout<<"j:"<<jentry<<" fcurrent:"<<fCurrent<<endl;
+    // ===============read this entry == == == == == == == == == == == 
+    Long64_t ientry = LoadTree(jentry);
+    if (ientry < 0) break;
+    nb = fChain->GetEntry(jentry);   nbytes += nb;
+    double wt = 1.0;
+
+    h_selectBaselineYields_->Fill(0);
+    if(!(HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0) ) continue;
+
+    TLorentzVector bestPhoton = getBestPhoton();
+    // if(bestPhotonIndxAmongPhotons<0) continue;
+    // if( (*Photons_hasPixelSeed)[bestPhotonIndxAmongPhotons] > 0.001 ) continue;
+
+    bool passTrg=false,passHTTrg=false,passPhoPtTrg=false,passHTPhoPtTrg=false;
+
+    for(int i=0;i<TriggerNames->size();i++){
+      string trgName=(*TriggerNames)[i];
+      trgName.pop_back();
+      if( trgName=="HLT_Photon90_CaloIdL_PFHT600_v" && (*TriggerPass)[i]==1 ) {	h_selectBaselineYields_->Fill(1); passTrg = true; passHTPhoPtTrg = true;}
+      else if( trgName=="HLT_Photon165_HE10_v" && (*TriggerPass)[i]==1 )      { h_selectBaselineYields_->Fill(2); passTrg = true; passPhoPtTrg = true;}
+      else if( trgName=="HLT_PFHT300_v" && (*TriggerPass)[i]==1 )             { h_selectBaselineYields_->Fill(3); passTrg = true; passHTTrg = true;}
+      else if( trgName=="HLT_PFHT350_v" && (*TriggerPass)[i]==1 )             { h_selectBaselineYields_->Fill(4); passTrg = true; passHTTrg = true;}
+      else if( trgName=="HLT_PFHT400_v" && (*TriggerPass)[i]==1 )             { h_selectBaselineYields_->Fill(5); passTrg = true; passHTTrg = true;}
+      else if( trgName=="HLT_PFHT475_v" && (*TriggerPass)[i]==1 )             { h_selectBaselineYields_->Fill(6); passTrg = true; passHTTrg = true;}
+      else if( trgName=="HLT_PFHT600_v" && (*TriggerPass)[i]==1 )             { h_selectBaselineYields_->Fill(7); passTrg = true; passHTTrg = true;}
+      else if( trgName=="HLT_PFHT650_v" && (*TriggerPass)[i]==1 )             { h_selectBaselineYields_->Fill(8); passTrg = true; passHTTrg = true;}
+      else if( trgName=="HLT_PFHT800_v" && (*TriggerPass)[i]==1 )             { h_selectBaselineYields_->Fill(9); passTrg = true; passHTTrg = true;}
+      else if( trgName=="HLT_PFHT900_v" && (*TriggerPass)[i]==1 )             { h_selectBaselineYields_->Fill(10); passTrg = true; passHTTrg = true;}
+      // cout<<(*TriggerNames)[i]<<" "<<(*TriggerPass)[i]<<" "<<(*TriggerPrescales)[i]<<endl;
+    }
+    if(!passTrg) continue;
+
+    //calulate ST and nHadJets
+    bool hadJetID=true;
+    int minDRindx=-100,phoMatchingJetIndx=-100,nHadJets=0;
+    double minDR=99999,ST=0;
+    vector<TLorentzVector> hadJets;
+
+    for(int i=0;i<Jets->size();i++){
+      if( ((*Jets)[i].Pt() > 30.0) && (abs((*Jets)[i].Eta()) <= 2.4) ){
+	double dR=bestPhoton.DeltaR((*Jets)[i]);
+	if(dR<minDR){minDR=dR;minDRindx=i;}
+      }
+    }
+    
+    for(int i=0;i<Jets->size();i++){
+      if( ((*Jets)[i].Pt() > 30.0) && (abs((*Jets)[i].Eta()) <= 2.4) ){
+	if( !(minDR < 0.3 && i==minDRindx) ){
+	  hadJets.push_back((*Jets)[i]);
+	  if(hadJetID) hadJetID=(*Jets_ID)[i];
+	}
+      }
+    }
+    if( minDR<0.3 ) phoMatchingJetIndx=minDRindx;
+    //now hadJets contains all jets except the one matched to photon. check whether there is energy near photon or not. If yes then add it as a jet.
+    if( phoMatchingJetIndx>=0 ){
+      if( ( ((*Jets)[phoMatchingJetIndx].Pt()) > 1.1*(bestPhoton.Pt()) ) && ( ((*Jets)[phoMatchingJetIndx] - bestPhoton).Pt() > 30) ){
+	hadJets.push_back( (*Jets)[phoMatchingJetIndx] - bestPhoton );
+      }
+    }      
+    //hadJets contains all hadronic type of jets. If there is a matching jet and jetPt/PhotonPt > 1.1 and Pt of (TLorentz[matching jet] - TLorentz[photon]) is > 30,
+    //then photon and hadJets are seperated. If there is no matching jet, then jet collection is used as it is in hadJets.
+    for(int i=0;i<hadJets.size();i++){
+      if( (abs(hadJets[i].Eta()) < 2.4) ){ST=ST+(hadJets[i].Pt());}
+      if( (abs(hadJets[i].Eta()) < 2.4) ){nHadJets++;}
+    }
+    if( minDR<0.3 ) ST=ST+bestPhoton.Pt();//add the pt of photon if and only if there is a matching jet.
+    sortTLorVec(&hadJets);
+    //-----------------------------------------------------------------------
+
+    double dphi1=3.8,dphi2=3.8,dphi3=3.8,dphi4=3.8,dphiG_MET=3.8;
+    if(bestPhoton.Pt()>0.1) dphiG_MET=abs(DeltaPhi(METPhi,bestPhoton.Phi()));
+    if(hadJets.size() > 0 ) dphi1 = abs(DeltaPhi(METPhi,(hadJets)[0].Phi()));
+    if(hadJets.size() > 1 ) dphi2 = abs(DeltaPhi(METPhi,(hadJets)[1].Phi()));
+    if(hadJets.size() > 2 ) dphi3 = abs(DeltaPhi(METPhi,(hadJets)[2].Phi()));
+    if(hadJets.size() > 3 ) dphi4 = abs(DeltaPhi(METPhi,(hadJets)[3].Phi()));
+
+    if(hadJetID){
+      h_intLumi->Fill(intLumi,wt);
+      if(passHTTrg){
+	h_HT_HT->Fill(HT,wt);
+	h_ST_HT->Fill(ST,wt);
+	h_MET_HT->Fill(MET,wt);
+	h_PhotonPt_HT->Fill(bestPhoton.Pt(),wt);
+	h_PhotonEta_HT->Fill(bestPhoton.Eta(),wt);
+	h_PhotonPhi_HT->Fill(bestPhoton.Phi(),wt);
+	if(Electrons->size() > 0){
+	  h_ElePt_HT->Fill((*Electrons)[0].Pt(),wt);
+	  h_EleEta_HT->Fill((*Electrons)[0].Eta(),wt);
+	  h_ElePhi_HT->Fill((*Electrons)[0].Phi(),wt);
+	}
+	if(Muons->size() > 0){
+	  h_MuPt_HT->Fill((*Muons)[0].Pt(),wt);
+	  h_MuEta_HT->Fill((*Muons)[0].Eta(),wt);
+	  h_MuPhi_HT->Fill((*Muons)[0].Phi(),wt);
+	}
+	h_METPhi_HT->Fill(METPhi,wt);
+	h_dPhi1_HT->Fill(dphi1,wt);
+	h_dPhi2_HT->Fill(dphi2,wt);
+	h_dPhi3_HT->Fill(dphi3,wt);
+	h_dPhi4_HT->Fill(dphi4,wt);
+	h_NJets_HT->Fill(NJets,wt);
+	h_nHadJ_HT->Fill(nHadJets,wt);
+	h_nBTags_HT->Fill(BTags,wt);
+      }//passing HT trigger(s)
+      if(passPhoPtTrg){
+	h_HT_PhoPt->Fill(HT,wt);
+	h_ST_PhoPt->Fill(ST,wt);
+	h_MET_PhoPt->Fill(MET,wt);
+	h_PhotonPt_PhoPt->Fill(bestPhoton.Pt(),wt);
+	h_PhotonEta_PhoPt->Fill(bestPhoton.Eta(),wt);
+	h_PhotonPhi_PhoPt->Fill(bestPhoton.Phi(),wt);
+	if(Electrons->size() > 0){
+	  h_ElePt_PhoPt->Fill((*Electrons)[0].Pt(),wt);
+	  h_EleEta_PhoPt->Fill((*Electrons)[0].Eta(),wt);
+	  h_ElePhi_PhoPt->Fill((*Electrons)[0].Phi(),wt);
+	}
+	if(Muons->size() > 0){
+	  h_MuPt_PhoPt->Fill((*Muons)[0].Pt(),wt);
+	  h_MuEta_PhoPt->Fill((*Muons)[0].Eta(),wt);
+	  h_MuPhi_PhoPt->Fill((*Muons)[0].Phi(),wt);
+	}
+	h_METPhi_PhoPt->Fill(METPhi,wt);
+	h_dPhi1_PhoPt->Fill(dphi1,wt);
+	h_dPhi2_PhoPt->Fill(dphi2,wt);
+	h_dPhi3_PhoPt->Fill(dphi3,wt);
+	h_dPhi4_PhoPt->Fill(dphi4,wt);
+	h_NJets_PhoPt->Fill(NJets,wt);
+	h_nHadJ_PhoPt->Fill(nHadJets,wt);
+	h_nBTags_PhoPt->Fill(BTags,wt);
+      }//passing photonPt trigger
+      if(passHTPhoPtTrg){
+	h_HT_HTPhoPt->Fill(HT,wt);
+	h_ST_HTPhoPt->Fill(ST,wt);
+	h_MET_HTPhoPt->Fill(MET,wt);
+	h_PhotonPt_HTPhoPt->Fill(bestPhoton.Pt(),wt);
+	h_PhotonEta_HTPhoPt->Fill(bestPhoton.Eta(),wt);
+	h_PhotonPhi_HTPhoPt->Fill(bestPhoton.Phi(),wt);
+	if(Electrons->size() > 0){
+	  h_ElePt_HTPhoPt->Fill((*Electrons)[0].Pt(),wt);
+	  h_EleEta_HTPhoPt->Fill((*Electrons)[0].Eta(),wt);
+	  h_ElePhi_HTPhoPt->Fill((*Electrons)[0].Phi(),wt);
+	}
+	if(Muons->size() > 0){
+	  h_MuPt_HTPhoPt->Fill((*Muons)[0].Pt(),wt);
+	  h_MuEta_HTPhoPt->Fill((*Muons)[0].Eta(),wt);
+	  h_MuPhi_HTPhoPt->Fill((*Muons)[0].Phi(),wt);
+	}
+	h_METPhi_HTPhoPt->Fill(METPhi,wt);
+	h_dPhi1_HTPhoPt->Fill(dphi1,wt);
+	h_dPhi2_HTPhoPt->Fill(dphi2,wt);
+	h_dPhi3_HTPhoPt->Fill(dphi3,wt);
+	h_dPhi4_HTPhoPt->Fill(dphi4,wt);
+	h_NJets_HTPhoPt->Fill(NJets,wt);
+	h_nHadJ_HTPhoPt->Fill(nHadJets,wt);
+	h_nBTags_HTPhoPt->Fill(BTags,wt);
+      }//passing HT X PhotonPt trigger
+
+
+    }
+    newtree->Fill();
+ 
+  } // loop over entries
+  //  newtree->AutoSave();
+}
+
+TLorentzVector SkimmingTrig::getBestPhoton(){
+  vector<TLorentzVector> goodPho;
+  vector<int> goodPhoIndx;
+  for(int iPho=0;iPho<Photons->size();iPho++){
+    if( (*Photons_fullID)[iPho] ) {
+      goodPho.push_back( (*Photons)[iPho] );
+      goodPhoIndx.push_back(iPho);
+    }
+  }
+  
+  int highPtIndx=-100;
+  for(int i=0;i<goodPho.size();i++){
+    if(i==0) highPtIndx=0;
+    else if( (goodPho[highPtIndx].Pt()) < (goodPho[i].Pt()) ){highPtIndx=i;}
+  }
+  
+  if(highPtIndx>=0){
+    bestPhotonIndxAmongPhotons = goodPhoIndx[highPtIndx];
+  }
+  else bestPhotonIndxAmongPhotons = -100;
+  if(highPtIndx==-100){TLorentzVector v0;return v0;}
+  else return goodPho[highPtIndx];
+}
+
+
+/*
+  int bestPhoIndx=-100;
+  TLorentzVector v1;
+  vector<TLorentzVector> goodPho;
+  for(int iPhoton=0;iPhoton<Photons->size();iPhoton++){
+    if( (*Photons_fullID)[iPhoton] ) goodPho.push_back( (*Photons)[iPhoton] );
+  }
+
+  if(goodPho.size()==0) return v1;
+  else if(goodPho.size()==1) return goodPho[0];
+  else{
+    for(int i=0;i<goodPho.size();i++){
+      if(i==0) bestPhoIndx=0;
+      else if(goodPho[bestPhoIndx].Pt() < goodPho[i].Pt()) bestPhoIndx=i;
+    }
+    return goodPho[bestPhoIndx];
+  }
+*/

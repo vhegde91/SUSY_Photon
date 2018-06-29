@@ -1,0 +1,1 @@
+root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/DCS_GJets_v2/DCS_MultiJets_Run2016C_JetHT_03Feb2017.root

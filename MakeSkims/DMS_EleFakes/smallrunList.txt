@@ -1,0 +1,1 @@
+root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Run2ProductionV12/Run2016H-03Feb2017_ver3-v1.SingleElectron_17_RA2AnalysisTree.root

@@ -42,37 +42,79 @@ void SkimmingSR::EventLoop(const char *data,const char *inputFileList) {
   TTree *newtree = fChain->CloneTree(0);
 
   string s_data = data;
+  //-------------------- for signal only ---------------
+  double momMass = 1600, nlspMass = 1000, nevents=0;
+  if(s_data=="Signal"){
+    TFile *f1 = new TFile("T5bbbbZg_MassScan.root");
+    TH2D *h2_mass = (TH2D*)f1->FindObjectAny("MGlMNLSP");
+    if(!h2_mass){ cout<<"AHHHHH: could not find hist"<<endl; return;}
+    int nxbins = h2_mass->GetNbinsX();
+    int nybins = h2_mass->GetNbinsY();
+    //    cout<<"Nx bins:"<<nxbins<<" Ny bins:"<<nybins<<endl;
+    for(int nx=1;nx<=nxbins;nx++){
+      if(abs(momMass - (h2_mass->GetXaxis()->GetBinCenter(nx))) > 0.1) continue;
+      if(nevents > 9.99) break;
+      for(int ny=1;ny<=nybins;ny++){
+  	if(abs(nlspMass - (h2_mass->GetYaxis()->GetBinCenter(ny))) > 0.1) continue;
+  	else{ nevents = h2_mass->GetBinContent(nx,ny); break;}
+      }
+    }
+    cout<<"No. of entries for mGluino = "<<momMass<<" mNLSP = "<<nlspMass<<" : "<<nevents<<endl;
+  }
+  // NumEvents = nevents;
+  // CrossSection = 0.00810078;//for Gluino mass = 1600 GeV
+  //-------------------- for signal only ends ------------------
 
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
 
     // ==============print number of events done == == == == == == == =
-    // double progress = 10.0 * jentry / (1.0 * nentries);
-    // int k = int (progress);
-    // if (k > decade)
-    //   cout << 10 * k << " %" <<endl;
-    // decade = k;
-    // cout<<"j:"<<jentry<<" fcurrent:"<<fCurrent<<endl;
+    double progress = 10.0 * jentry / (1.0 * nentries);
+    int k = int (progress);
+    if (k > decade)
+      cout << 10 * k << " %" <<endl;
+    decade = k;
+    //cout<<"j:"<<jentry<<" fcurrent:"<<fCurrent<<endl;
     // ===============read this entry == == == == == == == == == == == 
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
+    //----------------- for signal samples --------------------
+    if(s_data=="Signal"){
+      NumEvents = nevents;
+      //    CrossSection = 0.229367;//for Gluino mass = 1050 GeV
+      CrossSection = 0.00810078;//for Gluino mass = 1600 GeV
+      //------------ full sim T5bbbbZG private ------------------
+      //    NumEvents = 33611;//for mGl1600_NLSP150
+      //    NumEvents = 33922;//for mGl1600_NLSP1000
+      //    NumEvents = 33743;//for mGl1600_NLSP1550
+      //------------ full sim T5bbbbZG private ends ------------------
+      Weight = CrossSection/NumEvents;
+      //---------------------------------------------------------
+      if(abs(SusyMotherMass-momMass) > 0.001 || abs(SusyLSPMass-nlspMass) > 0.001) continue;
+      //      cout<<"SusyMotherMass:"<<SusyMotherMass<<" SusyLSPMass:"<<SusyLSPMass<<endl;
+      //      newtree->Fill(); continue;//!!!!!!!!!!!!!!!!!!!!!!  This creates unskimmed tree  !!!!!!!!!!!!!!!!!!!!!!!!
+    }
 
-    if(s_data=="SR_madHT0to600" && madHT>600) continue;//putting a cut on madHT for SingleLept and DiLept samples of TTbar. Do not use for other samples.
     h_selectBaselineYields_->Fill(0);
+    if(s_data=="SR_madHT0to600" && madHT>600) continue;//putting a cut on madHT for SingleLept and DiLept samples of TTbar. Do not use for other samples.
+    h_met0->Fill(MET);
+    h_mht0->Fill(MHT);  
+    h_ht0->Fill(HT);
+    h_nj0->Fill(NJets);
+    
+    for(int ipho=0;ipho<Photons->size();ipho++){
+      h_phopt0->Fill((*Photons)[ipho].Pt());
+    }
+
     if( (Electrons->size()==0) && (Muons->size() == 0) )   h_selectBaselineYields_->Fill(1); //veto leptons
     else continue;
     //---------------------------------------------------------------------------------
 
     //about photons
     TLorentzVector bestPhoton=getBestPhoton();
-    /*  if(Photons->size() && (*Photons)[0].Pt()>100){
-      cout<<"================bestPhotonPt:"<<bestPhoton.Pt()<<" "<<bestPhoton.Eta()<<" "<<bestPhoton.Phi()<<endl;
-      for(int iPhoton=0;iPhoton<Photons->size();iPhoton++){
-	cout<<iPhoton<<" Pt: "<<(*Photons)[iPhoton].Pt()<<" eta: "<<(*Photons)[iPhoton].Eta()<<" phi: "<<(*Photons)[iPhoton].Phi()<<" E: "<<(*Photons)[iPhoton].Energy()<<" "<<(*Photons_fullID)[iPhoton]<<" HT: "<<HT<<" NJ: "<<NJets<<" MET: "<<MET<<endl;
-      }
-    }
-*/
     if(bestPhoton.Pt()<100) continue;
+    h_selectBaselineYields_->Fill(2);
+    
     int minDRindx=-100,phoMatchingJetIndx=-100,nHadJets=0;
     double minDR=99999,ST=0;
     vector<TLorentzVector> hadJets;
@@ -91,39 +133,22 @@ void SkimmingSR::EventLoop(const char *data,const char *inputFileList) {
       }
     }
     if( minDR<0.3 ) phoMatchingJetIndx=minDRindx;
-    //now hadJets contains all jets except the one matched to photon. check whether there is energy near photon or not. If yes then add it as a jet.
-    if( phoMatchingJetIndx>=0 ){
-      if( ( ((*Jets)[phoMatchingJetIndx].Pt()) > 1.1*(bestPhoton.Pt()) ) && ( ((*Jets)[phoMatchingJetIndx] - bestPhoton).Pt() > 30) ){
-	hadJets.push_back( (*Jets)[phoMatchingJetIndx] - bestPhoton );
-      }
-    }      
-    //hadJets contains all hadronic type of jets. If there is a matching jet and jetPt/PhotonPt > 1.1 and Pt of (TLorentz[matching jet] - TLorentz[photon]) is > 30,
-    //then photon and hadJets are seperated. If there is no matching jet, then jet collection is used as it is in hadJets.
     for(int i=0;i<hadJets.size();i++){
       if( (abs(hadJets[i].Eta()) < 2.4) ){ST=ST+(hadJets[i].Pt());}
       if( (abs(hadJets[i].Eta()) < 2.4) ){nHadJets++;}
     }
     if( minDR<0.3 ) ST=ST+bestPhoton.Pt();//add the pt of photon if and only if there is a matching jet.
     //-----------------------------------------------------------------------
-
+    h_st0->Fill(ST);
+    h_nhadj->Fill(nHadJets);
     //select skimming parameters (2 of 2)
-    if( nHadJets >= 2 || NJets >= 2)  h_selectBaselineYields_->Fill(3);
+    if( (nHadJets >= 2) )  h_selectBaselineYields_->Fill(3);
     else continue;
-    if( ST>500. || HT>500 )           h_selectBaselineYields_->Fill(4);
+    if( (ST > 500) )           h_selectBaselineYields_->Fill(4);
     else continue;
-    if( MET>100. )                    h_selectBaselineYields_->Fill(5);
+    if( MET > 100 )                    h_selectBaselineYields_->Fill(5);
     else continue;
     //end of select skimming parameters
-    /*  for(int i=0;i<GenParticles->size();i++){
-      cout<<EvtNum<<" "<<jentry<<" "<<GenParticles->size()<<" "<<i<<" PdgId:"<<(*GenParticles_PdgId)[i]<<" parentId:"<<(*GenParticles_ParentId)[i]<<" parentIndx:"<<(*GenParticles_ParentIdx)[i]<<" Status:"<<(*GenParticles_Status)[i]<<"\tPx:"<<(*GenParticles)[i].Px()<<" Py:"<<(*GenParticles)[i].Py()<<" Pz:"<<(*GenParticles)[i].Pz()<<"\tPt:"<<(*GenParticles)[i].Pt()<<" Eta:"<<(*GenParticles)[i].Eta()<<" Phi:"<<(*GenParticles)[i].Phi()<<" E:"<<(*GenParticles)[i].Energy()<<endl;
-    }
-    for(int i=0;i<Jets->size();i++){
-      if((*Jets)[i].Pt()>30 && abs((*Jets)[i].Eta())<2.4){
-	cout<<"JetPt:"<<(*Jets)[i].Pt()<<" JetEta:"<<(*Jets)[i].Eta()<<" JetPhi:"<<(*Jets)[i].Phi()<<endl;
-      }
-    }
-*/    
-    //
     newtree->Fill();
  
   } // loop over entries
@@ -135,7 +160,7 @@ TLorentzVector SkimmingSR::getBestPhoton(){
   TLorentzVector v1;
   vector<TLorentzVector> goodPho;
   for(int iPhoton=0;iPhoton<Photons->size();iPhoton++){
-    if( (*Photons_fullID)[iPhoton] ) goodPho.push_back( (*Photons)[iPhoton] );
+    if( ((*Photons_fullID)[iPhoton]) && ((*Photons_hasPixelSeed)[iPhoton]<0.001) ) goodPho.push_back( (*Photons)[iPhoton] );
   }
 
   if(goodPho.size()==0) return v1;

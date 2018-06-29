@@ -44,41 +44,40 @@ void SkimmingLostLept::EventLoop(const char *data,const char *inputFileList) {
   string s_data=data;
 
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
-
+    
     // ==============print number of events done == == == == == == == =
-    // double progress = 10.0 * jentry / (1.0 * nentries);
-    // int k = int (progress);
-    // if (k > decade)
-    //   cout << 10 * k << " %" <<endl;
-    // decade = k;
+    double progress = 10.0 * jentry / (1.0 * nentries);
+    int k = int (progress);
+    if (k > decade)
+      cout << 10 * k << " %" <<endl;
+    decade = k;
     // cout<<"j:"<<jentry<<" fcurrent:"<<fCurrent<<endl;
     // ===============read this entry == == == == == == == == == == == 
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
 
-    if(s_data=="CS_LostEle_madHT0to600" && madHT>600 ) continue;//putting a cut on madHT for SingleLept and DiLept samples of TTbar. Do not use for other samples.
+    //    CrossSection = 123.9;//for ZGToLLG Inclv
+    //    CrossSection = 0.1585;//for ZGTo2LG PtG-130                                                                                
+    //    Weight = CrossSection/NumEvents;
+    if(s_data=="CS_LostMu_madHT0to600" && madHT>600 ) continue;//putting a cut on madHT for SingleLept and DiLept samples of TTbar. Do not use for other samples.
     h_selectBaselineYields_->Fill(0);
+    storeBTagEff();
     //---------------------------------- For Lost Muons -----------------------------------------------
     //should not be any electron. Need muons in the sample. Do not say anything about the muons.
     if( Electrons->size() == 0 )   h_selectBaselineYields_->Fill(1);
     else continue;
-    //---------------------------------- For Lost Electrons -----------------------------------------------
+    //---------------------------------- for Lost Electrons -----------------------------------------------
     //should not be any Muon. Need electrons in the sample. Do not say anything about the electrons.
-    /*    if( Muons->size() == 0 )   h_selectBaselineYields_->Fill(1);
-    else continue;*/
+    // if( Muons->size() == 0 )   h_selectBaselineYields_->Fill(1);
+    // else continue;
     //---------------------------------------------------------------------------------
 
     //about photons
     TLorentzVector bestPhoton=getBestPhoton();
-    /*  if(Photons->size() && (*Photons)[0].Pt()>100){
-      cout<<"================bestPhotonPt:"<<bestPhoton.Pt()<<" "<<bestPhoton.Eta()<<" "<<bestPhoton.Phi()<<endl;
-      for(int iPhoton=0;iPhoton<Photons->size();iPhoton++){
-	cout<<iPhoton<<" Pt: "<<(*Photons)[iPhoton].Pt()<<" eta: "<<(*Photons)[iPhoton].Eta()<<" phi: "<<(*Photons)[iPhoton].Phi()<<" E: "<<(*Photons)[iPhoton].Energy()<<" "<<(*Photons_fullID)[iPhoton]<<" HT: "<<HT<<" NJ: "<<NJets<<" MET: "<<MET<<endl;
-      }
-    }
-*/
     if(bestPhoton.Pt()<100) continue;
+    h_selectBaselineYields_->Fill(2);
+    
     int minDRindx=-100,phoMatchingJetIndx=-100,nHadJets=0;
     double minDR=99999,ST=0;
     vector<TLorentzVector> hadJets;
@@ -97,14 +96,6 @@ void SkimmingLostLept::EventLoop(const char *data,const char *inputFileList) {
       }
     }
     if( minDR<0.3 ) phoMatchingJetIndx=minDRindx;
-    //now hadJets contains all jets except the one matched to photon. check whether there is energy near photon or not. If yes then add it as a jet.
-    if( phoMatchingJetIndx>=0 ){
-      if( ( ((*Jets)[phoMatchingJetIndx].Pt()) > 1.1*(bestPhoton.Pt()) ) && ( ((*Jets)[phoMatchingJetIndx] - bestPhoton).Pt() > 30) ){
-	hadJets.push_back( (*Jets)[phoMatchingJetIndx] - bestPhoton );
-      }
-    }      
-    //hadJets contains all hadronic type of jets. If there is a matching jet and jetPt/PhotonPt > 1.1 and Pt of (TLorentz[matching jet] - TLorentz[photon]) is > 30,
-    //then photon and hadJets are seperated. If there is no matching jet, then jet collection is used as it is in hadJets.
     for(int i=0;i<hadJets.size();i++){
       if( (abs(hadJets[i].Eta()) < 2.4) ){ST=ST+(hadJets[i].Pt());}
       if( (abs(hadJets[i].Eta()) < 2.4) ){nHadJets++;}
@@ -113,22 +104,13 @@ void SkimmingLostLept::EventLoop(const char *data,const char *inputFileList) {
     //-----------------------------------------------------------------------
 
     //select skimming parameters (2 of 2)
-    if( nHadJets >= 2 || NJets >= 2)  h_selectBaselineYields_->Fill(3);
+    if( nHadJets >= 2 )  h_selectBaselineYields_->Fill(3);
     else continue;
-    if( ST>500. || HT>500 )           h_selectBaselineYields_->Fill(4);
+    if( ST>500.)         h_selectBaselineYields_->Fill(4);
     else continue;
-    if( MET>80. )                    h_selectBaselineYields_->Fill(5);
+    if( MET>100. )       h_selectBaselineYields_->Fill(5);
     else continue;
     //end of select skimming parameters
-    /*  for(int i=0;i<GenParticles->size();i++){
-      cout<<EvtNum<<" "<<jentry<<" "<<GenParticles->size()<<" "<<i<<" PdgId:"<<(*GenParticles_PdgId)[i]<<" parentId:"<<(*GenParticles_ParentId)[i]<<" parentIndx:"<<(*GenParticles_ParentIdx)[i]<<" Status:"<<(*GenParticles_Status)[i]<<"\tPx:"<<(*GenParticles)[i].Px()<<" Py:"<<(*GenParticles)[i].Py()<<" Pz:"<<(*GenParticles)[i].Pz()<<"\tPt:"<<(*GenParticles)[i].Pt()<<" Eta:"<<(*GenParticles)[i].Eta()<<" Phi:"<<(*GenParticles)[i].Phi()<<" E:"<<(*GenParticles)[i].Energy()<<endl;
-    }
-    for(int i=0;i<Jets->size();i++){
-      if((*Jets)[i].Pt()>30 && abs((*Jets)[i].Eta())<2.4){
-	cout<<"JetPt:"<<(*Jets)[i].Pt()<<" JetEta:"<<(*Jets)[i].Eta()<<" JetPhi:"<<(*Jets)[i].Phi()<<endl;
-      }
-    }
-*/    
     //
     newtree->Fill();
  
@@ -141,7 +123,7 @@ TLorentzVector SkimmingLostLept::getBestPhoton(){
   TLorentzVector v1;
   vector<TLorentzVector> goodPho;
   for(int iPhoton=0;iPhoton<Photons->size();iPhoton++){
-    if( (*Photons_fullID)[iPhoton] ) goodPho.push_back( (*Photons)[iPhoton] );
+    if( ((*Photons_fullID)[iPhoton]) && ((*Photons_hasPixelSeed)[iPhoton]<0.001) ) goodPho.push_back( (*Photons)[iPhoton] );
   }
 
   if(goodPho.size()==0) return v1;
@@ -152,5 +134,32 @@ TLorentzVector SkimmingLostLept::getBestPhoton(){
       else if(goodPho[bestPhoIndx].Pt() < goodPho[i].Pt()) bestPhoIndx=i;
     }
     return goodPho[bestPhoIndx];
+  }
+}
+
+void SkimmingLostLept::storeBTagEff(){
+  double CSVv2WP = 0.8484;
+  for(unsigned ja = 0; ja < Jets->size(); ++ja){
+    //HT jet cuts
+    if(!Jets_HTMask->at(ja)) continue;
+    
+    //fill by flavor
+    int flav = abs(Jets_hadronFlavor->at(ja));
+    double csv = Jets_bDiscriminatorCSV->at(ja);
+    double pt = Jets->at(ja).Pt();
+    //use abs(eta) for now
+    double eta = fabs(Jets->at(ja).Eta());
+    if(flav==5){
+      d_eff_b->Fill(pt,eta);
+      if(csv > CSVv2WP) n_eff_b->Fill(pt,eta);
+    }
+    else if(flav==4){
+      d_eff_c->Fill(pt,eta);
+      if(csv > CSVv2WP) n_eff_c->Fill(pt,eta);
+    }
+    else if(flav<4 || flav==21){
+      d_eff_udsg->Fill(pt,eta);
+      if(csv > CSVv2WP) n_eff_udsg->Fill(pt,eta);
+    }
   }
 }

@@ -1,0 +1,39 @@
+# - - - - - - - - - - - - - - - - - - -
+# Datacard for mGl= 1800 mNLSP= 1890 with model FastSim_T5qqqqHg_1900_1890
+# - - - - - - - - - - - - - - - - - - - 
+imax 1 number of channels
+jmax *  number of backgrounds('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin 26
+observation 2
+------------
+bin 26 26 26 26 26 26 
+process FastSim_T5qqqqHg_1900_1890_bin26 LEle_bin26 LMuTau_bin26 Fake_bin26 ZG_bin26 MultiJ_bin26 
+process 0 1 2 3 4 5 
+rate 0.687817 0.353093 0 0.66565 0.48275 0 
+------------
+sigLumiTrig lnN              1.032      -       -       -       -       -
+sigStat_b26 lnN       1.03128    -       -       -       -       -
+LEle_b26 gmN 1        -     0.353093     -       -       -       -
+LEleTFUnc_b26 lnN     -     1.10204      -       -       -       -
+LEleDR_b lnN     -     1.12      -       -       -       -
+LEleLeptSF_bM5 lnN     -     1.02      -       -       -       -
+LEleJEC_b lnN     -     1.02      -       -       -       -
+LMuTau_b26 gmN  0     -       -     0.793787     -       -       -
+LMuTauTFUnc_b26 lnN   -       -     1.09061      -       -       -
+LMuLeptSF_bM5 lnN     -     -    1.03     -       -       -
+LLeptPDF_b lnN     -     1.05     1.015       -       -       -
+FakeUncRate_b26 lnN   -       -          -    1.16525    -       -
+FakeRate_SF_b lnN   -       -          -    1.14    -       -
+FakeRate_PU_b lnN   -       -          -    1.06    -       -
+FakeRate_ISR_b lnN   -       -          -    1.02    -       -
+ZG_mcStat_b26 lnN     -       -          -      -     1.14095       -
+ZGTF_b gmN 36         -       -          -      -     0.0134097       -
+ZGTFpurity_b lnN  -       -          -      -     1.03608     -
+ZG_highOrdCorr_bR5 lnN  -       -          -      -     1.35       -
+ZG_bTagSF_b lnN  -       -          -      -     0.94       -
+MultiJ_b26 gmN 1     -       -          -          -         -       0.313837
+MultiJHL_bR5 lnN      -       -          -          -         -       1.09616
+MultiJdR_bR5 lnN      -       -          -          -         -       1.20788
+MultiJEW_b26  lnN      -       -          -          -         -        0.5/1.0

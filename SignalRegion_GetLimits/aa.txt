@@ -1,0 +1,27 @@
+Combination of a.txt
+imax 1 number of bins
+jmax 5 number of processes minus 1
+kmax 14 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+bin          ch1        
+observation  0.618821   
+----------------------------------------------------------------------------------------------------------------------------------
+bin                                 ch1           ch1           ch1           ch1           ch1           ch1         
+process                             Sbin31        ZG_bin31      MultiJ_bin31  Fake_bin31    LEle_bin31    LMuTau_bin31
+process                             0             1             2             3             4             5           
+rate                                12.4416       0.0190        1e-06         0.2535        0.3463        1e-06       
+----------------------------------------------------------------------------------------------------------------------------------
+FakeUncRate_b31         lnN         -             -             -             1.2346        -             -           
+LEleTFUnc_b31           lnN         -             -             -             -             1.17251       -           
+LEle_b31                gmN  1      -             -             -             -             0.346311      -           
+LMuTauTFUnc_b31         lnN         -             -             -             -             -             1.13725     
+LMuTau_b31              gmN  0      -             -             -             -             -             0.706147    
+MultiJEW_b31            lnN         -             -             0.500/1.000   -             -             -           
+MultiJHL_bR6            lnN         -             -             1.71526       -             -             -           
+MultiJ_b31              gmN  0      -             -             0.612509      -             -             -           
+MultiJdR_bR6            lnN         -             -             1.20112       -             -             -           
+ZGPureOverLLG_bB        lnN         -             1.19613       -             -             -             -           
+ZGTF_bB                 gmN  5      -             0.00380899    -             -             -             -           
+ZG_mcStat_b31           lnN         -             1.7           -             -             -             -           
+lumi                    lnN         1.023         -             -             -             -             -           
+sigStat_b31             lnN         1.02314       -             -             -             -             -           

@@ -10,7 +10,7 @@ void splitRunList(string infile,int nfPerJob){
   //------------ needed for condor files --------------
   string exeCondor  = "worker2.sh";
   string exeAna     = "skimmingLostLept";
-  string datasetAna = "CS_LostMu";
+  string datasetAna = "CS_LostEle";
   //---------------------------------------------------
   cout<<"executable at worker node : "<<exeCondor<<endl
       <<"Analysis executable : "<<exeAna<<endl
@@ -50,9 +50,9 @@ void splitRunList(string infile,int nfPerJob){
     outf.open(name);
     outf<<"universe = vanilla"<<endl
 	<<"Executable = "<<exeCondor<<endl
-	<<"Requirements = OpSys == \"LINUX\" && (Arch != \"DUMMY\" )"<<endl
-	<<"request_disk = 10000000"<<endl
-	<<"request_memory = 10000"<<endl
+      //	<<"Requirements = OpSys == \"LINUX\" && (Arch != \"DUMMY\" )"<<endl
+	// <<"request_disk = 10000000"<<endl
+	// <<"request_memory = 10000"<<endl
 	<<"Should_Transfer_Files = YES"<<endl
 	<<"WhenToTransferOutput = ON_EXIT_OR_EVICT"<<endl
 	<<"Transfer_Input_Files = "<<exeAna<<","<<fileListName<<endl
@@ -61,8 +61,8 @@ void splitRunList(string infile,int nfPerJob){
 	<<"Error = "<<logFile<<".stderr"<<endl
 	<<"Log = "<<logFile<<".condor"<<endl
 	<<"notification = Error"<<endl
-	<<"notify_user = vhegde@FNAL.GOV"<<endl
-	<<"x509userproxy = $ENV(X509_USER_PROXY)"<<endl
+      //<<"notify_user = vhegde@FNAL.GOV"<<endl
+      //	<<"x509userproxy = $ENV(X509_USER_PROXY)"<<endl
 	<<"Arguments = "<<exeAna<<" "<<fileListName<<" "<<logFile<<".root "<<datasetAna<<endl
 	<<"+LENGTH=\"SHORT\""<<endl
 	<<endl

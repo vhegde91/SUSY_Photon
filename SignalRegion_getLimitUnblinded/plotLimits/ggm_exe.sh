@@ -1,0 +1,4 @@
+#!/bin/sh
+./plotlimit runList_GGM_M1M3_SbinV7_Obs_v2.txt GGM_M1M3_LimitPlots_Obs_V7_v2.root GGM_M1M3
+./plotlimit runList_GGM_PhoLep_M1M3_SbinV7_Obs_v2.txt GGM_M1M3_PhoLep_LimitPlots_Obs_V7_v2.root GGM_M1M3
+./plotlimit runList_GGM_PhoLepPhoJet_M1M3_SbinV7_Obs_v2.txt GGM_M1M3_PhoLepPhoJet_LimitPlots_Obs_V7_v2.root GGM_M1M3

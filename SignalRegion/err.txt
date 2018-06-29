@@ -1,0 +1,237 @@
+[vhegde@cmslpc32 src]$ git cms-merge-topic -u kpedro88:METfix8022
+
+From .
+ * [new ref]                    -> merge-attempt
+remote: Counting objects: 14, done.
+remote: Total 14 (delta 12), reused 12 (delta 12), pack-reused 2
+Unpacking objects: 100% (14/14), done.
+From https://github.com/kpedro88/cmssw
+ * [new branch]      METfix8022 -> kpedro88/METfix8022
+Switched to branch 'merge-attempt'
+error: addinfo_cache failed for path 'GeneratorInterface/HiGenCommon/python/VtxSmearedPbP5TeVBoost_cff.py'
+error: addinfo_cache failed for path 'GeneratorInterface/HiGenCommon/python/VtxSmearedPPb5TeVBoost_cff.py'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/TauUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/TauPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/RegionalMuonGMTUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/RegionalMuonGMTPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/MuonUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/MuonPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/MPUnpacker_0x10010033.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/MPUnpacker_0x10010010.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/MPUnpacker_0x1001000b.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/MPUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/L1TStage2Layer2Constants.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/L1TStage2Layer2Constants.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/L1TObjectCollections.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/L1TObjectCollections.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/JetUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/JetPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/IntermediateMuonUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/IntermediateMuonPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GlobalExtBlkUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GlobalExtBlkPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GlobalAlgBlkUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GlobalAlgBlkPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GTTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GTTokens.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GTCollections.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GTCollections.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GMTTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GMTTokens.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GMTCollections.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GMTCollections.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EtSumUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EtSumPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFUnpackerTools.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFTokens.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFCollections.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFCollections.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFBlockTrailers.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFBlockSP.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFBlockRPC.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFBlockME.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFBlockHeaders.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFBlockCounters.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EGammaUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EGammaPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CommonTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CaloTowerUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CaloTowerPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CaloTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CaloTokens.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CaloCollections.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CaloCollections.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFUnpackerOutput.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFUnpackerOutput.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFUnpackerInputs.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFTokens.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFCollections.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFCollections.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/rctDataBase.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/rctDataBase.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/RCTEmRegionUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/RCTEmRegionPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/PhysicsToBitConverter.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/PhysicsToBitConverter.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/PhysCandUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/PhysCandPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/MissHtUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/MissHtPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/MissEtUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/MissEtPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/LegacyPhysCandUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/LegacyHFRingUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/LegacyEtSumUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/HFRingUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/HFRingPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/EtSumUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/EtSumPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/CaloTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/CaloTokens.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/CaloSpareHFUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/CaloSpareHFPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/CaloCollections.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/CaloCollections.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/UnpackerFactory.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/PackingSetupFactory.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/PackerFactory.cc'
+error: addinfo_cache failed for path 'CondFormats/CTPPSReadoutObjects/xml/ctpps_mapping_to_fill_5288.xml'
+Merge made by the 'recursive' strategy.
+ PhysicsTools/PatUtils/python/tools/runMETCorrectionsAndUncertainties.py | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+Switched to branch 'from-CMSSW_8_0_25'
+
+
+[vhegde@cmslpc32 src]$ git cms-merge-topic -u cms-met:fromCMSSW_8_0_20_postICHEPfilter
+From .
+ * [new ref]                    -> merge-attempt
+remote: Counting objects: 170, done.
+remote: Total 170 (delta 85), reused 85 (delta 85), pack-reused 85
+Receiving objects: 100% (170/170), 28.74 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (129/129), completed with 20 local objects.
+From https://github.com/cms-met/cmssw
+ * [new branch]      fromCMSSW_8_0_20_postICHEPfilter -> cms-met/fromCMSSW_8_0_20_postICHEPfilter
+Switched to branch 'merge-attempt'
+error: addinfo_cache failed for path 'L1TriggerConfig/L1TConfigProducers/src/L1TUtmTriggerMenuOnlineProd.cc'
+error: addinfo_cache failed for path 'L1TriggerConfig/L1TConfigProducers/src/L1TUtmTriggerMenuObjectKeysOnlineProd.cc'
+error: addinfo_cache failed for path 'L1TriggerConfig/L1TConfigProducers/python/L1TUtmTriggerMenuOnline_cfi.py'
+error: addinfo_cache failed for path 'L1TriggerConfig/L1TConfigProducers/python/L1TUtmTriggerMenuObjectKeysOnline_cfi.py'
+error: addinfo_cache failed for path 'L1TriggerConfig/L1TConfigProducers/BuildFile.xml'
+error: addinfo_cache failed for path 'GeneratorInterface/HiGenCommon/python/VtxSmearedPbP5TeVBoost_cff.py'
+error: addinfo_cache failed for path 'GeneratorInterface/HiGenCommon/python/VtxSmearedPPb5TeVBoost_cff.py'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/TauUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/RegionalMuonGMTUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/RegionalMuonGMTPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/MuonUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/MuonPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/MPUnpacker_0x1001000b.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/MPUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/L1TStage2Layer2Constants.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/L1TStage2Layer2Constants.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/L1TObjectCollections.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/L1TObjectCollections.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/JetUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/JetPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GlobalExtBlkUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GlobalExtBlkPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GlobalAlgBlkUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GlobalAlgBlkPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GTTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GTTokens.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GTCollections.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GTCollections.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GMTTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/GMTTokens.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EtSumUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFUnpackerTools.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFTokens.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFCollections.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFCollections.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFBlockTrailers.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFBlockSP.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFBlockRPC.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFBlockME.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFBlockHeaders.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EMTFBlockCounters.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EGammaUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/EGammaPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CommonTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CaloTowerUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CaloTowerPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CaloTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CaloTokens.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CaloCollections.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/CaloCollections.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFUnpackerOutput.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFUnpackerOutput.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFUnpackerInputs.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFTokens.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFCollections.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage2/BMTFCollections.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/rctDataBase.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/rctDataBase.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/RCTEmRegionUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/RCTEmRegionPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/PhysicsToBitConverter.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/PhysicsToBitConverter.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/PhysCandUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/PhysCandPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/MissHtUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/MissHtPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/MissEtUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/MissEtPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/LegacyPhysCandUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/LegacyHFRingUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/LegacyEtSumUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/HFRingUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/HFRingPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/EtSumUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/EtSumPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/CaloTokens.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/CaloTokens.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/CaloSpareHFUnpacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/CaloSpareHFPacker.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/CaloCollections.h'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/implementations_stage1/CaloCollections.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/UnpackerFactory.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/PackingSetupFactory.cc'
+error: addinfo_cache failed for path 'EventFilter/L1TRawToDigi/plugins/PackerFactory.cc'
+error: addinfo_cache failed for path 'DQM/HcalTasks/python/HFRaddamTask.py'
+error: addinfo_cache failed for path 'DQM/HcalTasks/plugins/HFRaddamTask.cc'
+error: addinfo_cache failed for path 'DQM/HcalTasks/interface/HFRaddamTask.h'
+error: addinfo_cache failed for path 'CondFormats/CTPPSReadoutObjects/xml/ctpps_mapping_to_fill_5288.xml'
+error: addinfo_cache failed for path 'Calibration/HcalAlCaRecoProducers/python/ALCARECOHcalCalHBHEMuon_cff.py'
+error: addinfo_cache failed for path 'Alignment/MillePedeAlignmentAlgorithm/templates/universalConfigTemplate.py'
+error: addinfo_cache failed for path 'Alignment/MillePedeAlignmentAlgorithm/templates/mps_runPede_rfcp_template.sh'
+error: addinfo_cache failed for path 'Alignment/MillePedeAlignmentAlgorithm/templates/mps_runMille_template.sh'
+error: addinfo_cache failed for path 'Alignment/MillePedeAlignmentAlgorithm/templates/alignment_config.ini'
+Merge made by the 'recursive' strategy.
+ PhysicsTools/PatAlgos/python/slimming/metFilterPaths_cff.py        |  11 +++-
+ RecoMET/METFilters/plugins/BadChargedCandidateFilter.cc            | 159 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ RecoMET/METFilters/plugins/BadChargedCandidateSummer16Filter.cc    | 141 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ RecoMET/METFilters/plugins/BadPFMuonFilter.cc                      | 160 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ RecoMET/METFilters/plugins/BadPFMuonSummer16Filter.cc              | 151 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ RecoMET/METFilters/plugins/MuonBadTrackFilter.cc                   |   2 +-
+ RecoMET/METFilters/python/BadChargedCandidateFilter_cfi.py         |  15 ++++++
+ RecoMET/METFilters/python/BadChargedCandidateSummer16Filter_cfi.py |  14 ++++++
+ RecoMET/METFilters/python/BadPFMuonFilter_cfi.py                   |  15 ++++++
+ RecoMET/METFilters/python/BadPFMuonSummer16Filter_cfi.py           |  13 +++++
+ RecoMET/METFilters/python/metFilters_cff.py                        |  17 +++++++
+ RecoMET/METFilters/test/test_badChargedCandidateFilter.py          |  45 +++++++++++++++++
+ RecoMET/METFilters/test/test_badMuonCandidateFilter.py             |  44 ++++++++++++++++
+ 13 files changed, 785 insertions(+), 2 deletions(-)
+ create mode 100644 RecoMET/METFilters/plugins/BadChargedCandidateFilter.cc
+ create mode 100644 RecoMET/METFilters/plugins/BadChargedCandidateSummer16Filter.cc
+ create mode 100644 RecoMET/METFilters/plugins/BadPFMuonFilter.cc
+ create mode 100644 RecoMET/METFilters/plugins/BadPFMuonSummer16Filter.cc
+ create mode 100644 RecoMET/METFilters/python/BadChargedCandidateFilter_cfi.py
+ create mode 100644 RecoMET/METFilters/python/BadChargedCandidateSummer16Filter_cfi.py
+ create mode 100644 RecoMET/METFilters/python/BadPFMuonFilter_cfi.py
+ create mode 100644 RecoMET/METFilters/python/BadPFMuonSummer16Filter_cfi.py
+ create mode 100644 RecoMET/METFilters/test/test_badChargedCandidateFilter.py
+ create mode 100644 RecoMET/METFilters/test/test_badMuonCandidateFilter.py
+Switched to branch 'from-CMSSW_8_0_25'

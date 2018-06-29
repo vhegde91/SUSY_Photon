@@ -1,0 +1,37 @@
+# - - - - - - - - - - - - - - - - - - -
+# Datacard for mGl= 900 mNLSP= 100 with model t6tt_900_100
+# - - - - - - - - - - - - - - - - - - - 
+imax 1 number of channels
+jmax *  number of backgrounds('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin 14
+observation 3
+------------
+bin 14 14 14 14 14 14 
+process t6tt_900_100_bin14 LEle_bin14 LMuTau_bin14 Fake_bin14 ZG_bin14 MultiJ_bin14 
+process 0 1 2 3 4 5 
+rate 0.914428 0.332759 1.45475 0.377983 0.131093 1.23545 
+------------
+lumi lnN              1.023      -       -       -       -       -
+sigStat_b14 lnN       1.11061    -       -       -       -       -
+LEle_b14 gmN 1        -     0.332759     -       -       -       -
+LEleTFUnc_b14 lnN     -     1.22895      -       -       -       -
+LEleDR_b lnN     -     1.12      -       -       -       -
+LEleLeptSF_bM3 lnN     -     1.02      -       -       -       -
+LEleJEC_b lnN     -     1.02      -       -       -       -
+LMuTau_b14 gmN  2     -       -     0.727376     -       -       -
+LMuTauTFUnc_b14 lnN   -       -     1.13628      -       -       -
+LMuLeptSF_bM3 lnN     -     -    1.01     -       -       -
+LLeptPDF_b lnN     -     1.05     1.015       -       -       -
+FakeUncRate_b14 lnN   -       -          -    1.2204    -       -
+FakeRate_SF_b lnN   -       -          -    1.1    -       -
+FakeRate_PU_b lnN   -       -          -    1.06    -       -
+FakeRate_ISR_b lnN   -       -          -    1.02    -       -
+ZG_mcStat_b14 lnN     -       -          -      -     1.42992       -
+ZGTF_bA gmN 31         -       -          -      -     0.0042288       -
+ZGPureOverLLG_bA lnN  -       -          -      -     1.05016     -
+ZG_highOrdCorr_bHJ lnN  -       -          -      -     1.02       -
+MultiJ_b14 gmN 3     -       -          -          -         -       0.411815
+MultiJHL_bR3 lnN      -       -          -          -         -       1.15936
+MultiJdR_bR3 lnN      -       -          -          -         -       1.28034

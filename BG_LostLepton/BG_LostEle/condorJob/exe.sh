@@ -1,0 +1,10 @@
+#!/bin/sh
+
+condor_submit Summer16.WGJets_MonoPhoton_PtG-40to130_TuneCUETP8M1_13TeV-madgraph_job5.jdl
+
+condor_submit Summer16.TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_job4.jdl
+condor_submit Summer16.TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_job5.jdl
+condor_submit Summer16.TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_job9.jdl
+condor_submit Summer16.TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_job14.jdl
+condor_submit Summer16.TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_job15.jdl
+condor_submit Summer16.TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_job16.jdl

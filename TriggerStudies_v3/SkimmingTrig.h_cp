@@ -1,0 +1,249 @@
+#ifndef SkimmingTrig_H
+#define SkimmingTrig_H
+
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <vector>
+#include "NtupleVariables.h"
+#include "TH1F.h"
+#include "TH2.h"
+#include <TProfile.h>
+#include "TFile.h"
+#include "TLorentzVector.h"
+#include "TDirectory.h"
+
+class SkimmingTrig : public NtupleVariables{
+
+ public:
+  SkimmingTrig(const TString &inputFileList="foo.txt", const char *outFileName="histo.root",const char *dataset="data");
+  ~SkimmingTrig();
+  Bool_t   FillChain(TChain *chain, const TString &inputFileList);
+  Long64_t LoadTree(Long64_t entry);
+  void     EventLoop(const char *,const char *);
+  void     BookHistogram();
+  TLorentzVector getBestPhoton();
+  int bestPhotonIndxAmongPhotons = -100;   
+  //Variables defined
+  double intLumi = 35.86;
+  TH1F *h_selectBaselineYields_;
+
+  TH1D *h_intLumi;
+  TH1D *h_HT_HT;
+  TH1D *h_ST_HT;
+  TH1D *h_MET_HT;
+  TH1D *h_PhotonPt_HT;
+  TH1D *h_PhotonEta_HT;
+  TH1D *h_PhotonPhi_HT;
+  TH1D *h_ElePt_HT;
+  TH1D *h_EleEta_HT;
+  TH1D *h_ElePhi_HT;
+  TH1D *h_MuPt_HT;
+  TH1D *h_MuEta_HT;
+  TH1D *h_MuPhi_HT;
+  TH1D *h_METPhi_HT;
+  TH1D *h_dPhi1_HT;
+  TH1D *h_dPhi2_HT;
+  TH1D *h_dPhi3_HT;
+  TH1D *h_dPhi4_HT;
+  TH1D *h_NJets_HT;
+  TH1D *h_nHadJ_HT;
+  TH1D *h_nBTags_HT;
+
+  TH1D *h_HT_PhoPt;
+  TH1D *h_ST_PhoPt;
+  TH1D *h_MET_PhoPt;
+  TH1D *h_PhotonPt_PhoPt;
+  TH1D *h_PhotonEta_PhoPt;
+  TH1D *h_PhotonPhi_PhoPt;
+  TH1D *h_ElePt_PhoPt;
+  TH1D *h_EleEta_PhoPt;
+  TH1D *h_ElePhi_PhoPt;
+  TH1D *h_MuPt_PhoPt;
+  TH1D *h_MuEta_PhoPt;
+  TH1D *h_MuPhi_PhoPt;
+  TH1D *h_METPhi_PhoPt;
+  TH1D *h_dPhi1_PhoPt;
+  TH1D *h_dPhi2_PhoPt;
+  TH1D *h_dPhi3_PhoPt;
+  TH1D *h_dPhi4_PhoPt;
+  TH1D *h_NJets_PhoPt;
+  TH1D *h_nHadJ_PhoPt;
+  TH1D *h_nBTags_PhoPt;
+
+  TH1D *h_HT_HTPhoPt;
+  TH1D *h_ST_HTPhoPt;
+  TH1D *h_MET_HTPhoPt;
+  TH1D *h_PhotonPt_HTPhoPt;
+  TH1D *h_PhotonEta_HTPhoPt;
+  TH1D *h_PhotonPhi_HTPhoPt;
+  TH1D *h_ElePt_HTPhoPt;
+  TH1D *h_EleEta_HTPhoPt;
+  TH1D *h_ElePhi_HTPhoPt;
+  TH1D *h_MuPt_HTPhoPt;
+  TH1D *h_MuEta_HTPhoPt;
+  TH1D *h_MuPhi_HTPhoPt;
+  TH1D *h_METPhi_HTPhoPt;
+  TH1D *h_dPhi1_HTPhoPt;
+  TH1D *h_dPhi2_HTPhoPt;
+  TH1D *h_dPhi3_HTPhoPt;
+  TH1D *h_dPhi4_HTPhoPt;
+  TH1D *h_NJets_HTPhoPt;
+  TH1D *h_nHadJ_HTPhoPt;
+  TH1D *h_nBTags_HTPhoPt;
+
+
+  TFile *oFile;
+  
+};
+#endif
+
+#ifdef SkimmingTrig_cxx
+
+void SkimmingTrig::BookHistogram() {
+
+  //  char hname[200], htit[200];
+  //  double xlow = 0.0,  xhigh = 2000.0;
+  //  int nbins = 2000;
+  char name[100],title[100];
+  h_selectBaselineYields_ = new TH1F("selectBaselineYields_","selectBaselineYields_",15,-0.5,14.5);
+  h_intLumi = new TH1D("intLumi","integrated luminosity in /fb",2500,25,50); 
+
+  h_HT_HT = new TH1D("HT_HT","HT for events passing HT Triggers",500,0,5000);
+  h_ST_HT = new TH1D("ST_HT","ST for events passing HT Triggers",500,0,5000);
+  h_MET_HT = new TH1D("MET_HT","MET for events passing HT Triggers",200,0,2000);
+  h_PhotonPt_HT = new TH1D("PhotonPt_HT","Photon Pt for events passing HT Triggers",200,0,2000);
+  h_PhotonEta_HT = new TH1D("PhotonEta_HT","Photon Eta for events passing HT Triggers",120,-6,6);
+  h_PhotonPhi_HT = new TH1D("PhotonPhi_HT","Photon Phi for events passing HT Triggers",80,-4,4);
+  h_ElePt_HT = new TH1D("ElePt_HT","Electron Pt for events passing HT Triggers",200,0,2000);
+  h_EleEta_HT = new TH1D("EleEta_HT","Electron Eta for events passing HT Triggers",120,-6,6);
+  h_ElePhi_HT = new TH1D("ElePhi_HT","Electron Phi for events passing HT Triggers",80,-40,40);
+  h_MuPt_HT = new TH1D("MuPt_HT","Muon Pt for events passing HT Triggers",200,0,2000);
+  h_MuEta_HT = new TH1D("MuEta_HT","Muon Eta for events passing HT Triggers",120,-6,6);
+  h_MuPhi_HT = new TH1D("MuPhi_HT","Muon Phi for events passing HT Triggers",80,-40,40);
+  h_METPhi_HT = new TH1D("METPhi_HT","METPhi for events passing HT Triggers",80,-40,40);
+  h_dPhi1_HT = new TH1D("dPhi1_HT","dPhi1 for events passing HT Triggers",80,-40,40);
+  h_dPhi2_HT = new TH1D("dPhi2_HT","dPhi2 for events passing HT Triggers",80,-40,40);
+  h_dPhi3_HT = new TH1D("dPhi3_HT","dPhi3 for events passing HT Triggers",80,-40,40);
+  h_dPhi4_HT = new TH1D("dPhi4_HT","dPhi4 for events passing HT Triggers",80,-40,40);
+  h_NJets_HT = new TH1D("NJets_HT","NJets for events passing HT Triggers",50,0,50);
+  h_nHadJ_HT = new TH1D("nHadJ_HT","nHadJ for events passing HT Triggers",50,0,50);
+  h_nBTags_HT = new TH1D("nBTags_HT","nBTags for events passing HT Triggers",50,0,50);
+  
+
+  h_HT_PhoPt = new TH1D("HT_PhoPt","HT for events passing PhoPt Trigger",500,0,5000);
+  h_ST_PhoPt = new TH1D("ST_PhoPt","ST for events passing PhoPt Trigger",500,0,5000);
+  h_MET_PhoPt = new TH1D("MET_PhoPt","MET for events passing PhoPt Trigger",200,0,2000);
+  h_PhotonPt_PhoPt = new TH1D("PhotonPt_PhoPt","Photon Pt for events passing PhoPt Trigger",200,0,2000);
+  h_PhotonEta_PhoPt = new TH1D("PhotonEta_PhoPt","Photon Eta for events passing PhoPt Trigger",120,-6,6);
+  h_PhotonPhi_PhoPt = new TH1D("PhotonPhi_PhoPt","Photon Phi for events passing PhoPt Trigger",80,-4,4);
+  h_ElePt_PhoPt = new TH1D("ElePt_PhoPt","Electron Pt for events passing PhoPt Trigger",200,0,2000);
+  h_EleEta_PhoPt = new TH1D("EleEta_PhoPt","Electron Eta for events passing PhoPt Trigger",120,-6,6);
+  h_ElePhi_PhoPt = new TH1D("ElePhi_PhoPt","Electron Phi for events passing PhoPt Trigger",80,-40,40);
+  h_MuPt_PhoPt = new TH1D("MuPt_PhoPt","Muon Pt for events passing PhoPt Trigger",200,0,2000);
+  h_MuEta_PhoPt = new TH1D("MuEta_PhoPt","Muon Eta for events passing PhoPt Trigger",120,-6,6);
+  h_MuPhi_PhoPt = new TH1D("MuPhi_PhoPt","Muon Phi for events passing PhoPt Trigger",80,-40,40);
+  h_METPhi_PhoPt = new TH1D("METPhi_PhoPt","METPhi for events passing PhoPt Trigger",80,-40,40);
+  h_dPhi1_PhoPt = new TH1D("dPhi1_PhoPt","dPhi1 for events passing PhoPt Trigger",80,-40,40);
+  h_dPhi2_PhoPt = new TH1D("dPhi2_PhoPt","dPhi2 for events passing PhoPt Trigger",80,-40,40);
+  h_dPhi3_PhoPt = new TH1D("dPhi3_PhoPt","dPhi3 for events passing PhoPt Trigger",80,-40,40);
+  h_dPhi4_PhoPt = new TH1D("dPhi4_PhoPt","dPhi4 for events passing PhoPt Trigger",80,-40,40);
+  h_NJets_PhoPt = new TH1D("NJets_PhoPt","NJets for events passing PhoPt Trigger",50,0,50);
+  h_nHadJ_PhoPt = new TH1D("nHadJ_PhoPt","nHadJ for events passing PhoPt Trigger",50,0,50);
+  h_nBTags_PhoPt = new TH1D("nBTags_PhoPt","nBTags for events passing PhoPt Trigger",50,0,50);
+
+
+  h_HT_HTPhoPt = new TH1D("HT_HTPhoPt","HT for events passing Photon X HT Trigger",500,0,5000);
+  h_ST_HTPhoPt = new TH1D("ST_HTPhoPt","ST for events passing Photon X HT Trigger",500,0,5000);
+  h_MET_HTPhoPt = new TH1D("MET_HTPhoPt","MET for events passing Photon X HT Trigger",200,0,2000);
+  h_PhotonPt_HTPhoPt = new TH1D("PhotonPt_HTPhoPt","Photon Pt for events passing Photon X HT Trigger",200,0,2000);
+  h_PhotonEta_HTPhoPt = new TH1D("PhotonEta_HTPhoPt","Photon Eta for events passing Photon X HT Trigger",120,-6,6);
+  h_PhotonPhi_HTPhoPt = new TH1D("PhotonPhi_HTPhoPt","Photon Phi for events passing Photon X HT Trigger",80,-4,4);
+  h_ElePt_HTPhoPt = new TH1D("ElePt_HTPhoPt","Electron Pt for events passing Photon X HT Trigger",200,0,2000);
+  h_EleEta_HTPhoPt = new TH1D("EleEta_HTPhoPt","Electron Eta for events passing Photon X HT Trigger",120,-6,6);
+  h_ElePhi_HTPhoPt = new TH1D("ElePhi_HTPhoPt","Electron Phi for events passing Photon X HT Trigger",80,-40,40);
+  h_MuPt_HTPhoPt = new TH1D("MuPt_HTPhoPt","Muon Pt for events passing Photon X HT Trigger",200,0,2000);
+  h_MuEta_HTPhoPt = new TH1D("MuEta_HTPhoPt","Muon Eta for events passing Photon X HT Trigger",120,-6,6);
+  h_MuPhi_HTPhoPt = new TH1D("MuPhi_HTPhoPt","Muon Phi for events passing Photon X HT Trigger",80,-40,40);
+  h_METPhi_HTPhoPt = new TH1D("METPhi_HTPhoPt","METPhi for events passing Photon X HT Trigger",80,-40,40);
+  h_dPhi1_HTPhoPt = new TH1D("dPhi1_HTPhoPt","dPhi1 for events passing Photon X HT Trigger",80,-40,40);
+  h_dPhi2_HTPhoPt = new TH1D("dPhi2_HTPhoPt","dPhi2 for events passing Photon X HT Trigger",80,-40,40);
+  h_dPhi3_HTPhoPt = new TH1D("dPhi3_HTPhoPt","dPhi3 for events passing Photon X HT Trigger",80,-40,40);
+  h_dPhi4_HTPhoPt = new TH1D("dPhi4_HTPhoPt","dPhi4 for events passing Photon X HT Trigger",80,-40,40);
+  h_NJets_HTPhoPt = new TH1D("NJets_HTPhoPt","NJets for events passing Photon X HT Trigger",50,0,50);
+  h_nHadJ_HTPhoPt = new TH1D("nHadJ_HTPhoPt","nHadJ for events passing Photon X HT Trigger",50,0,50);
+  h_nBTags_HTPhoPt = new TH1D("nBTags_HTPhoPt","nBTags for events passing Photon X HT Trigger",50,0,50);
+  
+ 
+}
+
+
+SkimmingTrig::SkimmingTrig(const TString &inputFileList, const char *outFileName, const char* dataset) {
+  string nameData=dataset;//vvv
+  //  TChain *tree = new TChain("PreSelection");
+  TChain *tree = new TChain("TreeMaker2/PreSelection");
+  //if(nameData=="signalH") tree = new TChain("TreeMaker2/PreSelection");//vvv
+  if( ! FillChain(tree, inputFileList) ) {
+    std::cerr << "Cannot get the tree " << std::endl;
+  } else {
+    std::cout << "Initiating analysis of dataset " << dataset << std::endl;
+  }
+
+  //if(nameData!="signalH") nameData="BG";
+  //cout<<"Treating the input files as "<<nameData<<" for setting tree branches"<<endl;
+  NtupleVariables::Init(tree,nameData);
+
+  BookHistogram();
+  char outflName[100];
+  sprintf(outflName,"%s_%s",dataset,outFileName);
+  oFile = new TFile(outflName, "recreate");
+}
+
+Bool_t SkimmingTrig::FillChain(TChain *chain, const TString &inputFileList) {
+
+  ifstream infile(inputFileList, ifstream::in);
+  std::string buffer;
+
+  if(!infile.is_open()) {
+    std::cerr << "** ERROR: Can't open '" << inputFileList << "' for input" << std::endl;
+    return kFALSE;
+  }
+
+  std::cout << "TreeUtilities : FillChain " << std::endl;
+  while(1) {
+    infile >> buffer;
+    if(!infile.good()) break;
+    //std::cout << "Adding tree from " << buffer.c_str() << std::endl;                                                              
+    chain->Add(buffer.c_str());
+  }
+  std::cout << "No. of Entries in this tree : " << chain->GetEntries() << std::endl;
+  return kTRUE;
+}
+
+Long64_t SkimmingTrig::LoadTree(Long64_t entry) {
+  // Set the environment to read one entry                                                                                          
+  if (!fChain) return -5;
+  Long64_t centry = fChain->LoadTree(entry);
+  if (centry < 0) return centry;
+  if (!fChain->InheritsFrom(TChain::Class()))  return centry;
+  TChain *chain = (TChain*)fChain;
+  if (chain->GetTreeNumber() != fCurrent) {
+    fCurrent = chain->GetTreeNumber();
+    //    Notify();
+  }
+  return centry;
+}
+
+SkimmingTrig::~SkimmingTrig() { 
+
+  if (!fChain) return;
+  delete fChain->GetCurrentFile();
+  oFile->cd();
+  h_selectBaselineYields_->Write();
+  oFile->Write();
+  oFile->Close();
+
+}
+
+#endif
+

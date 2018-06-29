@@ -1,0 +1,36 @@
+Combination of a.txt
+imax 1 number of bins
+jmax 5 number of processes minus 1
+kmax 23 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+bin          ch1        
+observation  0.608678   
+----------------------------------------------------------------------------------------------------------------------------------
+bin                                   ch1           ch1           ch1           ch1           ch1           ch1         
+process                               Sig_31        ZG_bin31      MultiJ_bin31  Fake_bin31    LEle_bin31    LMuTau_bin31
+process                               0             1             2             3             4             5           
+rate                                  12.4416       0.0190        1e-06         0.2324        0.3573        1e-06       
+----------------------------------------------------------------------------------------------------------------------------------
+FakeRate_ISR_b          lnN           -             -             -             1.02          -             -           
+FakeRate_PU_b           lnN           -             -             -             1.06          -             -           
+FakeRate_SF_b           lnN           -             -             -             1.1           -             -           
+FakeUncRate_b31         lnN           -             -             -             1.23578       -             -           
+LEleDR_b                lnN           -             -             -             -             1.12          -           
+LEleJEC_b               lnN           -             -             -             -             1.02          -           
+LEleLeptSF_bM5          lnN           -             -             -             -             1.02          -           
+LEleTFUnc_b31           lnN           -             -             -             -             1.16922       -           
+LEle_b31                gmN  1        -             -             -             -             0.357269      -           
+LLeptPDF_b              lnN           -             -             -             -             1.05          1.015       
+LMuLeptSF_bM5           lnN           -             -             -             -             -             1.01        
+LMuTauTFUnc_b31         lnN           -             -             -             -             -             1.14674     
+LMuTau_b31              gmN  0        -             -             -             -             -             0.664767    
+MultiJEW_b31            lnN           -             -             0.500/1.000   -             -             -           
+MultiJHL_bR6            lnN           -             -             1.71638       -             -             -           
+MultiJ_b31              gmN  0        -             -             0.618488      -             -             -           
+MultiJdR_bR6            lnN           -             -             1.20011       -             -             -           
+ZGPureOverLLG_bB        lnN           -             1.19613       -             -             -             -           
+ZGTF_bB                 gmN  5        -             0.00380899    -             -             -             -           
+ZG_highOrdCorr_bHJ      lnN           -             0.98          -             -             -             -           
+ZG_mcStat_b31           lnN           -             1.7           -             -             -             -           
+lumi                    lnN           1.023         -             -             -             -             -           
+sigStat_b31             lnN           1.02314       -             -             -             -             -           

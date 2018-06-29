@@ -1,0 +1,4 @@
+#!/bin/bash
+./analyzeRA2b runListHiggs150.txt HG_NLSP150.root signalH
+./analyzeRA2b runListHiggs1000.txt HG_NLSP1000.root signalH
+./analyzeRA2b runListHiggs1550.txt HG_NLSP1550.root signalH

@@ -1,0 +1,38 @@
+# - - - - - - - - - - - - - - - - - - -
+# Datacard for mGl= 1850 mNLSP= 500 with model FastSim_T5ttttZg_1850_500
+# - - - - - - - - - - - - - - - - - - - 
+imax 1 number of channels
+jmax *  number of backgrounds('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin 18
+observation 50
+------------
+bin 18 18 18 18 18 18 
+process FastSim_T5ttttZg_1850_500_bin18 LEle_bin18 LMuTau_bin18 Fake_bin18 ZG_bin18 MultiJ_bin18 
+process 0 1 2 3 4 5 
+rate 0 3.43017 14.4606 7.11092 3.55206 11.2907 
+------------
+sigLumiTrig lnN              1.032      -       -       -       -       -
+LEle_b18 gmN 6        -     0.571695     -       -       -       -
+LEleTFUnc_b18 lnN     -     1.08898      -       -       -       -
+LEleDR_b lnN     -     1.12      -       -       -       -
+LEleLeptSF_bM2 lnN     -     1.02      -       -       -       -
+LEleJEC_b lnN     -     1.02      -       -       -       -
+LMuTau_b18 gmN  13     -       -     1.11235     -       -       -
+LMuTauTFUnc_b18 lnN   -       -     1.09047      -       -       -
+LMuLeptSF_bM2 lnN     -     -    1.03     -       -       -
+LLeptPDF_b lnN     -     1.05     1.015       -       -       -
+FakeUncRate_b18 lnN   -       -          -    1.18185    -       -
+FakeRate_SF_b lnN   -       -          -    1.14    -       -
+FakeRate_PU_b lnN   -       -          -    1.06    -       -
+FakeRate_ISR_b lnN   -       -          -    1.02    -       -
+ZG_mcStat_b18 lnN     -       -          -      -     1.02523       -
+ZGTF_b gmN 36         -       -          -      -     0.0986685       -
+ZGTFpurity_b lnN  -       -          -      -     1.03608     -
+ZG_highOrdCorr_bR4 lnN  -       -          -      -     1.18       -
+ZG_bTagSF_b lnN  -       -          -      -     0.94       -
+MultiJ_b18 gmN 78     -       -          -          -         -       0.144752
+MultiJHL_bR4 lnN      -       -          -          -         -       1.04921
+MultiJdR_bR4 lnN      -       -          -          -         -       1.25932
+MultiJEW_b18  lnN      -       -          -          -         -        0.897659/0.940504

@@ -1,0 +1,39 @@
+# - - - - - - - - - - - - - - - - - - -
+# Datacard for mGl= 1600 mNLSP= 150 with model a
+# - - - - - - - - - - - - - - - - - - - 
+imax 1 number of channels
+jmax *  number of backgrounds('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin 28
+observation 12
+------------
+bin 28 28 28 28 28 28 
+process a_bin28 LEle_bin28 LMuTau_bin28 Fake_bin28 ZG_bin28 MultiJ_bin28 
+process 0 1 2 3 4 5 
+rate 6.28578 0.722905 1.9943 1.68476 0.0592782 5.93829 
+------------
+lumi lnN              1.023      -       -       -       -       -
+sigStat_b28 lnN       1.0308    -       -       -       -       -
+trigEff_b28 lnN       1.02    -       -       -       -       -
+LEle_b28 gmN 2        -     0.361453     -       -       -       -
+LEleTFUnc_b28 lnN     -     1.16923      -       -       -       -
+LEleDR_b lnN     -     1.12      -       -       -       -
+LEleLeptSF_bM2 lnN     -     1.02      -       -       -       -
+LEleJEC_b lnN     -     1.02      -       -       -       -
+LMuTau_b28 gmN  3     -       -     0.664767     -       -       -
+LMuTauTFUnc_b28 lnN   -       -     1.14674      -       -       -
+LMuLeptSF_bM2 lnN     -     -    1.03     -       -       -
+LLeptPDF_b lnN     -     1.05     1.015       -       -       -
+FakeUncRate_b28 lnN   -       -          -    1.15665    -       -
+FakeRate_SF_b lnN   -       -          -    1.1    -       -
+FakeRate_PU_b lnN   -       -          -    1.06    -       -
+FakeRate_ISR_b lnN   -       -          -    1.02    -       -
+ZG_mcStat_b28 lnN     -       -          -      -     1.58357       -
+ZGTF_bB gmN 5         -       -          -      -     0.0118556       -
+ZGPureOverLLG_bB lnN  -       -          -      -     1.19613     -
+ZG_highOrdCorr_bHJ lnN  -       -          -      -     0.98       -
+MultiJ_b28 gmN 12     -       -          -          -         -       0.494857
+MultiJHL_bR6 lnN      -       -          -          -         -       1.20033
+MultiJdR_bR6 lnN      -       -          -          -         -       1.71638
+MultiJEW_b28  lnN      -       -          -          -         -        0.713835/0.888116

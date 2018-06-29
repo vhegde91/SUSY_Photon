@@ -1,0 +1,37 @@
+# - - - - - - - - - - - - - - - - - - -
+# Datacard for mGl= 900 mNLSP= 100 with model t6tt_900_100
+# - - - - - - - - - - - - - - - - - - - 
+imax 1 number of channels
+jmax *  number of backgrounds('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin 20
+observation 4
+------------
+bin 20 20 20 20 20 20 
+process t6tt_900_100_bin20 LEle_bin20 LMuTau_bin20 Fake_bin20 ZG_bin20 MultiJ_bin20 
+process 0 1 2 3 4 5 
+rate 1.38014 0 1.11235 2 1.51782 0.61873 
+------------
+lumi lnN              1.023      -       -       -       -       -
+sigStat_b20 lnN       1.09022    -       -       -       -       -
+LEle_b20 gmN 0        -     0.565142     -       -       -       -
+LEleTFUnc_b20 lnN     -     1.08899      -       -       -       -
+LEleDR_b lnN     -     1.12      -       -       -       -
+LEleLeptSF_bM4 lnN     -     1.02      -       -       -       -
+LEleJEC_b lnN     -     1.02      -       -       -       -
+LMuTau_b20 gmN  1     -       -     1.11235     -       -       -
+LMuTauTFUnc_b20 lnN   -       -     1.09047      -       -       -
+LMuLeptSF_bM4 lnN     -     -    1.01     -       -       -
+LLeptPDF_b lnN     -     1.05     1.015       -       -       -
+FakeUncRate_b20 lnN   -       -          -    1.16491    -       -
+FakeRate_SF_b lnN   -       -          -    1.1    -       -
+FakeRate_PU_b lnN   -       -          -    1.06    -       -
+FakeRate_ISR_b lnN   -       -          -    1.02    -       -
+ZG_mcStat_b20 lnN     -       -          -      -     1.13812       -
+ZGTF_bB gmN 5         -       -          -      -     0.303563       -
+ZGPureOverLLG_bB lnN  -       -          -      -     1.19613     -
+ZG_highOrdCorr_bLJ lnN  -       -          -      -     0.875424       -
+MultiJ_b20 gmN 5     -       -          -          -         -       0.123746
+MultiJHL_bR4 lnN      -       -          -          -         -       1.04933
+MultiJdR_bR4 lnN      -       -          -          -         -       1.25932

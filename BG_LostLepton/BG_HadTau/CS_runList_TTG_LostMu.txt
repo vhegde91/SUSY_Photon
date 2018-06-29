@@ -1,0 +1,1 @@
+/home/vinay/work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV11/CS_LostMuon_TTG_TTHT_TTLept_v1/CS_Spring16.TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8.root

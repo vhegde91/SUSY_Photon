@@ -23,9 +23,23 @@ class SkimmingFakeRate : public NtupleVariables{
   void     EventLoop(const char *,const char *);
   void     BookHistogram();
   TLorentzVector getBestPhoton();
-   
+  double getISRWt();   
   //Variables defined
   TH1F *h_selectBaselineYields_;
+  TH1D *h_MET_NoCut;
+  TH1D *h_HT_NoCut;
+  TH1D *h_NJets_NoCut;
+  TH1D *h_madHT_NoCut;
+  TH1D *h_SumISRWts;
+  TH1D *h_MET_NoCut_ISRWtd;
+  TH1D *h_HT_NoCut_ISRWtd;
+  TH1D *h_NJets_NoCut_ISRWtd;
+  TH1D *h_madHT_NoCut_ISRWtd;
+
+  TH1D *h_MET_NoCut_WptWtd;
+  TH1D *h_HT_NoCut_WptWtd;
+  TH1D *h_NJets_NoCut_WptWtd;
+
   TFile *oFile;
   
 };
@@ -40,8 +54,20 @@ void SkimmingFakeRate::BookHistogram() {
   //  int nbins = 2000;
   char name[100],title[100];
   h_selectBaselineYields_ = new TH1F("selectBaselineYields_","selectBaselineYields_",9,0.5,9.5);
-  
- 
+  h_MET_NoCut=new TH1D("MET_NoCut","MET No Cut",200,0,2000);
+  h_HT_NoCut=new TH1D("HT_NoCut","HT NoCut",500,0,5000);
+  h_NJets_NoCut=new TH1D("NJets_NoCut","NJets No Cut",25,0,25);
+  h_madHT_NoCut=new TH1D("madHT_NoCut","mad HT No Cut",3000,0,3000);
+  h_SumISRWts=new TH1D("SumISRWts","sum of ISR weights. = ISR wt for evt1 + ISR wt for evt2 + ... + ISR wt for evtN. N is number of events",4,0.5,3.5);
+
+  h_MET_NoCut_ISRWtd=new TH1D("MET_NoCut_ISRWtd","MET No Cut ISRWtd",200,0,2000);
+  h_HT_NoCut_ISRWtd=new TH1D("HT_NoCut_ISRWtd","HT NoCut_ISRWtd",500,0,5000);
+  h_NJets_NoCut_ISRWtd=new TH1D("NJets_NoCut_ISRWtd","NJets No Cut ISRWtd",25,0,25);
+  h_madHT_NoCut_ISRWtd=new TH1D("madHT_NoCut_ISRWtd","mad HT No Cut ISR Wtd",3000,0,3000);
+
+  h_MET_NoCut_WptWtd=new TH1D("MET_NoCut_WptWtd","MET No Cut WPt reweighted",200,0,2000);
+  h_HT_NoCut_WptWtd=new TH1D("HT_NoCut_WptWtd","HT No Cut WPt reweighted",500,0,5000);
+  h_NJets_NoCut_WptWtd=new TH1D("NJets_NoCut_WptWtd","NJets No Cut WPt reweighted",25,0,25);
 }
 
 
@@ -107,6 +133,21 @@ SkimmingFakeRate::~SkimmingFakeRate() {
   delete fChain->GetCurrentFile();
   oFile->cd();
   h_selectBaselineYields_->Write();
+  h_MET_NoCut->Write();
+  h_HT_NoCut->Write();
+  h_NJets_NoCut->Write();
+  h_madHT_NoCut->Write();
+
+  h_SumISRWts->Write();
+  h_MET_NoCut_ISRWtd->Write();
+  h_HT_NoCut_ISRWtd->Write();
+  h_NJets_NoCut_ISRWtd->Write();
+  h_madHT_NoCut_ISRWtd->Write();
+
+  h_MET_NoCut_WptWtd->Write();
+  h_HT_NoCut_WptWtd->Write();
+  h_NJets_NoCut_WptWtd->Write();
+
   oFile->Write();
   oFile->Close();
 

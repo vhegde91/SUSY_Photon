@@ -1,0 +1,5 @@
+#!/bin/sh
+mv Eff_bTag_Summer16.TTJets_HT-600to800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root bTagStudy_VetoWtob_TTJetsHT600To800.root
+mv Eff_bTag_Summer16.TTJets_HT-800to1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root bTagStudy_VetoWtob_TTJetsHT800To1200.root
+mv Eff_bTag_Summer16.TTJets_HT-1200to2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root bTagStudy_VetoWtob_TTJetsHT1200To2500.root
+mv Eff_bTag_Summer16.TTJets_HT-2500toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root bTagStudy_VetoWtob_TTJetsHT2500ToInf.root

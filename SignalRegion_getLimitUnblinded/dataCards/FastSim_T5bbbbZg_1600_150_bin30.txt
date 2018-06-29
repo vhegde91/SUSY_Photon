@@ -1,0 +1,43 @@
+# - - - - - - - - - - - - - - - - - - -
+# Datacard for mGl= 1600 mNLSP= 150 with model FastSim_T5bbbbZg_1600_150
+# - - - - - - - - - - - - - - - - - - - 
+imax 1 number of channels
+jmax *  number of backgrounds('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin 30
+observation 1
+------------
+bin 30 30 30 30 30 30 
+process FastSim_T5bbbbZg_1600_150_bin30 LEle_bin30 LMuTau_bin30 Fake_bin30 ZG_bin30 MultiJ_bin30 
+process 0 1 2 3 4 5 
+rate 5.69714 0.722905 0 0.435797 0.0689121 0 
+------------
+sigLumiTrig lnN              1.032      -       -       -       -       -
+sigStat_b30 lnN       1.02949    -       -       -       -       -
+sigbTag_b lnN     0.983856    -       -       -       -       -
+sigGenMET_bM4 lnN     1.00327    -       -       -       -       -
+sigISR_bHJ lnN     1.15552    -       -       -       -       -
+sigOther_b30 lnN     1.058    -       -       -       -       -
+LEle_b30 gmN 2        -     0.361453     -       -       -       -
+LEleTFUnc_b30 lnN     -     1.16923      -       -       -       -
+LEleDR_b lnN     -     1.12      -       -       -       -
+LEleLeptSF_bM4 lnN     -     1.02      -       -       -       -
+LEleJEC_b lnN     -     1.02      -       -       -       -
+LMuTau_b30 gmN  0     -       -     0.664767     -       -       -
+LMuTauTFUnc_b30 lnN   -       -     1.14674      -       -       -
+LMuLeptSF_bM4 lnN     -     -    1.03     -       -       -
+LLeptPDF_b lnN     -     1.05     1.015       -       -       -
+FakeUncRate_b30 lnN   -       -          -    1.18075    -       -
+FakeRate_SF_b lnN   -       -          -    1.14    -       -
+FakeRate_PU_b lnN   -       -          -    1.06    -       -
+FakeRate_ISR_b lnN   -       -          -    1.02    -       -
+ZG_mcStat_b30 lnN     -       -          -      -     1.40328       -
+ZGTF_b gmN 36         -       -          -      -     0.00191423       -
+ZGTFpurity_b lnN  -       -          -      -     1.03608     -
+ZG_highOrdCorr_bR6 lnN  -       -          -      -     1.25       -
+ZG_bTagSF_b lnN  -       -          -      -     0.94       -
+MultiJ_b30 gmN 0     -       -          -          -         -       0.617992
+MultiJHL_bR6 lnN      -       -          -          -         -       1.2006
+MultiJdR_bR6 lnN      -       -          -          -         -       1.71638
+MultiJEW_b30  lnN      -       -          -          -         -        0.3/3.0
