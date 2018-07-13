@@ -337,7 +337,7 @@ void c_getBGHists::getFRHist(int i_f){
   TH1D *hFakeSF;
   if(!isLDP) hFakeSF=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_SF");
   else hFakeSF=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_SF_LDP");
-  c1.assignPCuncAllBins(hFakeSF,10.0);
+  c1.assignPCuncAllBins(hFakeSF,14.0);
   //------assign 6% unc for PU reweighting
   TH1D *hPU;
   if(!isLDP) hPU=(TH1D*)hFR->Clone("AllSBins_v7_UncFR_PU");
@@ -461,6 +461,7 @@ void c_getBGHists::getZGHist(int i_f){
     hTFpurity->Write();
     hCS->Write();
     h_highOrd->Write();
+    hBtagSFUnc->Write();
     hTFfinal->Write();
     hPred->Write();
 
@@ -554,9 +555,9 @@ void c_getBGHists::getMultiJHist(int i_f){
   //  c1.printContents(h_pure);
   // c1.printContents(h_pureUncUp);
   // c1.printContents(h_pureUncDown);
-  c1.printContents(hCSraw);
-  c1.printContents(hEWSumLDP);
-  c1.printContents(hCS);
+  // c1.printContents(hCSraw);
+  // c1.printContents(hEWSumLDP);
+  // c1.printContents(hCS);
   //----------------do predictions for HDP ----------------------
   hTemp->Reset();
   hTemp = (TH1D*)fout->Get("AllSBins_v7_LElePred");
@@ -636,10 +637,10 @@ void c_getBGHists::getMultiJHist(int i_f){
   h_MultiJPred->Write();
  
   
-  c1.printContents(hHLR);
-  c1.printContents(h_doubleR);
-  c1.printContents(hEWSum);
-  c1.printContents(h_MultiJPred);
+  // c1.printContents(hHLR);
+  // c1.printContents(h_doubleR);
+  // c1.printContents(hEWSum);
+  // c1.printContents(h_MultiJPred);
     
 }
 
@@ -671,10 +672,10 @@ void c_getBGHists::getTotalBG(int i_f){
   hDataVsBG->Write();
   hPull->Write();
   
-  //c1.printContents(hTot);
-  // c1.printContents(hData);
-  //c1.printContents(hDataVsBG);
-  //c1.printContents(hPull);
+  c1.printContents(hTot);
+  c1.printContents(hData);
+  c1.printContents(hDataVsBG);
+  c1.printContents(hPull);
 }
 
 //------------------------------------------------

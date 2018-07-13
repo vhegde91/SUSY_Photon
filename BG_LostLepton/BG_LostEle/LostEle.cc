@@ -47,7 +47,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   //get 2d histogram========================================
   TFile *f_LP=new TFile("LstEle_CS_TTWZ_LostEle_v2.root");
   //  TFile *f_LP=new TFile("LstEle_CS_LDP_TTWZ_LostEle_v2.root");
-  //TFile *f_LP=new TFile("LstEle_CS_TTW_LostEle_v2.root");
+  //  TFile *f_LP=new TFile("LstEle_CS_TTWZ_LostEle_NoSFs_v2.root");
   TH2D *h2_LP;TH1D *h_LP;
   bool do_prediction=0,do_norm=0;
   int jec2Use = 0;//-1 for JEC down, 0 for CV, 1 for JEC up
@@ -56,7 +56,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   //choose central, up, or down
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
 
-  bool applyEGMSFs = 1;
+  bool applyEGMSFs = 0;
   TFile *f_EGMSF1=TFile::Open("scaleFactors.root");
   TFile *f_EGMSF2=TFile::Open("egammaEffi.txt_EGM2D.root");
   TH2F *h2_EGMSFV=(TH2F*)f_EGMSF1->Get("GsfElectronToCutBasedSpring15V");
@@ -69,7 +69,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
   if(jec2Use!=0) cout<<"!!!!!!!!!! Applying JECs. -1 for JEC down, 0 for CV, 1 for JEC up. I am using "<<jec2Use<<" !!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
   if(do_norm) cout<<"!!!!!! Normalizing CS according to data"<<endl;
   //----------- btags SFs-----------------  
-  bool applybTagSFs=1;
+  bool applybTagSFs=0;
   int fListIndxOld=-1;
   double prob0=-100,prob1=-100;
   vector<TString> inFileName;
@@ -124,6 +124,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	currFile = TFile::Open(sampleName);
 	btagcorr.SetEffs(currFile);
 	btagcorr.SetCalib("btag/CSVv2_Moriond17_B_H_mod.csv");
+	if(s_data == "FastSim")btagcorr.SetCalibFastSim("btag/fastsim_csvv2_ttbar_26_1_2017.csv");
 	// btagcorr.SetBtagSFunc(1);
         // btagcorr.SetMistagSFunc(1);
         // btagcorr.SetBtagCFunc(1);
@@ -212,7 +213,8 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     //++++++++++++++++++++++ data only ends +++++++++++++++++++++++++++
 
     //---------------------- MC only -------------------------
-    wt=Weight*1000.0*lumiInfb*(puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(TrueNumInteractions,puhist->GetBinLowEdge(puhist->GetNbinsX()+1)))));
+    if(s_data!="FastSim") wt=Weight*1000.0*lumiInfb*(puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(TrueNumInteractions,puhist->GetBinLowEdge(puhist->GetNbinsX()+1)))));
+    else  wt=Weight*1000.0*lumiInfb;
     //Trigger related
     wt=wt*0.98;
     //done with trigger efficiencies
@@ -257,20 +259,36 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
     vector<TLorentzVector> genEle;   
     for(int i=0;i<GenParticles->size();i++){
       if((*GenParticles)[i].Pt()!=0){
-	if( abs((*GenParticles_PdgId)[i])==12 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {nGenEle++;}//electrons, cut using e neutrino
+	// if( abs((*GenParticles_PdgId)[i])==12 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {nGenEle++;}//electrons, cut using e neutrino
+	// else if( abs((*GenParticles_PdgId)[i])==14 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {
+	//   nGenMu++;
+	// }//muons, count using mu neutrino
+	if( abs((*GenParticles_PdgId)[i])==12 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {
+	  if((abs((*GenParticles_ParentId)[i])==15)){
+	    if(abs((*GenParticles_ParentId)[(*GenParticles_ParentIdx)[i]])<=25)
+	      nGenEle++;
+	  }
+	  else nGenEle++;
+	}//electrons, cut using e neutrino
 	else if( abs((*GenParticles_PdgId)[i])==14 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {
-	  nGenMu++;
+	  if((abs((*GenParticles_ParentId)[i])==15)){
+	    if(abs((*GenParticles_ParentId)[(*GenParticles_ParentIdx)[i]])<=25)
+	      nGenMu++;
+	  }
+	  else nGenMu++;
 	}//muons, count using mu neutrino
+
 	else if( abs((*GenParticles_PdgId)[i])==15 && abs((*GenParticles_ParentId)[i])<=25 ) {nGenTau++;}//taus
 	if( abs((*GenParticles_PdgId)[i])==11 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {genEle.push_back((*GenParticles)[i]);}
       }
     }
-    
-    if(nGenMu==0 && nGenEle==0 && nGenTau==0) continue;//to reject W->qq' type of events
+    if(nGenMu==0 && nGenEle==0 && nGenTau==0 && s_data!="FastSim") continue;//to reject W->qq' type of events
     if(Electrons->size()==0){
       if(isoMuonTracks!=0 || isoElectronTracks!=0 || isoPionTracks!=0) continue;
-      if(nGenEle==0) continue;
-      if(nGenMu!=0) continue;
+      if(s_data!="FastSim"){//for signal, just do SR selections. For lost e, consider lost e cases only
+	if(nGenEle==0) continue;
+	if(nGenMu!=0) continue;
+      }
     }
     if(genEle.size()==0) {TLorentzVector v1;genEle.push_back(v1);}
     sortTLorVec(&genEle);
@@ -307,7 +325,9 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	else realPho=true;
       }
       else cout<<"Logic issue in gen e/gamma matching with reco gamma"<<endl;
-      if(!realPho) continue;
+      if(s_data!="FastSim"){//for signal, just do SR selections. For lost e, consider lost e cases only
+	if(!realPho) continue;
+      }
     }
     //---------------------- MC only ends-------------------------
   
@@ -453,11 +473,14 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	}
 	else h_BTags_Ele0->Fill(BTags,wt);
 	h_METvBin_Ele0->Fill(MET,wt);
+	if(BTags==0) h_METvBin_Ele0_0b->Fill(MET,wt);
+        else h_METvBin_Ele0_min1b->Fill(MET,wt);
 	h_BestPhotonPt_Ele0->Fill(bestPhoton.Pt(),wt);
 	h_BestPhotonEta_Ele0->Fill(bestPhoton.Eta(),wt);
 	h_BestPhotonPhi_Ele0->Fill(bestPhoton.Phi(),wt);
 	h_mTpho_Ele0->Fill(mt_pho,wt);
-	
+	h_METPhi_Ele0->Fill(METPhi,wt);
+
 	h_EleMultInJets_Ele0->Fill(nEleMultJ,wt);
 
 	h_dPhi_PhoMET_Ele0->Fill(dphiPho_MET,wt);
@@ -471,8 +494,9 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_isoPiTrack_Ele0->Fill(isoPionTracks,wt);
 	//-----------------------MC only ------------------------------
 	h_nGenEle_Ele0->Fill(nGenEle,wt);//MC only
-	h_nGenEle_Ele0->Fill(nGenEle,wt);//MC only
+	h_nGenMu_Ele0->Fill(nGenMu,wt);//MC only
 	h_nGenTau_Ele0->Fill(nGenTau,wt);//MC only
+	h_nGenLightLep_Ele0->Fill(nGenEle+nGenMu,wt);
 
 	h_GenEleEta_Ele0->Fill(genEle[0].Eta(),wt);//MC only
 	h_GenElePt_Ele0->Fill(genEle[0].Pt(),wt);//MC only
@@ -503,6 +527,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 
 	h3_STMETnHadJ_Ele0->Fill(ST,MET,nHadJets,wt);
 	h2_hadJbTag_Ele0->Fill(nHadJets,BTags,wt);
+	if(genEle.size()>0 && genEle[0].Pt() !=0) h2_GenElePtEta_Ele0->Fill(genEle[0].Pt(),abs(genEle[0].Eta()),wt);
 
 	//	if(ST>5000 || MET>5000) cout<<"ST "<<ST<<" MET "<<MET<<endl;
 	if(nHadJets==2 || nHadJets==3)      h2_STMET_NJ2or3_Ele0  ->Fill(ST,MET,wt);
@@ -571,14 +596,19 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	  wt=tf*wt;
 	}
 	if(do_norm){
-	  double normFac[6] = {1.079808103,0.8710251313,1.308107212,1.681378731,1.17613559,1.089686378};
-	  if(nHadJets<=4 && BTags==0) wt = wt*normFac[0];
-          else if(nHadJets <=6 && BTags==0) wt = wt*normFac[1];
-          else if(nHadJets <=100 && BTags==0) wt = wt*normFac[2];
-          else if(nHadJets <=4 && BTags>=1) wt = wt*normFac[3];
-          else if(nHadJets <=6 && BTags>=1) wt = wt*normFac[4];
-          else if(nHadJets <=100 && BTags>=1) wt = wt*normFac[5];
-          else cout<<"Norm not assigned"<<endl;
+	  // double normFac[6] = {1.079808103,0.8710251313,1.308107212,1.681378731,1.17613559,1.089686378};
+	  // if(nHadJets<=4 && BTags==0) wt = wt*normFac[0];
+          // else if(nHadJets <=6 && BTags==0) wt = wt*normFac[1];
+          // else if(nHadJets <=100 && BTags==0) wt = wt*normFac[2];
+          // else if(nHadJets <=4 && BTags>=1) wt = wt*normFac[3];
+          // else if(nHadJets <=6 && BTags>=1) wt = wt*normFac[4];
+          // else if(nHadJets <=100 && BTags>=1) wt = wt*normFac[5];
+          // else cout<<"Norm not assigned"<<endl;
+	  // if((*Electrons)[0].Pt() > 100 && (*Electrons)[0].Pt() < 150) wt=wt*(59.0/44.146139);
+	  // else if((*Electrons)[0].Pt() >= 150 && (*Electrons)[0].Pt() < 200) wt=wt*(37./19.607035);
+	  // else if((*Electrons)[0].Pt() >=200) wt=wt*(29./17.863574);
+	  // if(MET > 100 && MET < 125) wt=wt*1.30651;
+	  // else if(MET >=125 && MET < 160) wt=wt*1.27152;
 	}
 	//----------------------------------------------------------------
         h_nVtx_Ele1->Fill(NVtx,wt);
@@ -593,11 +623,14 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	}
 	else h_BTags_Ele1->Fill(BTags,wt);
 	h_METvBin_Ele1->Fill(MET,wt);
+	if(BTags==0) h_METvBin_Ele1_0b->Fill(MET,wt);
+        else h_METvBin_Ele1_min1b->Fill(MET,wt);
 	h_BestPhotonPt_Ele1->Fill(bestPhoton.Pt(),wt);
 	h_BestPhotonEta_Ele1->Fill(bestPhoton.Eta(),wt);
 	h_BestPhotonPhi_Ele1->Fill(bestPhoton.Phi(),wt);
 	h_mTpho_Ele1->Fill(mt_pho,wt);
 	h_dPhiEleMET->Fill(DeltaPhi((*Electrons)[0].Phi(),METPhi),wt);
+	h_METPhi_Ele1->Fill(METPhi,wt);
 
 	h_EleMultInJets_Ele1->Fill(nEleMultJ,wt);
         h_invMassPhoEle->Fill((bestPhoton+(*Electrons)[0]).M(),wt);
@@ -625,6 +658,8 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_nGenEle_Ele1->Fill(nGenEle,wt);//MC only
 	h_nGenMu_Ele1->Fill(nGenMu,wt);//MC only
 	h_nGenTau_Ele1->Fill(nGenTau,wt);//MC only
+	h_nGenLightLep_Ele1->Fill(nGenEle+nGenMu,wt);//MC only
+	//	if(nGenEle+nGenMu==2) print(jentry);
 
 	h_nGenEleFmTau_Ele1->Fill(nGenEleFmTau,wt);//MC only
 	h_nGenMuFmTau_Ele1->Fill(nGenMuFmTau,wt);//MC only
@@ -650,6 +685,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Ele1->Fill(bestPhoton.Pt(),(jets[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 	if(eleMatchingJetIndx>=0) h2_RatioJetElePtVsElePt_Ele1->Fill((*Electrons)[0].Pt(),(jets[eleMatchingJetIndx].Pt())/((*Electrons)[0].Pt()),wt);
 
+	if(genEle.size()>0 && genEle[0].Pt() !=0) h2_GenElePtEta_Ele1->Fill(genEle[0].Pt(),abs(genEle[0].Eta()),wt);
 	h3_STMETnHadJ_Ele1->Fill(ST,MET,nHadJets,wt);
 	
 	h2_hadJbTag_Ele1->Fill(nHadJets,BTags,wt);
@@ -677,6 +713,14 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	  }
 	}
 	h2_R_ElePtJetPtVsDR->Fill( minDRele,((jets[minDReleIndx].Pt())/((*Electrons)[0].Pt())),wt);
+	double eleMiniIso = 100, mindR_elIso=100;
+	for(int el_i=0;el_i<ElectronsNoIso_MiniIso->size();el_i++){
+	  if(mindR_elIso > (*Electrons)[0].DeltaR((*ElectronsNoIso)[el_i])){ 
+	    mindR_elIso = (*Electrons)[0].DeltaR((*ElectronsNoIso)[el_i]);
+	    eleMiniIso = (*ElectronsNoIso_MiniIso)[el_i];
+	  }
+	}
+	h_EleMiniIso->Fill(eleMiniIso,wt);
 	//---------------- search bins -----------------------
 	if( searchRegion > 0 && searchRegion < 4){
 	  h_MET_Ele1_R[searchRegion-1]->Fill(MET,wt);

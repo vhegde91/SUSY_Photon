@@ -255,7 +255,7 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
     }
     //    if(MET>200) continue;
     int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
-    if(sBin7!=4) continue;
+    //    if(sBin7!=4) continue;
     if(emObjMatchingJetIndx>=0 && ((*Jets)[emObjMatchingJetIndx].Pt())/(bestEMObj.Pt()) < 1.0) continue; 
     if(emObjMatchingJetIndx<0) continue;
     process = process && ST>500 && nHadJets>=2 && MET>100 && (dphi1 > 0.3 && dphi2 > 0.3) && bestEMObj.Pt()>100;
@@ -461,8 +461,10 @@ void FakeRateEst::EventLoop(const char *data,const char *inputFileList) {
 	    //	    wt=(fakerate/(1-fakerate))*wt;
 	    // if(qMultMatchJet<=1) fakerate = fakerate*0.95;//from sideband sub
 	    // else fakerate = fakerate*1.67;//from sideband sub
-	    if(qMultMatchJet<=1) fakerate = fakerate*1.18;
-	    else fakerate = fakerate*1.21;
+	    if(qMultMatchJet<=1) fakerate = fakerate*1.18;//from fits
+	    else fakerate = fakerate*1.21;//from fits
+	    // if(qMultMatchJet<=1) fakerate = fakerate*0.27*0.27;//unc from fits, use sq unc
+	    // else fakerate = fakerate*0.16*0.16;//unc from fits, use sq unc
 	    wt=fakerate*wt*0.98/0.99;
 	  }
 	  //++++++++++++++++++++++ data only ends +++++++++++++++++++++++++++

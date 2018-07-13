@@ -39,22 +39,22 @@ void GetHLRatio(TString inFname){
   vector<string> name1,name2,name1_2d,name2_2d;
   vector<int> rebin;
   name1.push_back("ST_C");          name2.push_back("ST_A");      rebin.push_back(10);
-  // name1.push_back("myHT_C");          name2.push_back("myHT_A");      rebin.push_back(25);
-  // name1.push_back("STvarBin_C");          name2.push_back("STvarBin_A");      rebin.push_back(1);
-  name1.push_back("MET_CD");         name2.push_back("MET_AB");     rebin.push_back(2);
+  name1.push_back("myHT_C");          name2.push_back("myHT_A");      rebin.push_back(25);
+  name1.push_back("STvarBin_C");          name2.push_back("STvarBin_A");      rebin.push_back(1);
+  name1.push_back("MET_CD");         name2.push_back("MET_AB");     rebin.push_back(5);
   //  name1.push_back("GenMET_C");         name2.push_back("GenMET_A");     rebin.push_back(2);
   //  name1.push_back("METPhi_C");         name2.push_back("METPhi_A");     rebin.push_back(10);
   name1.push_back("nHadJets_C");    name2.push_back("nHadJets_A");rebin.push_back(1);
   name1.push_back("nBTags_C");      name2.push_back("nBTags_A");  rebin.push_back(1);
   name1.push_back("BestPhotonPt_C");    name2.push_back("BestPhotonPt_A");       rebin.push_back(5);
   name1.push_back("METvarBin_CD");   name2.push_back("METvarBin_AB");rebin.push_back(1);
-  //  name1.push_back("PhoFracPhoJet_C");   name2.push_back("PhoFracPhoJet_A");rebin.push_back(1);
+  // name1.push_back("jet1Pt_C");   name2.push_back("jet1Pt_A");rebin.push_back(5);
   // name1.push_back("jet2Pt_C");   name2.push_back("jet2Pt_A");rebin.push_back(5);
-  //name1.push_back("PtJetNearMET_C");   name2.push_back("PtJetNearMET_A");rebin.push_back(20);
+  //  name1.push_back("PtJetNearMET_C");   name2.push_back("PtJetNearMET_A");rebin.push_back(20);
   // name1.push_back("dPhi_METjet1_C");   name2.push_back("dPhi_METjet1_A");rebin.push_back(1);
   // name1.push_back("dPhi_METjet2_C");   name2.push_back("dPhi_METjet2_A");rebin.push_back(1);
   //  name1.push_back("dPhi_METBestPhoton_C");   name2.push_back("dPhi_METBestPhoton_A");rebin.push_back(2);
-  name1.push_back("AllSBins_v1_CD");   name2.push_back("AllSBins_v1_AB");rebin.push_back(1);
+  //  name1.push_back("AllSBins_v1_CD");   name2.push_back("AllSBins_v1_AB");rebin.push_back(1);
   name1.push_back("AllSBins_v4_CD");   name2.push_back("AllSBins_v4_AB");rebin.push_back(1);
   //  name1.push_back("dPhiPhotonJet1_C");   name2.push_back("dPhiPhotonJet1_A");rebin.push_back(1);
 
@@ -116,11 +116,11 @@ void GetHLRatio(TString inFname){
 	h_histG->Draw();
 	h_histE->Draw("sames");
 	h_histG->SetTitle(0);
-	legend[i]=new TLegend(0.7, 0.90,  0.85, 0.65);
+	legend[i]=new TLegend(0.7, 0.90,  0.90, 0.75);
 	name=name1[i];
-	legend[i]->AddEntry(h_histG,"High #Delta#Phi","l");
+	legend[i]->AddEntry(h_histG,"C(High #Delta#Phi Low MET)","l");
 	name=name2[i];
-	legend[i]->AddEntry(h_histE,"Low #Delta#Phi","l");
+	legend[i]->AddEntry(h_histE,"A(Low #Delta#Phi Low MET)","l");
 	legend[i]->Draw();
       }
     }
@@ -141,8 +141,7 @@ void GetHLRatio(TString inFname){
 
     h_numr->SetLineColor(kBlack);
     h_numr->SetMarkerColor(kBlack);
-    //    h_numr->SetTitle(";;#frac{C}{A}");
-    h_numr->SetTitle(";;#frac{High #Delta#Phi}{Low #Delta#Phi}");
+    h_numr->SetTitle(";;#frac{C}{A}");
     h_numr->GetYaxis()->SetTitleOffset(0.28);
     h_numr->GetYaxis()->SetTitleSize(0.17);
     h_numr->GetXaxis()->SetLabelSize(0.17);
@@ -197,22 +196,32 @@ void GetHLRatio(TString inFname){
 	gPad->Update();
 	fout->cd();
 	h2_histGcopy->Write();
-
+	cout<<"---------------H/L ratio---------------------"<<endl;
+	for(int ix=1;ix<=h2_histGcopy->GetNbinsX();ix++){
+	  for(int iy=1;iy<=h2_histGcopy->GetNbinsY();iy++){
+	    if(h2_histGcopy->GetBinContent(ix,iy) > 0.0001){
+	      cout<<h2_histGcopy->GetBinContent(ix,iy)<<" "<<h2_histGcopy->GetBinError(ix,iy)<<endl;
+	    }
+	  }
+	}
+	//-------------------------H/L ratio print----------------------
 	h_doubleR_num = (TH1D*)h2_histGcopy->ProjectionY("doubleR_num",h2_histGcopy->GetXaxis()->FindBin(201),h2_histGcopy->GetXaxis()->FindBin(201));
 	h_doubleR_den = (TH1D*)h2_histGcopy->ProjectionY("doubleR_den",h2_histGcopy->GetXaxis()->FindBin(101),h2_histGcopy->GetXaxis()->FindBin(101));
 
 	name="doubleR_"+name2_2d[i];
 	h_doubleR = (TH1D*)h_doubleR_num->Clone(name);
 	h_doubleR->Divide(h_doubleR_den);
-	cout<<name<<endl;
+	cout<<"Double ratio with unc for "<<name<<endl;
 	for(int iDouble=1;iDouble<=h_doubleR->GetNbinsX();iDouble++){
 	  if(h_doubleR->GetBinContent(iDouble) > 0.0001) cout<<h_doubleR->GetBinContent(iDouble)<<" "<<h_doubleR->GetBinError(iDouble)<<endl;
 	}
 	h_doubleR->Write();
+
       }
     }
   }
-
+  cout<<"---------------------------------------------"<<endl;
+  
   gStyle->SetTextSize(2);
 
   //  h2_histGcopy->Write();

@@ -332,7 +332,7 @@ AnalyzeLightBSM::AnalyzeLightBSM(const TString &inputFileList, const char *outFi
   string nameData=dataset;//vvv
   TChain *tree = new TChain("PreSelection");
   tree = new TChain("TreeMaker2/PreSelection");//vvv
-  //  if(nameData=="signalH") tree = new TChain("TreeMaker2/PreSelection");//vvv
+  if(nameData=="signalH") tree = new TChain("PreSelection");//vvv
   if( ! FillChain(tree, inputFileList) ) {
     std::cerr << "Cannot get the tree " << std::endl;
   } else {

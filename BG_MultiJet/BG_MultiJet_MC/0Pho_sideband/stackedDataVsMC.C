@@ -41,7 +41,8 @@ void stackedDataVsMC(TString iFname){
   f[3] = new TFile("VS_ZJetsToNuNu_ST1000_v2.root");
   f[4] = new TFile("VS_TTJets_ST1000_v2.root");
   f[5] = new TFile("VS_WJets_ST1000_v2.root");
-  f[6] = new TFile("VS_QCD_ST1000_v2.root");
+  //  f[6] = new TFile("VS_QCD_ST1000_v2.root");
+  f[6] = new TFile("VS_QCD_ST1000NoHighWt_v2.root");
   //f[6] = new TFile("VS_PhoPtWtd_GJetsQCD_ST1000.root");
   //f[6] = new TFile("DVS_2016_ST1000_Pred_v3.root");
   // f[7] = new TFile("VS_T5bbbbZg_1600_150_ST1000_v2.root");
@@ -56,6 +57,8 @@ void stackedDataVsMC(TString iFname){
   name1.push_back("ST_CD"); rebin.push_back(10);
   name1.push_back("MET_CD"); rebin.push_back(5);
   name1.push_back("METvarBin_CD"); rebin.push_back(1);
+  name1.push_back("MET_AB"); rebin.push_back(5);
+  name1.push_back("METvarBin_AB"); rebin.push_back(1);
   name1.push_back("nHadJets_CD"); rebin.push_back(1);
   name1.push_back("nBTags_AB"); rebin.push_back(1);
   name1.push_back("BestPhotonPt_CD"); rebin.push_back(1);

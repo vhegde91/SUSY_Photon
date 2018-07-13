@@ -41,13 +41,15 @@ void testClosure(TString iFname){
   
   vector<string> name1,name2;
   vector<int> rebin;
-  name1.push_back("ST_Mu0");          name2.push_back("ST_Mu1");      rebin.push_back(10);
+  name1.push_back("ST_Mu0");          name2.push_back("ST_Mu1");      rebin.push_back(25);
   name1.push_back("MET_Mu0");         name2.push_back("MET_Mu1");     rebin.push_back(5);
   name1.push_back("nBTags_Mu0");       name2.push_back("nBTags_Mu1");     rebin.push_back(1);
   name1.push_back("nHadJets_Mu0");    name2.push_back("nHadJets_Mu1");rebin.push_back(1);
-  name1.push_back("BestPhotonPt_Mu0");    name2.push_back("BestPhotonPt_Mu1");       rebin.push_back(5);
+  name1.push_back("BestPhotonPt_Mu0");    name2.push_back("BestPhotonPt_Mu1");       rebin.push_back(10);
   //  name1.push_back("BestPhotonEta_Mu0");   name2.push_back("BestPhotonEta_Mu1");  rebin.push_back(10);
   name1.push_back("METvarBin_Mu0");   name2.push_back("METvarBin_Mu1");  rebin.push_back(1);
+  name1.push_back("METvarBin_Mu0_0b");   name2.push_back("METvarBin_Mu1_0b");  rebin.push_back(1);
+  name1.push_back("METvarBin_Mu0_min1b");   name2.push_back("METvarBin_Mu1_min1b");  rebin.push_back(1);
   name1.push_back("dPhi_METjet1_Pho_Mu0");   name2.push_back("dPhi_METjet1_Pho_Mu1");  rebin.push_back(4);
   name1.push_back("dPhi_METjet2_Pho_Mu0");   name2.push_back("dPhi_METjet2_Pho_Mu1");  rebin.push_back(4);
   name1.push_back("dPhi_METBestPhoton_Mu0");   name2.push_back("dPhi_METBestPhoton_Mu1");  rebin.push_back(4);
@@ -104,7 +106,9 @@ void testClosure(TString iFname){
       name=name2[i];
       h_histE=(TH1D*)f[j]->FindObjectAny(name);//h_histE->Scale(150.9/481.6);
       h_histE->Rebin(rebin[i]);//h_histE->Scale(1.0/h_histE->Integral());
-     
+      for(int m=1;m<=h_histE->GetNbinsX();m++){
+	h_histE->SetBinError(m,sqrt((h_histE->GetBinError(m)*h_histE->GetBinError(m))+(0.1*h_histE->GetBinContent(m))*(0.1*h_histE->GetBinContent(m)) ));
+      }     
       if(h_histG && h_histE){
 	if(name1[i]=="nHadJets_Mu0"){
 	  sr_Integral=h_histG->Integral();
@@ -182,12 +186,12 @@ void testClosure(TString iFname){
     h_numr->Draw("e0same");
 
     TString name = h_histG->GetName();
-    if(name.Contains("SBins_v4")){ 
-      line1->Draw();	line2->Draw();	line3->Draw();	line4->Draw();	line5->Draw();
+    if(name.Contains("SBins_v7")){ 
+      line1V7->Draw();	line2V7->Draw();	line3V7->Draw();	line4V7->Draw();	line5V7->Draw();
       fout->cd();
       h_numr->Write();
       TH1D *h_pullHist = new TH1D("pull_lostMuHadTau","1D pull for lost Mu+hadTau",50,-2.5,7.5);
-      //TH1D *h_pullHist = new TH1D("pull_lostMuHadTau","1D pull for lost Mu+hadTau",43,0.5,43.5);
+      //      TH1D *h_pullHist = new TH1D("pull_lostMuHadTau","1D pull for lost Mu+hadTau",43,0.5,43.5);
       for(int p=1;p<=h_numr->GetNbinsX();p++){
 	h_pullHist->Fill( (1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));
 	//h_pullHist->Fill( p,(1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));

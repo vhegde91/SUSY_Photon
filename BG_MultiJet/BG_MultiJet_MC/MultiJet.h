@@ -111,6 +111,7 @@ class MultiJet : public NtupleVariables{
   TH1D *h_PhoPt_nJ2to4_AB,*h_PhoPt_nJ2to4_CD,*h_PhoPt_nJ2to4_[4];
   TH1D *h_PhoPt_minNJ5_AB,*h_PhoPt_minNJ5_CD,*h_PhoPt_minNJ5_[4];
 
+  TH2D *h2_BestPhoPtGenPhoPt_AB,*h2_BestPhoPtGenPhoPt_CD,*h2_BestPhoPtGenPhoPt_[4];
   TH2D *h2_PtPhotonvsMET_AB,*h2_PtPhotonvsMET_CD,*h2_PtPhotonvsMET_[4];
   TH2D *h2_dPhi1dPhi2_AB,*h2_dPhi1dPhi2_CD,*h2_dPhi1dPhi2_[4];
   TH2D *h2_NJST_AB,*h2_NJST_CD,*h2_NJST_[4];
@@ -177,6 +178,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_METPhi_AB=new TH1D("METPhi_AB","METPhi_AB",40,0,4);
   h_myHT_AB=new TH1D("myHT_AB","HT: sum Pt of hadJets_AB",400,0,4000);
 
+  h2_BestPhoPtGenPhoPt_AB=new TH2D("BestPhoPtGenPhoPt_AB","x:best reco photon Pt vs dR matching gen photon Pt_AB",150,0,1500,150,0,1500);
   h2_PtPhotonvsMET_AB=new TH2D("BestPhotonPtvsMET_AB","Best photon Pt vs MET_AB",150,0,1500,200,0,2000);
   h2_dPhi1dPhi2_AB=new TH2D("dPhi1dPhi2_AB","x:dPhi1 vs dPhi2_AB",40,0,4,40,0,4);
   h2_NJST_AB=new TH2D("NJST_AB","x:no. of hadJets vs ST_AB",nJBinLow.size()-1,&(nJBinLow[0]),STBinLow2.size()-1,&(STBinLow2[0]));
@@ -234,6 +236,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_mTPho_CD=new TH1D("mTPho_CD","mT(#gamma,MET)_CD",150,0,1500);
   h_RatioJetPhoPt_CD=new TH1D("RatioJetPhoPt_CD","ratio of matching jet Pt to photon Pt_CD",100,0,5);
 
+  h2_BestPhoPtGenPhoPt_CD=new TH2D("BestPhoPtGenPhoPt_CD","x:best reco photon Pt vs dR matching gen photon Pt_CD",150,0,1500,150,0,1500);
   h2_PtPhotonvsMET_CD=new TH2D("BestPhotonPtvsMET_CD","Best photon Pt vs MET_CD",150,0,1500,200,0,2000);
   h2_dPhi1dPhi2_CD=new TH2D("dPhi1dPhi2_CD","x:dPhi1 vs dPhi2_CD",40,0,4,40,0,4);
   h2_NJST_CD=new TH2D("NJST_CD","x:no. of hadJets vs ST_CD",nJBinLow.size()-1,&(nJBinLow[0]),STBinLow2.size()-1,&(STBinLow2[0]));
@@ -297,7 +300,8 @@ void MultiJet::BookHistogram(const char *outFileName) {
     h_PhoPt_minNJ5_[i]=new TH1D("PhoPt_minNJ5_"+regName,"Photon Pt for nJ>=5_"+regName,150,0,1500);
 
     h_SBins_v1_[i] = new TH1D("AllSBins_v1_"+regName,"search bins:(NJ=2to4) (NJ:5or6) (NJ>=7)_"+regName,21,0.5,21.5);
-  
+
+    h2_BestPhoPtGenPhoPt_[i]=new TH2D("BestPhoPtGenPhoPt_"+regName,"x:best reco photon Pt vs dR matching gen photon Pt_"+regName,150,0,1500,150,0,1500);  
     h2_PtPhotonvsMET_[i]=new TH2D("BestPhotonPtvsMET_"+regName,"Best photon Pt vs MET_"+regName,150,0,1500,200,0,2000);
     h2_dPhi1dPhi2_[i]=new TH2D("dPhi1dPhi2_"+regName,"x:dPhi1 vs dPhi2_"+regName,40,0,4,40,0,4);
     h2_NJST_[i]=new TH2D("NJST_"+regName,"x:no. of hadJets vs ST_"+regName,nJBinLow.size()-1,&(nJBinLow[0]),STBinLow2.size()-1,&(STBinLow2[0]));

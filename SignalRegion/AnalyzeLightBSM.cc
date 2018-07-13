@@ -40,7 +40,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
   TString s_data=data;
   Long64_t nbytes = 0, nb = 0;
   int decade = 0;
-  bool applISRWtsTottbar = 1;  
+  bool applISRWtsTottbar = 1, applyISRWtsFastSim=0;  
   int evtSurvived=0,minbtags=0;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down 
@@ -49,7 +49,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
       <<"applying ISR weights to ttbar? "<<applISRWtsTottbar<<endl;
   //set file for getting ISR wts for signal
   TFile *fISR;  TH2D *h2_isrWtCorr;
-  if(s_data.Contains("FastSim")){
+  if(s_data.Contains("FastSim") && applyISRWtsFastSim){
     if(s_data.Contains("T5bbbb")) fISR = new TFile("T5bbbbZg_MassScan.root");
     else if(s_data.Contains("T5tttt")) fISR = new TFile("T5ttttZg_MassScan.root");
     else if(s_data.Contains("T5qqqq")) fISR = new TFile("T5qqqqHg_MassScan.root");
@@ -175,11 +175,13 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
       	  break;
       	}
       }
-      double isrWt = 0,isrWtCorr = h2_isrWtCorr->GetBinContent(h2_isrWtCorr->GetXaxis()->FindBin(SusyMotherMass),h2_isrWtCorr->GetYaxis()->FindBin(SusyLSPMass));
-      vector<double> isrwt_arr={1., 0.920, 0.821, 0.715, 0.662, 0.561, 0.511};
-      if(NJetsISR>=6) isrWt = isrwt_arr[6];
-      else isrWt = isrwt_arr[NJetsISR];
-      wt = wt*isrWt*isrWtCorr;
+      if(applyISRWtsFastSim){
+	double isrWt = 0,isrWtCorr = h2_isrWtCorr->GetBinContent(h2_isrWtCorr->GetXaxis()->FindBin(SusyMotherMass),h2_isrWtCorr->GetYaxis()->FindBin(SusyLSPMass));
+	vector<double> isrwt_arr={1., 0.920, 0.821, 0.715, 0.662, 0.561, 0.511};
+	if(NJetsISR>=6) isrWt = isrwt_arr[6];
+	else isrWt = isrwt_arr[NJetsISR];
+	wt = wt*isrWt*isrWtCorr;
+      }
     }
 
     if(applISRWtsTottbar && s_data=="TTJets"){
@@ -260,7 +262,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     if(photonMatchingJetIndx<0) continue;
 
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
-    process = process && !eMatchedG && !bestPhoHasPxlSeed && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100 && dphi1 > 0.3 && dphi2 > 0.3;
+    process = process && !eMatchedG && !bestPhoHasPxlSeed && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 200;// && dphi1 > 0.3 && dphi2 > 0.3;
     //  process = process && ST>500 && nHadJets>=2 && MET>100 && dphi1 > 0.3 && dphi2 > 0.3;
     //    process = process && NJets>=3 && MET>100;// && dphi1 > 0.3;
     //if(process){process=HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0 && minDR<0.3;}

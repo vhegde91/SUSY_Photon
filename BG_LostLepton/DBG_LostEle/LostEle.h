@@ -114,9 +114,9 @@ class LostEle : public NtupleVariables{
   TH1D *h_BestPhotonEta_Ele0;
   TH1D *h_BestPhotonPhi_Ele0;
   TH1D *h_mTpho_Ele0;
+  TH1D *h_METPhi_Ele0;
 
   TH1D *h_EleMultInJets_Ele0;
-
   TH1D *h_nGenEle_Ele0,*h_nGenMu_Ele0,*h_nGenTau_Ele0;
   TH1D *h_GenElectrons_MT2Activity_Ele0;
 
@@ -173,6 +173,7 @@ class LostEle : public NtupleVariables{
   TH1D *h_BestPhotonPhi_Ele1;
   TH1D *h_mTpho_Ele1;
   TH1D *h_dPhiEleMET;
+  TH1D *h_METPhi_Ele1;
 
   TH1D *h_isoMuonTracks_Ele1;
   TH1D *h_EleMultInJets_Ele1;
@@ -186,6 +187,7 @@ class LostEle : public NtupleVariables{
   TH1D *h_EleEta;
   TH1D *h_ElePhi;
   TH1D *h_mTEle;
+  TH1D *h_EleMiniIso;
 
   TH1D *h_dPhi_PhoMET_Ele1;
   TH1D *h_dphi_METjet1_Ele1;
@@ -293,6 +295,7 @@ void LostEle::BookHistogram(const char *outFileName) {
   h_BestPhotonEta_Ele0=new TH1D("BestPhotonEta_Ele0","Eta of the best photon for 0 Electron events",120,-6,6);
   h_BestPhotonPhi_Ele0=new TH1D("BestPhotonPhi_Ele0","Phi of the best photon for 0 Electron events",80,-4,4);
   h_mTpho_Ele0=new TH1D("mTPho_Ele0","mT b/w photon and MET for 0 Electron events",150,0,1500);
+  h_METPhi_Ele0=new TH1D("METPhi_Ele0","MET Phi for 0 Electron events",80,-4,4);
 
   h_EleMultInJets_Ele0=new TH1D("EleMultInJets_Ele0","Electron multiplicity in jets for 0 Ele events",20,0,20);
 
@@ -356,12 +359,14 @@ void LostEle::BookHistogram(const char *outFileName) {
   h_BestPhotonPhi_Ele1=new TH1D("BestPhotonPhi_Ele1","Phi of the best photon for 1 Electron events",80,-4,4);
   h_mTpho_Ele1=new TH1D("mTPho_Ele1","mT b/w photon and MET for 1 Electron events",150,0,1500);
   h_dPhiEleMET=new TH1D("dPhiEleMET","dPhi(MET,e) for 1 Electron evnets",80,-4,4);
+  h_METPhi_Ele1=new TH1D("METPhi_Ele1","MET Phi for 1 Electron events",80,-4,4);
 
   h_GenElectrons_MT2Activity_Ele1=new TH1D("GenElectrons_MT2Activity_Ele1","Gen MT2 activity for 1 Ele events",100,0,0.5);
   h_ElePt=new TH1D("ElePt","Electron Pt",150,0,1500);
   h_EleEta=new TH1D("EleEta","Electron eta",120,-6,6);
   h_ElePhi=new TH1D("ElePhi","Electron Phi",80,-4,4);
   h_mTEle=new TH1D("MT_Ele","MT for 1 Ele events",500,0,500);
+  h_EleMiniIso=new TH1D("EleMiniIso","Mini-isolation for electron",100,0,0.2);
 
   h_EleMultInJets_Ele1=new TH1D("EleMultInJets_Ele1","Electron multiplicity in jets for 1 Ele events",20,0,20);
   h_invMassPhoEle=new TH1D("invMassPhoEle","Inv mass of photon and muon",200,0,2000);

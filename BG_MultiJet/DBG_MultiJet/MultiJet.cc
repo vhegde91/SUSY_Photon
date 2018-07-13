@@ -310,7 +310,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	}
 	if(regType=='C' || regType=='D'){
 	  //	  print(jentry);
-	  //	  if(sBin7==3) cout<<RunNum<<":"<<LumiBlockNum<<":"<<EvtNum<<endl;
+	  //	  if(regType=='D'){print(jentry); cout<<RunNum<<":"<<LumiBlockNum<<":"<<EvtNum<<endl;}
 	  h_ST_CD->Fill(ST,wt);
 	  h_MET_CD->Fill(MET,wt);
 	  h_METclean_CD->Fill(METclean,wt);

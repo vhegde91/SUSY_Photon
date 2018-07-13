@@ -14,7 +14,7 @@
 #include"THStack.h"
 #include"TStyle.h"
 #include"/home/vinay/root_includes.h"
-const int nfiles=2;
+const int nfiles=3;
 TFile *f[nfiles];
 TH1D *h1[nfiles];
 TLegend *lg1;
@@ -22,9 +22,9 @@ int col[10]={kRed,kTeal+9,kBlue,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta
 vector<TString> fNames,histName,legName;
 //void setLastBinAsOverFlow(TH1D*);
 vector<int> rebin;
-TString xAxisName="Bin no.";
+TString xAxisName="#Delta#Phi(MET,#gamma)";
 TString yAxisName="";
-bool saveHist=0,drawnormalized=0;
+bool saveHist=0,drawnormalized=1;
 
 void makeRatioPlot();
 void plotManyHists(){
@@ -36,20 +36,49 @@ void plotManyHists(){
   // legName.push_back("Exp");
   // rebin.push_back(1);
   //-------------------------------------
-  fNames.push_back("VS_GJetsQCD_ST1000_v2.root");
-  histName.push_back("MET_CD");
-  legName.push_back("VR");
-  rebin.push_back(5);
+  // fNames.push_back("runList_QCDGJets.root");
+  // histName.push_back("dPhi_METBestPhoton_CD");
+  // legName.push_back("VR");
+  // rebin.push_back(1);
   //-------------------------------------
   // fNames.push_back("EW_Subtracted_DVS_doubleR_2016_ST1000.root");
-  // histName.push_back("AllSBins_v4_AB");
+  // histName.push_back("AllSBins_v4_CD");
   // legName.push_back("Pred");
   // rebin.push_back(1);
-  fNames.push_back("GJetsQCD_prompt.root");
-  histName.push_back("MET_CD");
+  fNames.push_back("../gjets_qcd.root");
+  histName.push_back("dPhi_METBestPhoton_CD");
   legName.push_back("SR");
-  rebin.push_back(5);
+  rebin.push_back(1);
   //-------------------------------------
+  fNames.push_back("VS_GJetsQCD_SR_Sele_BestJetProxy.root");
+  histName.push_back("dPhi_METBestPhoton_CD");
+  legName.push_back("VR");
+  rebin.push_back(1);
+  fNames.push_back("VS_GJetsQCD_SR_Sele_WellMeasProxy.root");
+  histName.push_back("dPhi_METBestPhoton_CD");
+  legName.push_back("VR_goodProxy");
+  rebin.push_back(1);
+  // fNames.push_back("VS_GJetsQCD_SR_Sele_WellMeasProxy.root");
+  // histName.push_back("dPhi_METBestPhoton2J_CD");
+  // legName.push_back("VR_2J");
+  // rebin.push_back(1);
+  // fNames.push_back("VS_GJetsQCD_SR_Sele_WellMeasProxy.root");
+  // histName.push_back("dPhi_METBestPhoton3J_CD");
+  // legName.push_back("VR_3J");
+  // rebin.push_back(1);
+  // fNames.push_back("VS_GJetsQCD_SR_Sele_WellMeasProxy.root");
+  // histName.push_back("dPhi_METBestPhoton4J_CD");
+  // legName.push_back("VR_4J");
+  // rebin.push_back(1);
+  // fNames.push_back("VS_GJetsQCD_SR_Sele_WellMeasProxy.root");
+  // histName.push_back("dPhi_METBestPhoton5to6J_CD");
+  // legName.push_back("VR_5-6J");
+  // rebin.push_back(1);
+  // fNames.push_back("VS_GJetsQCD_SR_Sele_WellMeasProxy.root");
+  // histName.push_back("dPhi_METBestPhoton7J_CD");
+  // legName.push_back("VR_>=7J");
+  // rebin.push_back(1);
+ 
   //-------------------------------------
   // fNames.push_back("");
   // histName.push_back("");
@@ -127,9 +156,9 @@ void makeRatioPlot(){
   h1_cp->Draw();
   TFile *fout;
   if(saveHist){
-    fout = new TFile("phoPt_forVRwithSRsel_AB.root","recreate");
+    fout = new TFile("dPhiPhoMET_SRvsVR.root","update");
     fout->cd();
-    h1_cp->Write();
+    h1_cp->Write("AB_2J");
   }
   //  for(int i=0;i<nfiles;i++){
     // f[i] = new TFile(fNames[i]);

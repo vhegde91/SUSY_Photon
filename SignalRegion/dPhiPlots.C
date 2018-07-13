@@ -27,7 +27,7 @@ char name[100];
 void dPhiPlots(){
 
   //f[0] = new TFile("ZJetsToNuNu.root");
-  f[0] = new TFile("ZGJetsToNuNuG.root");
+  f[0] = new TFile("ZGZJ_NuNuG.root");
   f[1] = new TFile("WJetsToLNu.root");
   f[2] = new TFile("WGJetsToLNuG.root");
   f[3] = new TFile("TTJetsHT.root");
@@ -35,9 +35,9 @@ void dPhiPlots(){
   //  f[5] = new TFile("QCD.root");
   f[5] = new TFile("GJets.root");
 
-  f[6] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
+  f[6] = new TFile("GGM_M1M3_1600_200_FastSim.root");
   //  f[1] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
-  f[7] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
+  f[7] = new TFile("T5qqqqHg_1600_150_FastSim.root");
  
   // f[7] = new TFile("HG_NLSP150.root");
   //  f[8] = new TFile("HG_NLSP1000.root");

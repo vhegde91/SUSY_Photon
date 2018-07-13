@@ -47,6 +47,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   int evtSurvived=0;
   //get 2d histogram========================================
   TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuHadTau_v2.root");
+  //  TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuHadTau_odd.root");
   //TFile *f_LP=new TFile("LstMu_CS_LDP_TTWZ_LostMuHadTau_v2.root");
   //  TFile *f_LP=new TFile("LstMu_CS_TTWZ_HadTauOnly_v2.root");
   //TFile *f_LP=new TFile("LstMu_CS_TTWZ_LostMuOnly_v2.root");
@@ -58,7 +59,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   //choose central, up, or down
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
 
-  bool applyMuSFs=1;
+  bool applyMuSFs=0;
   int jec2Use = 0;//-1 for JEC down, 0 for CV, 1 for JEC up
   TFile *f_MuSF1 = TFile::Open("TnP_NUM_MiniIsoTight_DENOM_MediumID_VAR_map_pt_eta.root");
   TH2F *h2_MuSF1 = (TH2F*)f_MuSF1->Get("SF");
@@ -70,7 +71,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
   if(jec2Use!=0) cout<<"!!!!!!!!!! Applying JECs. -1 for JEC down, 0 for CV, 1 for JEC up. I am using "<<jec2Use<<" !!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
   if(do_norm) cout<<"!!!!!! Normalizing CS according to data"<<endl;
   //----------- btags SFs-----------------  
-  bool applybTagSFs=1;
+  bool applybTagSFs=0;
   int fListIndxOld=-1;
   double prob0=-100,prob1=-100;
   vector<TString> inFileName;
@@ -104,7 +105,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     bool process=true;
     if(s_data!="FastSim")
       if(!(CSCTightHaloFilter==1 && HBHENoiseFilter==1 && HBHEIsoNoiseFilter==1 && eeBadScFilter==1 && EcalDeadCellTriggerPrimitiveFilter==1 && BadChargedCandidateFilter && BadPFMuonFilter && NVtx > 0)) continue;
-
+    //    if(EvtNum%2!=0) continue;
     //----------------- for jets ----------------
     //    print(jentry);
     int n_j = 0;
@@ -131,6 +132,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       	currFile = TFile::Open(sampleName);
       	btagcorr.SetEffs(currFile);
       	btagcorr.SetCalib("btag/CSVv2_Moriond17_B_H_mod.csv");
+	if(s_data == "FastSim")btagcorr.SetCalibFastSim("btag/fastsim_csvv2_ttbar_26_1_2017.csv");
       }
     }
     vector<double> prob;
@@ -229,7 +231,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     //++++++++++++++++++++++ data only ends +++++++++++++++++++++++++++
 
     //---------------------- MC only -------------------------
-    wt=Weight*1000.0*lumiInfb*(puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(TrueNumInteractions,puhist->GetBinLowEdge(puhist->GetNbinsX()+1)))));
+    if(s_data!="FastSim") wt=Weight*1000.0*lumiInfb*(puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(TrueNumInteractions,puhist->GetBinLowEdge(puhist->GetNbinsX()+1)))));
+    else  wt=Weight*1000.0*lumiInfb;
     //Trigger related
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
     wt=wt*0.98;
@@ -269,6 +272,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       if(hasGenPromptPhoton && gendRLepPho > 0.3 && madMinPhotonDeltaR > 0.3) continue;
       if(jentry<3) cout<<"Non-Prompt, dR(pho,q/g/lep) < 0.3 ";
     }
+    
     //    if(madMinPhotonDeltaR < 0.5 || gendRLepPho < 0.5) continue;    
     int nGenMu=0,nGenEle=0,nGenTau=0,nGenMuFmTau=0,nGenEleFmTau=0,Windx=-1;
     vector<TLorentzVector> genMu;
@@ -276,12 +280,25 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     double Wmass=0;
     for(int i=0;i<GenParticles->size();i++){
       if((*GenParticles)[i].Pt()!=0){
-	if( abs((*GenParticles_PdgId)[i])==14 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {nGenMu++;}//muons, count using neutrino
-	else if( abs((*GenParticles_PdgId)[i])==12 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {nGenEle++;}//electrons, count using neutrino
+	// if( abs((*GenParticles_PdgId)[i])==14 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {nGenMu++;}//muons, count using neutrino
+	// else if( abs((*GenParticles_PdgId)[i])==12 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {nGenEle++;}//electrons, count using neutrino
+	if( abs((*GenParticles_PdgId)[i])==12 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {
+	  if((abs((*GenParticles_ParentId)[i])==15)){
+	    if(abs((*GenParticles_ParentId)[(*GenParticles_ParentIdx)[i]])<=25)
+	      nGenEle++;
+	  }
+	  else nGenEle++;
+	}//electrons, cut using e neutrino
+	else if( abs((*GenParticles_PdgId)[i])==14 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {
+	  if((abs((*GenParticles_ParentId)[i])==15)){
+	    if(abs((*GenParticles_ParentId)[(*GenParticles_ParentIdx)[i]])<=25)
+	      nGenMu++;
+	  }
+	  else nGenMu++;
+	}//muons, count using mu neutrino
 	else if( abs((*GenParticles_PdgId)[i])==15 && (abs((*GenParticles_ParentId)[i])<=25) ) {nGenTau++;}//taus
 	if( abs((*GenParticles_PdgId)[i])==13 && (abs((*GenParticles_ParentId)[i])<=25) && ((*GenParticles_Status)[i]==1) ) {genMu.push_back((*GenParticles)[i]);}
 	if(abs((*GenParticles_PdgId)[i])==24){ Wmass = (*GenParticles)[i].M(); Windx=i;}
-	
       }
     }
     if(Windx>0){
@@ -295,8 +312,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       h2_WMassVsGenMT->Fill(Wmass,sqrt(2*WKid1.Pt()*WKid2.Pt()*(1-cos(WKid1.DeltaPhi(WKid2)))),wt);
       //      if(sqrt(2*WKid1.Pt()*WKid2.Pt()*(1-cos(WKid1.DeltaPhi(WKid2)))) < 5){cout<<Wmass<<" "<<Windx<<" "<<WKid1.Pt()<<" "<<WKid2.Pt()<<" "<<sqrt(2*WKid1.Pt()*WKid2.Pt()*(1-cos(WKid1.DeltaPhi(WKid2))))<<endl; print(jentry);}
     }
-    if(nGenMu==0 && nGenEle==0 && nGenTau==0) continue;//to reject W->qq' type of events
-
+    if(nGenMu==0 && nGenEle==0 && nGenTau==0 && s_data!="FastSim") continue;//to reject W->qq' type of events
     if(Muons->size()==0){
       if(isoMuonTracks!=0 || isoElectronTracks!=0 || isoPionTracks!=0) continue;
       //      if(nGenMu==0) continue;//uncomment this line to do only lost muon, w/o including hadronic tau decays
@@ -305,7 +321,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
                                //set  temp1=true for lost muon + had tau. set temp1=false for only hadtau.
       else if(nGenEle>0) temp1=false;
       else temp1=true;
-      if(temp1==false) continue;
+      if(temp1==false && s_data!="FastSim") continue;
     }
     if(genMu.size()==0) {TLorentzVector v1;genMu.push_back(v1);}
     sortTLorVec(&genMu);
@@ -331,7 +347,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
       }
     }
     if(Muons->size()==0){
-      if(matche==1 && matchp==0) continue;//if reco photon matched to gen e and not matched to gen photon, it is fake.
+      if(matche==1 && matchp==0 && s_data!="FastSim") continue;//if reco photon matched to gen e and not matched to gen photon, it is fake.
     }//photon has been identified. It is a real photon and it is matched to gen photon with dR(genPho,RecoPho) < 0.1 and Pts are within 10%.
     //---------------------- MC only ends-------------------------
     if(phoMatchingJetIndx>=0 && (jets[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
@@ -444,6 +460,9 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	}
 	else h_BTags_Mu0->Fill(BTags,wt);
 	h_METvBin_Mu0->Fill(MET,wt);
+	if(BTags==0) h_METvBin_Mu0_0b->Fill(MET,wt);
+	else h_METvBin_Mu0_min1b->Fill(MET,wt);
+
 	h_BestPhotonPt_Mu0->Fill(bestPhoton.Pt(),wt);
 	h_BestPhotonEta_Mu0->Fill(bestPhoton.Eta(),wt);
 	h_BestPhotonPhi_Mu0->Fill(bestPhoton.Phi(),wt);
@@ -461,10 +480,24 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h_isoEleTrack_Mu0->Fill(isoElectronTracks,wt);
 	h_isoMuTrack_Mu0->Fill(isoMuonTracks,wt);
 	h_isoPiTrack_Mu0->Fill(isoPionTracks,wt);
-	//-----------------------MC only ------------------------------
+
+	for(int ig=0;ig<genMu.size();ig++){
+	  if(!(genMu[ig].Pt()>10 && abs(genMu[ig].Eta())<2.4)) continue;
+	  for(int ir=0;ir<MuonsNoIso->size();ir++){
+	    if(genMu[ig].DeltaR((*MuonsNoIso)[ir]) < 0.1){
+	      h_MuPtNoIso_Mu0->Fill((*MuonsNoIso)[ir].Pt(),wt);
+	      // if(ir>0){ cout<<ir<<"....................."<<endl;
+	      // 	cout<<(*MuonsNoIso)[ir].Pt()<<" "<<(*MuonsNoIso)[ir].Eta()<<" "<<(*MuonsNoIso)[ir].Phi()<<endl;
+	      // 	cout<<"Gen:"<<genMu[ig].Pt()<<" "<<genMu[ig].Eta()<<" "<<genMu[ig].Phi()<<endl;
+	      // 	print(jentry);}
+	    }
+	  }
+	}
+      	//-----------------------MC only ------------------------------
 	h_nGenEle_Mu0->Fill(nGenEle,wt);//MC only
 	h_nGenMu_Mu0->Fill(nGenMu,wt);//MC only
 	h_nGenTau_Mu0->Fill(nGenTau,wt);//MC only
+	h_nGenLightLep_Mu0->Fill(nGenEle+nGenMu,wt);//MC only
 
 	h_GenMuEta_Mu0->Fill(genMu[0].Eta(),wt);//MC only
 	h_GenMuPt_Mu0->Fill(genMu[0].Pt(),wt);//MC only
@@ -496,6 +529,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h3_STMETnHadJ_Mu0->Fill(ST,MET,nHadJets,wt);
 	h2_hadJbTag_Mu0->Fill(nHadJets,BTags,wt);
 
+	if(genMu.size()>0 && genMu[0].Pt() !=0) h2_GenMuPtEta_Mu0->Fill(genMu[0].Pt(),abs(genMu[0].Eta()),wt);
 	//	if(ST>5000 || MET>5000) cout<<"ST "<<ST<<" MET "<<MET<<endl;
 	if(nHadJets==2 || nHadJets==3)      h2_STMET_NJ2or3_Mu0  ->Fill(ST,MET,wt);
 	else if(nHadJets==4)                h2_STMET_NJ4_Mu0     ->Fill(ST,MET,wt);
@@ -580,6 +614,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	  h_BTags_Mu1->Fill(3.0,wt*prob[3]);
 	}
 	else h_BTags_Mu1->Fill(BTags,wt);
+	if(BTags==0) h_METvBin_Mu1_0b->Fill(MET,wt);
+	else h_METvBin_Mu1_min1b->Fill(MET,wt);
 	h_METvBin_Mu1->Fill(MET,wt);
 	h_BestPhotonPt_Mu1->Fill(bestPhoton.Pt(),wt);
 	h_BestPhotonEta_Mu1->Fill(bestPhoton.Eta(),wt);
@@ -607,12 +643,20 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	h_isoPiTrack_Mu1->Fill(isoPionTracks,wt);
 	h_dR_MuPho->Fill(bestPhoton.DeltaR((*Muons)[0]),wt);
 	h_mTPhoMuMET->Fill(mt_mupho,wt);
+	for(int ig=0;ig<genMu.size();ig++){
+	  if(!(genMu[ig].Pt()>10 && abs(genMu[ig].Eta())<2.4)) continue;
+	  for(int ir=0;ir<MuonsNoIso->size();ir++){
+	    if(genMu[ig].DeltaR((*MuonsNoIso)[ir]) < 0.2)
+	      h_MuPtNoIso_Mu1->Fill((*MuonsNoIso)[ir].Pt(),wt);
+	  }
+	}
 	//-------------------------------------- MC only -------------------------------------
 	//	h_GenMuPt_Mu1->Fill(genMu[0].Pt(),wt);//MC only
 	h_photonPrompt_Mu1->Fill(!((*Photons_nonPrompt)[bestPhotonIndxAmongPhotons]),wt);//MC only
 	h_nGenEle_Mu1->Fill(nGenEle,wt);//MC only
 	h_nGenMu_Mu1->Fill(nGenMu,wt);//MC only
 	h_nGenTau_Mu1->Fill(nGenTau,wt);//MC only
+	h_nGenLightLep_Mu1->Fill(nGenEle+nGenMu,wt);//MC only
 	
 	h_gendRLepPho_Mu1->Fill(gendRLepPho,wt);//MC only
 	h_madMinPhotonDeltaR_Mu1->Fill(madMinPhotonDeltaR,wt);//MC only
@@ -639,6 +683,8 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
 	if(phoMatchingJetIndx>=0) h2_RatioJetPhoPtVsPhoPt_Mu1->Fill(bestPhoton.Pt(),(jets[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()),wt);
 
 	h3_STMETnHadJ_Mu1->Fill(ST,MET,nHadJets,wt);
+
+	if(genMu.size()>0 && genMu[0].Pt() !=0) h2_GenMuPtEta_Mu1->Fill(genMu[0].Pt(),abs(genMu[0].Eta()),wt);
 	
 	h2_hadJbTag_Mu1->Fill(nHadJets,BTags,wt);
 	if(nHadJets==2 || nHadJets==3)      h2_STMET_NJ2or3_Mu1  ->Fill(ST,MET,wt);

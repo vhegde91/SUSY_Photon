@@ -203,10 +203,10 @@ void AnalyzeLightBSM::BookHistogram(const char *outFileName) {
   h_RunNum=new TH1I("runs","Run nos.",300000,0,300000);
   h_intLumi=new TH1D("intLumi","integrated luminosity in /fb",2500,25,50); 
   h_ST=new TH1D("ST","ST",400,0,4000);
-  h_MET=new TH1D("MET","MET",200,0,2000);
+  h_MET=new TH1D("MET","MET",150,0,1500);
   h_nHadJets=new TH1D("nHadJets","no. of jets(only hadronic jets,not counting photon)",25,0,25);
   h_BTags=new TH1D("nBTags","no. of B tags",10,0,10);
-  h_BestPhotonPt=new TH1D("BestPhotonPt","Pt of the Best Photon",150,0,1500);
+  h_BestPhotonPt=new TH1D("BestPhotonPt","Pt of the Best Photon",120,0,1200);
 
   h_HT=new TH1D("HT","HT",400,0,4000);
   h_MHT=new TH1D("MHT","MHT",200,0,2000);
@@ -225,7 +225,7 @@ void AnalyzeLightBSM::BookHistogram(const char *outFileName) {
   h2_dPhi1dPhi2=new TH2D("dPhi1dPhi2","x:#Delta#Phi1 vs #Delta#Phi2",40,0,4,40,0,4);
 
   h_STvBin = new TH1D("STvarBin","STvarBin",STBinLowEdge.size()-1,&(STBinLowEdge[0]));
-  h_METvBin=new TH1D("METvarBin","MET with variable bin size",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
+  h_METvBin=new TH1D("METvarBin","MET with variable bin size",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
   h_BestPhotonPtvBin=new TH1D("BestPhotonPtvarBin","BestPhotonPt with variable bin size",BestPhotonPtBinLowEdge.size()-1,&(BestPhotonPtBinLowEdge[0]));
   h_MHTvBin=new TH1D("MHTvarBin","MHT with variable bin size",METBinLowEdge.size()-1,&(METBinLowEdge[0]));
   h_MET_R[0] = new TH1D("MET_R1","MET: NJ=2to4",METBinLowEdge2.size()-1,&(METBinLowEdge2[0]));

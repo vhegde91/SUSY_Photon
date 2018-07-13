@@ -18,14 +18,14 @@
 TLatex textOnTop,intLumiE;
 double intLumi = 35.9;
 void overlayExcl(){
-  const int nFiles=2;
+  const int nFiles=3;
   int col[7]={kRed,kBlue,kTeal+9,kBlack,kOrange,kCyan,kMagenta};
   gStyle->SetOptStat(0);
   TCanvas *c1=new TCanvas("c1","c1",1200,1000);
   c1->SetLogz();
   TFile *f[nFiles];
-  // f[0]=new TFile("Excl_T5ttttZg_LimitPlots_Obs_V7_v3.root"); 
-  // f[1]=new TFile("Excl_T5ttttZg_LimitPlots_Obs_V7_v5.root");
+  // f[0]=new TFile("Excl_T5ttttZg_LimitPlots_Obs_V7_v8.root"); 
+  // f[1]=new TFile("Excl_T5ttttZg_LimitPlots_Obs_V7_v9.root");
 
   // f[0]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV3.root"); 
   // f[1]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV5.root");
@@ -36,17 +36,24 @@ void overlayExcl(){
 
   //  f[6]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV7.root");
 
-  // f[0]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV4.root");
-  // f[1]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV7.root");
+  // f[0]=new TFile("Excl_T6ttZg_LimitPlots_Obs_V7_v11.root");
+  //f[1]=new TFile("Excl_T6ttZg_LimitPlots_Obs_V7_v9.root");
+
+  f[0]=new TFile("Excl_GGM_M1M3_LimitPlots_Obs_V7_v3.root");
+  f[1]=new TFile("Excl_GGM_M1M3_PhoLep_LimitPlots_Obs_V7_v3.root");
+  f[2]=new TFile("Excl_GGM_M1M3_PhoLepPhoJet_LimitPlots_Obs_V7_v3.root");
+
   // f[0]=new TFile("Excl_T5ttttZg_LimitPlots_Obs_V7_v7.root"); 
-  // f[1]=new TFile("EMHT_Limits_Knut/T5ttttZg_v20/saved_graphs1d_limit.root");
+  //  f[2]=new TFile("EMHT_Limits_Knut/T5bbbbZg_v20/saved_graphs1d_limit.root");
+  //  f[1]=new TFile("Excl_T5bbbbZg_LimitPlots_Obs_V7_v9.root");
+  //  f[1]=new TFile("Excl_T6ttZg_LimitPlots_Obs_V7_v8.root");
   // f[0]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7.root");
   // f[1]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7_ObsTotBG.root");
   // f[2]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7_ObsTotBG_r.root");
   //  f[2]=new TFile("EMHT_Limits_Knut/T5bbbbZg_v20/saved_graphs1d_limit.root");
   // f[5]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV6.root");
-  f[0]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV7_v2.root");
-  f[1]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV7_HybridNew.root");
+  // f[0]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV7_v2.root");
+  // f[1]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV7_HybridNew.root");
   // f[1]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV4.root");
   // f[2]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV4.root");
   //  f[2]=new TFile("EMHT_Limits_Knut/T5ttttZg_v20/saved_graphs1d_limit.root");
@@ -58,7 +65,6 @@ void overlayExcl(){
   TH2D *h2 = new TH2D("mGlmNLSPPlane","mGlmNLSPPlane",100,12.5,2512.5,250,5,2505);
   //  gStyle->SetPadLeftMargin(0.15);
   c1->SetLeftMargin(0.15);
-  h2->SetTitle(";m_{#tilde{g}}(GeV);m_{#tilde{#chi}_{1}^{0}}(GeV)");
   h2->GetXaxis()->SetTitleSize(0.05);
   h2->GetXaxis()->SetLabelSize(0.05);
   h2->GetYaxis()->SetTitleSize(0.05);
@@ -67,6 +73,9 @@ void overlayExcl(){
   if(modelName.Contains("T5qqqqHg")) modelName="T5qqqqHg";
   else if(modelName.Contains("T5ttttZg")) modelName="T5ttttZg";
   else if(modelName.Contains("T5bbbbZg")) modelName="T5bbbbZg";
+  if(!modelName.Contains("GGM_M1M3")) h2->SetTitle(";m_{#tilde{g}} (GeV);m_{#tilde{#chi}_{1}^{0}} (GeV)");
+  else if(modelName.Contains("GGM_M1M3")) h2->SetTitle(";M3 (GeV);M1 (GeV)");
+  if(modelName.Contains("T6tt")) h2->SetTitle(";m_{ #tilde{t}} (GeV);m_{#tilde{#chi}_{1}^{0}} (GeV)");
   h2->SetTitle(modelName);
   h2->Draw();
   TGraph *gr[nFiles];
@@ -82,8 +91,15 @@ void overlayExcl(){
     if(fName.Contains("SbinV4")) fName = "(N_{2-4}, N_{5-6}, N_{#geq7}) x (N^{0}, N^{#geq1})";
     if(fName.Contains("SbinV5")) fName = "Merged MET";
     if(fName.Contains("SbinV6")) fName = "(N_{2-4}, N_{5-6}) x (N^{0}, N^{1}) + N_{#geq7} ";
-    if(fName.Contains("V7_v2")) fName = "Asymptotic";//"Photon+(b)Jets";
+    if(fName.Contains("v9")) fName = "Earlier";
+    if(fName.Contains("v10")) fName = "Current";
+    //    if(fName.Contains("V7_v2")) fName = "Asymptotic";//"Photon+(b)Jets";
     if(fName.Contains("HybridNew")) fName = "HybridNew";
+    if(fName.Contains("GGM_M1M3")){
+      if(fName.Contains("PhoLep") && !fName.Contains("PhoJet")) fName = "#gamma + lepton";
+      else if(fName.Contains("PhoJet") &&  fName.Contains("PhoLep")) fName = "Combination #gamma + (lepton + (b)jet)";
+      else fName = "#gamma + (b)jet";
+    }
 
     // if(fName.Contains("EMHT")) fName = "HT#gamma";
     // if(fName.Contains("SbinV1")) fName = "V1:NJ bins, Incl b's";
@@ -101,8 +117,9 @@ void overlayExcl(){
   char name3[100];
   textOnTop.SetTextSize(0.045);
   intLumiE.SetTextSize(0.045);
-  textOnTop.DrawLatexNDC(0.16,0.91,"CMS #it{#bf{Simulation}}");
-  sprintf(name3,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
+  //  textOnTop.DrawLatexNDC(0.16,0.91,"CMS #it{#bf{Simulation}}");
+  textOnTop.DrawLatexNDC(0.16,0.91,"CMS #it{#bf{Preliminary}}");
+  sprintf(name3,"#bf{%0.1f fb^{-1} (13TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.65,0.91,name3);
 
 

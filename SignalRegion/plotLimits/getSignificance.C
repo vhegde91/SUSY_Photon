@@ -24,7 +24,7 @@ void getSignificance(TString fName){
   TFile *f1=new TFile(fName);
   TFile *fout =new TFile("Excl_"+fName,"recreate");
   TH2D *h2_rvalue=(TH2D*)f1->FindObjectAny("mGlmNLSP_r");
- //---------------- set styles----------------
+  //---------------- set styles----------------
   gStyle->SetOptStat(0);
   gStyle->SetTitle(0);
   const Int_t NRGBs = 5;
@@ -37,13 +37,25 @@ void getSignificance(TString fName){
   
   TColor::CreateGradientColorTable(NRGBs, stops, red, green, blue, NCont);
   gStyle->SetNumberContours(NCont);
-  //---------------------------------   
+  //-----------------remove points with fluctuation----------------   
+  // TH2D *h2_=(TH2D*)h2_rvalue->Clone("h2");
+  // h2_rvalue->Reset();
+  // for(int i=1;i<=h2_->GetNbinsX();i++){
+  //   for(int j=1;j<=h2_->GetNbinsY();j++){
+  //     if(h2_->GetXaxis()->GetBinCenter(i) >1600 && h2_->GetXaxis()->GetBinCenter(i) < 1900 && h2_->GetYaxis()->GetBinCenter(j) > 550 && h2_->GetYaxis()->GetBinCenter(j) < 850)
+  //     	continue;
+  //     else if(h2_->GetXaxis()->GetBinCenter(i) >1700 && h2_->GetXaxis()->GetBinCenter(i) < 1900 && h2_->GetYaxis()->GetBinCenter(j) > 1100 && h2_->GetYaxis()->GetBinCenter(j) < 1510)
+  //     	continue;
+  //     // else if(h2_->GetXaxis()->GetBinCenter(i) >1790 && h2_->GetXaxis()->GetBinCenter(i) < 1810 && h2_->GetYaxis()->GetBinCenter(j) > 1290 && h2_->GetYaxis()->GetBinCenter(j) < 1310) continue;
+  //     else h2_rvalue->SetBinContent(i,j,h2_->GetBinContent(i,j));	
+  //   }
+  // }
   //-----------cheat here------------
   // h2_rvalue->SetBinContent(h2_rvalue->GetXaxis()->FindBin(1750),h2_rvalue->GetYaxis()->FindBin(1450),4.85);
   // h2_rvalue->SetBinContent(h2_rvalue->GetXaxis()->FindBin(1750),h2_rvalue->GetYaxis()->FindBin(1500),4.86);
   // h2_rvalue->SetBinContent(h2_rvalue->GetXaxis()->FindBin(1750),h2_rvalue->GetYaxis()->FindBin(1520),4.88);
   //---------------------------------
-  //  TCanvas *c3=new TCanvas("c3","c3",1500,1500);
+  //  TCanvas *c3=new TCanvas("c3","c3",400,300);
   TCanvas *c3=new TCanvas("c3","c3",1600,1200);
   c3->SetLeftMargin(0.15);
   c3->SetRightMargin(0.2);
@@ -64,6 +76,8 @@ void getSignificance(TString fName){
   // TList *listUp =gr2d_r->GetContourList(1.0);
   // TGraph *gr1dUp=(TGraph*)list->First();
 
+  //  cout<<gr1d->GetNPoints()<<endl;
+  //  gr1d->RemovePoint(55);
   int k=0;
 
   if(!obsSignif){
@@ -71,7 +85,7 @@ void getSignificance(TString fName){
     gr1d->SetLineWidth(2);
   }
 
-  gr2dXsec->SetTitle(";m_{#tilde{g}}(GeV);m_{#tilde{#chi}_{1}^{0}}(GeV)");
+  gr2dXsec->SetTitle(";m_{#tilde{g}} (GeV);m_{#tilde{#chi}_{1}^{0}} (GeV)");
   gr2dXsec->GetXaxis()->SetTitleSize(0.05);
   gr2dXsec->GetXaxis()->SetLabelSize(0.05);
   gr2dXsec->GetYaxis()->SetTitleSize(0.05);
@@ -86,7 +100,7 @@ void getSignificance(TString fName){
   else gr2dXsec->SetMaximum(0.4);
   
   gr2dXsec->Draw("COLZ");
-  if(!obsSignif)  gr1d->Draw("C");
+  if(!obsSignif)  gr1d->Draw("L");
   if(!obsSignif) gr2dXsec->GetZaxis()->SetTitle("Expected Significance");
   else gr2dXsec->GetZaxis()->SetTitle("Observed Significance");
   gr2dXsec->GetZaxis()->SetTitleSize(0.05);
@@ -98,8 +112,8 @@ void getSignificance(TString fName){
   else if(modelName.Contains("T5bbbbZg")) modelName="T5bbbbZg";
   else if(modelName.Contains("T6ttZg"  )) modelName="T6ttZg";
 
-  if(modelName!="T6ttZg") gr2dXsec->SetTitle(";m_{#tilde{g}}(GeV);m_{#tilde{#chi}_{1}^{0}}(GeV)");
-  else gr2dXsec->SetTitle(";m_{#tilde{ t }}(GeV);m_{#tilde{#chi}_{1}^{0}}(GeV)");
+  if(modelName!="T6ttZg") gr2dXsec->SetTitle(";m_{#tilde{g}} (GeV);m_{#tilde{#chi}_{1}^{0}} (GeV)");
+  else gr2dXsec->SetTitle(";m_{#tilde{ t }} (GeV);m_{#tilde{#chi}_{1}^{0}} (GeV)");
   //  gr2dXsec->SetTitle(modelName);
   // gr2dXsec->GetXaxis()->SetTitleSize(0.05);
   // gr2dXsec->GetXaxis()->SetLabelSize(0.05);
@@ -114,7 +128,8 @@ void getSignificance(TString fName){
 
   //----------------------
   //  TPaveText *decayMode = new TPaveText(0.15,0.7, 0.8,0.9,"NDC");
-  TPaveText *decayMode = new TPaveText(0.15,0.8, 0.8,0.9,"NDC");
+  //  TPaveText *decayMode = new TPaveText(0.15,0.8, 0.8,0.9,"NDC");
+  TPaveText *decayMode = new TPaveText(0.15,0.8, 0.6,0.9,"NDC");
   decayMode->SetShadowColor(0);   decayMode->SetFillColor(0);
   decayMode->SetLineWidth(3);
   if(!obsSignif) decayMode->AddText(" ");
@@ -149,7 +164,7 @@ void getSignificance(TString fName){
   textOnTop.SetTextSize(0.04);
   intLumiE.SetTextSize(0.04);
   textOnTop.DrawLatexNDC(0.15,0.91,"CMS #it{#bf{Preliminary}}");
-  sprintf(name3,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
+  sprintf(name3,"#bf{%0.1f fb^{-1} (13TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.63,0.91,name3);
 
   c3->Update();

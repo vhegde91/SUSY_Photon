@@ -48,11 +48,17 @@ void doubleR_dataMC_merged(){
 
   double dRatioUnc[6] = {0.09,0.07,0.07, 0.13,0.04,0.04};
 
+  TString binLabel[6] = {"N^{ 0}_{ 2-4}","N^{ 0}_{ 5-6}","N^{ 0}_{ #geq7}","N^{ #geq1}_{ 2-4}","N^{ #geq1}_{ 5-6}","N^{ #geq1}_{ #geq7}"};
+
   TH1D *h_numCp;
   TH1D *h_num = new TH1D("Data","data",6,0.5,6.5);
   TH1D *h_den = new TH1D("MC","MC",6,0.5,6.5);
   TH1D *h_DratioUnc = new TH1D("DratioUnc","assigned unc on double ratio",6,0.5,6.5);
 
+  TLine *line1 = new TLine(0.5,1.0,6.5,1.0);
+  line1->SetLineStyle(2);
+
+  gStyle->SetPadTickX(0);
   for(int i=1;i<=6;i++){
     h_num->SetBinContent(i,dRData[i-1]);
     h_num->SetBinError(i,dRDataUnc[i-1]);
@@ -68,7 +74,7 @@ void doubleR_dataMC_merged(){
   TString histToSave="nHadJets";
   // TFile *fd=new TFile("CS_ZGToLLG.root");
 
-  name2.push_back("Region no.");  rebin.push_back(5);
+  name2.push_back("Region");  rebin.push_back(5);
   TString nameN="Data";
   TString nameD="MC";
   TLegend *legend[name2.size()];
@@ -85,11 +91,11 @@ void doubleR_dataMC_merged(){
     c_cA[i] = new TCanvas(name,name,1000,600);
     p_top[i] =new TPad(name+"top",name+"top",0,0.4,1,1);
     p_bot[i] =new TPad(name+"bot",name+"bot",0,0.0,1,0.4);
-    p_top[i]->Draw();p_top[i]->SetGridx();p_top[i]->SetGridy();//p_top[i]->SetLogy();
+    p_top[i]->Draw();p_top[i]->SetGridx();p_top[i]->SetGridy(0);//p_top[i]->SetLogy();
     p_top[i]->SetBottomMargin(0);
     p_bot[i]->SetTopMargin(0);
     p_bot[i]->SetBottomMargin(0.35);
-    p_bot[i]->Draw();p_bot[i]->SetGridx();p_bot[i]->SetGridy();
+    p_bot[i]->Draw();p_bot[i]->SetGridx();p_bot[i]->SetGridy(0);
     //    textOnTop.DrawLatexNDC(0.1,0.91,"CMS #it{#bf{Simulation}}");
   }
 
@@ -107,11 +113,11 @@ void doubleR_dataMC_merged(){
       }
       h_num->SetLineWidth(2);
       h_num->SetMarkerColor(h_num->GetLineColor());
-      h_num->SetTitle(";;Double Ratio(K)");
+      h_num->SetTitle(";;Double Ratio (#kappa)");
       h_num->GetYaxis()->SetLabelSize(0.09);
       h_num->GetYaxis()->SetTitleSize(0.09);
-      h_num->GetYaxis()->SetTitleOffset(0.45);
-      
+      h_num->GetYaxis()->SetTitleOffset(0.53);
+
       h_den->SetLineColor(kBlue);//kMagenta+2
       //      h_den->SetLineColor(kMagenta+2);//MC
       h_den->SetLineWidth(2);
@@ -119,13 +125,28 @@ void doubleR_dataMC_merged(){
       h_den->SetMarkerSize(1.12);
       h_den->SetMarkerColor(h_den->GetLineColor());
       h_num->GetYaxis()->SetNdivisions(5);
+      h_num->GetYaxis()->SetNdivisions(505);
 
+      h_num->GetXaxis()->SetNdivisions(10);
+      h_den->GetXaxis()->SetNdivisions(10);
+      // h_num->GetXaxis()->SetAxisColor(0);
+      // h_num->GetXaxis()->SetNdivisions(0);
+      //      for(int j=1;j<=h_numCp->GetNbinsX();j++){
+      	// h_num->GetXaxis()->SetBinLabel(j,binLabel[j-1]);
+	// h_den->GetXaxis()->SetBinLabel(j,binLabel[j-1]);
+	//      } 
+      
       c_cA[i]->cd();p_top[i]->cd();
+      // for(int j=1;j<=h_numCp->GetNbinsX();j++){
+      // 	h_num->GetXaxis()->SetBinLabel(j,binLabel[j-1]);
+      // }
       // textOnTop.DrawLatexNDC(0.1,0.91,"CMS #it{#bf{Simulation}}");
       // textOnTop.DrawLatexNDC(0.1,0.91,txtTop);
       // intLumiE.DrawLatexNDC(0.73,0.91,txtLumi);
       // gPad->Update();
-      p_top[i]->SetTickx();p_top[i]->SetTicky();
+      p_top[i]->SetTickx();
+      p_top[i]->SetTicky();
+      h_num->GetYaxis()->SetTickLength(0.07/3);
       h_num->Draw("E1X0");
       h_den->Draw("E1X0 same");
 
@@ -139,17 +160,23 @@ void doubleR_dataMC_merged(){
       h_numCp->Divide(h_den);
       h_numCp->SetLineColor(kBlack);
       h_numCp->SetMarkerColor(kBlack);
-      h_numCp->SetMaximum(1.99);////////////////////////////////////
-      h_numCp->SetMinimum(0.001);
+      h_numCp->GetYaxis()->SetTickLength(0.097/3);
+      // h_numCp->SetMaximum(1.99);
+      // h_numCp->SetMinimum(0.001);
+      h_numCp->SetMaximum(1.3);
+      h_numCp->SetMinimum(0.7);
 
       h_numCp->GetXaxis()->SetTitle(getXaxisName(name2[i]));
-      h_numCp->GetXaxis()->SetLabelSize(0.15);
+      h_numCp->GetXaxis()->SetLabelSize(0.18);
       h_numCp->GetXaxis()->SetTitleSize(0.16);
       h_numCp->GetXaxis()->SetTitleOffset(0.90);
-
-      //      h_numCp->GetYaxis()->SetTitle("#frac{#nu#bar{#nu}}{l^{+}l^{-}}");
+      h_numCp->GetXaxis()->SetAxisColor(kBlack);
+      for(int j=1;j<=h_numCp->GetNbinsX();j++){
+      	h_numCp->GetXaxis()->SetBinLabel(j,binLabel[j-1]);
+      }
       h_numCp->GetYaxis()->SetTitle("#frac{Data}{MC}");
-      //  h_numCp->GetYaxis()->SetTitle("#frac{NLO}{LO}");
+      h_numCp->GetYaxis()->SetTitle("Data / MC");
+      h_numCp->GetYaxis()->CenterTitle(1);
       h_numCp->GetYaxis()->SetTitleOffset(0.35);
       h_numCp->GetYaxis()->SetTitleSize(0.13);
       h_numCp->GetYaxis()->SetLabelSize(0.14);
@@ -161,14 +188,16 @@ void doubleR_dataMC_merged(){
       h_DratioUnc->SetFillStyle(3013);
       h_DratioUnc->SetFillColor(1);
       h_DratioUnc->Draw("E2same");
+      line1->Draw();
 
-      c_cA[i]->cd();    p_top[i]->cd();
+      c_cA[i]->cd();    p_top[i]->cd();       gPad->RedrawAxis();
       char name3[100];
       textOnTop.SetTextSize(0.07);
       intLumiE.SetTextSize(0.07);
       textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
-      sprintf(name3,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
-      intLumiE.DrawLatexNDC(0.73,0.91,name3);
+      //textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
+      sprintf(name3,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
+      intLumiE.DrawLatexNDC(0.71,0.91,name3);
 
       if(saveCanvas){name="c_"+name2[i]+".png";c_cA[i]->SaveAs(name);}
     }

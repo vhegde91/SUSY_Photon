@@ -74,6 +74,7 @@ void GetLostMuProb(TString iFname){
   //  name1_2d.push_back("METnHadJ_Mu0");   name2_2d.push_back("METnHadJ_Mu1");newName.push_back("1");
   name1_2d.push_back("METNJ_Mu0_R0");   name2_2d.push_back("METNJ_Mu1_R0");newName.push_back("0");
   name1_2d.push_back("METNJ_Mu0_R1");   name2_2d.push_back("METNJ_Mu1_R1");newName.push_back("1");
+  name1_2d.push_back("hadJbTag_Mu0");   name2_2d.push_back("hadJbTag_Mu1");newName.push_back("2");
   //  name1_2d.push_back("METNJ_Mu0_R2");   name2_2d.push_back("METNJ_Mu1_R2");newName.push_back("2");
   //  name1_2d.push_back("STMET_Mu0");   name2_2d.push_back("STMET_Mu1");newName.push_back("A");
   //  name1_2d.push_back("STMET_2to3HadJ_Mu0");   name2_2d.push_back("STMET_2to3HadJ_Mu1");newName.push_back("1");

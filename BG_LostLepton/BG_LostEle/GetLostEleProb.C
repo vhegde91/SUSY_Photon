@@ -38,7 +38,7 @@ void GetLostEleProb(TString iFname){
   vector<string> name1,name2,name1_2d,name2_2d,name1_3d,name2_3d,newName;
   vector<int> rebin;
   name1.push_back("ST_Ele0");          name2.push_back("ST_Ele1");       rebin.push_back(25);
-  name1.push_back("MET_Ele0");         name2.push_back("MET_Ele1");      rebin.push_back(5);
+  name1.push_back("MET_Ele0");         name2.push_back("MET_Ele1");      rebin.push_back(1);
   name1.push_back("METvarBin_Ele0");   name2.push_back("METvarBin_Ele1");rebin.push_back(1);
   name1.push_back("nHadJets_Ele0");    name2.push_back("nHadJets_Ele1");  rebin.push_back(1);
   name1.push_back("BestPhotonPt_Ele0");name2.push_back("BestPhotonPt_Ele1");  rebin.push_back(5);
@@ -60,6 +60,7 @@ void GetLostEleProb(TString iFname){
 
   name1_2d.push_back("METNJ_Ele0_R0");   name2_2d.push_back("METNJ_Ele1_R0");newName.push_back("0");
   name1_2d.push_back("METNJ_Ele0_R1");   name2_2d.push_back("METNJ_Ele1_R1");newName.push_back("1");
+  name1_2d.push_back("hadJbTag_Ele0");   name2_2d.push_back("hadJbTag_Ele1");newName.push_back("2");
   //  name1_2d.push_back("METNJ_Ele0_R2");   name2_2d.push_back("METNJ_Ele1_R2");newName.push_back("2");  
   //name1_2d.push_back("METnHadJ_Ele0");   name2_2d.push_back("METnHadJ_Ele1");newName.push_back("A"); 
   for(int i=1;i<=4;i++){

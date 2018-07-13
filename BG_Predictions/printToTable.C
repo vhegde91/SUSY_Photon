@@ -53,13 +53,13 @@ void printToTable(TString fName){
   //   printf(" & %.0f  & %.3f  $\\pm$  %.3f  & %.1f $\\pm$ %.2f    \\hline",h4->GetBinContent(i),h5->GetBinContent(i),h5->GetBinError(i),h6->GetBinContent(i),h6->GetBinError(i));
   //   cout<<endl;
   // }
-  //  fakerate high dPhi
+  //   fakerate high dPhi
   // TFile *f=new TFile(fName);
   // TH1D *h1=(TH1D*)f->Get("AllSBins_v7_FRCS");
   // TH1D *h2=(TH1D*)f->Get("FRs_Final");
   // TH1D *h3=(TH1D*)f->Get("AllSBins_v7_FRPred");
   // for(int i=1;i<=h1->GetNbinsX();i++){
-  //   printf("%d & %.0f  & %.4f  $\\pm$  %.4f  & %.2f $\\pm$ %.2f    \\hline",i,h1->GetBinContent(i),h2->GetBinContent(i),h2->GetBinError(i),h3->GetBinContent(i),h3->GetBinError(i));
+  //   printf("%d & %.0f  & %.4f  $\\pm$  %.4f  & %.2f $\\pm$ %.2f   \\\\\\hline",i,h1->GetBinContent(i),h2->GetBinContent(i),h2->GetBinError(i),h3->GetBinContent(i),h3->GetBinError(i));
   //   cout<<endl;
   // }
 
@@ -69,18 +69,18 @@ void printToTable(TString fName){
   // TH1D *h2=(TH1D*)f->Get("FRs_Final_LDP");
   // TH1D *h3=(TH1D*)f->Get("AllSBins_v7_FRPred_LDP");
   // for(int i=1;i<=h1->GetNbinsX();i++){
-  //   printf("%d & %.0f  & %.4f  $\\pm$  %.4f  & %.2f $\\pm$ %.2f    \\hline",i,h1->GetBinContent(i),h2->GetBinContent(i),h2->GetBinError(i),h3->GetBinContent(i),h3->GetBinError(i));
+  //   printf("%d & %.0f  & %.4f  $\\pm$  %.4f  & %.2f $\\pm$ %.2f    \\\\\\hline",i,h1->GetBinContent(i),h2->GetBinContent(i),h2->GetBinError(i),h3->GetBinContent(i),h3->GetBinError(i));
   //   cout<<endl;
   // }
   
   //ZG high dPhi
-  TFile *f=new TFile(fName);
-  TH1D *h1=(TH1D*)f->Get("AllSBins_v7_ZGCS_LDP_StatUncOnly");
-  TH1D *h2=(TH1D*)f->Get("AllSBins_v7_ZGPred_LDP");
-  for(int i=1;i<=h1->GetNbinsX();i++){
-    printf("%d & %.2f  $\\pm$  %.2f  & %.2f $\\pm$ %.2f    \\\\hline",i,h1->GetBinContent(i),h1->GetBinError(i),h2->GetBinContent(i),h2->GetBinError(i));
-    cout<<endl;
-  }
+  // TFile *f=new TFile(fName);
+  // TH1D *h1=(TH1D*)f->Get("AllSBins_v7_ZGCS");
+  // TH1D *h2=(TH1D*)f->Get("AllSBins_v7_ZGPred");
+  // for(int i=1;i<=h1->GetNbinsX();i++){
+  //   printf("%d & %.2f  $\\pm$  %.2f  & %.2f $\\pm$ %.2f    \\\\hline",i,h1->GetBinContent(i),h1->GetBinError(i),h2->GetBinContent(i),h2->GetBinError(i));
+  //   cout<<endl;
+  // }
 
   //Multijet
   // TFile *f=new TFile(fName);
@@ -104,6 +104,42 @@ void printToTable(TString fName){
   //   if(i==0 || i==6  || i==11 || i==16 || i==21 || i==26)      cout<<"\\hline"<<endl;
   // }
   // cout<<"\\hline"<<endl;
- 
 
+  //total pred table
+  TFile *f=new TFile(fName);
+  TString binName;
+  TH1D *h[8];
+  h[0]=(TH1D*)f->Get("AllSBins_v7_ZGPred");
+  h[1]=(TH1D*)f->Get("AllSBins_v7_LElePred");
+  h[2]=(TH1D*)f->Get("AllSBins_v7_LMuPred");
+  h[3]=(TH1D*)f->Get("AllSBins_v7_FRPred"); 
+  h[4]=(TH1D*)f->Get("AllSBins_v7_MultiJPred");
+  h[5]=(TH1D*)f->Get("AllSBins_v7_TotalBG");
+  h[6]=(TH1D*)f->Get("AllSBins_v7_Obs");
+  h[7]=(TH1D*)f->Get("AllSBins_v7_Pull");
+  for(int i=1;i<=h[0]->GetNbinsX();i++){
+    if(i==17) cout<<endl<<endl;
+    if(i==1)       cout<<"\\multicolumn{8}{c}{$2\\leq\\nj\\leq 4, \\nb=0$} \\\\\\hline"<<endl;
+    if(i==7)       cout<<"\\multicolumn{8}{c}{$5\\leq\\nj\\leq 6, \\nb=0$} \\\\\\hline"<<endl;
+    if(i==12)      cout<<"\\multicolumn{8}{c}{$\\nj\\geq 7, \\nb=0$} \\\\\\hline"<<endl;
+    if(i==17)      cout<<"\\multicolumn{8}{c}{$2\\leq\\nj\\leq4, \\nb\\geq1$} \\\\\\hline"<<endl;
+    if(i==22)      cout<<"\\multicolumn{8}{c}{$5\\leq\\nj\\leq6, \\nb\\geq1$} \\\\\\hline"<<endl;
+    if(i==27)      cout<<"\\multicolumn{8}{c}{$\\nj\\geq7, \\nb\\geq1$} \\\\\\hline"<<endl;
+    
+    if     (i==1 || i==7  || i==12 || i==17 || i==22 || i==27){      binName = "$100<\\ptmiss<200$"; cout<<binName<<" & ";}
+    else if(i==2 || i==8  || i==13 || i==18 || i==23 || i==28){      binName = "$200<\\ptmiss<270$"; cout<<binName<<" & ";}
+    else if(i==3 || i==9  || i==14 || i==19 || i==24 || i==29){      binName = "$270<\\ptmiss<350$"; cout<<binName<<" & ";}
+    else if(i==4 || i==10 || i==15 || i==20 || i==25 || i==30){      binName = "$350<\\ptmiss<450$"; cout<<binName<<" & ";}
+    else if(i==5 || i==11 || i==16 || i==21 || i==26 || i==31){      binName = "$450<\\ptmiss<750$"; cout<<binName<<" & ";}
+    else if(i==6)                                             {      binName = "$\\ptmiss>750$"; cout<<binName<<" & ";}
+    
+    for(int j=0;j<8;j++){
+      if(j==6)       printf("%.0f & ",h[j]->GetBinContent(i));
+      else if(j==7)  printf("%.2f \\\\\\hline ",h[j]->GetBinContent(i));
+      else printf("%.2f $\\pm$ %.2f  & ",h[j]->GetBinContent(i),h[j]->GetBinError(i));
+    }
+    cout<<endl;
+  }
+  
+  cout<<endl;
 }

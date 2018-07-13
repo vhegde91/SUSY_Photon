@@ -48,7 +48,7 @@ void stackedDataVsMC(TString iFname){
   vector<string> name1;
   vector<int> rebin;
   vector<double> xLow,xHigh;
-  //  name1.push_back("ST_Mu1");  rebin.push_back(10);   xLow.push_back(0); xHigh.push_back(3000); 
+  name1.push_back("ST");  rebin.push_back(10);   xLow.push_back(0); xHigh.push_back(3000); 
   //name1.push_back("MET_Mu1");    rebin.push_back(2);    xLow.push_back(0); xHigh.push_back(800); 
   name1.push_back("nBTags");   rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(6);  
   name1.push_back("nHadJets");  rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(10);

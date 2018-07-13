@@ -18,7 +18,7 @@
 #include"THStack.h"
 #include"TStyle.h"
 
-void signalContamination(TString, int, int);
+void signalContamination(int,int,TString);
 void signalContamination(TString);
 TLatex textOnTop,intLumiE;
 double intLumi=35.9;
@@ -75,8 +75,9 @@ void signalContamination(TString fName){
 
   h1->Multiply(hTF);
 
-  TH1D *hRatio = (TH1D*)h1->Clone("ratio");
+  TH1D *hRatio = (TH1D*)h1->Clone("ratio0mu1mu");
   hRatio->Divide(h2);
+  //  hRatio->Smooth(1000);
 
   p_top->cd();
   h2->GetXaxis()->SetTitle(xName);
@@ -142,12 +143,14 @@ void signalContamination(TString fName){
   intLumiE.DrawLatexNDC(0.8,0.91,name2);
 
   cout<<name1<<endl;
-  if(totBGHist) c1->SaveAs(name1+"_SignalCont_TotBG.pdf");
-  else c1->SaveAs(name1+"_SignalCont_SR.pdf");
+  TFile *fout=new TFile("signalContLostMu_T5ttttZg_1800_150.root","recreate");
+  hRatio->Write();
+  // if(totBGHist) c1->SaveAs(name1+"_SignalCont_TotBG.pdf");
+  // else c1->SaveAs(name1+"_SignalCont_SR.pdf");
 
 }
 
-void signalContamination(TString fName, int mGl, int mNLSP){
+void signalContamination(int mGl, int mNLSP, TString fName){
   TString name;
   TFile *f1 = TFile::Open(fName);
   TH2D *h2_Mu0,*h2_Mu1;
@@ -156,6 +159,7 @@ void signalContamination(TString fName, int mGl, int mNLSP){
   else if(fName.Contains("T5bbbbZg")) foutName = "T5bbbbZg_LostMu_"+to_string(mGl)+"_"+to_string(mNLSP)+"_.root";
   else if(fName.Contains("T5qqqqHg")) foutName = "T5qqqqHg_LostMu_"+to_string(mGl)+"_"+to_string(mNLSP)+"_.root";
   else if(fName.Contains("T6ttZg"))   foutName = "T6ttZg_LostMu_"+to_string(mGl)+"_"+to_string(mNLSP)+"_.root";
+  else if(fName.Contains("GGM_M1M3"))   foutName = "GGM_M1M3_LostMu_"+to_string(mGl)+"_"+to_string(mNLSP)+"_.root";
 
   TFile *fout = new TFile(foutName,"recreate");
 

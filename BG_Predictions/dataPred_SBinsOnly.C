@@ -20,7 +20,9 @@
 
 const int nfiles=3,nBGs=5,nHists=8,nSig=nHists-nBGs-1;    //Specify no. of files
 TFile *f[nfiles];
-int col[11]={kPink-2,kTeal+9,kGreen,kOrange,kCyan,kYellow,kBlue,kMagenta+2,kPink+1,kMagenta,kBlack};  //Specify Colors
+//int col[11]={kPink-2,kTeal+9,kGreen,kOrange,kCyan,kYellow,kBlue,kMagenta+2,kPink+1,kMagenta,kBlack};  //Specify Colors Good
+//int col[11]={kGray,kTeal+9,kOrange,kPink-2,kCyan,kYellow,kBlue,kMagenta+2,kPink+1,kMagenta,kBlack};  //Specify Colors
+int col[11]={kOrange,kGray,kRed,kTeal+9,kCyan,kYellow,kBlue,kMagenta+2,kPink+1,kMagenta,kBlack};  //Specify Colors
 //int col[11]={kOrange,kCyan,kPink-2,kYellow,kGreen,kTeal+9,kBlue,kMagenta+2,kPink+1,kMagenta,kBlack};  //Specify Colors
 
 TString name;
@@ -40,8 +42,10 @@ void dataPred_SBinsOnly(TString iFname){
   //  gStyle->SetOptStat("nemri");
   vector<TString> suffixHist; 
   f[0] = new TFile(iFname);
-  f[1] = new TFile("FastSim_T5bbbbZG_1600_150.root");
-  f[2] = new TFile("FastSim_T5bbbbZG_1600_1550.root");
+  // f[1] = new TFile("FastSim_T5bbbbZG_1600_150.root");
+  // f[2] = new TFile("FastSim_T5bbbbZG_1600_1550.root");
+  f[1] = new TFile("FastSim_T5bbbbZG_1800_150.root");
+  f[2] = new TFile("FastSim_T5bbbbZG_1800_1750.root");
   
   TFile *fout;
   vector<string> name1;
@@ -51,8 +55,10 @@ void dataPred_SBinsOnly(TString iFname){
   vector<TString> histName={"AllSBins_v7_ZGPred","AllSBins_v7_LElePred","AllSBins_v7_LMuPred","AllSBins_v7_FRPred","AllSBins_v7_MultiJPred","AllSBins_v7_Obs","AllSBins_v7_CD","AllSBins_v7_CD"};
   TH1D *h_hist[nHists],*h_histOrg[nHists];
   THStack *hs_BG = new THStack("predVsData","predVsData");
-  //  TLegend *legend=new TLegend(0.55, 0.88,  0.86, 0.55);
-  TLegend *legend=new TLegend(0.15, 0.88,  0.86, 0.70);
+  //  TLegend *legend=new TLegend(0.15, 0.88,  0.86, 0.70);
+  //TLegend *legend=new TLegend(0.15, 0.88,  0.5, 0.6);
+  TLegend *legend=new TLegend(0.15, 0.88,  0.78, 0.72);
+  TLegend *legendSig=new TLegend(0.3, 0.73,  0.84, 0.53);
   for(int i=0;i<nHists;i++){
     //    cout<<i<<" "<<i-nBGs<<" "<<histName[i]<<endl;
     name = histName[i]+to_string(i);
@@ -75,7 +81,7 @@ void dataPred_SBinsOnly(TString iFname){
       h_hist[i]->SetLineWidth(1);
       hs_BG->Add(h_hist[i]);
       hs_BG->SetMinimum(0.5);
-      hs_BG->SetMaximum(10000);
+      hs_BG->SetMaximum(100000);
       hs_BG->SetTitle(";Bin Number;Events");
       legend->AddEntry(h_hist[i],getLegName(histName[i]),"f");
     }
@@ -83,14 +89,22 @@ void dataPred_SBinsOnly(TString iFname){
       h_hist[i]->SetLineWidth(3);
       if(i==nBGs) legend->AddEntry(h_hist[i],getLegName(histName[i]),"ep");
       else{
-	if(i==nBGs+1) legend->AddEntry(h_hist[i],getLegName(f[1]->GetName()),"lp");
-	if(i==nBGs+2) legend->AddEntry(h_hist[i],getLegName(f[2]->GetName()),"lp");
+	if(i==nBGs+1) legendSig->AddEntry(h_hist[i],getLegName(f[1]->GetName()),"lp");
+	if(i==nBGs+2) legendSig->AddEntry(h_hist[i],getLegName(f[2]->GetName()),"lp");
       }
     }
     // cout<<h_hist[i]->GetName()<<endl;
   }
   legend->SetNColumns(4);
   legend->SetBorderSize(0);
+  legend->SetFillColor(0);
+  // legend->SetTextFont(62);
+  legendSig->SetMargin(0.1);
+  legendSig->SetEntrySeparation(0.001);
+  legendSig->SetBorderSize(0);
+  //  legendSig->SetTextFont(62);
+  legendSig->SetFillColor(0);
+  //  gStyle->SetLegendFont(44);
   //  cout<<"outttttttt";
   TCanvas *cA = new TCanvas("c_predVsDataSBins","c_predVsDataSBins",1500,800);
   TPad *p_top=new TPad("top","top",0,0.4,1,1);
@@ -105,6 +119,7 @@ void dataPred_SBinsOnly(TString iFname){
   hs_BG->GetYaxis()->SetTitleOffset(0.50);    
   hs_BG->GetYaxis()->SetTitleSize(0.09);
   hs_BG->GetYaxis()->SetLabelSize(0.09);
+  hs_BG->GetYaxis()->SetTickLength(0.01668);
 
   for(int i=nBGs;i<nHists;i++){
     if(histName[i].Contains("Obs")){
@@ -120,13 +135,14 @@ void dataPred_SBinsOnly(TString iFname){
   TH1D *h_totBGorg = (TH1D*)f[0]->Get("AllSBins_v7_TotalBG");
   TH1D *h_totBG = new TH1D("totBG","totBG",25,0.5,25.5);
   setSBinHist(h_totBGorg,h_totBG);
-  h_totBG->SetFillStyle(3013);
-  h_totBG->SetFillColor(1);
+  h_totBG->SetFillStyle(3013);//3013);
+  h_totBG->SetFillColor(kGray+3);
   h_totBG->Draw("E2SAME");
   //h_totBG->Draw("e0 histe same");
   
   gPad->RedrawAxis();
-  legend->Draw();
+  legend->Draw();  
+  legendSig->Draw();
   
   TH1D *h_ratioOrg = (TH1D*)f[0]->Get("DataOverBG");
   TH1D *h_ratio = new TH1D("dataByBG","data over BG",25,0.5,25.5);
@@ -140,11 +156,13 @@ void dataPred_SBinsOnly(TString iFname){
   h_ratio->GetXaxis()->SetTitleSize(0.13);
   h_ratio->GetXaxis()->SetLabelSize(0.14);
 
-  h_ratio->GetYaxis()->SetTitle("#frac{Data}{SM}");
-  h_ratio->GetYaxis()->SetTitleOffset(0.35);
+  //  h_ratio->GetYaxis()->SetTitle("#frac{Data}{SM}");
+  h_ratio->GetYaxis()->SetTitle("Obs. / Pred.");
+  h_ratio->GetYaxis()->SetTitleOffset(0.33);
   h_ratio->GetYaxis()->SetTitleSize(0.13);
   h_ratio->GetYaxis()->SetLabelSize(0.14);
   h_ratio->GetYaxis()->SetNdivisions(505);
+  h_ratio->GetYaxis()->SetTickLength(0.02155);
   h_ratio->SetMarkerStyle(20);
   h_ratio->SetMaximum(1.99);
   h_ratio->SetMinimum(0.01);
@@ -154,11 +172,11 @@ void dataPred_SBinsOnly(TString iFname){
   h_ratio->Draw("X0E1");
 
   TLine *line1V7=new TLine( 5.5,0.01,  5.5,1000);
-  TLine *line2V7=new TLine( 9.5,0.01,  9.5,1000);
-  TLine *line3V7=new TLine(13.5,0.01, 13.5,1000);
-  TLine *line4V7=new TLine(17.5,0.01, 17.5,1000);
-  TLine *line5V7=new TLine(21.5,0.01, 21.5,1000);
-  p_top->cd(); p_top->SetGridx(0);
+  TLine *line2V7=new TLine( 9.5,0.01,  9.5,300);
+  TLine *line3V7=new TLine(13.5,0.01, 13.5,300);
+  TLine *line4V7=new TLine(17.5,0.01, 17.5,300);
+  TLine *line5V7=new TLine(21.5,0.01, 21.5,300);
+  p_top->cd(); p_top->SetGridx(0);  p_top->SetGridy(0);
   line1V7->Draw();	line2V7->Draw();	line3V7->Draw();	line4V7->Draw();	line5V7->Draw();
   p_bot->cd(); p_bot->SetGridx(0);
   line1V7->Draw();	line2V7->Draw();	line3V7->Draw();	line4V7->Draw();	line5V7->Draw();
@@ -168,26 +186,27 @@ void dataPred_SBinsOnly(TString iFname){
   textOnTop.SetTextSize(0.07);
   intLumiE.SetTextSize(0.07);
   textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
+  //textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
   intLumiE.SetTextSize(0.07);
-  sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
-  intLumiE.DrawLatexNDC(0.73,0.91,name2);
+  sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
+  intLumiE.DrawLatexNDC(0.72,0.91,name2);
 
-  TArrow *arrow1 = new TArrow(0.5,290, 5.5,290,0.01,"<|>");
-  TArrow *arrow2 = new TArrow(5.5,290, 9.5,290,0.01,"<|>");
-  TArrow *arrow3 = new TArrow( 9.5,290,13.5,290,0.01,"<|>");
-  TArrow *arrow4 = new TArrow(13.5,290,17.5,290,0.01,"<|>");
-  TArrow *arrow5 = new TArrow(17.5,290,21.5,290,0.01,"<|>");
-  TArrow *arrow6 = new TArrow(21.5,290,25.5,290,0.01,"<|>");
+  TArrow *arrow1 = new TArrow(0.5,280, 5.5,280,0.01,"<|>");
+  TArrow *arrow2 = new TArrow(5.5,80, 9.5,80,0.01,"<|>");
+  TArrow *arrow3 = new TArrow( 9.5,80,13.5,80,0.01,"<|>");
+  TArrow *arrow4 = new TArrow(13.5,80,17.5,80,0.01,"<|>");
+  TArrow *arrow5 = new TArrow(17.5,80,21.5,80,0.01,"<|>");
+  TArrow *arrow6 = new TArrow(21.5,80,25.5,80,0.01,"<|>");
   arrow1->Draw(); arrow2->Draw(); arrow3->Draw();
   arrow4->Draw(); arrow5->Draw(); arrow6->Draw();
   TLatex Tl;
-  Tl.SetTextSize(0.08);
-  Tl.DrawLatex(2.5,400,"N^{0}_{2-4}");
-  Tl.DrawLatex(7.0,400,"N^{0}_{5-6}");
-  Tl.DrawLatex(11.0,400,"N^{0}_{#geq7}");
-  Tl.DrawLatex(15.0,400,"N^{#geq1}_{2-4}");
-  Tl.DrawLatex(19.0,400,"N^{#geq1}_{5-6}");
-  Tl.DrawLatex(23.0,400,"N^{#geq1}_{#geq7}");
+  Tl.SetTextSize(0.06);
+  Tl.DrawLatex(2.5,400,"N^{ 0}_{ 2-4}");
+  Tl.DrawLatex(7.0,120,"N^{ 0}_{ 5-6}");
+  Tl.DrawLatex(11.0,120,"N^{ 0}_{ #geq7}");
+  Tl.DrawLatex(15.0,120,"N^{ #geq1}_{ 2-4}");
+  Tl.DrawLatex(19.0,120,"N^{ #geq1}_{ 5-6}");
+  Tl.DrawLatex(23.0,120,"N^{ #geq1}_{ #geq7}");
 
   // TLatex Tl2;
   // Tl2.SetTextSize(0.05);
@@ -204,13 +223,15 @@ void dataPred_SBinsOnly(TString iFname){
 }
 
 TString getLegName(TString fname){
-  if(fname.Contains("ZGPred")){return "Z(#nu #bar{#nu})#gamma";}
+  if(fname.Contains("ZGPred")){return "Z(#nu#bar{#nu}) + #gamma";}
   else if(fname.Contains("LEle")){return "Lost e";}
-  else if(fname.Contains("LMu")){return "Lost #mu+ #tau_{had}";}
-  else if(fname.Contains("FR")){return "e #rightarrow #gamma";}
-  else if(fname.Contains("MultiJ") || fname.Contains("gjets")  ){return "#gamma+jets";}
-  else if(fname.Contains("T5bbbbZG_1600_150")){return "T5bbbbZG_150";}
-  else if(fname.Contains("T5bbbbZG_1600_1550")){return "T5bbbbZG_1550";}
+  else if(fname.Contains("LMu")){return "Lost #mu + #tau_{had}";}
+  else if(fname.Contains("FR")){return "Misidentified #gamma";}
+  else if(fname.Contains("MultiJ") || fname.Contains("gjets")  ){return "#gamma + jets";}
+  else if(fname.Contains("T5bbbbZG_1600_150")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1600 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
+  else if(fname.Contains("T5bbbbZG_1600_1550")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1600 GeV, m_{#tilde{#chi}_{1}^{0}} = 1550 GeV)";}
+  else if(fname.Contains("T5bbbbZG_1800_150")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
+  else if(fname.Contains("T5bbbbZG_1800_1750")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 1750 GeV)";}
   else if(fname.Contains("v7_Obs") ){return "Data";}
   else return fname;
 }

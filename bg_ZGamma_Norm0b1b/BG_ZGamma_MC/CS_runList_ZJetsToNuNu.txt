@@ -1,0 +1,7 @@
+/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_ZGamma/CS_ZJetsToNuNu_Summer16.ZJetsToNuNu_HT-100To200_13TeV-madgraph.root
+/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_ZGamma/CS_ZJetsToNuNu_Summer16.ZJetsToNuNu_HT-1200To2500_13TeV-madgraph.root
+/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_ZGamma/CS_ZJetsToNuNu_Summer16.ZJetsToNuNu_HT-200To400_13TeV-madgraph.root
+/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_ZGamma/CS_ZJetsToNuNu_Summer16.ZJetsToNuNu_HT-2500ToInf_13TeV-madgraph.root
+/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_ZGamma/CS_ZJetsToNuNu_Summer16.ZJetsToNuNu_HT-400To600_13TeV-madgraph.root
+/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_ZGamma/CS_ZJetsToNuNu_Summer16.ZJetsToNuNu_HT-600To800_13TeV-madgraph.root
+/home/vinay/Phy_Work/ROOT_Files/Physics/GMSB_susy/GMSB_skims_ST_RA2b_TreesV12/CS_ZGamma/CS_ZJetsToNuNu_Summer16.ZJetsToNuNu_HT-800To1200_13TeV-madgraph.root

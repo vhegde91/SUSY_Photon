@@ -49,6 +49,8 @@ void testClosure(TString iFname){
   name1.push_back("BestPhotonPt");    name2.push_back("ElePt");       rebin.push_back(5);
   // name1.push_back("BestPhotonEta");   name2.push_back("EleEta");      rebin.push_back(3);
   name1.push_back("METvarBin_Pho");   name2.push_back("METvarBin_Ele");rebin.push_back(1);
+  name1.push_back("METvarBin_Pho_0b");   name2.push_back("METvarBin_Ele_0b");rebin.push_back(1);
+  name1.push_back("METvarBin_Pho_min1b");   name2.push_back("METvarBin_Ele_min1b");rebin.push_back(1);
   name1.push_back("nVtx_Pho");name2.push_back("nVtx_Ele");rebin.push_back(5);
   // name1.push_back("PtJetNearPho");name2.push_back("PtJetNearEle");rebin.push_back(5);
   // name1.push_back("minDR_Pho_HadJet");name2.push_back("minDR_Ele_HadJet");rebin.push_back(5);

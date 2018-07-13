@@ -11,7 +11,9 @@
 
 hadd -f CS_TGZGDY_LostMuHadTau_v2.root CS_TG_LostMuHadTau_v2.root CS_ZGToLLG_LostMuHadTau_v2.root CS_DYJetsToLL_LostMuHadTau_v2.root
 
-#hadd -f CS_TTW_LostMuHadTau_v2.root CS_WG_LostMuHadTau_v2.root CS_TTG_LostMuHadTau_v2.root CS_TG_LostMuHadTau_v2.root CS_WJets_LostMuHadTau_v2.root CS_TTJets_LostMuHadTau_v2.root
+
 hadd -f CS_TTWZ_LostMuHadTau_v2.root CS_WG_LostMuHadTau_v2.root CS_TTG_LostMuHadTau_v2.root CS_WJets_LostMuHadTau_v2.root CS_TTJets_LostMuHadTau_v2.root CS_TGZGDY_LostMuHadTau_v2.root
+
+#hadd -f CS_TTWZ_LostMuHadTau_odd.root CS_WG_LostMuHadTau_v2.root CS_TTG_LostMuHadTau_v2.root CS_WJets_LostMuHadTau_v2.root CS_TTJets_LostMuHadTau_v2.root CS_TGZGDY_LostMuHadTau_v2.root
 
 #./lostMuon CS_runList_TTW_LostMu_v2.txt CS_TTW_LostMuHadTau_v2.root CS_TTW_LostMu

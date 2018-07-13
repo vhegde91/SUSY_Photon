@@ -186,7 +186,14 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
       	}
       }
     }
-
+    TLorentzVector genPho;
+    for(int i=0;i<GenParticles->size();i++){
+      if((*GenParticles)[i].Pt()!=0 && (*GenParticles_PdgId)[i]==22 &&
+	 (abs((*GenParticles_ParentId)[i]) < 22 || (*GenParticles_PdgId)[i]==2212) && (*GenParticles_Status)[i]==1){
+	if(bestPhoton.DeltaR((*GenParticles)[i]) < 0.2 && bestPhoton.DeltaR(genPho) > bestPhoton.DeltaR((*GenParticles)[i]))
+	  genPho = (*GenParticles)[i];
+      }
+    }
     bool hadJetID=true;
     int minDRindx=-100,photonMatchingJetIndx=-100,nHadJets=0;
     double minDR=99999,ST=0,myHT=0,mtPho=0;
@@ -248,7 +255,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     if( process && !eMatchedG && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && hadJetID && GenMET > 100 && dphi1_genMET > 0.3 && dphi2_genMET > 0.3) h_GenMETvBin_CD->Fill(GenMET,wt);
 
     process = process && !eMatchedG && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100;
-    
+
     if(process){
       evtSurvived++;
       h_RunNum->Fill(RunNum);
@@ -342,6 +349,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	if(nHadJets<=4) h_PhoPt_nJ2to4_[r_i]->Fill(bestPhoton.Pt(),wt );
 	else h_PhoPt_minNJ5_[r_i]->Fill(bestPhoton.Pt(),wt );
 
+	h2_BestPhoPtGenPhoPt_[r_i]->Fill(bestPhoton.Pt(),genPho.Pt(),wt);
 	h2_dPhi1dPhi2_[r_i]->Fill(dphi1,dphi2,wt);
 	h2_PtPhotonvsMET_[r_i]->Fill( bestPhoton.Pt(),MET,wt);
 	h2_NJST_[r_i]->Fill(nHadJets,ST,wt);
@@ -414,6 +422,8 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 
 	  if(nHadJets<=4) h_PhoPt_nJ2to4_AB->Fill(bestPhoton.Pt(),wt );
 	  else h_PhoPt_minNJ5_AB->Fill(bestPhoton.Pt(),wt );
+
+	  h2_BestPhoPtGenPhoPt_AB->Fill(bestPhoton.Pt(),genPho.Pt(),wt);
 
 	  h2_PtPhotonvsMET_AB->Fill( bestPhoton.Pt(),MET,wt);
 	  h2_dPhi1dPhi2_AB->Fill(dphi1,dphi2,wt);
@@ -504,6 +514,8 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 
 	  if(nHadJets<=4) h_PhoPt_nJ2to4_CD->Fill(bestPhoton.Pt(),wt );
 	  else h_PhoPt_minNJ5_CD->Fill(bestPhoton.Pt(),wt );
+
+	  h2_BestPhoPtGenPhoPt_CD->Fill(bestPhoton.Pt(),genPho.Pt(),wt);
 
 	  h2_PtPhotonvsMET_CD->Fill( bestPhoton.Pt(),MET,wt);
 	  h2_dPhi1dPhi2_CD->Fill(dphi1,dphi2,wt);

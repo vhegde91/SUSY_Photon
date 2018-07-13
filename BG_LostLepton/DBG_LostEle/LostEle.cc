@@ -349,6 +349,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_BestPhotonEta_Ele0->Fill(bestPhoton.Eta(),wt);
 	h_BestPhotonPhi_Ele0->Fill(bestPhoton.Phi(),wt);
 	h_mTpho_Ele0->Fill(mt_pho,wt);
+	h_METPhi_Ele0->Fill(METPhi,wt);
 
 	h_EleMultInJets_Ele0->Fill(nEleMultJ,wt);
 
@@ -452,6 +453,7 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	h_BestPhotonPhi_Ele1->Fill(bestPhoton.Phi(),wt);
 	h_mTpho_Ele1->Fill(mt_pho,wt);
 	h_dPhiEleMET->Fill(DeltaPhi((*Electrons)[0].Phi(),METPhi),wt);
+	h_METPhi_Ele1->Fill(METPhi,wt);
 
 	h_EleMultInJets_Ele1->Fill(nEleMultJ,wt);
         h_invMassPhoEle->Fill((bestPhoton+(*Electrons)[0]).M(),wt);
@@ -524,6 +526,14 @@ void LostEle::EventLoop(const char *data,const char *inputFileList) {
 	  }
 	}
 	h2_R_ElePtJetPtVsDR->Fill( minDRele,(((*Jets)[minDReleIndx].Pt())/((*Electrons)[0].Pt())),wt);
+	double eleMiniIso = 100, mindR_elIso=100;
+        for(int el_i=0;el_i<ElectronsNoIso_MiniIso->size();el_i++){
+          if(mindR_elIso > (*Electrons)[0].DeltaR((*ElectronsNoIso)[el_i])){
+            mindR_elIso = (*Electrons)[0].DeltaR((*ElectronsNoIso)[el_i]);
+            eleMiniIso = (*ElectronsNoIso_MiniIso)[el_i];
+          }
+        }
+	h_EleMiniIso->Fill(eleMiniIso,wt);
 	//---------------- search bins -----------------------
 	if( searchRegion > 0 && searchRegion < 4){
 	  h_MET_Ele1_R[searchRegion-1]->Fill(MET,wt);

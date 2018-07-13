@@ -43,14 +43,16 @@ void StackHists(){
   f[2] = new TFile("TTJetsHT.root");
   f[3] = new TFile("WJetsToLNu.root");
   f[4] = new TFile("ZJetsToNuNu.root");
-  f[5] = new TFile("ZGJetsToNuNuG.root");
+  f[5] = new TFile("ZGZJ_NuNuG.root");
   f[6] = new TFile("QCD.root");
   f[7] = new TFile("GJets.root");
   // f[8] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
   // f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
   // f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
-  f[8] = new TFile("T6ttZg_900_100_FastSim.root");
-  f[9] = new TFile("T6ttZg_900_750_FastSim.root");
+  // f[8] = new TFile("T6ttZg_900_100_FastSim.root");
+  // f[9] = new TFile("T6ttZg_900_750_FastSim.root");
+  f[8] = new TFile("GGM_M1M3_1100_1000_FastSim.root");
+  f[9] = new TFile("GGM_M1M3_1600_200_FastSim.root");
 
   //  f[10] = new TFile("T5qqqqHg_2000_127.root");
   //  f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
@@ -300,7 +302,7 @@ void drawlegend(TH1D *hist,int i,const char* fname){
   else if(lName=="QCD"){lName="QCD";}
   else if(lName=="GJets"){lName="#gamma +jets";}
   else if(lName=="WGJetsToLNuG"){lName="W(#rightarrow l #nu)+ #gamma";}
-  else if(lName=="ZGJetsToNuNuG"){lName="Z(#rightarrow #nu #bar{#nu})+ #gamma";}
+  else if(lName=="ZGZJ_NuNuG"){lName="Z(#rightarrow #nu #bar{#nu})+ #gamma";}
   else if(lName=="TTGJets"){lName="t #bar{t}+ #gamma";}
   else if(lName=="T1bbbb_ZG_mGl1600_NLSP150"){lName="4bZG_150";}
   else if(lName=="T1bbbb_ZG_mGl1600_NLSP1000"){lName="4bZG_1000";}

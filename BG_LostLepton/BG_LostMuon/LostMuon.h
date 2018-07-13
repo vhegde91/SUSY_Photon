@@ -71,6 +71,7 @@ class LostMuon : public NtupleVariables{
     /* vector<double> METBinLowEdge5={0,100,150,5000};//=1b */
   /* vector<double> METBinLowEdge5={0,100,150,5000};//>=2b */
   vector<double> nHadJLow={0,2,3,4,5,15};
+  vector<double> bTagBin1={0,1,10};
 
   vector<double> METBinLowEdge2={0,100,140,180,250,5000};//{0,100,140,180,5000};//{0,100,120,160,200,270,5000};
   vector<double> METBinLowEdge4={0,100,140,200,5000};
@@ -116,6 +117,8 @@ class LostMuon : public NtupleVariables{
   TH1D *h_nHadJets_Mu0;
   TH1D *h_BTags_Mu0;
   TH1D *h_METvBin_Mu0;
+  TH1D *h_METvBin_Mu0_0b;
+  TH1D *h_METvBin_Mu0_min1b;
   TH1D *h_BestPhotonPt_Mu0;
   TH1D *h_BestPhotonEta_Mu0;
   TH1D *h_BestPhotonPhi_Mu0;
@@ -124,7 +127,7 @@ class LostMuon : public NtupleVariables{
   TH1D *h_isoMuonTracks_Mu0;
   TH1D *h_MuMultInJets_Mu0;
 
-  TH1D *h_nGenEle_Mu0,*h_nGenMu_Mu0,*h_nGenTau_Mu0;
+  TH1D *h_nGenEle_Mu0,*h_nGenMu_Mu0,*h_nGenTau_Mu0,*h_nGenLightLep_Mu0;
   TH1D *h_GenMuons_MT2Activity_Mu0;
 
   TH1D *h_dPhi_PhoMET_Mu0;
@@ -145,6 +148,7 @@ class LostMuon : public NtupleVariables{
   TH1D *h_fakePhoPt_Mu0;
   TH1D *h_gendRLepPho_Mu0;
   TH1D *h_madMinPhotonDeltaR_Mu0;
+  TH1D *h_MuPtNoIso_Mu0;
 
   TH2D *h2_METnHadJ_Mu0;
   TH2D *h2_dPhi1nHadJ_Mu0;
@@ -160,6 +164,7 @@ class LostMuon : public NtupleVariables{
   TH3D *h3_STMETnHadJ_Mu0;
 
   TH2D *h2_hadJbTag_Mu0;
+  TH2D *h2_GenMuPtEta_Mu0;
 
   TH2D *h2_STMET_NJ2or3_Mu0;
   TH2D *h2_STMET_NJ4_Mu0;
@@ -180,6 +185,8 @@ class LostMuon : public NtupleVariables{
   TH1D *h_nHadJets_Mu1;
   TH1D *h_BTags_Mu1;
   TH1D *h_METvBin_Mu1;
+  TH1D *h_METvBin_Mu1_0b;
+  TH1D *h_METvBin_Mu1_min1b;
   TH1D *h_BestPhotonPt_Mu1;
   TH1D *h_BestPhotonEta_Mu1;
   TH1D *h_BestPhotonPhi_Mu1;
@@ -189,7 +196,7 @@ class LostMuon : public NtupleVariables{
   TH1D *h_MuMultInJets_Mu1;
   TH1D *h_invMassPhoMu;
 
-  TH1D *h_nGenEle_Mu1,*h_nGenMu_Mu1,*h_nGenTau_Mu1;
+  TH1D *h_nGenEle_Mu1,*h_nGenMu_Mu1,*h_nGenTau_Mu1,*h_nGenLightLep_Mu1;
   TH1D *h_GenMuons_MT2Activity_Mu1;
   TH1D *h_GenMuPt_Mu1;
  
@@ -227,6 +234,7 @@ class LostMuon : public NtupleVariables{
   TH1D *h_dR_MuPho;
   TH1D *h_gendRLepPho_Mu1;
   TH1D *h_madMinPhotonDeltaR_Mu1;
+  TH1D *h_MuPtNoIso_Mu1;
  
   TH2D *h2_METnHadJ_Mu1;
   TH2D *h2_dPhi1nHadJ_Mu1;
@@ -241,6 +249,7 @@ class LostMuon : public NtupleVariables{
   TH3D *h3_STMETnHadJ_Mu1;
 
   TH2D *h2_hadJbTag_Mu1;
+  TH2D *h2_GenMuPtEta_Mu1;
 
   TH2D *h2_STMET_NJ2or3_Mu1;
   TH2D *h2_STMET_NJ4_Mu1;
@@ -309,6 +318,9 @@ void LostMuon::BookHistogram(const char *outFileName) {
   h_nHadJets_Mu0=new TH1D("nHadJets_Mu0","no. of jets(only hadronic jets,not counting photon)  for 0 Muon events",25,0,25);
   h_BTags_Mu0=new TH1D("nBTags_Mu0","no. of B tags for 0 Muon events",10,0,10);
   h_METvBin_Mu0=new TH1D("METvarBin_Mu0","MET with variable bin size for 0 Muon events",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
+  h_METvBin_Mu0_0b=new TH1D("METvarBin_Mu0_0b","MET with variable bin size for 0 Muon and 0 b-tag events",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
+  h_METvBin_Mu0_min1b=new TH1D("METvarBin_Mu0_min1b","MET with variable bin size for 0 Muon and >=1 b-tag events ",METBinLowEdgeV4.size()-1,&(METBinLowEdgeV4[0]));
+
   h_BestPhotonPt_Mu0=new TH1D("BestPhotonPt_Mu0","Pt of the best photon for 0 Muon events",150,0,1500);
   h_BestPhotonEta_Mu0=new TH1D("BestPhotonEta_Mu0","Eta of the best photon for 0 Muon events",120,-6,6);
   h_BestPhotonPhi_Mu0=new TH1D("BestPhotonPhi_Mu0","Phi of the best photon for 0 Muon events",80,-4,4);
@@ -336,11 +348,15 @@ void LostMuon::BookHistogram(const char *outFileName) {
   h_GenMuPt_Mu0=new TH1D("GenMuPt_Mu0","Pt of the Gen Muon for 0 RECO Mu events. Gen Mus are coming from W/tau(tau's parent is W)",150,0,1500);
   h_nGenEleFmTau_Mu0=new TH1D("nGenEleFmTau_Mu0","no. of gen electrons from tau for 0 Mu events",5,0,5);
   h_nGenMuFmTau_Mu0=new TH1D("nGenMuFmTau_Mu0","no. of gen muons from tau for 0 Mu events",5,0,5);
+  h_nGenLightLep_Mu0=new TH1D("nGenLightLep_Mu0","no. of gen light leptons for 0 Mu events",5,0,5);
+
   h_genMuParent_Mu0=new TH1D("genMuParent_Mu0","PdgID of gen muon's parent for 0 Mu events",51,-0.5,50.5);
   h_photonPrompt_Mu0=new TH1D("photonPrompt_Mu0","is Photon prompt(1) or non-prompt(0) for 0 Mu events",3,0,3);
   h_fakePhoPt_Mu0=new TH1D("fakePhoPt_Mu0","Pt of the fake photon for 0 Mu events",200,0,2000);
   h_gendRLepPho_Mu0=new TH1D("gendRLepPho_Mu0","Gen dR(#gamma,lepton) for 0 Mu events",100,0,10);
   h_madMinPhotonDeltaR_Mu0=new TH1D("madMinPhotonDeltaR_Mu0","Gen dR(#gamma,q) for 0 Mu events",100,0,10);
+
+  h_MuPtNoIso_Mu0=new TH1D("MuPtNoIso_Mu0","Pt of muon within acceptance, no iso required for 0 Mu events",150,0,1500);
 
   h2_METnHadJ_Mu0=new TH2D("METnHadJ_Mu0","x: MET vs nHadJets for 0 Mu events",METBinLowEdge5.size()-1,&(METBinLowEdge5[0]),nHadJLow.size()-1,&(nHadJLow[0]));
   h2_dPhi1nHadJ_Mu0=new TH2D("dPhi1nHadJ_Mu0","x:dPhi MET and leading jet vs nHadJets for 0 Mu events",dPhi1LowEdge.size()-1,&(dPhi1LowEdge[0]),nHadJLow.size()-1,&(nHadJLow[0]));
@@ -349,12 +365,13 @@ void LostMuon::BookHistogram(const char *outFileName) {
   h2_STMET_Mu0=new TH2D("STMET_Mu0","x:ST vs MET for 0 Mu events",STLowEdge.size()-1,&(STLowEdge[0]),METBinLowEdge4.size()-1,&(METBinLowEdge4[0]));
   h2_dPhi1dPhi2_Mu0=new TH2D("dPhi1dPhi2_Mu0","x:dPhi1 vs dPhi2 for 0 Mu events",dPhi1LowEdge.size()-1,&(dPhi1LowEdge[0]),dPhi2LowEdge.size()-1,&(dPhi2LowEdge[0]));
   h2_GenMuPtGenAct_Mu0=new TH2D("GenMuPtGenAct_Mu0","x:Pt of Gen Muon vs MT2 activity of Gen Muon",MuPtLowEdge.size()-1,&(MuPtLowEdge[0]),MuActLowEdge.size()-1,&(MuActLowEdge[0]));
+  h2_GenMuPtEta_Mu0=new TH2D("GenMuPtEta_Mu0","x:GenMuPt vs GenMu |Eta| for 0 Mu events",100,0,1000,60,0,6);
 
   h2_STHadJ_Mu0=new TH2D("STHadJ_Mu0","x:ST vs HadJets for 0 Mu events",STLowEdge.size()-1,&(STLowEdge[0]),nHadJLow.size()-1,&(nHadJLow[0]));
   h2_METJet1Pt_Mu0=new TH2D("METJet1Pt_Mu0","x:MET vs leading JetPt for 0 Mu events",METBinLowEdge2.size()-1,&(METBinLowEdge2[0]),jet1PtLowEdge.size()-1,&(jet1PtLowEdge[0]));
   h3_STMETnHadJ_Mu0=new TH3D("STMETnHadJ_Mu0","x:ST,y:MET,z:nHadJets for 0 Mu events",STLowEdge2.size()-1,&(STLowEdge2[0]),METBinLowEdge2.size()-1,&(METBinLowEdge2[0]),nHadJLow.size()-1,&(nHadJLow[0]));
 
-  h2_hadJbTag_Mu0=new TH2D("hadJbTag_Mu0","x: hadJ vs BTag for 0 Mu events",1,0,100,1,0,100);
+  h2_hadJbTag_Mu0=new TH2D("hadJbTag_Mu0","x: hadJ vs BTag for 0 Mu events",15,0,15,bTagBin1.size()-1,&(bTagBin1[0]));
 
   h2_STMET_NJ2or3_Mu0 = new TH2D("STMET_Mu0_R1","x:ST vs MET for NJ=2 or 3 for 0 Mu events",STInclLowEdge.size()-1,&(STInclLowEdge[0]),MET_NJ2or3LowEdge.size()-1,&(MET_NJ2or3LowEdge[0]));
   h2_STMET_NJ4_Mu0 = new TH2D("STMET_Mu0_R2","x:ST vs MET for NJ=4 for 0 Mu events",STInclLowEdge.size()-1,&(STInclLowEdge[0]),MET_NJ4LowEdge.size()-1,&(MET_NJ4LowEdge[0]));
@@ -377,6 +394,8 @@ void LostMuon::BookHistogram(const char *outFileName) {
   h_nHadJets_Mu1=new TH1D("nHadJets_Mu1","no. of jets(only hadronic jets,not counting photon)  for 1 Muon events",25,0,25);
   h_BTags_Mu1=new TH1D("nBTags_Mu1","no. of B tags for 1 Muon events",10,0,10);
   h_METvBin_Mu1=new TH1D("METvarBin_Mu1","MET with variable bin size for 1 Muon events",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
+  h_METvBin_Mu1_0b=new TH1D("METvarBin_Mu1_0b","MET with variable bin size for 1 Muon and 0 b-tag events",METBinLowEdgeV4_njLow.size()-1,&(METBinLowEdgeV4_njLow[0]));
+  h_METvBin_Mu1_min1b=new TH1D("METvarBin_Mu1_min1b","MET with variable bin size for 1 Muon and >=1 b-tag events ",METBinLowEdgeV4.size()-1,&(METBinLowEdgeV4[0]));
   h_BestPhotonPt_Mu1=new TH1D("BestPhotonPt_Mu1","Pt of the best photon for 1 Muon events",150,0,1500);
   h_BestPhotonEta_Mu1=new TH1D("BestPhotonEta_Mu1","Eta of the best photon for 1 Muon events",120,-6,6);
   h_BestPhotonPhi_Mu1=new TH1D("BestPhotonPhi_Mu1","Phi of the best photon for 1 Muon events",80,-4,4);
@@ -406,12 +425,15 @@ void LostMuon::BookHistogram(const char *outFileName) {
   h_nGenEle_Mu1=new TH1D("nGenEle_Mu1","number of gen electrons, electrons from W/tau(tau's parent is W), for 1 Muon events",5,-0.5,4.5);
   h_nGenMu_Mu1=new TH1D("nGenMu_Mu1","number of gen muons, muons from W/tau(tau's parent is W), for 1 Muon events",5,-0.5,4.5);
   h_nGenTau_Mu1=new TH1D("nGenTau_Mu1","number of gen taus, taus from W, for 1 Muon events",5,-0.5,4.5);
+  h_nGenLightLep_Mu1=new TH1D("nGenLightLep_Mu1","no. of gen light leptons for 1 Muon events",5,0,5);
+
   h_fakePhoPt_Mu1=new TH1D("fakePhoPt_Mu1","Pt of the fake photon for 1 Mu events",200,0,2000);
   h_dR_MuPho=new TH1D("dR_MuPho","dR(#mu,#gamma) for 1 Muon events",100,0,10);
   h_mTPhoMuMET=new TH1D("mTPhoMuMET","mT(pho+Mu,MET)",500,0,500);
   h_invMassMuPhoNu=new TH1D("invMassMuPhoNu","inv mass of mu, leading photon and neutrino",500,0,500);
   h_gendRLepPho_Mu1=new TH1D("gendRLepPho_Mu1","Gen dR(#gamma,lepton) for 1 Mu events",100,0,10);
   h_madMinPhotonDeltaR_Mu1=new TH1D("madMinPhotonDeltaR_Mu1","Gen dR(#gamma,q) for 1 Mu events",100,0,10);
+  h_MuPtNoIso_Mu1=new TH1D("MuPtNoIso_Mu1","Pt of muon within acceptance, no iso required for 1 Mu events",150,0,1500);
 
   h2_STvsMuPt_Mu1=new TH2D("STvsMuPt_Mu1","x: Muon Pt vs ST for 1 Muon events",150,0,1500,400,0,4000);
   h2_METvsMuPt_Mu1=new TH2D("METvsMuPt_Mu1","x:Muon Pt vs MET for 1 Muon events",150,0,1500,200,0,2000);
@@ -438,11 +460,13 @@ void LostMuon::BookHistogram(const char *outFileName) {
   h2_dPhi1dPhi2_Mu1=new TH2D("dPhi1dPhi2_Mu1","x:dPhi1 vs dPhi2 for 1 Mu events",dPhi1LowEdge.size()-1,&(dPhi1LowEdge[0]),dPhi2LowEdge.size()-1,&(dPhi2LowEdge[0]));
   h2_RecoMuPtRecoAct_Mu1=new TH2D("RecoMuPtRecoAct_Mu1","x:Pt of RECO Muon vs MT2 activity of RECO Muon",MuPtLowEdge.size()-1,&(MuPtLowEdge[0]),MuActLowEdge.size()-1,&(MuActLowEdge[0]));
 
+  h2_GenMuPtEta_Mu1=new TH2D("GenMuPtEta_Mu1","x:GenMuPt vs GenMu |Eta| for 1 Mu events",100,0,1000,60,0,6);
+
   h2_STHadJ_Mu1=new TH2D("STHadJ_Mu1","x:ST vs HadJets for 1 Mu events",STLowEdge.size()-1,&(STLowEdge[0]),nHadJLow.size()-1,&(nHadJLow[0]));
   h2_METJet1Pt_Mu1=new TH2D("METJet1Pt_Mu1","x:MET vs leading JetPt for 1 Mu events",METBinLowEdge2.size()-1,&(METBinLowEdge2[0]),jet1PtLowEdge.size()-1,&(jet1PtLowEdge[0]));
   h3_STMETnHadJ_Mu1=new TH3D("STMETnHadJ_Mu1","x:ST,y:MET,z:nHadJets for 1 Mu events",STLowEdge2.size()-1,&(STLowEdge2[0]),METBinLowEdge2.size()-1,&(METBinLowEdge2[0]),nHadJLow.size()-1,&(nHadJLow[0]));
 
-  h2_hadJbTag_Mu1=new TH2D("hadJbTag_Mu1","x: hadJ vs BTag for 1 Mu events",1,0,100,1,0,100);
+  h2_hadJbTag_Mu1=new TH2D("hadJbTag_Mu1","x: hadJ vs BTag for 1 Mu events",15,0,15,bTagBin1.size()-1,&(bTagBin1[0]));
 
   h2_STMET_NJ2or3_Mu1 = new TH2D("STMET_Mu1_R1","x:ST vs MET for NJ=2 or 3 for 1 Mu events",STInclLowEdge.size()-1,&(STInclLowEdge[0]),MET_NJ2or3LowEdge.size()-1,&(MET_NJ2or3LowEdge[0]));
   h2_STMET_NJ4_Mu1 = new TH2D("STMET_Mu1_R2","x:ST vs MET for NJ=4 for 1 Mu events",STInclLowEdge.size()-1,&(STInclLowEdge[0]),MET_NJ4LowEdge.size()-1,&(MET_NJ4LowEdge[0]));

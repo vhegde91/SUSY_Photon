@@ -30,14 +30,8 @@ TString getXaxisName(TString axname);
 void testClosure(TString inFname){
   TH1::SetDefaultSumw2(1);
   gStyle->SetOptStat(0);
-  //  f[0] = new TFile("CS_WJetsToLNu.root");
-  // f[0] = new TFile("CS_TTJets.root");
-  //  f[0] = new TFile("CS_TTW_FR_clsr_FRDY.root");
-  //f[0] = new TFile("CS_TTW_FR_clsr_EMPtQMult.root");
-  //  f[0] = new TFile("CS_TTW_FR_clsr_EMPtQMult_FR_DY_IgoreTagE.root");
   f[0] = new TFile(inFname);
-  //  f[0] = new TFile("CS_WJets_FR_clsr_EMPtQMult_FR_DY_IgoreTagE.root");
-
+  TFile *fout = new TFile("forPull.root","recreate");
   //  gStyle->SetOptStat("nemri");
   double intLumi=35.9;  
   vector<TString> name1,name2;
@@ -48,7 +42,8 @@ void testClosure(TString inFname){
   name1.push_back("nBTags_D");         name2.push_back("nBTags_B");     rebin.push_back(1);
   name1.push_back("nHadJets_D");    name2.push_back("nHadJets_B");rebin.push_back(1);
   //  name1.push_back("nJets_D");      name2.push_back("nJets_B");  rebin.push_back(1);
-  name1.push_back("BestPhotonPt_D");    name2.push_back("BestPhotonPt_B");       rebin.push_back(10);
+  name1.push_back("BestPhotonPt_D");    name2.push_back("BestPhotonPt_C");       rebin.push_back(5);
+  name1.push_back("BestPhotonPtvarBin_D");    name2.push_back("BestPhotonPtvarBin_C");       rebin.push_back(1);
   name1.push_back("METvarBin_CD");   name2.push_back("METvarBin_AB");rebin.push_back(1);
   name1.push_back("jet1Pt_D");   name2.push_back("jet1Pt_B");rebin.push_back(5);
   name1.push_back("jet2Pt_D");   name2.push_back("jet2Pt_B");rebin.push_back(5);
@@ -157,18 +152,32 @@ void testClosure(TString inFname){
     //    c_cB->cd(i+1);    p_bot[i]->cd();
     h_numr->Draw("e0");
     h_numr->Draw("e1 same");
+
+    TString name = h_histG->GetName();
+    if(name.Contains("SBins_v7")){ 
+      fout->cd();
+      h_numr->Write();
+      TH1D *h_pullHist = new TH1D("pull_multijet","1D pull for lost Mu+hadTau",25,-2.5,7.5);
+      for(int p=1;p<=h_numr->GetNbinsX();p++){
+	if( p==1 || p==7 || p==12 || p==17 || p==22 || p==27 ) continue;
+	h_pullHist->Fill( (1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));
+	//h_pullHist->Fill( p,(1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));
+      }
+      h_pullHist->Write();
+    }
     
     TLine *line1V7=new TLine( 6.5,0.01,  6.5,1000);
     TLine *line2V7=new TLine(11.5,0.01, 11.5,1000);
     TLine *line3V7=new TLine(16.5,0.01, 16.5,1000);
     TLine *line4V7=new TLine(21.5,0.01, 21.5,1000);
     TLine *line5V7=new TLine(26.5,0.01, 26.5,300);
-  
-    p_top[i]->cd(); p_top[i]->SetGridx(0);
-    line1V7->Draw();      line2V7->Draw();        line3V7->Draw();        line4V7->Draw();    line5V7->Draw();
-    p_bot[i]->cd(); p_bot[i]->SetGridx(0);
-    line1V7->Draw();      line2V7->Draw();        line3V7->Draw();        line4V7->Draw();    line5V7->Draw();
 
+    if(name.Contains("SBins_v7")){
+      p_top[i]->cd(); p_top[i]->SetGridx(0);
+      line1V7->Draw();      line2V7->Draw();        line3V7->Draw();        line4V7->Draw();    line5V7->Draw();
+      p_bot[i]->cd(); p_bot[i]->SetGridx(0);
+      line1V7->Draw();      line2V7->Draw();        line3V7->Draw();        line4V7->Draw();    line5V7->Draw();
+    }
   }
 
   gStyle->SetTextSize(2);

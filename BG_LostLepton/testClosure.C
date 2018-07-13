@@ -21,7 +21,7 @@
 const int nfiles=2,nBG=1;    //Specify no. of files
 TFile *f[nfiles];
 //int col[10]={kOrange,kBlue,kTeal+9,kGray+1,kCyan,kOrange-9,kYellow+2,kRed,kMagenta+2,kMagenta};  //Specify Colors
-int col[10]={kOrange,kTeal+9,kBlue,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
+int col[10]={kOrange,kBlue,kTeal+9,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
 TString name;
 bool saveCanvas=0;
 void setLastBinAsOverFlow(TH1D*);
@@ -48,7 +48,7 @@ void testClosure(){
   //  TFile *fout = new TFile("forPull.root","recreate");
   //  gStyle->SetOptStat("nemri");
   
-  cout<<pcUncLEleTF<<" muUnc: "<<pcUncLMuTF<<endl;
+  //  cout<<pcUncLEleTF<<" muUnc: "<<pcUncLMuTF<<endl;
 
   TH1D *h0=(TH1D*)f[0]->Get("AllSBins_v7_Mu0");
   TH1D *h1=(TH1D*)f[0]->Get("AllSBins_v7_Mu1");
@@ -97,8 +97,8 @@ void testClosure(){
   TLine *line1V7=new TLine( 6.5,0.05,  6.5,400);
   TLine *line2V7=new TLine(11.5,0.05, 11.5,400);
   TLine *line3V7=new TLine(16.5,0.05, 16.5,400);
-  TLine *line4V7=new TLine(21.5,0.05, 21.5,400);
-  TLine *line5V7=new TLine(26.5,0.05, 26.5,40 );
+  TLine *line4V7=new TLine(21.5,0.05, 21.5,200);
+  TLine *line5V7=new TLine(26.5,0.05, 26.5,200 );
   
   //  TCanvas *c_cB=new TCanvas("closure_test","closure test",1500,800); c_cB->Divide(4,2);
   TPad *p_top[name1.size()];
@@ -109,7 +109,7 @@ void testClosure(){
     c_cA[i]=new TCanvas(name,name,1500,800);//c_cA[i]->Divide(4,2);
     p_top[i]=new TPad(name+"_top",name+"_top",0,0.4,1,1);
     p_bot[i]=new TPad(name+"_bot",name+"_bot",0,0.0,1,0.4);
-    p_top[i]->Draw();p_top[i]->SetGridx();p_top[i]->SetGridy();p_top[i]->SetLogy();
+    p_top[i]->Draw();p_top[i]->SetGridx(0);p_top[i]->SetGridy(0);p_top[i]->SetLogy();
     p_top[i]->SetBottomMargin(0);
     p_bot[i]->SetTopMargin(0);
     p_bot[i]->SetBottomMargin(0.3);
@@ -146,23 +146,31 @@ void testClosure(){
 	h_histG->SetTitle(";;Events");
 	h_histG->GetYaxis()->SetLabelSize(0.09);
 	h_histG->GetYaxis()->SetTitleSize(0.09);
-	h_histG->GetYaxis()->SetTitleOffset(0.45);
+	h_histG->GetYaxis()->SetTitleOffset(0.47);
 	h_histG->GetYaxis()->SetNdivisions(10);
 	
-	h_histE->SetLineColor(kGreen+2);
+	//	h_histE->SetLineColor(kGreen+2);
+	h_histE->SetLineColor(kBlue);
 	h_histE->SetLineWidth(2);
 	h_histE->SetMarkerStyle(20);
 	h_histE->SetMarkerColor(h_histE->GetLineColor());
 
 	c_cA[i]->cd();p_top[i]->cd();
 	//c_cB->cd(i+1);p_top[i]->cd();
+	h_histG->GetYaxis()->SetTickLength(0.0328/1.5);
+	h_histG->SetMaximum(999);
 	h_histG->Draw("e1");
+	//	cout<<"y "<<h_histG->GetYaxis()->GetTickLength()<<endl;
+	//	h_histG->GetYaxis()->SetTickLength(0.05);
+	//	h_histG->GetYaxis()->SetTickLength(0.25);
 	// h_histE->SetFillStyle(3004);
 	// h_histE->SetFillColor(h_histE->GetLineColor());
  	h_histE->Draw("e1 same");
 	//	h_histE->Draw("L same");
 
-	legend[i]=new TLegend(0.69, 0.66,  0.85, 0.86);
+	//	legend[i]=new TLegend(0.69, 0.66,  0.85, 0.86);
+	//	legend[i]=new TLegend(0.62, 0.76,  0.86, 0.86); legend[i]->SetNColumns(2);
+	legend[i]=new TLegend(0.6241656,0.7686987,0.864486,0.8702983); legend[i]->SetNColumns(2);
 	name=name1[i];
 	legend[i]->AddEntry(h_histG,"Expected","lep");
 	name=name2[i];
@@ -182,23 +190,27 @@ void testClosure(){
       }
     }
     
-    TH1D *h_numr=(TH1D*)h_histG->Clone();
+    TH1D *h_numr=(TH1D*)h_histG->Clone("ratioPlot");
     
     h_numr->Divide(h_histE);
     TString xaxisName = getXaxisName(h_histG->GetName());
 
     h_numr->SetLineColor(kBlack);
     h_numr->SetMarkerColor(kBlack);
-    h_numr->SetTitle(";;#frac{Exp}{Pred }");
+    //    h_numr->SetTitle(";;#frac{Exp}{Pred }");
+    h_numr->SetTitle(";;Exp. / Pred.");
     h_numr->GetXaxis()->SetLabelSize(0.13);
     h_numr->GetXaxis()->SetTitle(xaxisName);
     h_numr->GetXaxis()->SetTitleSize(0.13);
     h_numr->GetXaxis()->SetTitleOffset(0.9);
 
-    h_numr->GetYaxis()->SetTitleOffset(0.36);
+    //    h_numr->GetYaxis()->SetTitleOffset(0.36);
+    h_numr->GetYaxis()->CenterTitle();
+    h_numr->GetYaxis()->SetTitleOffset(0.30);
     h_numr->GetYaxis()->SetTitleSize(0.14);
     h_numr->GetYaxis()->SetLabelSize(0.14);
     h_numr->GetYaxis()->SetNdivisions(505);
+    h_numr->GetYaxis()->SetTickLength(0.042/1.5);
     h_numr->SetMaximum(1.90);
     h_numr->SetMinimum(0.01);
     c_cA[i]->cd();    p_bot[i]->cd();
@@ -208,8 +220,8 @@ void testClosure(){
     h_LMuTFUnc->SetFillColor(1); 
     h_LMuTFUnc->Draw("E2same");
     h_numr->Draw("e0 same");
-    h_LMuTFUnc->Print("all");
-
+    //    h_LMuTFUnc->Print("all");
+    //    cout<<"Bot:"<<h_numr->GetYaxis()->GetTickLength()<<endl;
     TString name = h_histG->GetName();
     if(name.Contains("SBins_v4")){ 
       line1->Draw();	line2->Draw();	line3->Draw();	line4->Draw();	line5->Draw();
@@ -224,14 +236,44 @@ void testClosure(){
     }
     else if(name.Contains("SBins_v7")){
       line1V7->Draw();	line2V7->Draw();	line3V7->Draw();	line4V7->Draw();	line5V7->Draw();
+      line1V7->SetLineStyle(2);	line2V7->SetLineStyle(2);	line3V7->SetLineStyle(2);	line4V7->SetLineStyle(2);	line5V7->SetLineStyle(2);
     }
     c_cA[i]->cd();    p_top[i]->cd();
     char name2[100];
     textOnTop.SetTextSize(0.07);
     intLumiE.SetTextSize(0.07);
-    textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation}}");
-    sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
-    intLumiE.DrawLatexNDC(0.73,0.91,name2);
+    //    textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation}}");
+    textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Preliminary}}");
+    sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
+    intLumiE.DrawLatexNDC(0.72,0.91,name2);
+ 
+    c_cA[i]->cd();    p_top[i]->cd();
+    TArrow *arrow1 = new TArrow(0.5,110,6.5,110,0.01,"<|>");
+    TArrow *arrow2 = new TArrow(6.5,110,11.5,110,0.01,"<|>");
+    TArrow *arrow3 = new TArrow(11.5,110,16.5,110,0.01,"<|>");
+    TArrow *arrow4 = new TArrow(16.5,110,21.5,110,0.01,"<|>");
+    TArrow *arrow5 = new TArrow(21.5,110,26.5,110,0.01,"<|>");
+    TArrow *arrow6 = new TArrow(26.5,110,31.5,110,0.01,"<|>");
+    arrow1->Draw(); arrow2->Draw(); arrow3->Draw();
+    arrow4->Draw(); arrow5->Draw(); arrow6->Draw();
+    TLatex Tl;
+    Tl.SetTextSize(0.06);
+    Tl.DrawLatex(3.,135,"N^{ 0}_{ 2-4}");
+    Tl.DrawLatex(8.5,135,"N^{ 0}_{ 5-6}");
+    Tl.DrawLatex(13.5,135,"N^{ 0}_{ #geq7}");
+    Tl.DrawLatex(18.5,135,"N^{ #geq1}_{ 2-4}");
+    Tl.DrawLatex(23.5,135,"N^{ #geq1}_{ 5-6}");
+    Tl.DrawLatex(28.5,135,"N^{ #geq1}_{ #geq7}");
+
+    // TLatex Tl2;
+    // Tl2.SetTextSize(0.05);
+    // Tl2.SetTextAngle(90);
+    // Tl2.DrawLatex(1.1,1,"#bf{Sideband}");
+    // Tl2.DrawLatex(7.1,1,"#bf{Sideband}");
+    // Tl2.DrawLatex(12.1,1,"#bf{Sideband}");
+    // Tl2.DrawLatex(17.1,1,"#bf{Sideband}");
+    // Tl2.DrawLatex(22.1,1,"#bf{Sideband}");
+    // Tl2.DrawLatex(27.1,1,"#bf{Sideband}");
 
     if(saveCanvas){name="c_"+name1[i]+name2[i]+".png";c_cA[i]->SaveAs(name);}
   }

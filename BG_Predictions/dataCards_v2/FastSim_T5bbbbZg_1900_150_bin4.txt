@@ -1,0 +1,40 @@
+# - - - - - - - - - - - - - - - - - - -
+# Datacard for mGl= 1900 mNLSP= 150 with model FastSim_T5bbbbZg_1900_150
+# - - - - - - - - - - - - - - - - - - - 
+imax 1 number of channels
+jmax *  number of backgrounds('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin 4
+observation 50
+------------
+bin 4 4 4 4 4 4 
+process FastSim_T5bbbbZg_1900_150_bin4 LEle_bin4 LMuTau_bin4 Fake_bin4 ZG_bin4 MultiJ_bin4 
+process 0 1 2 3 4 5 
+rate 0.0115336 1.67905 13.9474 6.586 16.9818 4.10965 
+------------
+lumi lnN              1.023      -       -       -       -       -
+sigStat_b4 lnN       1.35829    -       -       -       -       -
+trigEff_b4 lnN       1.02    -       -       -       -       -
+LEle_b4 gmN 4        -     0.419762     -       -       -       -
+LEleTFUnc_b4 lnN     -     1.09431      -       -       -       -
+LEleDR_b lnN     -     1.12      -       -       -       -
+LEleLeptSF_bM4 lnN     -     1.02      -       -       -       -
+LEleJEC_b lnN     -     1.02      -       -       -       -
+LMuTau_b4 gmN  14     -       -     0.996246     -       -       -
+LMuTauTFUnc_b4 lnN   -       -     1.06189      -       -       -
+LMuLeptSF_bM4 lnN     -     -    1.03     -       -       -
+LLeptPDF_b lnN     -     1.05     1.015       -       -       -
+FakeUncRate_b4 lnN   -       -          -    1.17837    -       -
+FakeRate_SF_b lnN   -       -          -    1.1    -       -
+FakeRate_PU_b lnN   -       -          -    1.06    -       -
+FakeRate_ISR_b lnN   -       -          -    1.02    -       -
+ZG_mcStat_b4 lnN     -       -          -      -     1.0194       -
+ZGTF_b gmN 36         -       -          -      -     0.471717       -
+ZGTFpurity_b lnN  -       -          -      -     1.03608     -
+ZG_highOrdCorr_bM4 lnN  -       -          -      -     1.25       -
+ZG_bTagSF_bA lnN  -       -          -      -     1.02       -
+MultiJ_b4 gmN 26     -       -          -          -         -       0.158063
+MultiJHL_bR1 lnN      -       -          -          -         -       1.0238
+MultiJdR_bR1 lnN      -       -          -          -         -       1.17059
+MultiJEW_b4  lnN      -       -          -          -         -        0.607644/0.754884

@@ -1,0 +1,1025 @@
+TreeUtilities : FillChain 
+No. of Entries in this tree : 13049
+Initiating analysis of dataset a
+Treating the input files as BG for setting tree branches
+dataset a 
+nentries 13049
+Analyzing dataset a 
+************* Applying weights for AB? 0
+-------------------------------- Photons -------------------------------------------
+Photon Pt:136.611 eta:0.81319 phi:2.23926 E:184.324 FullID:1 Pixel Seed:0
+JetPt:231.511 JetEta:1.36295 JetPhi:2.28721 energy:483.135 QMult:17 CSV:0.0940809 dPhi with photon:0.0479457
+JetPt:169.294 JetEta:-0.497347 JetPhi:-1.43511 energy:190.943 QMult:11 CSV:0.0718696 dPhi with photon:2.60881
+JetPt:153.218 JetEta:-1.05751 JetPhi:1.75502 energy:247.539 QMult:9 CSV:0.0631111 dPhi with photon:-0.484241
+JetPt:149.237 JetEta:0.809658 JetPhi:2.23451 energy:201.087 QMult:3 CSV:0.471798 dPhi with photon:-0.00475073
+JetPt:53.0617 JetEta:1.28435 JetPhi:0.0144438 energy:103.872 QMult:15 CSV:0.818732 dPhi with photon:-2.22482
+JetPt:31.7492 JetEta:-0.224004 JetPhi:-2.81232 energy:33.0799 QMult:8 CSV:0.180717 dPhi with photon:1.23161
+JetPt:30.9703 JetEta:2.07094 JetPhi:2.45045 energy:124.872 QMult:6 CSV:0.177757 dPhi with photon:0.211188
+MET:357.392 METPhi:-0.93264
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279766:304:571581041
+-------------------------------- Photons -------------------------------------------
+Photon Pt:260.714 eta:0.212737 phi:-2.29235 E:266.636 FullID:1 Pixel Seed:0
+JetPt:605.855 JetEta:0.749031 JetPhi:1.58365 energy:785.227 QMult:15 CSV:0.0920612 dPhi with photon:-2.40719
+JetPt:521.823 JetEta:0.244069 JetPhi:-2.29191 energy:537.887 QMult:3 CSV:-10 dPhi with photon:0.000446558
+JetPt:265.383 JetEta:-0.94815 JetPhi:-1.13775 energy:397.709 QMult:28 CSV:0.996967 dPhi with photon:1.1546
+JetPt:58.6374 JetEta:-0.439287 JetPhi:-0.993062 energy:65.3158 QMult:7 CSV:0.463653 dPhi with photon:1.29929
+MET:233.088 METPhi:0.5492
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278923:441:735527954
+-------------------------------- Photons -------------------------------------------
+Photon Pt:123.889 eta:-2.25431 phi:1.45648 E:596.754 FullID:1 Pixel Seed:0
+JetPt:533.72 JetEta:0.492831 JetPhi:0.479736 energy:602.524 QMult:35 CSV:0.895989 dPhi with photon:-0.97674
+JetPt:433.22 JetEta:-1.73114 JetPhi:-2.32325 energy:1263.11 QMult:29 CSV:0.255188 dPhi with photon:2.50346
+JetPt:145.071 JetEta:-2.25507 JetPhi:1.46193 energy:699.358 QMult:4 CSV:0.626937 dPhi with photon:0.00544941
+JetPt:110.402 JetEta:1.17112 JetPhi:1.06367 energy:195.907 QMult:13 CSV:0.52401 dPhi with photon:-0.392804
+JetPt:81.8761 JetEta:2.34931 JetPhi:-1.38922 energy:433.029 QMult:11 CSV:0.771089 dPhi with photon:-2.8457
+JetPt:34.5277 JetEta:3.23769 JetPhi:1.86135 energy:440.513 QMult:0 CSV:-10 dPhi with photon:0.404875
+MET:240.064 METPhi:-2.73737
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279024:136:141996149
+-------------------------------- Photons -------------------------------------------
+Photon Pt:384.885 eta:-0.892997 phi:-3.04995 E:548.821 FullID:1 Pixel Seed:0
+JetPt:421.2 JetEta:-0.893725 JetPhi:-3.04955 energy:600.999 QMult:1 CSV:-10 dPhi with photon:0.000399828
+JetPt:221.612 JetEta:-1.64227 JetPhi:-0.313767 energy:594.356 QMult:19 CSV:0.223106 dPhi with photon:2.73619
+JetPt:78.4499 JetEta:-1.521 JetPhi:2.20596 energy:188.26 QMult:7 CSV:0.665092 dPhi with photon:-1.02727
+MET:246.248 METPhi:0.0837176
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279694:2172:3920131087
+-------------------------------- Photons -------------------------------------------
+Photon Pt:197.467 eta:-1.9914 phi:2.53271 E:736.781 FullID:1 Pixel Seed:0
+JetPt:231.159 JetEta:-1.99392 JetPhi:2.5315 energy:864.698 QMult:8 CSV:0.585514 dPhi with photon:-0.00121713
+JetPt:201.218 JetEta:-1.45998 JetPhi:-1.81538 energy:457.215 QMult:14 CSV:0.120348 dPhi with photon:1.93509
+JetPt:153.884 JetEta:0.496682 JetPhi:2.01785 energy:173.968 QMult:14 CSV:0.124748 dPhi with photon:-0.514869
+MET:298.717 METPhi:-0.0985554
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280018:21:31788538
+-------------------------------- Photons -------------------------------------------
+Photon Pt:442.117 eta:1.80827 phi:-2.79993 E:1384.68 FullID:1 Pixel Seed:0
+JetPt:493.429 JetEta:1.81027 JetPhi:-2.80156 energy:1548.46 QMult:5 CSV:-10 dPhi with photon:-0.00163174
+JetPt:415.653 JetEta:0.558923 JetPhi:-2.42838 energy:486.044 QMult:21 CSV:0.0848003 dPhi with photon:0.371554
+JetPt:306.606 JetEta:0.625807 JetPhi:1.33298 energy:371.061 QMult:27 CSV:0.996601 dPhi with photon:-2.15028
+JetPt:302.202 JetEta:0.392969 JetPhi:0.169016 energy:326.489 QMult:9 CSV:-10 dPhi with photon:2.96895
+MET:395.767 METPhi:0.209102
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280330:586:1116220963
+-------------------------------- Photons -------------------------------------------
+Photon Pt:289.775 eta:-0.0871043 phi:-2.22142 E:290.874 FullID:1 Pixel Seed:0
+JetPt:311.551 JetEta:-0.0888771 JetPhi:-2.22515 energy:313.531 QMult:11 CSV:0.870701 dPhi with photon:-0.00372505
+JetPt:206.321 JetEta:1.45773 JetPhi:0.0823148 energy:468.481 QMult:13 CSV:0.272869 dPhi with photon:2.30374
+JetPt:108.908 JetEta:0.374504 JetPhi:-2.9386 energy:118.572 QMult:18 CSV:0.15171 dPhi with photon:-0.717178
+JetPt:43.4028 JetEta:0.194335 JetPhi:2.85521 energy:45.036 QMult:11 CSV:0.955956 dPhi with photon:-1.20655
+JetPt:35.1391 JetEta:-2.69745 JetPhi:-1.82811 energy:261.998 QMult:0 CSV:-10 dPhi with photon:0.39331
+JetPt:33.0793 JetEta:-1.45514 JetPhi:0.930212 energy:75.2883 QMult:13 CSV:0.203363 dPhi with photon:-3.13155
+MET:288.868 METPhi:1.38915
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279975:216:280494323
+10 %
+-------------------------------- Photons -------------------------------------------
+Photon Pt:313.435 eta:0.292533 phi:-2.45254 E:326.942 FullID:1 Pixel Seed:0
+JetPt:338.126 JetEta:0.296081 JetPhi:-2.45525 energy:353.41 QMult:5 CSV:-10 dPhi with photon:-0.00271249
+JetPt:206.328 JetEta:-0.0568136 JetPhi:-0.0914502 energy:208.418 QMult:24 CSV:0.0949795 dPhi with photon:2.36109
+JetPt:58.4098 JetEta:1.50897 JetPhi:-0.879368 energy:139.002 QMult:11 CSV:0.462621 dPhi with photon:1.57317
+JetPt:32.7459 JetEta:-0.847792 JetPhi:1.4488 energy:45.7917 QMult:12 CSV:0.145246 dPhi with photon:-2.38185
+MET:264.003 METPhi:1.49514
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279766:117:219820383
+-------------------------------- Photons -------------------------------------------
+Photon Pt:386.72 eta:0.119346 phi:1.58819 E:389.478 FullID:1 Pixel Seed:0
+JetPt:574.386 JetEta:0.147127 JetPhi:-1.65809 energy:581.496 QMult:8 CSV:0.116453 dPhi with photon:3.03691
+JetPt:398.157 JetEta:0.119897 JetPhi:1.59035 energy:401.433 QMult:8 CSV:0.430811 dPhi with photon:0.0021621
+JetPt:33.8606 JetEta:0.768841 JetPhi:-1.3189 energy:45.0435 QMult:13 CSV:0.774717 dPhi with photon:-2.90708
+MET:222.457 METPhi:1.41624
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278923:324:518034827
+-------------------------------- Photons -------------------------------------------
+Photon Pt:200.341 eta:0.427041 phi:1.68192 E:218.887 FullID:1 Pixel Seed:0
+JetPt:1195.07 JetEta:-0.524876 JetPhi:0.0409063 energy:1364.28 QMult:9 CSV:0.286757 dPhi with photon:-1.64101
+JetPt:1082.44 JetEta:1.10632 JetPhi:2.86268 energy:1818.19 QMult:38 CSV:0.157514 dPhi with photon:1.18077
+JetPt:528.344 JetEta:0.495728 JetPhi:-1.58934 energy:597.364 QMult:27 CSV:0.40296 dPhi with photon:3.01193
+JetPt:211.283 JetEta:0.428127 JetPhi:1.68288 energy:231.047 QMult:3 CSV:-10 dPhi with photon:0.000962138
+JetPt:146.06 JetEta:-0.349978 JetPhi:-1.15497 energy:156.666 QMult:11 CSV:0.211479 dPhi with photon:-2.83688
+MET:215.44 METPhi:2.53725
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280017:385:682938942
+-------------------------------- Photons -------------------------------------------
+Photon Pt:309.298 eta:-1.1932 phi:-2.3933 E:556.871 FullID:1 Pixel Seed:0
+JetPt:712.494 JetEta:1.13393 JetPhi:1.01616 energy:1222.64 QMult:14 CSV:0.946318 dPhi with photon:-2.87373
+JetPt:352.54 JetEta:-1.19312 JetPhi:-2.39428 energy:634.792 QMult:3 CSV:-10 dPhi with photon:-0.000983
+JetPt:295.845 JetEta:-0.630257 JetPhi:-2.42559 energy:357.272 QMult:17 CSV:0.161714 dPhi with photon:-0.0322955
+JetPt:196.426 JetEta:1.55556 JetPhi:-0.148306 energy:488.065 QMult:25 CSV:0.580368 dPhi with photon:2.24499
+MET:227.82 METPhi:-2.05772
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280191:203:365754419
+-------------------------------- Photons -------------------------------------------
+Photon Pt:202.024 eta:1.6306 phi:2.27935 E:535.643 FullID:1 Pixel Seed:0
+JetPt:403.628 JetEta:0.0366879 JetPhi:-0.766016 energy:406.245 QMult:20 CSV:0.535242 dPhi with photon:-3.04537
+JetPt:226.562 JetEta:1.62879 JetPhi:2.27736 energy:599.822 QMult:5 CSV:-10 dPhi with photon:-0.00199199
+JetPt:49.8106 JetEta:3.0909 JetPhi:-2.54087 energy:549.033 QMult:0 CSV:-10 dPhi with photon:1.46296
+JetPt:35.6967 JetEta:-4.25865 JetPhi:0.0960759 energy:1262.41 QMult:0 CSV:-10 dPhi with photon:-2.18328
+JetPt:33.9869 JetEta:0.758827 JetPhi:0.794745 energy:44.5842 QMult:5 CSV:0.540738 dPhi with photon:-1.48461
+JetPt:31.34 JetEta:0.742489 JetPhi:2.67484 energy:40.9223 QMult:13 CSV:0.206142 dPhi with photon:0.395483
+MET:201.751 METPhi:2.25336
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279694:174:311687275
+-------------------------------- Photons -------------------------------------------
+Photon Pt:382.704 eta:0.192595 phi:1.87137 E:389.824 FullID:1 Pixel Seed:0
+JetPt:475.974 JetEta:-0.169785 JetPhi:-0.731737 energy:486.105 QMult:22 CSV:0.0909844 dPhi with photon:-2.60311
+JetPt:404.836 JetEta:0.19282 JetPhi:1.87176 energy:412.674 QMult:5 CSV:-10 dPhi with photon:0.000389218
+JetPt:54.2689 JetEta:-0.599606 JetPhi:0.0253552 energy:64.9829 QMult:11 CSV:0.0936672 dPhi with photon:-1.84602
+MET:261.804 METPhi:-2.82016
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279716:913:1661577906
+-------------------------------- Photons -------------------------------------------
+Photon Pt:144.227 eta:1.05033 phi:1.39621 E:231.371 FullID:1 Pixel Seed:0
+JetPt:281.05 JetEta:-0.211758 JetPhi:-1.41333 energy:288.496 QMult:14 CSV:0.928219 dPhi with photon:-2.80954
+JetPt:176.906 JetEta:-0.297445 JetPhi:1.34254 energy:185.694 QMult:11 CSV:0.210199 dPhi with photon:-0.0536754
+JetPt:166.605 JetEta:0.108185 JetPhi:-2.01267 energy:168.103 QMult:8 CSV:0.109627 dPhi with photon:2.8743
+JetPt:160.329 JetEta:1.05053 JetPhi:1.39475 energy:257.378 QMult:3 CSV:-10 dPhi with photon:-0.00146341
+JetPt:129.661 JetEta:0.0838155 JetPhi:1.85254 energy:131.279 QMult:14 CSV:0.336069 dPhi with photon:0.456321
+JetPt:104.978 JetEta:0.666611 JetPhi:1.74596 energy:130.944 QMult:16 CSV:0.268521 dPhi with photon:0.349748
+JetPt:47.3136 JetEta:-0.323761 JetPhi:0.407039 energy:50.7326 QMult:16 CSV:0.715755 dPhi with photon:-0.989176
+MET:205.389 METPhi:-1.74218
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280018:387:666218494
+-------------------------------- Photons -------------------------------------------
+Photon Pt:308.723 eta:-1.31621 phi:1.06404 E:617.046 FullID:1 Pixel Seed:0
+JetPt:323.399 JetEta:-1.31429 JetPhi:1.06267 energy:645.409 QMult:3 CSV:-10 dPhi with photon:-0.00137115
+JetPt:287.365 JetEta:0.582968 JetPhi:-2.06425 energy:339.531 QMult:23 CSV:0.052946 dPhi with photon:-3.12829
+JetPt:222.89 JetEta:0.465287 JetPhi:-0.758373 energy:250.202 QMult:26 CSV:0.151973 dPhi with photon:-1.82242
+JetPt:102.721 JetEta:-0.452088 JetPhi:2.68731 energy:114.996 QMult:13 CSV:0.265868 dPhi with photon:1.62327
+JetPt:62.1101 JetEta:0.285157 JetPhi:-0.100614 energy:65.3759 QMult:11 CSV:0.140502 dPhi with photon:-1.16466
+JetPt:33.0317 JetEta:-2.78747 JetPhi:-0.508947 energy:269.288 QMult:1 CSV:-10 dPhi with photon:-1.57299
+MET:213.362 METPhi:2.2512
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279667:110:86331746
+-------------------------------- Photons -------------------------------------------
+Photon Pt:293.133 eta:-0.485072 phi:2.34313 E:328.301 FullID:1 Pixel Seed:0
+JetPt:384.21 JetEta:-1.41591 JetPhi:1.10945 energy:838.942 QMult:11 CSV:0.776484 dPhi with photon:-1.23368
+JetPt:310.926 JetEta:-0.485812 JetPhi:2.34225 energy:348.531 QMult:1 CSV:-10 dPhi with photon:-0.000882626
+JetPt:157.322 JetEta:-1.92304 JetPhi:-2.29871 energy:550.134 QMult:14 CSV:0.273854 dPhi with photon:1.64135
+JetPt:69.2092 JetEta:-3.33395 JetPhi:-1.57053 energy:971.939 QMult:0 CSV:-10 dPhi with photon:2.36952
+JetPt:50.8561 JetEta:-1.51738 JetPhi:-2.09655 energy:121.726 QMult:12 CSV:0.450476 dPhi with photon:1.84351
+MET:371.833 METPhi:-1.21119
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279715:632:1053583298
+-------------------------------- Photons -------------------------------------------
+Photon Pt:231.101 eta:-0.165949 phi:-2.28422 E:234.291 FullID:1 Pixel Seed:0
+JetPt:243.066 JetEta:-0.167642 JetPhi:-2.28427 energy:246.78 QMult:3 CSV:-10 dPhi with photon:-4.33922e-05
+JetPt:217.982 JetEta:-2.27274 JetPhi:2.58084 energy:1069.16 QMult:9 CSV:0.355622 dPhi with photon:-1.41812
+JetPt:206.056 JetEta:-0.394111 JetPhi:-0.934982 energy:223.171 QMult:17 CSV:0.849118 dPhi with photon:1.34924
+JetPt:112.193 JetEta:1.8894 JetPhi:0.584126 energy:379.821 QMult:10 CSV:0.114326 dPhi with photon:2.86835
+JetPt:42.5507 JetEta:1.27851 JetPhi:-0.845621 energy:82.943 QMult:12 CSV:0.209806 dPhi with photon:1.4386
+JetPt:32.1244 JetEta:2.70922 JetPhi:0.852412 energy:242.398 QMult:0 CSV:-10 dPhi with photon:3.13664
+MET:206.617 METPhi:1.0947
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280385:1798:3274229975
+-------------------------------- Photons -------------------------------------------
+Photon Pt:134.765 eta:1.58848 phi:0.598116 E:343.686 FullID:1 Pixel Seed:0
+JetPt:301.449 JetEta:0.0563292 JetPhi:-0.0358021 energy:302.751 QMult:25 CSV:0.996925 dPhi with photon:-0.633918
+JetPt:174.687 JetEta:0.248641 JetPhi:-0.503313 energy:180.589 QMult:9 CSV:0.197965 dPhi with photon:-1.10143
+JetPt:166.251 JetEta:1.58933 JetPhi:0.591195 energy:424.593 QMult:11 CSV:0.641749 dPhi with photon:-0.00692117
+JetPt:137.928 JetEta:1.2612 JetPhi:-2.97569 energy:263.335 QMult:6 CSV:0.2509 dPhi with photon:2.70938
+JetPt:61.3683 JetEta:0.889985 JetPhi:2.90021 energy:87.9091 QMult:13 CSV:0.831093 dPhi with photon:2.30209
+JetPt:33.5017 JetEta:2.39006 JetPhi:0.0167713 energy:184.485 QMult:6 CSV:0.271253 dPhi with photon:-0.581345
+MET:429.388 METPhi:3.02667
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279794:135:131233603
+20 %
+-------------------------------- Photons -------------------------------------------
+Photon Pt:100.591 eta:-1.12265 phi:0.725001 E:170.924 FullID:1 Pixel Seed:0
+JetPt:276.098 JetEta:0.744154 JetPhi:0.952046 energy:357.221 QMult:20 CSV:0.159634 dPhi with photon:0.227046
+JetPt:191.512 JetEta:-1.09531 JetPhi:-2.75157 energy:318.962 QMult:9 CSV:0.290514 dPhi with photon:2.80661
+JetPt:180.693 JetEta:-0.568652 JetPhi:0.809545 energy:211.447 QMult:17 CSV:0.556803 dPhi with photon:0.0845445
+JetPt:144.463 JetEta:-2.23722 JetPhi:-1.47754 energy:684.478 QMult:12 CSV:0.782807 dPhi with photon:-2.20255
+JetPt:113.746 JetEta:-1.12212 JetPhi:0.722677 energy:193.348 QMult:4 CSV:-10 dPhi with photon:-0.00232375
+MET:275.364 METPhi:-2.24399
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280017:346:617230746
+-------------------------------- Photons -------------------------------------------
+Photon Pt:193.832 eta:0.453578 phi:1.47292 E:214.115 FullID:1 Pixel Seed:0
+JetPt:598.201 JetEta:1.04896 JetPhi:-1.73304 energy:961.338 QMult:20 CSV:0.180761 dPhi with photon:3.07722
+JetPt:207.181 JetEta:0.454853 JetPhi:1.47141 energy:229.422 QMult:6 CSV:-10 dPhi with photon:-0.0015167
+JetPt:133.69 JetEta:0.356551 JetPhi:-1.79134 energy:144.947 QMult:21 CSV:0.426095 dPhi with photon:3.01892
+JetPt:39.9717 JetEta:-1.07667 JetPhi:-2.03548 energy:65.95 QMult:13 CSV:0.391463 dPhi with photon:2.77478
+JetPt:39.2463 JetEta:-0.279074 JetPhi:-1.95738 energy:41.5173 QMult:11 CSV:0.113467 dPhi with photon:2.85288
+MET:607.151 METPhi:1.39697
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279841:117:128288139
+-------------------------------- Photons -------------------------------------------
+Photon Pt:223.227 eta:-0.575235 phi:-2.6939 E:261.19 FullID:1 Pixel Seed:0
+JetPt:594.584 JetEta:-0.660932 JetPhi:0.474044 energy:730.828 QMult:21 CSV:0.090386 dPhi with photon:-3.11524
+JetPt:248.328 JetEta:-0.585812 JetPhi:-2.69033 energy:292.931 QMult:7 CSV:0.470033 dPhi with photon:0.0035677
+JetPt:32.3081 JetEta:-1.84946 JetPhi:-2.19419 energy:105.442 QMult:13 CSV:0.40215 dPhi with photon:0.49971
+MET:373.349 METPhi:-2.69994
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278923:84:93683033
+-------------------------------- Photons -------------------------------------------
+Photon Pt:507.559 eta:-1.13791 phi:-0.614217 E:873.19 FullID:1 Pixel Seed:0
+JetPt:532.479 JetEta:-1.13839 JetPhi:-0.614124 energy:916.531 QMult:3 CSV:-10 dPhi with photon:9.31621e-05
+JetPt:371.183 JetEta:1.73636 JetPhi:2.54708 energy:1088.06 QMult:52 CSV:0.95342 dPhi with photon:-3.12189
+JetPt:186.699 JetEta:1.39717 JetPhi:-3.03213 energy:402.165 QMult:23 CSV:0.387683 dPhi with photon:-2.41791
+JetPt:103.081 JetEta:1.05348 JetPhi:-1.84631 energy:166.443 QMult:13 CSV:0.642752 dPhi with photon:-1.23209
+JetPt:73.4298 JetEta:1.03276 JetPhi:-0.747722 energy:116.963 QMult:16 CSV:0.961507 dPhi with photon:-0.133505
+JetPt:35.5159 JetEta:-2.03917 JetPhi:-1.70085 energy:138.842 QMult:6 CSV:0.531912 dPhi with photon:-1.08663
+JetPt:30.5217 JetEta:-0.547306 JetPhi:2.66201 energy:35.6361 QMult:8 CSV:-10 dPhi with photon:-3.00696
+MET:304.741 METPhi:0.987923
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279115:519:808360697
+-------------------------------- Photons -------------------------------------------
+Photon Pt:459.078 eta:1.00488 phi:1.10525 E:711.034 FullID:1 Pixel Seed:0
+JetPt:506.813 JetEta:1.00481 JetPhi:1.10436 energy:785 QMult:1 CSV:-10 dPhi with photon:-0.000881791
+JetPt:126.369 JetEta:3.4031 JetPhi:-2.57576 energy:1901.41 QMult:0 CSV:-10 dPhi with photon:2.60218
+JetPt:84.9111 JetEta:0.901224 JetPhi:-0.936489 energy:122.238 QMult:9 CSV:0.110627 dPhi with photon:-2.04174
+JetPt:34.7112 JetEta:1.25759 JetPhi:-1.78902 energy:66.4252 QMult:17 CSV:0.170689 dPhi with photon:-2.89426
+MET:250.98 METPhi:-2.08984
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279694:911:1683047989
+-------------------------------- Photons -------------------------------------------
+Photon Pt:317.534 eta:-1.15685 phi:-2.92437 E:554.793 FullID:1 Pixel Seed:0
+JetPt:419.282 JetEta:0.759449 JetPhi:0.478078 energy:548.777 QMult:22 CSV:0.105465 dPhi with photon:-2.88074
+JetPt:344.945 JetEta:-1.15923 JetPhi:-2.92373 energy:604.34 QMult:5 CSV:0.440617 dPhi with photon:0.000635862
+JetPt:133.489 JetEta:2.58558 JetPhi:3.13561 energy:890.921 QMult:1 CSV:-10 dPhi with photon:-0.223206
+JetPt:56.8142 JetEta:-1.85515 JetPhi:0.27971 energy:186.215 QMult:13 CSV:0.218549 dPhi with photon:-3.07911
+JetPt:42.53 JetEta:2.95695 JetPhi:0.298483 energy:410.312 QMult:0 CSV:-10 dPhi with photon:-3.06034
+JetPt:30.8851 JetEta:-2.83485 JetPhi:2.07817 energy:263.922 QMult:0 CSV:-10 dPhi with photon:-1.28065
+MET:237.571 METPhi:-1.92414
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278975:149:252517898
+-------------------------------- Photons -------------------------------------------
+Photon Pt:103.37 eta:-0.751266 phi:2.39079 E:133.94 FullID:1 Pixel Seed:0
+JetPt:393.419 JetEta:-1.27557 JetPhi:-1.41265 energy:760.652 QMult:21 CSV:0.193008 dPhi with photon:2.47975
+JetPt:114.835 JetEta:-0.755252 JetPhi:2.39003 energy:149.269 QMult:2 CSV:0.808016 dPhi with photon:-0.000761509
+JetPt:104.221 JetEta:1.05526 JetPhi:1.63863 energy:168.234 QMult:12 CSV:0.427342 dPhi with photon:-0.752156
+JetPt:98.354 JetEta:1.37207 JetPhi:-0.0223286 energy:206.617 QMult:4 CSV:0.549068 dPhi with photon:-2.41312
+JetPt:88.437 JetEta:0.867769 JetPhi:0.465158 energy:124.789 QMult:12 CSV:0.344554 dPhi with photon:-1.92563
+JetPt:61.5333 JetEta:-1.7011 JetPhi:-1.90682 energy:174.636 QMult:11 CSV:0.113243 dPhi with photon:1.98558
+JetPt:44.1475 JetEta:0.361194 JetPhi:1.10025 energy:47.6114 QMult:12 CSV:0.0989445 dPhi with photon:-1.29054
+MET:253.972 METPhi:2.23985
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279931:2670:4581139096
+-------------------------------- Photons -------------------------------------------
+Photon Pt:293.66 eta:1.41992 phi:-0.0996031 E:642.898 FullID:1 Pixel Seed:0
+JetPt:564.253 JetEta:-0.735495 JetPhi:-3.00257 energy:724.488 QMult:10 CSV:0.179259 dPhi with photon:-2.90296
+JetPt:333.561 JetEta:1.42027 JetPhi:-0.0998961 energy:730.496 QMult:1 CSV:-10 dPhi with photon:-0.000293024
+JetPt:147.319 JetEta:-1.81248 JetPhi:2.18582 energy:463.586 QMult:9 CSV:0.0930212 dPhi with photon:2.28543
+JetPt:45.0294 JetEta:3.25685 JetPhi:-0.558028 energy:585.594 QMult:0 CSV:-10 dPhi with photon:-0.458425
+JetPt:34.7754 JetEta:-3.82453 JetPhi:-1.96829 energy:796.965 QMult:0 CSV:-10 dPhi with photon:-1.86869
+MET:367.409 METPhi:0.232585
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278923:248:383721722
+-------------------------------- Photons -------------------------------------------
+Photon Pt:202.941 eta:0.506741 phi:-1.15694 E:229.559 FullID:1 Pixel Seed:0
+JetPt:217.202 JetEta:0.507194 JetPhi:-1.15459 energy:246.222 QMult:10 CSV:0.500272 dPhi with photon:0.00235009
+JetPt:146.087 JetEta:0.684079 JetPhi:0.539595 energy:182.059 QMult:11 CSV:0.482873 dPhi with photon:1.69653
+JetPt:90.4626 JetEta:1.70141 JetPhi:1.38477 energy:256.556 QMult:10 CSV:0.943131 dPhi with photon:2.5417
+JetPt:63.0979 JetEta:0.607993 JetPhi:2.18854 energy:76.0309 QMult:11 CSV:0.288358 dPhi with photon:-2.9377
+MET:250.061 METPhi:3.06291
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279975:651:1071303957
+30 %
+-------------------------------- Photons -------------------------------------------
+Photon Pt:216.045 eta:1.95879 phi:1.18454 E:781.192 FullID:1 Pixel Seed:0
+JetPt:552.577 JetEta:-1.16917 JetPhi:-1.69121 energy:978.182 QMult:32 CSV:0.0984755 dPhi with photon:-2.87575
+JetPt:242.203 JetEta:1.9578 JetPhi:1.18471 energy:874.998 QMult:4 CSV:-10 dPhi with photon:0.000163913
+JetPt:33.9604 JetEta:1.60842 JetPhi:3.06872 energy:88.4699 QMult:11 CSV:0.171576 dPhi with photon:1.88418
+MET:361.76 METPhi:1.4782
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279588:981:1711262401
+-------------------------------- Photons -------------------------------------------
+Photon Pt:325.397 eta:0.55335 phi:-1.29426 E:376.499 FullID:1 Pixel Seed:0
+JetPt:759.778 JetEta:-0.581714 JetPhi:2.05801 energy:895.95 QMult:33 CSV:0.122378 dPhi with photon:-2.93092
+JetPt:633.156 JetEta:0.382453 JetPhi:1.7353 energy:681.164 QMult:16 CSV:0.244339 dPhi with photon:3.02956
+JetPt:345.833 JetEta:0.552737 JetPhi:-1.29304 energy:400.281 QMult:3 CSV:-10 dPhi with photon:0.00121617
+MET:1088.32 METPhi:-1.20815
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279667:405:624188195
+-------------------------------- Photons -------------------------------------------
+Photon Pt:215.301 eta:-0.701658 phi:-3.074 E:270.511 FullID:1 Pixel Seed:0
+JetPt:367.144 JetEta:-1.27196 JetPhi:0.369088 energy:709.269 QMult:21 CSV:0.285842 dPhi with photon:-2.8401
+JetPt:345.31 JetEta:-2.00783 JetPhi:0.224347 energy:1309.53 QMult:25 CSV:0.265242 dPhi with photon:-2.98484
+JetPt:237.62 JetEta:-0.701433 JetPhi:-3.07429 energy:298.666 QMult:1 CSV:-10 dPhi with photon:-0.000293493
+JetPt:92.6401 JetEta:-2.05102 JetPhi:-2.56071 energy:366.396 QMult:14 CSV:0.0835524 dPhi with photon:0.513282
+JetPt:82.4825 JetEta:-0.224441 JetPhi:-2.12967 energy:85.8204 QMult:16 CSV:0.71598 dPhi with photon:0.944326
+JetPt:46.3581 JetEta:0.479532 JetPhi:1.18414 energy:52.3993 QMult:10 CSV:0.12832 dPhi with photon:-2.02505
+MET:394.437 METPhi:-2.79739
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280249:322:607838602
+-------------------------------- Photons -------------------------------------------
+Photon Pt:200.477 eta:-0.283282 phi:1.90022 E:208.575 FullID:1 Pixel Seed:0
+JetPt:217.77 JetEta:-0.285236 JetPhi:1.90026 energy:226.977 QMult:2 CSV:0.482469 dPhi with photon:4.29153e-05
+JetPt:158.47 JetEta:2.16038 JetPhi:0.488218 energy:696.555 QMult:10 CSV:0.165165 dPhi with photon:-1.412
+JetPt:144.833 JetEta:-0.303813 JetPhi:-0.574792 energy:152.97 QMult:16 CSV:0.479428 dPhi with photon:-2.47501
+MET:273.469 METPhi:-2.27256
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279694:1371:2547486927
+-------------------------------- Photons -------------------------------------------
+Photon Pt:117.595 eta:0.682842 phi:-3.00824 E:146.093 FullID:1 Pixel Seed:0
+JetPt:525.559 JetEta:-0.610046 JetPhi:0.38057 energy:629.754 QMult:27 CSV:0.13182 dPhi with photon:-2.89438
+JetPt:140.689 JetEta:-2.81585 JetPhi:-3.14075 energy:1179.67 QMult:0 CSV:-10 dPhi with photon:-0.13251
+JetPt:123.675 JetEta:0.682388 JetPhi:-3.00306 energy:153.834 QMult:4 CSV:-10 dPhi with photon:0.00517535
+JetPt:96.278 JetEta:0.0246743 JetPhi:-1.83648 energy:97.037 QMult:14 CSV:0.903507 dPhi with photon:1.17176
+JetPt:73.9926 JetEta:0.436311 JetPhi:-1.49886 energy:81.6829 QMult:13 CSV:0.768026 dPhi with photon:1.50938
+JetPt:32.5545 JetEta:-4.42617 JetPhi:2.52534 energy:1361.16 QMult:0 CSV:-10 dPhi with photon:-0.749609
+JetPt:30.6141 JetEta:3.11132 JetPhi:1.22022 energy:344.411 QMult:0 CSV:-10 dPhi with photon:-2.05472
+MET:227.068 METPhi:-2.82748
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278969:167:197042492
+-------------------------------- Photons -------------------------------------------
+Photon Pt:246.021 eta:-0.161539 phi:2.07635 E:249.238 FullID:1 Pixel Seed:0
+JetPt:318.807 JetEta:0.59346 JetPhi:-0.94119 energy:378.389 QMult:23 CSV:0.256191 dPhi with photon:-3.01754
+JetPt:260.149 JetEta:-0.160989 JetPhi:2.0796 energy:263.896 QMult:5 CSV:0.477053 dPhi with photon:0.0032475
+JetPt:245.758 JetEta:0.247839 JetPhi:-1.34944 energy:254.035 QMult:7 CSV:0.13004 dPhi with photon:2.8574
+JetPt:40.2354 JetEta:-0.234493 JetPhi:2.69185 energy:42.3397 QMult:18 CSV:0.475781 dPhi with photon:0.6155
+JetPt:39.6903 JetEta:1.604 JetPhi:0.932449 energy:102.974 QMult:8 CSV:0.345942 dPhi with photon:-1.1439
+MET:268.365 METPhi:2.06858
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279966:212:269938358
+-------------------------------- Photons -------------------------------------------
+Photon Pt:144.195 eta:-0.876259 phi:-1.908 E:203.187 FullID:1 Pixel Seed:0
+JetPt:492.719 JetEta:-1.34803 JetPhi:-1.53132 energy:1013.03 QMult:8 CSV:0.176716 dPhi with photon:0.37668
+JetPt:318.158 JetEta:-0.412956 JetPhi:1.8192 energy:346.76 QMult:16 CSV:0.0698773 dPhi with photon:-2.55599
+JetPt:199.121 JetEta:-0.875706 JetPhi:-1.90581 energy:280.589 QMult:3 CSV:0.470706 dPhi with photon:0.00218141
+JetPt:47.7708 JetEta:-1.6261 JetPhi:1.8234 energy:126.314 QMult:11 CSV:0.282577 dPhi with photon:-2.55179
+MET:396.051 METPhi:1.18905
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278820:1101:2033600047
+-------------------------------- Photons -------------------------------------------
+Photon Pt:287.99 eta:1.71991 phi:-1.21598 E:829.857 FullID:1 Pixel Seed:0
+JetPt:318.521 JetEta:1.72045 JetPhi:-1.21512 energy:918.343 QMult:2 CSV:-10 dPhi with photon:0.000860572
+JetPt:237.586 JetEta:1.73417 JetPhi:0.99128 energy:694.405 QMult:20 CSV:0.239574 dPhi with photon:2.20726
+JetPt:43.0825 JetEta:-1.47405 JetPhi:-1.64276 energy:99.5107 QMult:11 CSV:0.622537 dPhi with photon:-0.426784
+JetPt:39.3884 JetEta:2.28478 JetPhi:0.50087 energy:195.649 QMult:13 CSV:0.861854 dPhi with photon:1.71685
+MET:303.067 METPhi:2.76321
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279931:1464:2556669122
+-------------------------------- Photons -------------------------------------------
+Photon Pt:214.821 eta:1.17223 phi:1.62686 E:380.111 FullID:1 Pixel Seed:0
+JetPt:243.162 JetEta:1.17284 JetPhi:1.6271 energy:430.625 QMult:2 CSV:0.855468 dPhi with photon:0.000237584
+JetPt:203.264 JetEta:-0.940666 JetPhi:-1.0956 energy:300.937 QMult:10 CSV:0.137318 dPhi with photon:-2.72246
+JetPt:172.676 JetEta:-1.77882 JetPhi:-1.57331 energy:526.373 QMult:21 CSV:0.116931 dPhi with photon:3.08302
+JetPt:168.056 JetEta:-0.0197117 JetPhi:0.91276 energy:169.534 QMult:15 CSV:0.0987333 dPhi with photon:-0.714099
+JetPt:37.652 JetEta:-0.54661 JetPhi:0.71101 energy:44.001 QMult:9 CSV:0.126551 dPhi with photon:-0.91585
+MET:226.444 METPhi:3.09804
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280015:577:1072765995
+40 %
+-------------------------------- Photons -------------------------------------------
+Photon Pt:106.832 eta:-2.22897 phi:-1.12691 E:501.999 FullID:1 Pixel Seed:0
+JetPt:696.979 JetEta:-0.250973 JetPhi:2.28973 energy:720.744 QMult:29 CSV:0.558647 dPhi with photon:-2.86655
+JetPt:315.351 JetEta:-0.112571 JetPhi:-1.50916 energy:320.666 QMult:21 CSV:0.988937 dPhi with photon:-0.382259
+JetPt:196.216 JetEta:0.813393 JetPhi:-0.12122 energy:265.518 QMult:17 CSV:0.269665 dPhi with photon:1.00569
+JetPt:129.52 JetEta:-2.23561 JetPhi:-1.11758 energy:612.672 QMult:5 CSV:0.630963 dPhi with photon:0.00932169
+JetPt:77.5834 JetEta:1.23122 JetPhi:-1.60752 energy:145.011 QMult:15 CSV:0.17546 dPhi with photon:-0.480615
+JetPt:55.383 JetEta:0.227917 JetPhi:-1.94389 energy:57.3185 QMult:7 CSV:0.583901 dPhi with photon:-0.816989
+JetPt:43.3353 JetEta:2.46654 JetPhi:2.33019 energy:257.174 QMult:4 CSV:0.566455 dPhi with photon:-2.82609
+JetPt:36.7805 JetEta:-1.26484 JetPhi:0.580962 energy:70.4982 QMult:2 CSV:-10 dPhi with photon:1.70787
+MET:216.616 METPhi:-0.0832995
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278820:545:991933949
+-------------------------------- Photons -------------------------------------------
+Photon Pt:133.458 eta:-0.563757 phi:-0.159635 E:155.234 FullID:1 Pixel Seed:0
+JetPt:246.597 JetEta:-1.55577 JetPhi:-0.856779 energy:611.02 QMult:27 CSV:0.21259 dPhi with photon:-0.697144
+JetPt:184.025 JetEta:-1.64283 JetPhi:0.684529 energy:494.303 QMult:21 CSV:0.427411 dPhi with photon:0.844164
+JetPt:177.154 JetEta:-1.46282 JetPhi:-3.13689 energy:403.539 QMult:10 CSV:0.461141 dPhi with photon:-2.97726
+JetPt:142.563 JetEta:-0.569067 JetPhi:-0.164188 energy:166.721 QMult:7 CSV:0.451571 dPhi with photon:-0.00455308
+JetPt:50.567 JetEta:0.427525 JetPhi:1.92804 energy:55.7702 QMult:7 CSV:0.0961157 dPhi with photon:2.08767
+JetPt:46.9621 JetEta:-1.48828 JetPhi:2.52075 energy:109.663 QMult:15 CSV:0.593056 dPhi with photon:2.68039
+JetPt:39.4978 JetEta:-1.70426 JetPhi:1.20643 energy:112.446 QMult:10 CSV:0.539929 dPhi with photon:1.36607
+MET:212.219 METPhi:2.8666
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279841:418:667558394
+-------------------------------- Photons -------------------------------------------
+Photon Pt:171.336 eta:-1.22868 phi:0.790643 E:317.777 FullID:1 Pixel Seed:0
+JetPt:569.553 JetEta:-0.220226 JetPhi:-2.00617 energy:587.22 QMult:25 CSV:0.795485 dPhi with photon:-2.79682
+JetPt:234.54 JetEta:-1.17948 JetPhi:0.794015 energy:418.733 QMult:5 CSV:0.657496 dPhi with photon:0.00337267
+JetPt:137.921 JetEta:-2.24257 JetPhi:-1.13284 energy:656.899 QMult:10 CSV:0.260609 dPhi with photon:-1.92348
+JetPt:53.8248 JetEta:-0.0616103 JetPhi:2.774 energy:55.5274 QMult:19 CSV:0.933177 dPhi with photon:1.98336
+MET:511.308 METPhi:1.35369
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279841:916:1551142336
+-------------------------------- Photons -------------------------------------------
+Photon Pt:593.638 eta:0.0927283 phi:-1.62986 E:596.192 FullID:1 Pixel Seed:0
+JetPt:689.442 JetEta:0.0936679 JetPhi:-1.63011 energy:692.815 QMult:5 CSV:0.369817 dPhi with photon:-0.000250936
+JetPt:416.166 JetEta:1.07432 JetPhi:1.80266 energy:682.419 QMult:27 CSV:0.432601 dPhi with photon:-2.85066
+JetPt:190.809 JetEta:1.97035 JetPhi:0.514277 energy:698.331 QMult:23 CSV:0.194535 dPhi with photon:2.14414
+JetPt:61.7506 JetEta:-3.38435 JetPhi:2.94395 energy:911.914 QMult:0 CSV:-10 dPhi with photon:-1.70938
+JetPt:59.9376 JetEta:0.562264 JetPhi:1.7552 energy:70.3245 QMult:14 CSV:0.137794 dPhi with photon:-2.89812
+JetPt:42.7782 JetEta:-1.46372 JetPhi:-1.33995 energy:97.5775 QMult:4 CSV:0.402304 dPhi with photon:0.289908
+MET:203.284 METPhi:1.30961
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279966:384:569743337
+-------------------------------- Photons -------------------------------------------
+Photon Pt:281.305 eta:0.885762 phi:3.10236 E:399.064 FullID:1 Pixel Seed:0
+JetPt:551.201 JetEta:0.906056 JetPhi:3.10227 energy:793.613 QMult:4 CSV:0.466606 dPhi with photon:-9.36985e-05
+JetPt:131.838 JetEta:2.02991 JetPhi:0.758926 energy:510.706 QMult:8 CSV:0.645925 dPhi with photon:-2.34344
+JetPt:88.8344 JetEta:0.465339 JetPhi:-0.716291 energy:100.966 QMult:20 CSV:0.462197 dPhi with photon:2.46453
+JetPt:32.309 JetEta:0.750199 JetPhi:-0.37259 energy:42.1329 QMult:7 CSV:0.51591 dPhi with photon:2.80823
+MET:269.583 METPhi:0.0314773
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278969:232:316096102
+-------------------------------- Photons -------------------------------------------
+Photon Pt:149.827 eta:-1.19343 phi:2.60836 E:269.804 FullID:1 Pixel Seed:0
+JetPt:283.762 JetEta:0.890583 JetPhi:-0.759661 energy:405.446 QMult:26 CSV:0.845941 dPhi with photon:2.91517
+JetPt:194.254 JetEta:-1.03824 JetPhi:0.144406 energy:310.908 QMult:26 CSV:0.250286 dPhi with photon:-2.46395
+JetPt:181.007 JetEta:-0.236937 JetPhi:2.74226 energy:186.373 QMult:5 CSV:0.298735 dPhi with photon:0.133903
+JetPt:167.941 JetEta:-1.19741 JetPhi:2.6079 energy:303.566 QMult:4 CSV:-10 dPhi with photon:-0.000461817
+JetPt:55.2224 JetEta:2.93625 JetPhi:0.000784395 energy:521.882 QMult:0 CSV:-10 dPhi with photon:-2.60757
+JetPt:30.0383 JetEta:-0.517015 JetPhi:-0.827773 energy:34.8494 QMult:10 CSV:0.311176 dPhi with photon:2.84705
+MET:229.076 METPhi:2.88847
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279588:656:1094335723
+-------------------------------- Photons -------------------------------------------
+Photon Pt:168.667 eta:-0.0277964 phi:1.98251 E:168.732 FullID:1 Pixel Seed:0
+JetPt:528.652 JetEta:0.866154 JetPhi:-1.04369 energy:741.816 QMult:31 CSV:0.450363 dPhi with photon:-3.0262
+JetPt:200.166 JetEta:-0.0772595 JetPhi:-1.08342 energy:201.879 QMult:19 CSV:0.80973 dPhi with photon:-3.06594
+JetPt:180.446 JetEta:-0.0253293 JetPhi:1.98633 energy:180.941 QMult:5 CSV:0.540669 dPhi with photon:0.003824
+JetPt:142.195 JetEta:0.244737 JetPhi:2.39823 energy:146.931 QMult:7 CSV:0.747573 dPhi with photon:0.415722
+JetPt:81.1381 JetEta:-0.846471 JetPhi:3.03768 energy:112.438 QMult:11 CSV:0.154746 dPhi with photon:1.05517
+JetPt:35.1285 JetEta:-0.66072 JetPhi:-0.816812 energy:43.5792 QMult:11 CSV:0.332663 dPhi with photon:-2.79932
+MET:438.77 METPhi:2.03632
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279654:265:499100982
+50 %
+-------------------------------- Photons -------------------------------------------
+Photon Pt:213.04 eta:0.0451496 phi:0.386408 E:213.257 FullID:1 Pixel Seed:0
+JetPt:497.359 JetEta:-0.872645 JetPhi:-2.96824 energy:699.508 QMult:8 CSV:0.473583 dPhi with photon:2.92854
+JetPt:225.414 JetEta:0.0454475 JetPhi:0.385989 energy:225.911 QMult:6 CSV:0.489817 dPhi with photon:-0.000418633
+JetPt:61.295 JetEta:-0.0152519 JetPhi:-0.570292 energy:62.0561 QMult:11 CSV:0.913323 dPhi with photon:-0.956699
+JetPt:36.182 JetEta:-0.250163 JetPhi:-2.49502 energy:37.9691 QMult:8 CSV:0.986988 dPhi with photon:-2.88143
+MET:312.067 METPhi:0.319257
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279588:811:1395649783
+-------------------------------- Photons -------------------------------------------
+Photon Pt:295.242 eta:-0.534736 phi:-2.14272 E:338.468 FullID:1 Pixel Seed:0
+JetPt:307.338 JetEta:-0.534978 JetPhi:-2.14286 energy:352.493 QMult:1 CSV:-10 dPhi with photon:-0.000133991
+JetPt:134.243 JetEta:-2.23874 JetPhi:-1.30763 energy:636.96 QMult:13 CSV:0.152424 dPhi with photon:0.835099
+JetPt:82.5389 JetEta:1.27976 JetPhi:1.60157 energy:160.431 QMult:17 CSV:0.209458 dPhi with photon:-2.53889
+MET:313.73 METPhi:1.1265
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278820:158:274345229
+-------------------------------- Photons -------------------------------------------
+Photon Pt:181.304 eta:-0.524786 phi:-1.52814 E:206.848 FullID:1 Pixel Seed:0
+JetPt:678.377 JetEta:-1.03706 JetPhi:1.95958 energy:1077.82 QMult:9 CSV:0.371813 dPhi with photon:-2.79547
+JetPt:196.624 JetEta:-0.522549 JetPhi:-1.53522 energy:224.507 QMult:5 CSV:-10 dPhi with photon:-0.0070796
+JetPt:106.207 JetEta:1.98239 JetPhi:1.40792 energy:393.327 QMult:17 CSV:0.450855 dPhi with photon:2.93606
+JetPt:90.9678 JetEta:-0.590357 JetPhi:-2.0223 energy:109.232 QMult:17 CSV:0.276684 dPhi with photon:-0.494164
+JetPt:37.5287 JetEta:0.0895594 JetPhi:2.52395 energy:38.6154 QMult:12 CSV:0.37843 dPhi with photon:-2.2311
+JetPt:37.3262 JetEta:-1.63894 JetPhi:1.20371 energy:100.054 QMult:9 CSV:0.267572 dPhi with photon:2.73184
+JetPt:35.2618 JetEta:0.520922 JetPhi:-1.70052 energy:40.8585 QMult:11 CSV:0.765395 dPhi with photon:-0.172384
+MET:545.801 METPhi:-0.954073
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279654:1209:2294167866
+-------------------------------- Photons -------------------------------------------
+Photon Pt:143.207 eta:-0.806017 phi:-1.33669 E:192.299 FullID:1 Pixel Seed:0
+JetPt:398.425 JetEta:-0.672527 JetPhi:0.338712 energy:492.443 QMult:9 CSV:0.253195 dPhi with photon:1.6754
+JetPt:252.831 JetEta:-0.53688 JetPhi:1.33077 energy:295.552 QMult:17 CSV:0.191171 dPhi with photon:2.66745
+JetPt:237.08 JetEta:-1.33304 JetPhi:3.07934 energy:481.852 QMult:22 CSV:0.156157 dPhi with photon:-1.86716
+JetPt:153.6 JetEta:-0.808895 JetPhi:-1.33877 energy:206.774 QMult:2 CSV:-10 dPhi with photon:-0.00208175
+JetPt:47.7779 JetEta:1.95252 JetPhi:2.91782 energy:171.845 QMult:5 CSV:0.222054 dPhi with photon:-2.02867
+MET:295.069 METPhi:-2.12972
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279931:1374:2401742135
+-------------------------------- Photons -------------------------------------------
+Photon Pt:307.449 eta:-0.338493 phi:-2.82115 E:325.231 FullID:1 Pixel Seed:0
+JetPt:324.907 JetEta:-0.338543 JetPhi:-2.8211 energy:343.809 QMult:3 CSV:-10 dPhi with photon:4.93526e-05
+JetPt:97.6108 JetEta:-2.6749 JetPhi:-2.05207 energy:711.616 QMult:0 CSV:-10 dPhi with photon:0.769076
+JetPt:72.0928 JetEta:0.119798 JetPhi:-0.0948281 energy:72.9277 QMult:7 CSV:0.0983803 dPhi with photon:2.72632
+JetPt:61.643 JetEta:1.12898 JetPhi:1.1105 energy:105.706 QMult:15 CSV:0.363223 dPhi with photon:-2.35154
+JetPt:59.2457 JetEta:0.495548 JetPhi:-0.478533 energy:66.9756 QMult:8 CSV:0.113049 dPhi with photon:2.34262
+JetPt:47.8694 JetEta:-2.04119 JetPhi:1.94839 energy:187.488 QMult:6 CSV:0.470729 dPhi with photon:-1.51364
+MET:228.282 METPhi:0.518337
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280018:844:1462253070
+-------------------------------- Photons -------------------------------------------
+Photon Pt:371.335 eta:-2.29564 phi:-2.49348 E:1862.53 FullID:1 Pixel Seed:0
+JetPt:407.036 JetEta:-2.29976 JetPhi:-2.49387 energy:2049.92 QMult:1 CSV:-10 dPhi with photon:-0.000381947
+JetPt:98.2271 JetEta:1.11278 JetPhi:2.64926 energy:166.131 QMult:13 CSV:0.0764906 dPhi with photon:-1.14044
+JetPt:53.7195 JetEta:-1.17003 JetPhi:2.17168 energy:95.2916 QMult:11 CSV:0.0636531 dPhi with photon:-1.61802
+MET:455.386 METPhi:0.26121
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279931:1135:1957897395
+-------------------------------- Photons -------------------------------------------
+Photon Pt:264.166 eta:-0.260917 phi:-1.97192 E:273.209 FullID:1 Pixel Seed:0
+JetPt:525.911 JetEta:-0.0156785 JetPhi:0.676098 energy:527.64 QMult:13 CSV:0.450978 dPhi with photon:2.64802
+JetPt:472.148 JetEta:-0.637378 JetPhi:-2.67312 energy:571.997 QMult:19 CSV:0.149995 dPhi with photon:-0.7012
+JetPt:343.091 JetEta:-0.257787 JetPhi:-1.9712 energy:354.908 QMult:9 CSV:0.446503 dPhi with photon:0.00072062
+JetPt:59.2279 JetEta:0.269104 JetPhi:1.18167 energy:62.1936 QMult:11 CSV:0.112155 dPhi with photon:-3.12959
+MET:200.836 METPhi:1.0492
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278969:877:1473156574
+-------------------------------- Photons -------------------------------------------
+Photon Pt:292.264 eta:1.5821 phi:3.13737 E:740.994 FullID:1 Pixel Seed:0
+JetPt:325.203 JetEta:1.58289 JetPhi:3.13662 energy:825.225 QMult:4 CSV:0.760841 dPhi with photon:-0.000751495
+JetPt:204.891 JetEta:1.99556 JetPhi:-2.88415 energy:767.689 QMult:13 CSV:0.115355 dPhi with photon:0.261669
+JetPt:107.199 JetEta:1.93453 JetPhi:0.35213 energy:378.994 QMult:19 CSV:0.579635 dPhi with photon:-2.78524
+JetPt:65.3322 JetEta:1.77527 JetPhi:0.882771 energy:198.755 QMult:13 CSV:0.296227 dPhi with photon:-2.2546
+MET:374.747 METPhi:-0.0755517
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279694:73:132324985
+60 %
+-------------------------------- Photons -------------------------------------------
+Photon Pt:132.627 eta:-0.58219 phi:3.05649 E:155.745 FullID:1 Pixel Seed:0
+JetPt:348.071 JetEta:-1.6819 JetPhi:1.31882 energy:968.651 QMult:25 CSV:0.109804 dPhi with photon:-1.73767
+JetPt:307.716 JetEta:-0.763929 JetPhi:0.0520498 energy:403.823 QMult:24 CSV:0.161288 dPhi with photon:-3.00444
+JetPt:275.771 JetEta:-1.97995 JetPhi:-2.43156 energy:1018.06 QMult:18 CSV:0.428431 dPhi with photon:0.795139
+JetPt:142.501 JetEta:-0.58491 JetPhi:3.05648 energy:167.779 QMult:5 CSV:0.447863 dPhi with photon:-5.24521e-06
+JetPt:74.6241 JetEta:-0.453482 JetPhi:-0.781955 energy:83.581 QMult:15 CSV:0.392501 dPhi with photon:2.44474
+JetPt:44.4707 JetEta:-4.04297 JetPhi:-0.103107 energy:1267.73 QMult:0 CSV:-10 dPhi with photon:3.12359
+MET:208.5 METPhi:-2.46648
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279975:777:1296964741
+-------------------------------- Photons -------------------------------------------
+Photon Pt:274.238 eta:-0.478047 phi:2.33273 E:306.175 FullID:1 Pixel Seed:0
+JetPt:293.028 JetEta:-0.479321 JetPhi:2.33263 energy:327.491 QMult:3 CSV:-10 dPhi with photon:-9.20296e-05
+JetPt:154.315 JetEta:-1.10731 JetPhi:-0.875393 energy:259.349 QMult:11 CSV:0.0780575 dPhi with photon:3.07507
+JetPt:91.3195 JetEta:0.611696 JetPhi:2.6178 energy:109.443 QMult:11 CSV:0.137499 dPhi with photon:0.285074
+JetPt:51.5416 JetEta:-2.78884 JetPhi:-1.97404 energy:420.745 QMult:0 CSV:-10 dPhi with photon:1.97642
+MET:207.317 METPhi:-0.312293
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280385:1143:2151737319
+-------------------------------- Photons -------------------------------------------
+Photon Pt:121.313 eta:-0.869946 phi:-1.64399 E:170.187 FullID:1 Pixel Seed:0
+JetPt:241.674 JetEta:-1.00692 JetPhi:1.96166 energy:376.549 QMult:35 CSV:0.0570553 dPhi with photon:-2.67753
+JetPt:149.525 JetEta:-1.8165 JetPhi:0.811088 energy:472.244 QMult:20 CSV:0.668321 dPhi with photon:2.45508
+JetPt:134.794 JetEta:-0.866434 JetPhi:-1.65081 energy:188.962 QMult:3 CSV:0.471342 dPhi with photon:-0.00681126
+JetPt:99.3887 JetEta:-1.24682 JetPhi:-2.99591 energy:188.044 QMult:12 CSV:0.212883 dPhi with photon:-1.35192
+JetPt:81.8633 JetEta:-1.22878 JetPhi:2.38862 energy:152.852 QMult:13 CSV:0.355725 dPhi with photon:-2.25057
+JetPt:77.4888 JetEta:-0.62687 JetPhi:2.66396 energy:93.9771 QMult:19 CSV:0.34586 dPhi with photon:-1.97523
+JetPt:58.5523 JetEta:-1.5439 JetPhi:0.0573567 energy:143.878 QMult:13 CSV:0.43488 dPhi with photon:1.70135
+JetPt:53.405 JetEta:0.919899 JetPhi:-1.98158 energy:78.1234 QMult:13 CSV:0.0843464 dPhi with photon:-0.337585
+JetPt:39.9075 JetEta:1.8604 JetPhi:-2.50877 energy:131.592 QMult:13 CSV:0.262079 dPhi with photon:-0.864774
+JetPt:39.1734 JetEta:-1.43212 JetPhi:1.25876 energy:86.9723 QMult:13 CSV:0.204701 dPhi with photon:2.90275
+JetPt:37.9703 JetEta:-1.07131 JetPhi:0.500068 energy:62.7039 QMult:15 CSV:0.144458 dPhi with photon:2.14406
+MET:300.805 METPhi:-0.882353
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280385:228:423730742
+-------------------------------- Photons -------------------------------------------
+Photon Pt:286.807 eta:0.641608 phi:-1.95136 E:347.893 FullID:1 Pixel Seed:0
+JetPt:308.528 JetEta:0.641557 JetPhi:-1.95235 energy:374.478 QMult:4 CSV:0.481817 dPhi with photon:-0.000992537
+JetPt:216.389 JetEta:-0.580334 JetPhi:1.90408 energy:256.335 QMult:28 CSV:0.628745 dPhi with photon:-2.42775
+JetPt:70.3622 JetEta:-1.32776 JetPhi:-2.62627 energy:142.527 QMult:15 CSV:0.131422 dPhi with photon:-0.674914
+JetPt:35.6962 JetEta:-1.61991 JetPhi:1.72089 energy:93.8679 QMult:7 CSV:0.151925 dPhi with photon:-2.61094
+MET:250.096 METPhi:0.362908
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280385:456:840336908
+-------------------------------- Photons -------------------------------------------
+Photon Pt:135.897 eta:0.954117 phi:-0.0659415 E:202.59 FullID:1 Pixel Seed:0
+JetPt:444.753 JetEta:0.864229 JetPhi:2.8954 energy:623.031 QMult:16 CSV:0.985555 dPhi with photon:2.96134
+JetPt:219.728 JetEta:0.37363 JetPhi:-0.114986 energy:236.957 QMult:16 CSV:0.247899 dPhi with photon:-0.0490441
+JetPt:151.415 JetEta:0.955276 JetPhi:-0.0699712 energy:226.151 QMult:5 CSV:0.908949 dPhi with photon:-0.00402969
+JetPt:148.258 JetEta:1.41119 JetPhi:-2.83942 energy:322.721 QMult:16 CSV:0.36638 dPhi with photon:-2.77348
+JetPt:96.0561 JetEta:-1.21029 JetPhi:-0.552645 energy:176.362 QMult:20 CSV:0.688882 dPhi with photon:-0.486703
+JetPt:67.9869 JetEta:0.953775 JetPhi:-2.53036 energy:101.9 QMult:11 CSV:0.155428 dPhi with photon:-2.46442
+MET:224.935 METPhi:0.39288
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280385:929:1743402375
+-------------------------------- Photons -------------------------------------------
+Photon Pt:200.821 eta:1.85461 phi:-0.65581 E:657.257 FullID:1 Pixel Seed:0
+JetPt:735.254 JetEta:1.35805 JetPhi:-0.639812 energy:1525.43 QMult:12 CSV:0.155307 dPhi with photon:0.0159979
+JetPt:501.625 JetEta:0.568356 JetPhi:2.65705 energy:590.786 QMult:33 CSV:0.959512 dPhi with photon:-2.97033
+JetPt:234.494 JetEta:1.85753 JetPhi:-0.655349 energy:769.735 QMult:5 CSV:0.654603 dPhi with photon:0.000461102
+JetPt:176.206 JetEta:-0.491488 JetPhi:2.98725 energy:200.336 QMult:15 CSV:0.97535 dPhi with photon:-2.64013
+JetPt:140.524 JetEta:-0.770901 JetPhi:1.2548 energy:185.35 QMult:16 CSV:0.122148 dPhi with photon:1.91061
+JetPt:115.675 JetEta:0.696671 JetPhi:0.706339 energy:145.952 QMult:20 CSV:0.164747 dPhi with photon:1.36215
+JetPt:106.09 JetEta:0.102306 JetPhi:-3.06521 energy:107.918 QMult:22 CSV:0.374131 dPhi with photon:-2.4094
+JetPt:42.6939 JetEta:0.398175 JetPhi:-2.46036 energy:46.8065 QMult:13 CSV:0.0919941 dPhi with photon:-1.80455
+JetPt:30.5615 JetEta:0.125424 JetPhi:-0.624633 energy:31.6708 QMult:11 CSV:0.790216 dPhi with photon:0.0311769
+MET:215.587 METPhi:2.26033
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279966:190:231366087
+-------------------------------- Photons -------------------------------------------
+Photon Pt:960.522 eta:-0.406388 phi:2.89098 E:1040.94 FullID:1 Pixel Seed:0
+JetPt:1000.8 JetEta:-0.406371 JetPhi:2.89143 energy:1084.66 QMult:1 CSV:-10 dPhi with photon:0.000455856
+JetPt:571.95 JetEta:-0.08583 JetPhi:-0.902663 energy:576.166 QMult:26 CSV:0.101966 dPhi with photon:2.48955
+JetPt:275.786 JetEta:0.546516 JetPhi:-0.490991 energy:319.25 QMult:26 CSV:0.438286 dPhi with photon:2.90122
+JetPt:236.874 JetEta:0.989415 JetPhi:0.638856 energy:363.459 QMult:15 CSV:0.313669 dPhi with photon:-2.25212
+JetPt:225.754 JetEta:-0.709727 JetPhi:-2.78745 energy:285.311 QMult:7 CSV:0.286745 dPhi with photon:0.604758
+JetPt:80.0826 JetEta:-1.64686 JetPhi:-2.72686 energy:215.836 QMult:13 CSV:0.122985 dPhi with photon:0.665345
+MET:522.905 METPhi:0.689656
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279931:2828:4832376009
+-------------------------------- Photons -------------------------------------------
+Photon Pt:118.236 eta:-2.08788 phi:-2.56518 E:484.281 FullID:1 Pixel Seed:0
+JetPt:241.119 JetEta:-0.897526 JetPhi:1.15768 energy:348.251 QMult:28 CSV:0.0639517 dPhi with photon:-2.56032
+JetPt:187.1 JetEta:-1.2503 JetPhi:0.855068 energy:353.805 QMult:9 CSV:0.0997194 dPhi with photon:-2.86293
+JetPt:183.29 JetEta:0.0410845 JetPhi:0.306247 energy:184.64 QMult:23 CSV:0.486647 dPhi with photon:2.87143
+JetPt:174.243 JetEta:1.80888 JetPhi:-2.1065 energy:546.216 QMult:12 CSV:0.847088 dPhi with photon:0.458689
+JetPt:139.878 JetEta:-2.09129 JetPhi:-2.56922 energy:574.89 QMult:3 CSV:-10 dPhi with photon:-0.00403929
+JetPt:95.9776 JetEta:0.798865 JetPhi:-3.00715 energy:128.539 QMult:5 CSV:-10 dPhi with photon:-0.441963
+MET:200.512 METPhi:-2.16694
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279115:120:95444486
+70 %
+-------------------------------- Photons -------------------------------------------
+Photon Pt:409.008 eta:-0.318834 phi:-1.70618 E:429.973 FullID:1 Pixel Seed:0
+JetPt:436.352 JetEta:-0.319494 JetPhi:-1.70566 energy:459.265 QMult:7 CSV:-10 dPhi with photon:0.000519037
+JetPt:163.652 JetEta:0.0735755 JetPhi:-0.256358 energy:165.271 QMult:12 CSV:0.109345 dPhi with photon:1.44983
+JetPt:52.4834 JetEta:-2.34796 JetPhi:-2.59068 energy:277.244 QMult:7 CSV:0.239408 dPhi with photon:-0.884495
+MET:475.992 METPhi:1.79296
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278969:93:56633771
+-------------------------------- Photons -------------------------------------------
+Photon Pt:285.224 eta:0.176985 phi:0.648663 E:289.703 FullID:1 Pixel Seed:0
+JetPt:557.81 JetEta:0.650962 JetPhi:-2.58396 energy:680.845 QMult:12 CSV:0.283263 dPhi with photon:3.05056
+JetPt:299.123 JetEta:0.176708 JetPhi:0.64944 energy:304.003 QMult:3 CSV:-10 dPhi with photon:0.000777423
+JetPt:97.0686 JetEta:-1.40891 JetPhi:-0.391999 energy:211.071 QMult:17 CSV:0.115008 dPhi with photon:-1.04066
+JetPt:37.7124 JetEta:-0.605275 JetPhi:-1.09753 energy:45.7298 QMult:8 CSV:0.950396 dPhi with photon:-1.7462
+MET:256.108 METPhi:0.992914
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279931:1673:2890205869
+-------------------------------- Photons -------------------------------------------
+Photon Pt:315.438 eta:0.820925 phi:2.85836 E:427.832 FullID:1 Pixel Seed:0
+JetPt:453.373 JetEta:2.12275 JetPhi:-0.184823 energy:1921.92 QMult:17 CSV:0.411287 dPhi with photon:-3.04318
+JetPt:331.479 JetEta:0.821232 JetPhi:2.85827 energy:449.793 QMult:0 CSV:-10 dPhi with photon:-9.13143e-05
+JetPt:43.4245 JetEta:-1.51969 JetPhi:-0.274408 energy:104.293 QMult:9 CSV:0.51638 dPhi with photon:-3.13277
+JetPt:31.3292 JetEta:-0.468263 JetPhi:-2.11128 energy:35.2191 QMult:12 CSV:0.582645 dPhi with photon:1.31354
+MET:208.741 METPhi:2.87593
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278957:113:100750602
+-------------------------------- Photons -------------------------------------------
+Photon Pt:119.585 eta:1.44215 phi:0.138505 E:267.047 FullID:1 Pixel Seed:0
+JetPt:627.284 JetEta:1.81362 JetPhi:-2.9931 energy:1976.06 QMult:31 CSV:0.69777 dPhi with photon:-3.1316
+JetPt:141.63 JetEta:1.44244 JetPhi:0.133308 energy:316.422 QMult:2 CSV:-10 dPhi with photon:-0.00519624
+JetPt:88.2381 JetEta:0.604861 JetPhi:-2.46106 energy:107.103 QMult:21 CSV:0.534359 dPhi with photon:-2.59956
+MET:613.795 METPhi:0.243746
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278822:364:609159350
+-------------------------------- Photons -------------------------------------------
+Photon Pt:506.088 eta:1.64928 phi:-1.89406 E:1365.28 FullID:1 Pixel Seed:0
+JetPt:566.003 JetEta:1.64757 JetPhi:-1.89255 energy:1524.68 QMult:2 CSV:0.472502 dPhi with photon:0.00150168
+JetPt:234.709 JetEta:0.0301662 JetPhi:2.17513 energy:235.661 QMult:17 CSV:0.38317 dPhi with photon:-2.214
+JetPt:79.8129 JetEta:-0.971487 JetPhi:1.99886 energy:121.313 QMult:13 CSV:0.842296 dPhi with photon:-2.39027
+JetPt:69.3524 JetEta:-0.973259 JetPhi:-1.66311 energy:105.574 QMult:10 CSV:0.122685 dPhi with photon:0.230946
+JetPt:34.977 JetEta:1.31973 JetPhi:0.762597 energy:70.5251 QMult:4 CSV:0.551539 dPhi with photon:2.65665
+MET:432.294 METPhi:0.726252
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279588:547:895144294
+-------------------------------- Photons -------------------------------------------
+Photon Pt:191.276 eta:0.625476 phi:0.918838 E:229.928 FullID:1 Pixel Seed:0
+JetPt:359.056 JetEta:-0.116021 JetPhi:-2.90974 energy:361.923 QMult:11 CSV:0.0993085 dPhi with photon:2.45461
+JetPt:229.581 JetEta:0.623435 JetPhi:0.924137 energy:276.108 QMult:6 CSV:0.501651 dPhi with photon:0.00529921
+JetPt:30.2203 JetEta:1.63692 JetPhi:-3.03654 energy:80.8242 QMult:9 CSV:0.551564 dPhi with photon:2.32781
+MET:216.2 METPhi:-0.588248
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279654:1044:1991818479
+80 %
+-------------------------------- Photons -------------------------------------------
+Photon Pt:152.132 eta:-0.333599 phi:-2.06963 E:160.676 FullID:1 Pixel Seed:0
+JetPt:443.447 JetEta:0.296077 JetPhi:1.72828 energy:465.51 QMult:12 CSV:0.972366 dPhi with photon:-2.48527
+JetPt:162.861 JetEta:-0.337623 JetPhi:-2.07754 energy:172.527 QMult:3 CSV:0.482538 dPhi with photon:-0.00790977
+JetPt:108.029 JetEta:-1.36728 JetPhi:-1.92713 energy:226.013 QMult:9 CSV:0.997491 dPhi with photon:0.142498
+JetPt:101.718 JetEta:-1.01969 JetPhi:1.81491 energy:160.079 QMult:18 CSV:0.333582 dPhi with photon:-2.39865
+JetPt:72.5176 JetEta:0.372056 JetPhi:0.886314 energy:78.3597 QMult:12 CSV:0.172264 dPhi with photon:2.95594
+JetPt:64.5782 JetEta:0.379667 JetPhi:0.010329 energy:70.0703 QMult:9 CSV:0.164993 dPhi with photon:2.07996
+MET:334.531 METPhi:-1.32402
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280017:2:2186447
+-------------------------------- Photons -------------------------------------------
+Photon Pt:258.138 eta:-0.725333 phi:1.59278 E:329.072 FullID:1 Pixel Seed:0
+JetPt:281.74 JetEta:-0.720424 JetPhi:1.58959 energy:358.455 QMult:4 CSV:-10 dPhi with photon:-0.00318742
+JetPt:179.949 JetEta:-0.863857 JetPhi:-2.64833 energy:252.286 QMult:21 CSV:0.158083 dPhi with photon:2.04207
+JetPt:55.603 JetEta:-2.72597 JetPhi:-1.01475 energy:426.445 QMult:0 CSV:-10 dPhi with photon:-2.60753
+JetPt:46.52 JetEta:-0.306668 JetPhi:2.71043 energy:49.247 QMult:6 CSV:0.521638 dPhi with photon:1.11765
+JetPt:37.8393 JetEta:0.627562 JetPhi:-0.620837 energy:46.0107 QMult:11 CSV:0.0782408 dPhi with photon:-2.21362
+MET:232.927 METPhi:-0.391714
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279887:207:239496936
+-------------------------------- Photons -------------------------------------------
+Photon Pt:244.231 eta:0.77949 phi:-0.951615 E:322.262 FullID:1 Pixel Seed:0
+JetPt:272.131 JetEta:0.777574 JetPhi:-0.950834 energy:359.073 QMult:9 CSV:0.628926 dPhi with photon:0.000781
+JetPt:224.619 JetEta:1.40762 JetPhi:1.96464 energy:487.382 QMult:16 CSV:0.995378 dPhi with photon:2.91626
+JetPt:168.345 JetEta:1.35196 JetPhi:2.67748 energy:347.606 QMult:9 CSV:0.458066 dPhi with photon:-2.65409
+MET:233.995 METPhi:-0.594823
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279931:331:473793173
+-------------------------------- Photons -------------------------------------------
+Photon Pt:210.152 eta:0.979282 phi:2.82546 E:319.234 FullID:1 Pixel Seed:0
+JetPt:335.029 JetEta:1.45462 JetPhi:-0.484974 energy:757.911 QMult:30 CSV:0.310415 dPhi with photon:2.97275
+JetPt:232.422 JetEta:0.982696 JetPhi:2.82643 energy:354.264 QMult:5 CSV:-10 dPhi with photon:0.000976086
+JetPt:167.273 JetEta:0.835093 JetPhi:0.0921268 energy:230.491 QMult:24 CSV:0.157501 dPhi with photon:-2.73333
+JetPt:159.673 JetEta:0.825515 JetPhi:-0.393873 energy:218.051 QMult:16 CSV:0.0826945 dPhi with photon:3.06385
+MET:407.562 METPhi:2.70053
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278923:142:193940290
+-------------------------------- Photons -------------------------------------------
+Photon Pt:149.436 eta:0.182864 phi:-1.33374 E:151.942 FullID:1 Pixel Seed:0
+JetPt:200.913 JetEta:-1.06304 JetPhi:-2.38067 energy:327.315 QMult:20 CSV:0.065682 dPhi with photon:-1.04693
+JetPt:197.338 JetEta:1.5276 JetPhi:0.518321 energy:476.393 QMult:18 CSV:0.326216 dPhi with photon:1.85207
+JetPt:188.51 JetEta:1.52892 JetPhi:-0.764167 energy:455.655 QMult:13 CSV:0.687577 dPhi with photon:0.569577
+JetPt:157.804 JetEta:-0.946076 JetPhi:2.09029 energy:235.199 QMult:22 CSV:0.0764249 dPhi with photon:-2.85915
+JetPt:154.879 JetEta:0.185934 JetPhi:-1.33244 energy:157.706 QMult:2 CSV:-10 dPhi with photon:0.00130248
+JetPt:34.376 JetEta:1.43174 JetPhi:2.88779 energy:76.5385 QMult:17 CSV:0.13248 dPhi with photon:-2.06165
+JetPt:30.7889 JetEta:0.775584 JetPhi:-1.14402 energy:40.9001 QMult:13 CSV:0.133535 dPhi with photon:0.189723
+MET:233.903 METPhi:1.96452
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279694:757:1391500872
+-------------------------------- Photons -------------------------------------------
+Photon Pt:489.193 eta:-0.488323 phi:1.67181 E:548.688 FullID:1 Pixel Seed:0
+JetPt:491.678 JetEta:-0.488959 JetPhi:1.67235 energy:551.752 QMult:1 CSV:-10 dPhi with photon:0.000538826
+JetPt:366.956 JetEta:-0.397441 JetPhi:-2.0435 energy:397.853 QMult:20 CSV:0.0910186 dPhi with photon:2.56788
+JetPt:61.6862 JetEta:0.459101 JetPhi:2.6867 energy:68.4647 QMult:8 CSV:0.606205 dPhi with photon:1.01489
+JetPt:42.7666 JetEta:0.0106295 JetPhi:-2.4662 energy:43.2938 QMult:9 CSV:0.0689289 dPhi with photon:2.14517
+MET:347.222 METPhi:-0.461833
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278875:740:1356088435
+-------------------------------- Photons -------------------------------------------
+Photon Pt:104.857 eta:0.771143 phi:2.03217 E:137.61 FullID:1 Pixel Seed:0
+JetPt:531.658 JetEta:-0.620903 JetPhi:-1.00397 energy:638.91 QMult:29 CSV:0.805471 dPhi with photon:-3.03614
+JetPt:120.157 JetEta:0.77787 JetPhi:2.03127 energy:158.845 QMult:7 CSV:0.46926 dPhi with photon:-0.000894785
+JetPt:119.155 JetEta:0.534833 JetPhi:3.10154 energy:139.046 QMult:14 CSV:0.13165 dPhi with photon:1.06937
+JetPt:70.215 JetEta:2.17072 JetPhi:2.80054 energy:311.845 QMult:5 CSV:0.338631 dPhi with photon:0.768366
+JetPt:36.6416 JetEta:2.88837 JetPhi:-1.25011 energy:330.184 QMult:0 CSV:-10 dPhi with photon:3.0009
+MET:387.318 METPhi:1.6999
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278923:203:303342999
+-------------------------------- Photons -------------------------------------------
+Photon Pt:430.722 eta:0.348468 phi:2.64504 E:457.139 FullID:1 Pixel Seed:0
+JetPt:453.588 JetEta:0.349363 JetPhi:2.64541 energy:481.844 QMult:3 CSV:0.503084 dPhi with photon:0.000365734
+JetPt:169.586 JetEta:0.153169 JetPhi:-1.4374 energy:173.123 QMult:9 CSV:0.49481 dPhi with photon:2.20075
+JetPt:86.8425 JetEta:1.215 JetPhi:-0.494296 energy:159.668 QMult:9 CSV:0.600995 dPhi with photon:-3.13934
+JetPt:43.4825 JetEta:1.58767 JetPhi:-0.081381 energy:110.887 QMult:4 CSV:0.568995 dPhi with photon:-2.72642
+MET:274.185 METPhi:-0.0696077
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278923:299:474300099
+-------------------------------- Photons -------------------------------------------
+Photon Pt:322.414 eta:0.0942685 phi:-1.23198 E:323.847 FullID:1 Pixel Seed:0
+JetPt:1259.65 JetEta:0.502366 JetPhi:-2.59742 energy:1428.14 QMult:57 CSV:0.39583 dPhi with photon:-1.36544
+JetPt:814.155 JetEta:-0.462908 JetPhi:1.03242 energy:904.386 QMult:19 CSV:0.900454 dPhi with photon:2.26439
+JetPt:325.814 JetEta:0.0944077 JetPhi:-1.23203 energy:327.469 QMult:3 CSV:0.462656 dPhi with photon:-5.04255e-05
+JetPt:167.978 JetEta:-0.646461 JetPhi:0.298597 energy:205.791 QMult:24 CSV:0.101215 dPhi with photon:1.53057
+MET:486.425 METPhi:0.435537
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280349:17:31176500
+-------------------------------- Photons -------------------------------------------
+Photon Pt:169.512 eta:-0.175172 phi:-1.16822 E:172.12 FullID:1 Pixel Seed:0
+JetPt:289.978 JetEta:0.715859 JetPhi:2.1523 energy:370.919 QMult:27 CSV:0.267357 dPhi with photon:-2.96266
+JetPt:217.042 JetEta:1.36627 JetPhi:1.96887 energy:453.5 QMult:10 CSV:0.877823 dPhi with photon:3.13709
+JetPt:186.197 JetEta:-0.431626 JetPhi:-0.0403269 energy:204.767 QMult:9 CSV:0.860267 dPhi with photon:1.12789
+JetPt:178.69 JetEta:-0.178904 JetPhi:-1.16423 energy:181.932 QMult:4 CSV:0.487696 dPhi with photon:0.00399208
+MET:288.525 METPhi:-1.52886
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280349:50:93767566
+-------------------------------- Photons -------------------------------------------
+Photon Pt:1548.94 eta:-1.04819 phi:1.89455 E:2480.66 FullID:1 Pixel Seed:0
+JetPt:1715.32 JetEta:-1.04816 JetPhi:1.89453 energy:2747.29 QMult:3 CSV:-10 dPhi with photon:-1.32322e-05
+JetPt:712.821 JetEta:-0.635546 JetPhi:-1.80395 energy:862.856 QMult:14 CSV:0.701164 dPhi with photon:2.58469
+JetPt:584.274 JetEta:-1.48392 JetPhi:0.19343 energy:1355.66 QMult:16 CSV:0.287981 dPhi with photon:-1.70112
+JetPt:343.448 JetEta:1.35193 JetPhi:2.45353 energy:711.006 QMult:27 CSV:0.253039 dPhi with photon:0.558987
+MET:1149.99 METPhi:-1.25852
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280349:51:95527167
+-------------------------------- Photons -------------------------------------------
+Photon Pt:226.465 eta:-0.415069 phi:2.48367 E:246.255 FullID:1 Pixel Seed:0
+JetPt:555.106 JetEta:0.800082 JetPhi:0.719556 energy:746.811 QMult:24 CSV:0.164707 dPhi with photon:-1.76411
+JetPt:240.687 JetEta:-0.415123 JetPhi:2.4832 energy:261.797 QMult:1 CSV:-10 dPhi with photon:-0.0004673
+JetPt:192.661 JetEta:-1.81427 JetPhi:-3.08071 energy:607.251 QMult:15 CSV:0.133596 dPhi with photon:0.718808
+JetPt:100.832 JetEta:-2.28995 JetPhi:3.07741 energy:503.121 QMult:13 CSV:0.193322 dPhi with photon:0.593748
+JetPt:32.3849 JetEta:-1.50702 JetPhi:0.0745543 energy:76.8239 QMult:8 CSV:0.138423 dPhi with photon:-2.40911
+MET:484.89 METPhi:-1.56252
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279658:497:893417670
+-------------------------------- Photons -------------------------------------------
+Photon Pt:126.703 eta:-0.218516 phi:-1.59252 E:129.74 FullID:1 Pixel Seed:0
+JetPt:645.079 JetEta:0.856718 JetPhi:1.9169 energy:897.518 QMult:11 CSV:0.156606 dPhi with photon:-2.77377
+JetPt:140.791 JetEta:0.512127 JetPhi:-1.85804 energy:160.589 QMult:16 CSV:0.988085 dPhi with photon:-0.265513
+JetPt:137.957 JetEta:-0.220745 JetPhi:-1.59166 energy:141.811 QMult:5 CSV:0.564741 dPhi with photon:0.00086081
+JetPt:129.179 JetEta:-0.468274 JetPhi:-0.437217 energy:144.888 QMult:15 CSV:0.0872207 dPhi with photon:1.15531
+JetPt:71.4053 JetEta:-0.531406 JetPhi:0.185038 energy:82.1658 QMult:13 CSV:0.881347 dPhi with photon:1.77756
+JetPt:30.5803 JetEta:-0.473688 JetPhi:1.19267 energy:34.8305 QMult:10 CSV:0.151384 dPhi with photon:2.78519
+MET:325.315 METPhi:-1.32514
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280249:1046:1885391745
+-------------------------------- Photons -------------------------------------------
+Photon Pt:384.394 eta:1.57577 phi:-0.700551 E:968.923 FullID:1 Pixel Seed:0
+JetPt:428.33 JetEta:1.57395 JetPhi:-0.700266 energy:1077.98 QMult:4 CSV:0.585652 dPhi with photon:0.000285804
+JetPt:149.519 JetEta:-0.316627 JetPhi:3.06927 energy:158.167 QMult:20 CSV:0.082899 dPhi with photon:-2.51337
+JetPt:96.2653 JetEta:0.469267 JetPhi:1.32958 energy:107.939 QMult:14 CSV:0.221785 dPhi with photon:2.03013
+MET:211.339 METPhi:2.39127
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280249:383:716227221
+90 %
+-------------------------------- Photons -------------------------------------------
+Photon Pt:202.341 eta:0.991497 phi:2.46026 E:310.218 FullID:1 Pixel Seed:0
+JetPt:229.848 JetEta:0.991825 JetPhi:2.46146 energy:352.742 QMult:8 CSV:-10 dPhi with photon:0.00120425
+JetPt:217.851 JetEta:1.05498 JetPhi:-0.468775 energy:353.305 QMult:30 CSV:0.224925 dPhi with photon:-2.92903
+JetPt:164.73 JetEta:1.20875 JetPhi:-0.969145 energy:300.906 QMult:18 CSV:0.354004 dPhi with photon:2.85378
+MET:235.473 METPhi:2.5622
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279823:215:287129691
+-------------------------------- Photons -------------------------------------------
+Photon Pt:403.63 eta:-1.06099 phi:2.27445 E:652.94 FullID:1 Pixel Seed:0
+JetPt:406.679 JetEta:-1.06064 JetPhi:2.27422 energy:657.882 QMult:1 CSV:-10 dPhi with photon:-0.000224352
+JetPt:400.534 JetEta:0.142934 JetPhi:-0.052943 energy:405.056 QMult:9 CSV:0.0640901 dPhi with photon:-2.32739
+JetPt:39.7855 JetEta:-2.01935 JetPhi:1.51063 energy:152.74 QMult:12 CSV:0.622863 dPhi with photon:-0.763816
+MET:364.912 METPhi:-2.01081
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280242:612:1121095891
+-------------------------------- Photons -------------------------------------------
+Photon Pt:120.17 eta:1.39359 phi:1.58457 E:257.012 FullID:1 Pixel Seed:0
+JetPt:1072.34 JetEta:0.778042 JetPhi:-1.54609 energy:1416.4 QMult:26 CSV:0.1779 dPhi with photon:-3.13066
+JetPt:147.759 JetEta:1.41197 JetPhi:1.59499 energy:321.586 QMult:10 CSV:0.621535 dPhi with photon:0.010426
+JetPt:134.433 JetEta:-1.29279 JetPhi:1.7808 energy:264.216 QMult:16 CSV:0.325789 dPhi with photon:0.196231
+JetPt:56.3236 JetEta:-1.32225 JetPhi:-2.67641 energy:114.03 QMult:25 CSV:0.313033 dPhi with photon:2.02221
+MET:866.422 METPhi:1.44327
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280249:252:479487685
+-------------------------------- Photons -------------------------------------------
+Photon Pt:260.254 eta:1.41568 phi:-1.58337 E:567.62 FullID:1 Pixel Seed:0
+JetPt:718.46 JetEta:0.192832 JetPhi:1.72239 energy:733.013 QMult:10 CSV:0.775122 dPhi with photon:-2.97742
+JetPt:280.774 JetEta:1.41551 JetPhi:-1.58411 energy:612.33 QMult:2 CSV:-10 dPhi with photon:-0.000735044
+JetPt:189.884 JetEta:-0.422356 JetPhi:-0.37941 energy:208.188 QMult:29 CSV:0.0999159 dPhi with photon:1.20396
+MET:399.908 METPhi:-1.76074
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279667:727:1225432856
+-------------------------------- Photons -------------------------------------------
+Photon Pt:283.127 eta:2.10528 phi:-0.520607 E:1179.4 FullID:1 Pixel Seed:0
+JetPt:333.833 JetEta:1.0716 JetPhi:2.68214 energy:545.115 QMult:11 CSV:0.0981479 dPhi with photon:-3.08044
+JetPt:318.797 JetEta:2.10712 JetPhi:-0.524485 energy:1330.45 QMult:6 CSV:-10 dPhi with photon:-0.0038777
+JetPt:107.7 JetEta:0.329715 JetPhi:-2.97558 energy:116.42 QMult:18 CSV:0.0997455 dPhi with photon:-2.45497
+MET:215.755 METPhi:-0.128176
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278969:785:1307779404
+-------------------------------- Photons -------------------------------------------
+Photon Pt:292.472 eta:0.343419 phi:0.494456 E:309.889 FullID:1 Pixel Seed:0
+JetPt:307.099 JetEta:0.344044 JetPhi:0.494325 energy:325.552 QMult:1 CSV:-10 dPhi with photon:-0.000130296
+JetPt:242.691 JetEta:-0.482637 JetPhi:-2.56648 energy:272.195 QMult:10 CSV:0.473376 dPhi with photon:-3.06093
+JetPt:67.592 JetEta:-1.96968 JetPhi:0.369531 energy:247.421 QMult:12 CSV:0.534573 dPhi with photon:-0.124924
+JetPt:34.1865 JetEta:1.15389 JetPhi:1.00308 energy:59.7385 QMult:3 CSV:0.551078 dPhi with photon:0.508625
+JetPt:33.6745 JetEta:-1.04332 JetPhi:-2.98817 energy:53.9569 QMult:5 CSV:0.530258 dPhi with photon:2.80056
+JetPt:33.2287 JetEta:0.648013 JetPhi:-0.491636 energy:40.7061 QMult:4 CSV:0.536615 dPhi with photon:-0.986092
+MET:220.71 METPhi:-3.07783
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278969:731:1207223577
+-------------------------------- Photons -------------------------------------------
+Photon Pt:580.752 eta:-1.15983 phi:-1.71931 E:1017.17 FullID:1 Pixel Seed:0
+JetPt:601.768 JetEta:-1.16012 JetPhi:-1.71958 energy:1054.35 QMult:3 CSV:0.426167 dPhi with photon:-0.000264406
+JetPt:273.842 JetEta:0.965929 JetPhi:-2.78875 energy:413.081 QMult:28 CSV:0.561329 dPhi with photon:-1.06944
+JetPt:187.971 JetEta:1.25115 JetPhi:3.07783 energy:355.975 QMult:17 CSV:0.0867346 dPhi with photon:-1.48604
+MET:822.827 METPhi:0.868998
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278969:467:733491516
+-------------------------------- Photons -------------------------------------------
+Photon Pt:174.06 eta:0.433615 phi:0.31992 E:190.682 FullID:1 Pixel Seed:0
+JetPt:412.66 JetEta:-1.92276 JetPhi:2.29973 energy:1441.84 QMult:12 CSV:0.264392 dPhi with photon:1.97981
+JetPt:315.302 JetEta:1.72442 JetPhi:-1.95414 energy:913.139 QMult:22 CSV:0.190661 dPhi with photon:-2.27406
+JetPt:188.182 JetEta:0.434345 JetPhi:0.316339 energy:206.461 QMult:1 CSV:-10 dPhi with photon:-0.00358093
+JetPt:149.575 JetEta:0.226152 JetPhi:-1.03553 energy:154.397 QMult:14 CSV:0.231459 dPhi with photon:-1.35545
+JetPt:77.5634 JetEta:0.926468 JetPhi:-2.58215 energy:114.38 QMult:12 CSV:0.316819 dPhi with photon:-2.90207
+JetPt:68.9555 JetEta:1.85299 JetPhi:2.67759 energy:225.549 QMult:12 CSV:0.923365 dPhi with photon:2.35768
+JetPt:51.8495 JetEta:-0.279854 JetPhi:-0.38614 energy:54.7653 QMult:19 CSV:0.972227 dPhi with photon:-0.70606
+JetPt:48.1963 JetEta:1.86348 JetPhi:1.37484 energy:159.26 QMult:11 CSV:0.144542 dPhi with photon:1.05492
+MET:230.768 METPhi:0.174199
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278969:542:866696449
+-------------------------------- Photons -------------------------------------------
+Photon Pt:201.058 eta:0.501298 phi:0.766432 E:226.855 FullID:1 Pixel Seed:0
+JetPt:292.743 JetEta:-0.2903 JetPhi:-0.279571 energy:306.83 QMult:25 CSV:0.988389 dPhi with photon:-1.046
+JetPt:224.358 JetEta:0.58288 JetPhi:-2.39934 energy:265.033 QMult:30 CSV:0.158473 dPhi with photon:3.11742
+JetPt:214.138 JetEta:0.503005 JetPhi:0.767252 energy:241.971 QMult:2 CSV:0.500866 dPhi with photon:0.00082022
+JetPt:172.241 JetEta:-0.482124 JetPhi:2.75891 energy:193.251 QMult:11 CSV:0.43423 dPhi with photon:1.99247
+JetPt:47.1037 JetEta:-0.749322 JetPhi:-0.305553 energy:61.2637 QMult:9 CSV:0.194538 dPhi with photon:-1.07199
+JetPt:45.0754 JetEta:-0.764351 JetPhi:-0.727208 energy:59.3469 QMult:14 CSV:0.0855136 dPhi with photon:-1.49364
+MET:202.647 METPhi:2.78251
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279931:1457:2545205323
+-------------------------------- Photons -------------------------------------------
+Photon Pt:170.676 eta:-2.31189 phi:2.91065 E:869.813 FullID:1 Pixel Seed:0
+JetPt:350.422 JetEta:0.650077 JetPhi:-0.90428 energy:430.312 QMult:32 CSV:0.357226 dPhi with photon:2.46826
+JetPt:221.392 JetEta:1.00902 JetPhi:-0.266468 energy:344.657 QMult:14 CSV:0.977093 dPhi with photon:3.10607
+JetPt:194.511 JetEta:-2.31446 JetPhi:2.91051 energy:993.838 QMult:2 CSV:-10 dPhi with photon:-0.000136375
+JetPt:60.8379 JetEta:0.217022 JetPhi:0.905203 energy:62.982 QMult:13 CSV:0.518362 dPhi with photon:-2.00544
+MET:419.337 METPhi:2.37927
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279716:177:338668444
+-------------------------------- Photons -------------------------------------------
+Photon Pt:163.603 eta:-1.02071 phi:0.94383 E:256.489 FullID:1 Pixel Seed:0
+JetPt:376.367 JetEta:-0.950859 JetPhi:-2.26698 energy:561.848 QMult:25 CSV:0.107655 dPhi with photon:3.07238
+JetPt:248.45 JetEta:-2.3087 JetPhi:-0.999413 energy:1262.52 QMult:12 CSV:0.623445 dPhi with photon:-1.94324
+JetPt:179.195 JetEta:-1.02527 JetPhi:0.94408 energy:282.086 QMult:1 CSV:-10 dPhi with photon:0.00025034
+JetPt:53.1959 JetEta:-2.52929 JetPhi:1.98482 energy:335.906 QMult:8 CSV:0.889725 dPhi with photon:1.04099
+JetPt:30.4001 JetEta:-2.22841 JetPhi:2.44322 energy:142.87 QMult:9 CSV:0.597811 dPhi with photon:1.49939
+MET:294.835 METPhi:1.52601
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+278969:334:492516829
+-------------------------------- Photons -------------------------------------------
+Photon Pt:195.349 eta:-1.59057 phi:1.14985 E:499.152 FullID:1 Pixel Seed:0
+JetPt:229.658 JetEta:-0.302108 JetPhi:1.07333 energy:240.813 QMult:14 CSV:0.182278 dPhi with photon:-0.0765277
+JetPt:225.732 JetEta:-1.59297 JetPhi:1.14653 energy:578.301 QMult:6 CSV:0.711182 dPhi with photon:-0.00332701
+JetPt:137.116 JetEta:-1.52983 JetPhi:-1.3561 energy:332.262 QMult:18 CSV:0.330909 dPhi with photon:-2.50595
+JetPt:69.3874 JetEta:-1.93336 JetPhi:-1.74796 energy:245.308 QMult:17 CSV:0.565152 dPhi with photon:-2.89781
+MET:287.568 METPhi:-2.54683
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+279794:357:531027014
+-------------------------------- Photons -------------------------------------------
+Photon Pt:289.893 eta:1.23782 phi:-2.55624 E:541.826 FullID:1 Pixel Seed:0
+JetPt:537.583 JetEta:-0.210466 JetPhi:-0.0325202 energy:550.68 QMult:20 CSV:0.0888096 dPhi with photon:2.52372
+JetPt:300.52 JetEta:1.23928 JetPhi:-2.55652 energy:562.443 QMult:1 CSV:-10 dPhi with photon:-0.000277758
+JetPt:38.2862 JetEta:-1.57486 JetPhi:-2.42092 energy:96.6806 QMult:13 CSV:0.416283 dPhi with photon:0.135319
+MET:346.603 METPhi:2.52463
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280194:116:184522022
+-------------------------------- Photons -------------------------------------------
+Photon Pt:124.957 eta:0.675906 phi:2.25083 E:154.603 FullID:1 Pixel Seed:0
+JetPt:499.649 JetEta:-0.407861 JetPhi:-0.663187 energy:543.617 QMult:24 CSV:0.224565 dPhi with photon:-2.91401
+JetPt:234.412 JetEta:0.841014 JetPhi:2.17952 energy:325.583 QMult:1 CSV:0.504114 dPhi with photon:-0.0713034
+JetPt:138.496 JetEta:-1.30303 JetPhi:-1.48466 energy:274.382 QMult:12 CSV:0.489788 dPhi with photon:2.5477
+JetPt:40.8338 JetEta:0.838578 JetPhi:-2.18706 energy:56.4501 QMult:10 CSV:0.138356 dPhi with photon:1.8453
+JetPt:39.738 JetEta:2.81195 JetPhi:3.11825 energy:331.927 QMult:1 CSV:-10 dPhi with photon:0.867424
+MET:406.146 METPhi:2.11481
+^^^^^^^^^^^^^^^^^^ Event ends ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+280363:324:542384862
+Events Survied:3232

@@ -47,6 +47,8 @@ void testClosure(TString iFname){
   name1.push_back("BestPhotonPt_Ele0");    name2.push_back("BestPhotonPt_Ele1");       rebin.push_back(10);
   //  name1.push_back("BestPhotonEta_Ele0");   name2.push_back("BestPhotonEta_Ele1");  rebin.push_back(10);
   name1.push_back("METvarBin_Ele0");   name2.push_back("METvarBin_Ele1");  rebin.push_back(1);
+  name1.push_back("METvarBin_Ele0_0b");   name2.push_back("METvarBin_Ele1_0b");  rebin.push_back(1);
+  name1.push_back("METvarBin_Ele0_min1b");   name2.push_back("METvarBin_Ele1_min1b");  rebin.push_back(1);
   name1.push_back("dPhi_METjet1_Pho_Ele0");   name2.push_back("dPhi_METjet1_Pho_Ele1");  rebin.push_back(4);
   name1.push_back("dPhi_METjet2_Pho_Ele0");   name2.push_back("dPhi_METjet2_Pho_Ele1");  rebin.push_back(4);
   name1.push_back("dPhi_METBestPhoton_Ele0");   name2.push_back("dPhi_METBestPhoton_Ele1");  rebin.push_back(4);
@@ -177,15 +179,19 @@ void testClosure(TString iFname){
     h_numr->Draw("e0");
     h_numr->Draw("e1same");
     TString name = h_histG->GetName();
-    if(name.Contains("SBins_v4")){ 
+    if(name.Contains("SBins_v7")){ 
       line1->Draw();line2->Draw();line3->Draw();line4->Draw();line5->Draw();
       fout->cd();
       h_numr->Write();
       TH1D *h_pullHist = new TH1D("pull_lostEle","1D pull for lost e",50,-2.5,7.5);
+      //      TH1D *h_pullHist = new TH1D("pull_lostEle","1D pull for lost e",21,-3,4);
+      cout<<"pull:"<<endl;
       for(int p=1;p<=h_numr->GetNbinsX();p++){
 	h_pullHist->Fill( (1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));
+	//	cout<<(1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p)<<",";
       }
       h_pullHist->Write();
+      cout<<endl;
       //      p_bot[i]->SetGridx(0);
     }
     else if(name.Contains("SBins_v7")){
