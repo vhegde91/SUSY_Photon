@@ -18,7 +18,7 @@
 TLatex textOnTop,intLumiE;
 double intLumi = 35.9;
 void overlayExcl(){
-  const int nFiles=3;
+  const int nFiles=2;
   int col[7]={kRed,kBlue,kTeal+9,kBlack,kOrange,kCyan,kMagenta};
   gStyle->SetOptStat(0);
   TCanvas *c1=new TCanvas("c1","c1",1200,1000);
@@ -36,15 +36,15 @@ void overlayExcl(){
 
   //  f[6]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV7.root");
 
-  // f[0]=new TFile("Excl_T6ttZg_LimitPlots_Obs_V7_v11.root");
+  f[0]=new TFile("Excl_T5bbbbZg_LimitPlots_Obs_V7_v11.root");
   //f[1]=new TFile("Excl_T6ttZg_LimitPlots_Obs_V7_v9.root");
 
-  f[0]=new TFile("Excl_GGM_M1M3_LimitPlots_Obs_V7_v3.root");
-  f[1]=new TFile("Excl_GGM_M1M3_PhoLep_LimitPlots_Obs_V7_v3.root");
-  f[2]=new TFile("Excl_GGM_M1M3_PhoLepPhoJet_LimitPlots_Obs_V7_v3.root");
+  // f[0]=new TFile("Excl_GGM_M1M3_LimitPlots_Obs_V7_v3.root");
+  // f[1]=new TFile("Excl_GGM_M1M3_PhoLep_LimitPlots_Obs_V7_v3.root");
+  // f[2]=new TFile("Excl_GGM_M1M3_PhoLepPhoJet_LimitPlots_Obs_V7_v3.root");
 
   // f[0]=new TFile("Excl_T5ttttZg_LimitPlots_Obs_V7_v7.root"); 
-  //  f[2]=new TFile("EMHT_Limits_Knut/T5bbbbZg_v20/saved_graphs1d_limit.root");
+  f[1]=new TFile("EMHT_Limits_Knut/T5bbbbZg_v20/saved_graphs1d_limit.root");
   //  f[1]=new TFile("Excl_T5bbbbZg_LimitPlots_Obs_V7_v9.root");
   //  f[1]=new TFile("Excl_T6ttZg_LimitPlots_Obs_V7_v8.root");
   // f[0]=new TFile("Excl_T5bbbbZg_LimitPlots_SbinV7.root");
@@ -84,7 +84,7 @@ void overlayExcl(){
     gr[i]->SetLineColor(col[i]);
     gr[i]->Draw("same");
     TString fName=f[i]->GetName();
-    if(fName.Contains("EMHT")) fName = "HT#gamma";
+    if(fName.Contains("EMHT")) fName = "SUS-16-047, H_{T}^{#gamma}";
     if(fName.Contains("SbinV1")) fName = "(N_{2-4}, N_{5-6}, N_{#geq7}) x (N^{#geq0})";//"B1:N^{#geq0}_{2-4}, N^{#geq0}_{5-6}, N^{#geq0}_{#geq7},";
     if(fName.Contains("SbinV2")) fName = "(N_{2-4}, N_{#geq5}) x (N^{0}, N^{1}, N^{#geq2})";//"B2:N^{0}_{2-4}, N^{0}_{#geq5}, N^{1}_{2-4}, N^{1}_{#geq5}, N^{#geq2}_{2-4}, N^{#geq2}_{#geq5}";
     if(fName.Contains("SbinV3")) fName = "(N_{2-4}, N_{5-6}, N_{#geq7}) x (N^{0}, N^{1}, N^{#geq2})";
@@ -92,7 +92,7 @@ void overlayExcl(){
     if(fName.Contains("SbinV5")) fName = "Merged MET";
     if(fName.Contains("SbinV6")) fName = "(N_{2-4}, N_{5-6}) x (N^{0}, N^{1}) + N_{#geq7} ";
     if(fName.Contains("v9")) fName = "Earlier";
-    if(fName.Contains("v10")) fName = "Current";
+    if(fName.Contains("v11")) fName = "#gamma + (b) jets, SUS-18-002";
     //    if(fName.Contains("V7_v2")) fName = "Asymptotic";//"Photon+(b)Jets";
     if(fName.Contains("HybridNew")) fName = "HybridNew";
     if(fName.Contains("GGM_M1M3")){

@@ -21,13 +21,17 @@
 TLatex textOnTop,intLumiE;
 double intLumi=35.9;
 const int nfiles=3,nBGs=5,nHists=8,nSig=nHists-nBGs-1;
+bool savePlots=1;
 TFile *f[nfiles];
 TFile *fout;
 TH1D *h_hist[nHists];
 //int col[11]={kPink-2,kTeal+9,kGreen,kOrange,kCyan,kYellow,kBlue,kMagenta+2,kPink+1,kMagenta,kBlack};  //Specify Colors   
 int col[11]={kOrange,kGray,kRed,kTeal+9,kCyan,kYellow,kBlue,kMagenta+2,kPink+1,kMagenta,kBlack};
-TLegend *legend=new TLegend(0.6, 0.88,  0.86, 0.65);
+TLegend *legend1=new TLegend(0.2, 0.87,  0.86, 0.74);
+TLegend *legend2=new TLegend(0.18, 0.71,  0.86, 0.52);
 TString name;
+double yMin=8,yMax=2000;
+int nDivXaxis=10;
 TString getXaxisName(TString);
 TString getLegName(TString);
 double getCombBinContent(TH1D*,vector<int>);
@@ -36,14 +40,27 @@ void myPrint(TH1D*);
 void getMETincl();
 void getMET0b();
 void getMET1b();
+void getMET0bLJ();
 void getNJ();
+void getNJ0b();
+void getNJ1b();
 void getbtag();
 void drawPlots(TH1D* h[],TString);
 void combineBins(){
   gStyle->SetOptStat(0);
   f[0] = new TFile("SBinHists.root");
-  f[1] = new TFile("FastSim_T5bbbbZG_1600_150.root");
-  f[2] = new TFile("FastSim_T5bbbbZG_1600_1550.root");
+  // f[1] = new TFile("FastSim_T5bbbbZg_1800_150.root");
+  // f[2] = new TFile("FastSim_T5bbbbZg_1800_1750.root");
+  // f[1] = new TFile("FastSim_T5qqqqHg_1800_150.root");
+  // f[2] = new TFile("FastSim_T5qqqqHg_1800_1750.root");
+  // f[1] = new TFile("FastSim_T5ttttZg_1800_150.root");
+  // f[2] = new TFile("FastSim_T5ttttZg_1800_1550.root");
+  f[1] = new TFile("FastSim_T6ttZg_1000_100.root");
+  f[2] = new TFile("FastSim_T6ttZg_1000_900.root");
+
+  // f[1] = new TFile("FastSim_T5qqqqHg_1700_150.root");
+  // f[2] = new TFile("FastSim_T5qqqqHg_1700_1650.root");
+
   fout = new TFile("binsCombined.root","recreate");
   vector<string> name1;
   name1.push_back("AllSBins_v7");
@@ -72,26 +89,155 @@ void combineBins(){
       // hs_BG->SetMinimum(0.5);
       // hs_BG->SetMaximum(100000);
       // hs_BG->SetTitle(";Bin Number;Events");
-      legend->AddEntry(h_hist[i],getLegName(histName[i]),"f");
+      legend1->AddEntry(h_hist[i],getLegName(histName[i]),"f");
     }
     else{
-      h_hist[i]->SetLineWidth(2);
+      h_hist[i]->SetLineWidth(3);
       if(i==nBGs){
 	h_hist[i]->SetMarkerStyle(20);
 	//	h_hist[i]->Draw("X0E1");
-	legend->AddEntry(h_hist[i],getLegName(histName[i]),"ep");
+	legend1->AddEntry(h_hist[i],getLegName(histName[i]),"ep");
       }
       else{
-	if(i==nBGs+1) legend->AddEntry(h_hist[i],getLegName(f[1]->GetName()),"lp");
-	if(i==nBGs+2) legend->AddEntry(h_hist[i],getLegName(f[2]->GetName()),"lp");
+	if(i==nBGs+1) legend2->AddEntry(h_hist[i],getLegName(f[1]->GetName()),"lp");
+	if(i==nBGs+2) legend2->AddEntry(h_hist[i],getLegName(f[2]->GetName()),"lp");
       }
     }
   }
-  getMETincl();
-  getMET0b();
-  getMET1b();
-  getNJ();
-  getbtag();
+  //  getMETincl();
+  //  getMET0b();
+  //getMET1b();
+  //  getMET0bLJ();
+  //  getNJ();
+  //  getNJ0b();
+  getNJ1b();
+  //  getbtag();
+}
+
+void drawPlots(TH1D* h1[],TString varName){
+  TCanvas *cA = new TCanvas("c_"+varName,"c_"+varName,1100,900);
+  TPad *p_top=new TPad("top","top",0,0.4,1,1);
+  TPad *p_bot=new TPad("bot","bot",0,0.0,1,0.4);
+  p_top->SetBottomMargin(0);
+  p_top->SetLeftMargin(0.15);
+  p_top->Draw();p_top->SetGridx(0);p_top->SetGridy(0);p_top->SetLogy();
+  p_bot->SetTopMargin(0);
+  p_bot->SetLeftMargin(0.15);
+  p_bot->SetBottomMargin(0.3);
+  p_bot->Draw();p_bot->SetGridx(0);p_bot->SetGridy();
+  p_top->cd();
+  //  cout<<varName<<endl;
+  THStack *hs = new THStack(varName,varName);
+  TH1D *h1Tot;
+  for(int i=0;i<nHists;i++){
+    if(i<nBGs){
+      h1[i]->SetFillColor(h_hist[i]->GetFillColor());
+      hs->Add(h1[i]);
+      if(i==0) h1Tot = (TH1D*)h1[i]->Clone("sum_"+varName);
+      else h1Tot->Add(h1[i]);
+    }
+    h1[i]->SetLineWidth(h_hist[i]->GetLineWidth());
+    h1[i]->SetLineColor(h_hist[i]->GetLineColor());
+    //    cout<<"*************** "<<h_hist[i]->GetName()<<" *****************"<<endl;
+    //    myPrint(h1[i]);
+  }
+  hs->SetMinimum(yMin);
+  hs->SetMaximum(yMax);
+  
+  hs->Draw("hist");
+  hs->SetTitle(";MET;Events");
+  hs->GetYaxis()->SetTitleOffset(0.65);
+  hs->GetYaxis()->SetTitleSize(0.075);
+  hs->GetYaxis()->SetLabelSize(0.075);
+  hs->GetXaxis()->SetNdivisions(nDivXaxis);
+  
+  for(int i=nBGs;i<nHists;i++){
+    //    if(histName[i].Contains("Obs")){
+    if(i==nBGs){
+      h1[i]->SetMarkerStyle(20);
+      h1[i]->SetLineWidth(2);
+      h1[i]->Draw("E1X0 same");
+    }
+    else{
+      h1[i]->Draw("hist same");
+    }
+    h1[i]->GetXaxis()->SetNdivisions(nDivXaxis);
+  }
+  h1Tot->SetFillStyle(3013);
+  h1Tot->SetFillColor(1);
+  h1Tot->Draw("E2SAME");
+  h1Tot->GetXaxis()->SetNdivisions(nDivXaxis);
+
+  legend1->SetNColumns(3);
+  legend1->SetFillStyle(0);
+  legend1->SetLineWidth(0);
+  legend2->SetFillStyle(0);
+  legend2->SetLineWidth(0);
+  legend2->SetMargin(0.1);
+  legend2->SetEntrySeparation(0.2);
+  legend1->Draw();
+  legend2->Draw();
+  gPad->RedrawAxis();
+  //------------------ratio plot-----------------------
+  TH1D *h_ratio = (TH1D*)h1[nBGs]->Clone("DataOverBG_"+varName);
+  h_ratio->Divide(h1Tot);
+
+  h_ratio->SetLineColor(kBlack);
+  h_ratio->SetMarkerColor(kBlack);
+  h_ratio->SetTitle(0);
+  h_ratio->GetXaxis()->SetTitle(getXaxisName(varName));
+  h_ratio->GetXaxis()->SetTitleOffset(0.95);
+  h_ratio->GetXaxis()->SetTitleSize(0.11);
+  h_ratio->GetXaxis()->SetLabelSize(0.11);
+  h_ratio->GetXaxis()->SetNdivisions(nDivXaxis);
+
+  //h_ratio->GetYaxis()->SetTitle("#frac{Data}{SM}");
+  h_ratio->GetYaxis()->SetTitle("Obs. / Pred.");
+  if(varName=="NJ1b")  h_ratio->GetYaxis()->SetTitleOffset(0.4);
+  else   h_ratio->GetYaxis()->SetTitleOffset(0.5);
+  h_ratio->GetYaxis()->SetTitleSize(0.11);
+  h_ratio->GetYaxis()->SetLabelSize(0.11);
+  h_ratio->GetYaxis()->SetNdivisions(505);
+  h_ratio->SetMarkerStyle(20);
+  h_ratio->SetMaximum(1.99);
+  h_ratio->SetMinimum(0.01);
+
+  TLine *line1 = new TLine(2.0,1.,10,1.);
+  line1->SetLineStyle(3);  
+  if(varName=="NJ1b"){
+     h_ratio->SetMaximum(6.4);
+     h_ratio->SetMinimum(0.0);
+     cA->cd();    p_bot->SetGridy(0);
+     h_ratio->SetNdivisions(10);
+     // h_ratio->GetXaxis()->SetBinLabel(1,"2 - 4");
+     // h_ratio->GetXaxis()->SetBinLabel(2,"5 - 6");
+     // h_ratio->GetXaxis()->SetBinLabel(3,"#geq 7");
+  }
+  cA->cd();    p_bot->cd();
+  p_bot->SetTickx();p_bot->SetTicky();
+  h_ratio->Draw("X0E1");
+  line1->Draw();
+
+  p_top->cd();
+  char name2[100];
+  textOnTop.SetTextSize(0.06);
+  intLumiE.SetTextSize(0.06);
+  textOnTop.DrawLatexNDC(0.15,0.91,"CMS #it{#bf{Supplementary}}");
+  sprintf(name2,"#bf{%0.1f fb^{-1} (13TeV)}",intLumi);
+  intLumiE.DrawLatexNDC(0.68,0.91,name2);
+  TLatex Tl;  Tl.SetTextSize(0.05);
+  Tl.DrawLatexNDC(0.45,0.91,"#bf{arXiv:xxxx.xxxxx}");
+
+  if(savePlots){
+    TString saveName = "supp_predData_"+varName;
+    TString modelName = f[1]->GetName();
+    if(modelName.Contains("T5bbbb")) modelName = "T5bbbbZG";
+    else if(modelName.Contains("T5qqqq")) modelName = "T5qqqqHG";
+    else if(modelName.Contains("T5tttt")) modelName = "T5ttttZG";
+    else if(modelName.Contains("T6tt")) modelName = "T6ttZG";
+    saveName = saveName+"_"+modelName+".pdf";
+    cA->SaveAs(saveName);
+  }
 }
 
 //////////////////////////////////////////////////////
@@ -101,6 +247,7 @@ void getMETincl(){
   TH1D *h_met[nHists];
   vector<double> metBins={200,270,350,450,600};
   vector<int> bins;
+  yMin = 8; yMax = 8000; nDivXaxis = 505;
   for(int i=0;i<nHists;i++){
     name = "met_"+to_string(i);
     h_met[i] = new TH1D(name,name,metBins.size()-1,&(metBins[0]));
@@ -134,6 +281,7 @@ void getMET0b(){
   TH1D *h_met[nHists];
   vector<double> metBins={200,270,350,450,600};
   vector<int> bins;
+  yMin = 0.5; yMax = 20000; nDivXaxis = 505;
   for(int i=0;i<nHists;i++){
     name = "met0b_"+to_string(i);
     h_met[i] = new TH1D(name,name,metBins.size()-1,&(metBins[0]));
@@ -168,7 +316,8 @@ void getMET0b(){
 void getMET1b(){
   TH1D *h_met[nHists];
   vector<double> metBins={200,270,350,450,600};
-  vector<int> bins;
+  vector<int> bins; nDivXaxis = 505;
+  yMin = 2; yMax = 2000;
   for(int i=0;i<nHists;i++){
     name = "met1b_"+to_string(i);
     h_met[i] = new TH1D(name,name,metBins.size()-1,&(metBins[0]));
@@ -194,7 +343,46 @@ void getMET1b(){
   }
   drawPlots(h_met,"MET_1b");
 }
+//////////////////////////////////////////////////////
+///////////////////// MET 0b 2-4J //////////////////
+//////////////////////////////////////////////////////
+void getMET0bLJ(){
+  TH1D *h_met[nHists];
+  vector<double> metBins={200,270,350,450,750,1200};
+  vector<int> bins;
+  yMin = 0.5; yMax = 20000; nDivXaxis = 505;
+  for(int i=0;i<nHists;i++){
+    name = "met0bLJ_"+to_string(i);
+    h_met[i] = new TH1D(name,name,metBins.size()-1,&(metBins[0]));
 
+    bins.resize(0);
+    bins={2};
+    h_met[i]->SetBinContent(1,getCombBinContent(h_hist[i],bins));
+    h_met[i]->SetBinError(1,getCombBinError(h_hist[i],bins));
+
+    bins.resize(0);
+    bins={3};
+    h_met[i]->SetBinContent(2,getCombBinContent(h_hist[i],bins));
+    h_met[i]->SetBinError(2,getCombBinError(h_hist[i],bins));
+
+    bins.resize(0);
+    bins={4};
+    h_met[i]->SetBinContent(3,getCombBinContent(h_hist[i],bins));
+    h_met[i]->SetBinError(3,getCombBinError(h_hist[i],bins));
+
+    bins.resize(0);
+    bins={5};
+    h_met[i]->SetBinContent(4,getCombBinContent(h_hist[i],bins));
+    h_met[i]->SetBinError(4,getCombBinError(h_hist[i],bins));
+
+    bins.resize(0);
+    bins={6};
+    h_met[i]->SetBinContent(5,getCombBinContent(h_hist[i],bins));
+    h_met[i]->SetBinError(5,getCombBinError(h_hist[i],bins));
+
+  }
+  drawPlots(h_met,"MET_0bLJ");
+}
 //////////////////////////////////////////////////////
 ///////////////////// NJets  //////////////////
 //////////////////////////////////////////////////////
@@ -202,132 +390,123 @@ void getNJ(){
   TH1D *h_nj[nHists];
   vector<double> njBins={1.5,4.5,6.5,10.5};
   //  vector<double> njBins={2,5,7,10};
-  vector<int> bins;
+  vector<int> bins; nDivXaxis = 10;
+  yMin = 1; yMax = 20000;
   for(int i=0;i<nHists;i++){
     name = "nj_"+to_string(i);
     h_nj[i] = new TH1D(name,name,njBins.size()-1,&(njBins[0]));
 
-    bins={2,3,4,5,6,18,19,20,21};
+    //    bins={2,3,4,5,6,18,19,20,21};
+    bins={4,5,6,20,21};
     h_nj[i]->SetBinContent(1,getCombBinContent(h_hist[i],bins));
     h_nj[i]->SetBinError(1,getCombBinError(h_hist[i],bins));
 
     bins.resize(0);
-    bins={8,9,10,11,23,24,25,26};
+    //    bins={8,9,10,11,23,24,25,26};
+    bins={10,11,25,26};
     h_nj[i]->SetBinContent(2,getCombBinContent(h_hist[i],bins));
     h_nj[i]->SetBinError(2,getCombBinError(h_hist[i],bins));
 
     bins.resize(0);
-    bins={13,14,15,16,28,29,30,31};
+    //    bins={13,14,15,16,28,29,30,31};
+    bins={15,16,30,31};
     h_nj[i]->SetBinContent(3,getCombBinContent(h_hist[i],bins));
     h_nj[i]->SetBinError(3,getCombBinError(h_hist[i],bins));
   }
   drawPlots(h_nj,"NJ");
 }
 //////////////////////////////////////////////////////
+///////////////////// NJets 0b  //////////////////
+//////////////////////////////////////////////////////
+void getNJ0b(){
+  TH1D *h_nj[nHists];
+  vector<double> njBins={1.5,4.5,6.5,10.5};
+  //  vector<double> njBins={2,5,7,10};
+  vector<int> bins; nDivXaxis = 10;
+  yMin = 1; yMax = 20000;
+  for(int i=0;i<nHists;i++){
+    name = "nj0b_"+to_string(i);
+    h_nj[i] = new TH1D(name,name,njBins.size()-1,&(njBins[0]));
+
+    //bins={4,5,6};
+    bins={5,6};
+    h_nj[i]->SetBinContent(1,getCombBinContent(h_hist[i],bins));
+    h_nj[i]->SetBinError(1,getCombBinError(h_hist[i],bins));
+
+    bins.resize(0);
+    //    bins={10,11};
+    bins={11};
+    h_nj[i]->SetBinContent(2,getCombBinContent(h_hist[i],bins));
+    h_nj[i]->SetBinError(2,getCombBinError(h_hist[i],bins));
+
+    bins.resize(0);
+    //    bins={15,16};
+    bins={16};
+    h_nj[i]->SetBinContent(3,getCombBinContent(h_hist[i],bins));
+    h_nj[i]->SetBinError(3,getCombBinError(h_hist[i],bins));
+  }
+  drawPlots(h_nj,"NJ0b");
+}
+//////////////////////////////////////////////////////
+///////////////////// NJets 1b  //////////////////
+//////////////////////////////////////////////////////
+void getNJ1b(){
+  TH1D *h_nj[nHists];
+  //  vector<double> njBins={1.5,4.5,6.5,10.5};
+  vector<double> njBins={2,5,7,10};
+  vector<int> bins; nDivXaxis = 10;
+  yMin = 1; yMax = 2000;
+  for(int i=0;i<nHists;i++){
+    name = "nj1b_"+to_string(i);
+    h_nj[i] = new TH1D(name,name,njBins.size()-1,&(njBins[0]));
+
+    //bins={20,21};
+    bins={21};
+    h_nj[i]->SetBinContent(1,getCombBinContent(h_hist[i],bins));
+    h_nj[i]->SetBinError(1,getCombBinError(h_hist[i],bins));
+
+    bins.resize(0);
+    //bins={25,26};
+    bins={26};
+    h_nj[i]->SetBinContent(2,getCombBinContent(h_hist[i],bins));
+    h_nj[i]->SetBinError(2,getCombBinError(h_hist[i],bins));
+
+    bins.resize(0);
+    //bins={30,31};
+    bins={31};
+    h_nj[i]->SetBinContent(3,getCombBinContent(h_hist[i],bins));
+    h_nj[i]->SetBinError(3,getCombBinError(h_hist[i],bins));
+  }
+  drawPlots(h_nj,"NJ1b");
+}
+
+//////////////////////////////////////////////////////
 ///////////////////// btags  //////////////////
 //////////////////////////////////////////////////////
 void getbtag(){
   TH1D *h_bTag[nHists];
   vector<double> bTagBins={-0.5,0.5,1.5};
-  vector<int> bins;
+  vector<int> bins; nDivXaxis = 3;
+  yMin = 5; yMax = 2000;
   for(int i=0;i<nHists;i++){
     name = "bTag_"+to_string(i);
     h_bTag[i] = new TH1D(name,name,bTagBins.size()-1,&(bTagBins[0]));
 
-    bins={2,3,4,5,6,8,9,10,11,13,14,15,16};
+    //    bins={2,3,4,5,6,8,9,10,11,13,14,15,16};
+    bins={4,5,6,10,11,15,16};
     h_bTag[i]->SetBinContent(1,getCombBinContent(h_hist[i],bins));
     h_bTag[i]->SetBinError(1,getCombBinError(h_hist[i],bins));
 
     bins.resize(0);
-    bins={18,19,20,21,23,24,25,26,28,29,30,31};
+    //    bins={18,19,20,21,23,24,25,26,28,29,30,31};
+    bins={20,21,25,26,30,31};
     h_bTag[i]->SetBinContent(2,getCombBinContent(h_hist[i],bins));
     h_bTag[i]->SetBinError(2,getCombBinError(h_hist[i],bins));
   }
   drawPlots(h_bTag,"bTags");
 }
 
-void drawPlots(TH1D* h1[],TString varName){
-  TCanvas *cA = new TCanvas("c_"+varName,"c_"+varName,1100,900);
-  TPad *p_top=new TPad("top","top",0,0.4,1,1);
-  TPad *p_bot=new TPad("bot","bot",0,0.0,1,0.4);
-  p_top->SetBottomMargin(0);
-  p_top->SetLeftMargin(0.15);
-  p_top->Draw();p_top->SetGridx(0);p_top->SetGridy(0);p_top->SetLogy();
-  p_bot->SetTopMargin(0);
-  p_bot->SetLeftMargin(0.15);
-  p_bot->SetBottomMargin(0.3);
-  p_bot->Draw();p_bot->SetGridx();p_bot->SetGridy();
-  p_top->cd();
 
-  THStack *hs = new THStack(varName,varName);
-  TH1D *h1Tot;
-  for(int i=0;i<nHists;i++){
-    if(i<nBGs){
-      h1[i]->SetFillColor(h_hist[i]->GetFillColor());
-      hs->Add(h1[i]);
-      if(i==0) h1Tot = (TH1D*)h1[i]->Clone("sum_"+varName);
-      else h1Tot->Add(h1[i]);
-    }
-    h1[i]->SetLineWidth(h_hist[i]->GetLineWidth());
-    h1[i]->SetLineColor(h_hist[i]->GetLineColor());
-    //    cout<<"*************** "<<h_hist[i]->GetName()<<" *****************"<<endl;
-    //    myPrint(h1[i]);
-  }
-  hs->SetMinimum(8);
-  hs->SetMaximum(1000);
-  hs->Draw("hist");
-  hs->SetTitle(";MET;Events");
-  hs->GetYaxis()->SetTitleOffset(0.65);
-  hs->GetYaxis()->SetTitleSize(0.075);
-  hs->GetYaxis()->SetLabelSize(0.075);
-  for(int i=nBGs;i<nHists;i++){
-    //    if(histName[i].Contains("Obs")){
-    if(i==nBGs){
-      h1[i]->SetMarkerStyle(20);
-      h1[i]->SetLineWidth(2);
-      h1[i]->Draw("E1X0 same");
-    }
-    else{
-      h1[i]->Draw("hist same");
-    }
-  }
-  h1Tot->SetFillStyle(3013);
-  h1Tot->SetFillColor(1);
-  h1Tot->Draw("E2SAME");
-  legend->Draw();
-  gPad->RedrawAxis();
-  //------------------ratio plot-----------------------
-  TH1D *h_ratio = (TH1D*)h1[nBGs]->Clone("DataOverBG_"+varName);
-  h_ratio->Divide(h1Tot);
-
-  h_ratio->SetLineColor(kBlack);
-  h_ratio->SetMarkerColor(kBlack);
-  h_ratio->SetTitle(0);
-  h_ratio->GetXaxis()->SetTitle(getXaxisName(varName));
-  h_ratio->GetXaxis()->SetTitleOffset(0.95);
-  h_ratio->GetXaxis()->SetTitleSize(0.11);
-  h_ratio->GetXaxis()->SetLabelSize(0.11);
-
-  //h_ratio->GetYaxis()->SetTitle("#frac{Data}{SM}");
-  h_ratio->GetYaxis()->SetTitle("Obs. / Pred.");
-  h_ratio->GetYaxis()->SetTitleOffset(0.5);
-  h_ratio->GetYaxis()->SetTitleSize(0.11);
-  h_ratio->GetYaxis()->SetLabelSize(0.11);
-  h_ratio->GetYaxis()->SetNdivisions(505);
-  h_ratio->SetMarkerStyle(20);
-  h_ratio->SetMaximum(1.99);
-  h_ratio->SetMinimum(0.01);
-  cA->cd();    p_bot->cd();
-  p_bot->SetTickx();p_bot->SetTicky();
-  h_ratio->Draw("X0E1");
-  p_top->cd();
-  char name2[100];
-  textOnTop.SetTextSize(0.06);
-  intLumiE.SetTextSize(0.06);
-  textOnTop.DrawLatexNDC(0.15,0.91,"CMS #it{#bf{Preliminary, Additional}}");
-  sprintf(name2,"#bf{%0.1f fb^{-1} (13TeV)}",intLumi);
-  intLumiE.DrawLatexNDC(0.68,0.91,name2);
-}
 double getCombBinContent(TH1D* h1,vector<int> bin){
   double sum=0.0;
    for(int i=0;i<bin.size();i++){
@@ -348,7 +527,7 @@ double getCombBinError(TH1D* h1,vector<int> bin){
 
 
 TString getLegName(TString fname){
-  if(fname.Contains("ZGPred")){return "Z(#nu#bar{#nu})#gamma";}
+  if(fname.Contains("ZGPred")){return "Z(#nu#bar{#nu}) + #gamma";}
   else if(fname.Contains("LEle")){return "Lost e";}
   else if(fname.Contains("LMu")){return "Lost #mu + #tau_{had}";}
   else if(fname.Contains("FR")){return "Misidentified #gamma";}
@@ -358,15 +537,29 @@ TString getLegName(TString fname){
   else if(fname.Contains("TChiNG_0_800")){return "TChiNG_800";}
   else if(fname.Contains("TChiWG_0_800")){return "TChiWG_800";}
   else if(fname.Contains("v7_Obs") ){return "Data";}
+
+  else if(fname.Contains("T5bbbbZg_1800_150")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
+  else if(fname.Contains("T5bbbbZg_1800_1750")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 1750 GeV)";}
+  else if(fname.Contains("T5qqqqHg_1800_150")){return "#tilde{g} #rightarrow q #bar{q} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/H #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
+  else if(fname.Contains("T5qqqqHg_1800_1750")){return "#tilde{g} #rightarrow q #bar{q} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/H #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 1750 GeV)";}
+
+  else if(fname.Contains("T5qqqqHg_1700_150")){return "#tilde{g} #rightarrow q #bar{q} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/H #tilde{G} (m_{#tilde{g}} = 1700 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
+  else if(fname.Contains("T5qqqqHg_1700_1650")){return "#tilde{g} #rightarrow q #bar{q} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/H #tilde{G} (m_{#tilde{g}} = 1700 GeV, m_{#tilde{#chi}_{1}^{0}} = 1650 GeV)";}
+
+  else if(fname.Contains("T5ttttZg_1800_150")){return "#tilde{g} #rightarrow t #bar{t} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
+  else if(fname.Contains("T5ttttZg_1800_1550")){return "#tilde{g} #rightarrow t #bar{t} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 1550 GeV)";}
+
+  else if(fname.Contains("T6ttZg_1000_100")){return "#tilde{t} #rightarrow t #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1000 GeV, m_{#tilde{#chi}_{1}^{0}} = 100 GeV)";}
+  else if(fname.Contains("T6ttZg_1000_900")){return "#tilde{t} #rightarrow t #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1000 GeV, m_{#tilde{#chi}_{1}^{0}} = 900 GeV)";}
   else return fname;
 }
 TString getXaxisName(TString axname){
-  if(axname.Contains("nHadJets")) return "Jets";
-  else if(axname.Contains("ST")) return "ST(GeV)";
-  else if(axname.Contains("BTags")) return "b-Tags";
-  else if(axname.Contains("ElePt")) return "e pT(GeV)";
-  else if(axname.Contains("PhotonPt")) return "#gamma pT(GeV)";
-  else if(axname.Contains("mT")) return "mT_{#gamma,MET}(GeV)";
+  if(axname.Contains("nHadJets") || axname.Contains("NJ")) return "N_{ Jets}";
+  else if(axname.Contains("ST")) return "ST (GeV)";
+  else if(axname.Contains("BTags") || axname.Contains("bTags")) return "N_{ b tags}";
+  else if(axname.Contains("ElePt")) return "e pT (GeV)";
+  else if(axname.Contains("PhotonPt")) return "#gamma pT (GeV)";
+  else if(axname.Contains("mT")) return "mT_{#gamma,MET} (GeV)";
   else if(axname.Contains("AllSBin")) return "Bin Number";
   else if(axname.Contains("dPhi_METjet1") || axname.Contains("dphi1_METjet1")) return "#Delta#Phi_{1}";
   else if(axname.Contains("dPhi_METjet2") || axname.Contains("dphi2_METjet2")) return "#Delta#Phi_{2}";

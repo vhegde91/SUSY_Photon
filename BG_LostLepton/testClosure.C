@@ -23,7 +23,7 @@ TFile *f[nfiles];
 //int col[10]={kOrange,kBlue,kTeal+9,kGray+1,kCyan,kOrange-9,kYellow+2,kRed,kMagenta+2,kMagenta};  //Specify Colors
 int col[10]={kOrange,kBlue,kTeal+9,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
 TString name;
-bool saveCanvas=0;
+bool saveCanvas=1;
 void setLastBinAsOverFlow(TH1D*);
 TString getXaxisName(TString);
 TLatex textOnTop,intLumiE;
@@ -38,6 +38,26 @@ void testClosure(){
   f[0] = new TFile("CS_TTWZ_LostMuHadTau_clsr_METnJbJ_v2.root");
   f[1] = new TFile("CS_TTWZ_LostEle_clsr_METNJbJ_v2.root");
 
+  //---------------- set styles if not running on my desktop ---------------
+  //---------------- otherwise you do not need this part -------------------
+  gStyle->SetPadGridX(1);
+  gStyle->SetPadGridY(1);
+  gStyle->SetPadTickX(1);
+  gStyle->SetPadTickY(1);
+  gStyle->SetPadBottomMargin(0.12);
+  gStyle->SetPadLeftMargin(0.12);
+  gStyle->SetPadRightMargin(0.12);
+  gStyle->SetHistLineWidth(2);
+  gStyle->SetTitleSize(0.05,"X");
+  gStyle->SetLabelSize(0.05,"X");
+  gStyle->SetTitleSize(0.05,"Y");
+  gStyle->SetLabelSize(0.05,"Y");
+  gStyle->SetTitleSize(0.05,"Z");
+  gStyle->SetLabelSize(0.05,"Z");
+  gStyle->SetLineScalePS(1.5);
+  gROOT->ForceStyle();
+  //---------------- end of settings ---------------------------- 
+  
   // TFile *fTF = new TFile("SBinHists.root");
   //  TH1D *h_tfe = (TH1D*)fTF->Get("LEleTFs_Final");
   // TH1D *h_tfm = (TH1D*)fTF->Get("LMuTFs_Final");
@@ -231,7 +251,7 @@ void testClosure(){
 	h_pullHist->Fill( (1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));
 	//h_pullHist->Fill( p,(1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));
       }
-      h_pullHist->Write();
+      //      h_pullHist->Write();
       //      p_bot[i]->SetGridx(0);
     }
     else if(name.Contains("SBins_v7")){
@@ -242,8 +262,8 @@ void testClosure(){
     char name2[100];
     textOnTop.SetTextSize(0.07);
     intLumiE.SetTextSize(0.07);
-    //    textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation}}");
-    textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Preliminary}}");
+    textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation}}");
+    //    textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Preliminary}}");
     sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
     intLumiE.DrawLatexNDC(0.72,0.91,name2);
  
@@ -275,7 +295,7 @@ void testClosure(){
     // Tl2.DrawLatex(22.1,1,"#bf{Sideband}");
     // Tl2.DrawLatex(27.1,1,"#bf{Sideband}");
 
-    if(saveCanvas){name="c_"+name1[i]+name2[i]+".png";c_cA[i]->SaveAs(name);}
+    if(saveCanvas){c_cA[i]->SaveAs("LostLeptClosure.pdf");}
   }
   gStyle->SetTextSize(2);
   //fout->cd();

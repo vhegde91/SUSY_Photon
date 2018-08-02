@@ -30,8 +30,26 @@ void setLastBinAsOverFlow(TH1D*);
 
 void doubleR_dataMC_merged(){
   TH1::SetDefaultSumw2(1);
-
-  bool saveCanvas=0;
+  //---------------- set styles if not running on my desktop ---------------
+  //---------------- otherwise you do not need this part -------------------
+  gStyle->SetPadGridX(1);
+  gStyle->SetPadGridY(1);
+  gStyle->SetPadTickX(1);
+  gStyle->SetPadTickY(1);
+  gStyle->SetPadBottomMargin(0.12);
+  gStyle->SetPadLeftMargin(0.12);
+  gStyle->SetPadRightMargin(0.12);
+  gStyle->SetHistLineWidth(2);
+  gStyle->SetTitleSize(0.05,"X");
+  gStyle->SetLabelSize(0.05,"X");
+  gStyle->SetTitleSize(0.05,"Y");
+  gStyle->SetLabelSize(0.05,"Y");
+  gStyle->SetTitleSize(0.05,"Z");
+  gStyle->SetLabelSize(0.05,"Z");
+  gStyle->SetLineScalePS(1.5);
+  gROOT->ForceStyle();
+  //---------------- end of settings ----------------------------
+  bool saveCanvas=1;
   vector<TString> legNames, name2;
   vector<int> rebin;
   double nunu_Integral=0,ll_Integral=0;
@@ -194,12 +212,12 @@ void doubleR_dataMC_merged(){
       char name3[100];
       textOnTop.SetTextSize(0.07);
       intLumiE.SetTextSize(0.07);
-      textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
-      //textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
+      //textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
+      textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
       sprintf(name3,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
       intLumiE.DrawLatexNDC(0.71,0.91,name3);
 
-      if(saveCanvas){name="c_"+name2[i]+".png";c_cA[i]->SaveAs(name);}
+      if(saveCanvas){c_cA[i]->SaveAs("DoubleRatio_VR_DataMC_merged.pdf");}
     }
   }
 }
@@ -239,46 +257,3 @@ TString getXaxisName(TString axname){
   else return axname;
 
 }
-
-/*
-  TH1D *h_den=(TH1D*)fd->FindObjectAny(nameD);
-  h_num->Rebin(rebin);
-  h_den->Rebin(rebin);
-
-  h_num->SetLineColor(col[0]);
-  h_num->SetLineWidth(2);
-  h_den->SetLineColor(col[1]);
-  h_den->SetLineWidth(2);
-  //  h_den->Scale(h_num->Integral()/h_den->Integral());
-  TH1D *h_numC=(TH1D*)h_num->Clone("hnew");
-  h_numC->Divide(h_den);
-
-  c_cA->cd();    p_top->cd();
-  //h_num->Scale(0.5*h_num->Integral());
-  // h_num->Scale(1.0/h_num->Integral());
-  // h_den->Scale(1.0/h_den->Integral());
-  
-  // h_num->GetXaxis()->SetRangeUser(100,2000);
-
-  h_num->Draw();  
-  h_den->Draw("sames");
-  gPad->Update();
-
-  TPaveStats *stN=(TPaveStats*)h_num->FindObject("stats");
-  TPaveStats *stD=(TPaveStats*)h_den->FindObject("stats");
-  stN->SetTextColor(h_num->GetLineColor());
-  stD->SetTextColor(h_den->GetLineColor());
-
-  TLegend *leg=new TLegend(0.5,0.9,0.7,0.7);
-  leg->AddEntry(h_num,legNames[0]);
-  leg->AddEntry(h_den,legNames[1]);
-  leg->Draw();  
-
-  c_cA->cd();    p_bot->cd();
-  h_numC->GetYaxis()->SetLabelSize(0.08);
-  h_numC->GetXaxis()->SetLabelSize(0.08);
-  //  h_numC->GetXaxis()->SetRangeUser(100,2000);
-  h_numC->Draw();
-  
-}
-*/

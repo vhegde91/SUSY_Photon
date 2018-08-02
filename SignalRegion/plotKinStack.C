@@ -24,6 +24,7 @@ TString name3;
 TLatex textOnTop,intLumiE;
 const int nfiles=8,nBG=6;    //Specify no. of files
 TFile *f[nfiles];
+bool savePlots=1;
 //int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kMagenta+2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
 ////int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kPink-2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
 //int col[11]={kPink-2,kTeal+9,kGreen,kYellow,kOrange,kBlue,kCyan,kRed,kBlue+2,kMagenta,kPink+1};  //Specify Colors b's
@@ -35,28 +36,34 @@ void decorate(TH1D*,int,const char*);
 void decorate(THStack*,int,const char*);
 void drawlegend(TH1D*,int,const char*);
 void printInt(TH1D*,int,const char*);
-TLegend *legend1=new TLegend(0.4, 0.75,  0.87, 0.88);
-TLegend *legend2=new TLegend(0.35, 0.62,  0.82, 0.72);
+// TLegend *legend1=new TLegend(0.4, 0.75,  0.87, 0.88);
+// TLegend *legend2=new TLegend(0.38, 0.6,  0.85, 0.72);
 
-//TLegend *legend2=new TLegend(0.7, 0.9,  0.90, 0.65);
-//TLegend *legend2=new TLegend(0.6, 0.90,  0.98, 0.45);
+//TLegend *legend1=new TLegend(0.5660881,0.5702076,0.8491322,0.6996337);
+TLegend *legend1=new TLegend(0.5253672,0.5299145,0.85247,0.6996337);
+//TLegend *legend2=new TLegend(0.2803738,0.7350427,0.8190921,0.8669109);
+TLegend *legend2=new TLegend(0.2,0.7350427,0.8190921,0.8669109);
+
 void setLastBinAsOverFlow(TH1D*);
+TH1D* setMyRange(TH1D*,double,double);
+
 void plotKinStack(){
   double sr_Integral=0,cr_Integral=0;
   TH1::SetDefaultSumw2(1);
   gStyle->SetOptStat(0);
   gStyle->SetTitle(0);
   double yMin=0.1,yMax = 1000;
-  //TString varName = "BestPhotonPt"; TString xLabel = "p_{T}^{#gamma} (GeV)";   int rebin=10; yMin=0.4,yMax = 1000;
-  //  TString varName = "MET"; TString xLabel = "p_{T}^{miss} (GeV)";   int rebin=10; yMin=0.1,yMax = 1000;
-  //TString varName = "nHadJets"; TString xLabel = "Jets";   int rebin=1; yMin=0.1,yMax = 1000;
-  //  TString varName = "nBTags"; TString xLabel = "b-tagged jet";   int rebin=1; yMin=0.1,yMax = 1000;
-  //  TString varName = "ST"; TString xLabel = "ST (GeV)";   int rebin=25; yMin=0.1,yMax = 1000;
-  TString varName = "mindPhi1dPhi2"; TString xLabel = "Min (#Delta#Phi_{1}, #Delta#Phi_{2})";   int rebin=10; yMin=0.1,yMax = 1000;
+  double xMin=0.0,xMax = 2000;
+  //TString varName = "ST"; TString xLabel = "H_{T}^{#gamma} (GeV)";   int rebin=25; yMin=0.5,yMax = 1100; xMin=300.0,xMax = 3000;
+  //TString varName = "MET"; TString xLabel = "p_{T}^{miss} (GeV)";   int rebin=10; yMin=0.1,yMax = 1500; xMin=200.0,xMax = 1400;
+  //TString varName = "BestPhotonPt"; TString xLabel = "p_{T}^{#gamma} (GeV)";   int rebin=10; yMin=0.4,yMax = 1000; xMin=100.0,xMax = 1200;
+  //TString varName = "nHadJets"; TString xLabel = "N_{Jets}";   int rebin=1; yMin=0.1,yMax = 1000; xMin=2.0,xMax = 15;
+  //TString varName = "nBTags"; TString xLabel = "N_{ b jets}";   int rebin=1; yMin=0.1,yMax = 3000; xMin=1.0,xMax = 5;
+  TString varName = "mindPhi1dPhi2"; TString xLabel = "Min (#Delta#phi_{1}, #Delta#phi_{2})";   int rebin=10; yMin=0.3,yMax = 1500; xMin=-100000.0,xMax = 100000;
   //"mindPhi1dPhi2";//"AllSBins_v7_CD";
   //TString varName = "METvarBin";
   //  TString xLabel = "p_{T}^{miss} (GeV)";//min(#Delta#Phi_{1},#Delta#Phi_{2})
-
+  
   f[0] = new TFile("TTGJets.root");
   f[1] = new TFile("TTJetsHT.root");
   f[2] = new TFile("ZGZJ_NuNuG.root");
@@ -64,27 +71,30 @@ void plotKinStack(){
   f[4] = new TFile("WJetsToLNu.root");
   f[5] = new TFile("GJetsQCD.root");
   col.resize(0);
-  col={kYellow,kTeal+9,kOrange,kGray,kCyan,kPink+1,kBlue,kRed,kBlue+2,kMagenta,kCyan};
+  col={kGray,kTeal+9,kOrange,kRed,kCyan-1,kCyan,kBlue,kMagenta+2,kPink+1,kMagenta,kBlack};
+  //  col={kGray,kTeal+9,kOrange,kPink+1,kYellow,kCyan,kBlue,kRed,kBlue,kMagenta,kCyan};//v1
   // f[0] = new TFile("GJetsQCD.root");
   // f[1] = new TFile("TTJetsHT.root");
   // f[2] = new TFile("TTGJets.root");
   // f[3] = new TFile("WGJetsToLNuG.root");
   // f[4] = new TFile("ZGZJ_NuNuG.root");
   // f[5] = new TFile("WJetsToLNu.root");
+  // f[6] = new TFile("FastSim_T5bbbbZG_1800_150.root");
+  // f[7] = new TFile("FastSim_T5bbbbZG_1800_1750.root");
+  
+  // f[6] = new TFile("FastSim_T5qqqqHg_1800_150.root");
+  // f[7] = new TFile("FastSim_T5qqqqHg_1800_1750.root");
+  // f[6] = new TFile("FastSim_T5bbbbZg_1800_150.root");
+  // f[7] = new TFile("FastSim_T5bbbbZg_1800_1750.root");
+  // f[6] = new TFile("FastSim_T5ttttZg_1800_150.root");
+  // f[7] = new TFile("FastSim_T5ttttZg_1800_1550.root");
+  // f[6] = new TFile("FastSim_T6ttZg_1000_100.root");
+  // f[7] = new TFile("FastSim_T6ttZg_1000_900.root");
   
   //  f[7] = new TFile("DCS_LDP_Run2016_Multijet_v2.root");
-  f[6] = new TFile("FastSim_T5bbbbZG_1800_150.root");
   //  f[8] = new TFile("T5qqqqHg_1600_1000_FastSim.root");
-  f[7] = new TFile("FastSim_T5bbbbZG_1800_1750.root");
-  // f[7] = new TFile("T5qqqqHg_1600_150_FastSim.root");
-  // f[8] = new TFile("T5qqqqHg_1600_1550_FastSim.root");
-  // f[7] = new TFile("FastSim_TChiNG_0_800.root");
-  // f[8] = new TFile("FastSim_TChiWG_0_800.root");
-
-  //  f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP150.root");
-  // f[9] = new TFile("T1bbbb_ZG_mGl1600_NLSP1000.root");
-  // f[10] = new TFile("T1bbbb_ZG_mGl1600_NLSP1550.root");
-
+  f[6] = new TFile("T5bbbbZg_1800_150_FastSim.root");
+  f[7] = new TFile("T5bbbbZg_1800_1750_FastSim.root");
 
   gStyle->SetTextSize(2);
   THStack *hs_var=new THStack("var_Stack","MET Stacked");
@@ -108,11 +118,16 @@ void plotKinStack(){
 	cout<<"Integarted lumi for "<<f[i]->GetName()<<" is "<<h_intLumi->GetMean()<<" and for other files it is different"<<endl;
     }
     
-    TH1D *h_MET=(TH1D*)f[i]->FindObjectAny(varName);
+    TH1D *h_MET;
+    if(i<=nBG-1) h_MET=(TH1D*)f[i]->FindObjectAny(varName);
+    if(i>=nBG) h_MET=(TH1D*)f[i]->FindObjectAny(varName+"");
+    //    cout<<h_MET->GetNbinsX()<<" ";
     h_MET->Rebin(rebin);
     //    h_MET->GetYaxis()->SetRangeUser(100.5,20000);
     //    h_MET->SetMinimum(100);
     decorate(h_MET,i,f[i]->GetName());
+    h_MET = setMyRange(h_MET,xMin,xMax);
+    //    h_MET->GetXaxis()->SetRangeUser(xMin,xMax);
     
     if(i<=(nBG-1))  hs_var->Add(h_MET);
 
@@ -123,7 +138,7 @@ void plotKinStack(){
       hs_var->SetMinimum(yMin);
       hs_var->SetMaximum(yMax);
       decorate(hs_var,i,f[i]->GetName()); 
-      //      hs_var->GetYaxis()->SetRangeUser(yMin,yMax);
+      if(xMin > -10000 && xMax < 10000) hs_var->GetXaxis()->SetRangeUser(xMin-0.1,0.1+xMax);
     }
     if(i>=nBG){ 
       c_cA->cd(); 
@@ -141,8 +156,22 @@ void plotKinStack(){
       hs_var->GetXaxis()->SetTitleOffset(1.0);
       hs_var->GetXaxis()->SetTitle(xLabel); hs_var->GetYaxis()->SetTitle("Events");hs_var->SetTitle(0);
       hs_var->GetYaxis()->SetTitleOffset(.90);
+      TString temp=h_MET->GetName(),temp2;
+      if(temp.Contains("nHadJets") || temp.Contains("nBTags")){
+	gPad->SetTickx(0);
+	hs_var->GetXaxis()->SetLabelSize(0.08);
+	for(int i=1;i<=h_MET->GetNbinsX();i++){
+	  temp2 = to_string(i-1);
+	  if(i%2==0 && temp.Contains("nHadJets")) continue;
+	    hs_var->GetXaxis()->SetBinLabel(i,temp2);
+	}
+	//      cout<<hist->GetName()<<endl;
+      }
     }
+    
   }
+
+  legend1->SetFillStyle(0); legend2->SetFillStyle(0);  
   legend1->SetNColumns(2);
   legend1->SetBorderSize(0);
   legend2->SetBorderSize(0);
@@ -157,17 +186,23 @@ void plotKinStack(){
   textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Supplementary}}");
   sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.7,0.91,name2);
-
-  TLine *line1=new TLine( 0.3,yMin,  0.3,yMax);
-  line1->Draw();
-  TArrow *arrow1 = new TArrow(0.3,200,1.2,200,0.01,"|>");
-  arrow1->Draw();
   TLatex Tl;
   Tl.SetTextSize(0.04);
-  Tl.DrawLatex(0.33,240,"#bf{Signal Region}");
-  //  c_cB->SaveAs("searchBins.png");
-  cout<<"*****************************************************"<<endl;
-  cout<<"Int Lumi(inv.fb) for file1:"<<setprecision(4)<<intLumi<<endl;
+  Tl.DrawLatexNDC(0.48,0.91,"#bf{arXiv:xxxx.xxxxx}");
+
+  if(varName == "mindPhi1dPhi2"){
+    TLine *line1=new TLine( 0.3,0.11,  0.3,yMax);
+    line1->Draw();
+    line1->SetLineStyle(2);
+    TArrow *arrow1 = new TArrow(0.3,100,1.2,100,0.01,"|>");
+    arrow1->Draw();
+    TLatex Tl;
+    Tl.SetTextSize(0.04);
+    Tl.DrawLatex(0.33,140,"#bf{Signal Region}");
+    //  Tl.SetTextSize(0.04);
+    //  Tl.DrawLatexNDC(0.48,0.91,"#bf{arXiv:xxxx.xxxxx}");
+  }
+  // //  c_cB->SaveAs("searchBins.png");
   //------------------------------------
   c_cA->cd(); c_cA->SetGridx(0); c_cA->SetGridy(0);
   if(varName=="AllSBins_v7_CD"){
@@ -202,7 +237,16 @@ void plotKinStack(){
     Tl.DrawLatex(28.5,400,"N^{ #geq1}_{ #geq7}");
   }
   //------------------------------------
-    
+  if(savePlots){
+    TString saveName = "supp_Sim_"+varName;
+    TString modelName = f[6]->GetName();
+    if(modelName.Contains("T5bbbb")) modelName = "T5bbbbZG";
+    else if(modelName.Contains("T5qqqq")) modelName = "T5qqqqHG";
+    else if(modelName.Contains("T5tttt")) modelName = "T5ttttZG";
+    else if(modelName.Contains("T6tt")) modelName = "T6ttZG";
+    saveName = saveName+"_"+modelName+".pdf";
+    c_cA->SaveAs(saveName);
+  }
 }
 
 void decorate(THStack *hs,int i,const char* fname){
@@ -233,6 +277,7 @@ void decorate(TH1D* hist,int i,const char* fname){
   //  gPad->Update();
   setLastBinAsOverFlow(hist);
   gStyle->SetOptStat(0);
+  
   //Hlist.Add(hist);
 }
 
@@ -257,6 +302,17 @@ void drawlegend(TH1D *hist,int i,const char* fname){
   else if(lName.Contains("T5bbbbZg_1600_1550")){lName = "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1600 GeV, m_{#tilde{#chi}_{1}^{0}} = 1550 GeV)";}
   else if(lName.Contains("T5bbbbZG_1800_150")){lName = "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
   else if(lName.Contains("T5bbbbZG_1800_1750")){lName = "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 1750 GeV)";}
+
+  else if(lName.Contains("T5bbbbZg_1800_150")){lName = "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
+  else if(lName.Contains("T5bbbbZg_1800_1750")){lName = "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 1750 GeV)";}
+  else if(lName.Contains("T5qqqqHg_1800_150")){lName = "#tilde{g} #rightarrow q #bar{q} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/H #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
+  else if(lName.Contains("T5qqqqHg_1800_1750")){lName = "#tilde{g} #rightarrow q #bar{q} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/H #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 1750 GeV)";}
+  else if(lName.Contains("T5ttttZg_1800_150")){lName = "#tilde{g} #rightarrow t #bar{t} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
+  else if(lName.Contains("T5ttttZg_1800_1550")){lName = "#tilde{g} #rightarrow t #bar{t} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 1550 GeV)";}
+
+  else if(lName.Contains("T6ttZg_1000_100")){lName = "#tilde{t} #rightarrow t #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1000 GeV, m_{#tilde{#chi}_{1}^{0}} = 100 GeV)";}
+  else if(lName.Contains("T6ttZg_1000_900")){lName = "#tilde{t} #rightarrow t #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1000 GeV, m_{#tilde{#chi}_{1}^{0}} = 900 GeV)";}
+
   // else if(lName.Contains("T5bbbbZg_1600_150")){lName = "T5bbbbZG (m_{#tilde{g}} = 1600 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
   // else if(lName.Contains("T5bbbbZg_1600_1550")){lName = "T5bbbbZG (m_{#tilde{g}} = 1600 GeV, m_{#tilde{#chi}_{1}^{0}} = 1550 GeV)";}
   else if(lName.Contains("T5bbbbZg_1600_1550")){lName="T5bbbbZg 1600, 1550";}
@@ -289,44 +345,23 @@ void setLastBinAsOverFlow(TH1D* h_hist){
     
 }
 
-/*
-{
-    TLine *line1V7=new TLine( 7.5,0.5,  7.5,3000);
-    TLine *line2V7=new TLine(14.5,0.5, 14.5,3000);
-    TLine *line3V7=new TLine(21.5,0.5, 21.5,3000);
-    TLine *line4V7=new TLine(28.5,0.5, 28.5,300);
-    TLine *line5V7=new TLine(35.5,0.5, 35.5,300);
-    TLine *line6V7=new TLine(42.5,0.5, 42.5,300);
-    TLine *line7V7=new TLine(49.5,0.5, 49.5,300);
-    TLine *line8V7=new TLine(56.5,0.5, 56.5,300);
-
-    c_cA->cd(); c_cA->SetGridx(0); c_cA->SetGridy(0);
-    line1V7->Draw();      line2V7->Draw();  line3V7->Draw();
-    line4V7->Draw();      line5V7->Draw();  line6V7->Draw();
-    line7V7->Draw();      line8V7->Draw();
-    TArrow *arrow1 = new TArrow(0.5,1500,7.5,1500,0.01,"<|>");
-    TArrow *arrow2 = new TArrow(7.5,1500,14.5,1500,0.01,"<|>");
-    TArrow *arrow3 = new TArrow(14.5,1500,21.5,1500,0.01,"<|>");
-    TArrow *arrow4 = new TArrow(21.5,150,28.5,150,0.01,"<|>");
-    TArrow *arrow5 = new TArrow(28.5,150,35.5,150,0.01,"<|>");
-    TArrow *arrow6 = new TArrow(35.5,150,42.5,150,0.01,"<|>");
-    TArrow *arrow7 = new TArrow(42.5,150,49.5,150,0.01,"<|>");
-    TArrow *arrow8 = new TArrow(49.5,150,56.5,150,0.01,"<|>");
-    TArrow *arrow9 = new TArrow(56.5,150,63.5,150,0.01,"<|>");
-
-
-    arrow1->Draw(); arrow2->Draw(); arrow3->Draw();
-    arrow4->Draw(); arrow5->Draw(); arrow6->Draw();
-    arrow7->Draw(); arrow8->Draw(); arrow9->Draw();
-    TLatex Tl;
-    Tl.SetTextSize(0.04);
-    Tl.DrawLatex(3.,2000,"N^{0}_{2-4}");
-    Tl.DrawLatex(10,2000,"N^{0}_{5-6}");
-    Tl.DrawLatex(17,2000,"N^{0}_{#geq7}");
-    Tl.DrawLatex(24,200,"N^{1}_{2-4}");
-    Tl.DrawLatex(31,200,"N^{1}_{5-6}");
-    Tl.DrawLatex(38,200,"N^{1}_{#geq7}");
-    Tl.DrawLatex(45,200,"N^{#geq2}_{2-4}");
-    Tl.DrawLatex(52,200,"N^{#geq2}_{5-6}");
-    Tl.DrawLatex(59,200,"N^{#geq2}_{#geq7}");
-    }*/
+TH1D* setMyRange(TH1D *h1,double xLow,double xHigh){
+  //call it after setting last bin as overflow
+  double err=0;
+  if(xHigh > 13000) return h1;
+  if(xLow < -13000) return h1;
+  // h1->Print("all");
+  int nMax=h1->FindBin(xHigh);
+  h1->SetBinContent(nMax,h1->IntegralAndError(nMax,h1->GetNbinsX(),err));
+  h1->SetBinError(nMax,err);
+  //  cout<<nMax<<endl;
+  for(int i=nMax+1;i<=h1->GetNbinsX()+1;i++){
+    h1->SetBinContent(i,0);
+    h1->SetBinError(i,0);
+    //    cout<<":";
+  }
+  //  h1->Print("all");
+  //  cout<<endl;
+  return h1;
+  //  h1->GetXaxis()->SetRangeUser(xLow,xHigh);                                                                                                                      
+}

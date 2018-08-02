@@ -39,6 +39,25 @@ void dataPred_SBinsOnly(TString iFname){
   //  gStyle->Reset();
   TH1::SetDefaultSumw2(1);
   gStyle->SetOptStat(0);
+  //---------------- set styles if not running on my desktop ---------------
+  //---------------- otherwise you do not need this part -------------------
+  gStyle->SetPadGridX(1);
+  gStyle->SetPadGridY(1);
+  gStyle->SetPadTickX(1);
+  gStyle->SetPadTickY(1);
+  gStyle->SetPadBottomMargin(0.12);
+  gStyle->SetPadLeftMargin(0.12);
+  gStyle->SetPadRightMargin(0.12);
+  gStyle->SetHistLineWidth(2);
+  gStyle->SetTitleSize(0.05,"X");
+  gStyle->SetLabelSize(0.05,"X");
+  gStyle->SetTitleSize(0.05,"Y");
+  gStyle->SetLabelSize(0.05,"Y");
+  gStyle->SetTitleSize(0.05,"Z");
+  gStyle->SetLabelSize(0.05,"Z");
+  gStyle->SetLineScalePS(1.5);
+  gROOT->ForceStyle();
+  //---------------- end of settings ----------------------------
   //  gStyle->SetOptStat("nemri");
   vector<TString> suffixHist; 
   f[0] = new TFile(iFname);
@@ -185,8 +204,8 @@ void dataPred_SBinsOnly(TString iFname){
   char name2[100];
   textOnTop.SetTextSize(0.07);
   intLumiE.SetTextSize(0.07);
-  textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
-  //textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
+  //textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
+  textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
   intLumiE.SetTextSize(0.07);
   sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.72,0.91,name2);

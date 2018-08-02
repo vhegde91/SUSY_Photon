@@ -203,10 +203,10 @@ void AnalyzeLightBSM::BookHistogram(const char *outFileName) {
   h_RunNum=new TH1I("runs","Run nos.",300000,0,300000);
   h_intLumi=new TH1D("intLumi","integrated luminosity in /fb",2500,25,50); 
   h_ST=new TH1D("ST","ST",400,0,4000);
-  h_MET=new TH1D("MET","MET",150,0,1500);
+  h_MET=new TH1D("MET","MET",200,0,2000);
   h_nHadJets=new TH1D("nHadJets","no. of jets(only hadronic jets,not counting photon)",25,0,25);
   h_BTags=new TH1D("nBTags","no. of B tags",10,0,10);
-  h_BestPhotonPt=new TH1D("BestPhotonPt","Pt of the Best Photon",120,0,1200);
+  h_BestPhotonPt=new TH1D("BestPhotonPt","Pt of the Best Photon",150,0,1500);
 
   h_HT=new TH1D("HT","HT",400,0,4000);
   h_MHT=new TH1D("MHT","MHT",200,0,2000);

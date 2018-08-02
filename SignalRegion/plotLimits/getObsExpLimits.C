@@ -20,13 +20,33 @@ double intLumi = 35.9;
 void removePoint(TGraph*,double,double);
 TGraph *cleanupDiagonal(TGraph*,TString);
 void getObsExpLimits(TString fName){
-  //---------------- set styles----------------
+  //---------------- set styles if not running on my desktop ---------------
+  //---------------- otherwise you do not need this part -------------------
+  gStyle->SetPadGridX(1);
+  gStyle->SetPadGridY(1);
+  gStyle->SetPadTickX(1);
+  gStyle->SetPadTickY(1);
+  gStyle->SetPadBottomMargin(0.12);
+  gStyle->SetPadLeftMargin(0.12);
+  gStyle->SetPadRightMargin(0.12);
+  gStyle->SetHistLineWidth(2);
+  gStyle->SetTitleSize(0.05,"X");
+  gStyle->SetLabelSize(0.05,"X");
+  gStyle->SetTitleSize(0.05,"Y");
+  gStyle->SetLabelSize(0.05,"Y");
+  gStyle->SetTitleSize(0.05,"Z");
+  gStyle->SetLabelSize(0.05,"Z");
+  gStyle->SetLineScalePS(1.5);
+  gROOT->ForceStyle();
+  //---------------- end of settings ----------------------------
+  //---------------- set styles for all computers ----------------
   gStyle->SetOptStat(0);
   gStyle->SetTitle(0);
   const Int_t NRGBs = 5;
   const Int_t NCont = 255;
   bool cleanDiagnl = 1;
-  
+  bool xsecULinfb = 1;
+
   Double_t stops[NRGBs] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
   Double_t red[NRGBs]   = { 0.50, 0.50, 1.00, 1.00, 1.00 };
   Double_t green[NRGBs] = { 0.50, 1.00, 1.00, 0.60, 0.50 };
@@ -42,7 +62,8 @@ void getObsExpLimits(TString fName){
   //double zMin = 0.000005, zMax = 0.09;
   //  double zMin = 0.4, zMax = 20;//EMHT, STgamma
   //double zMin = 0.0004, zMax = 0.002;//gluinos
-  double zMin = 0.0004, zMax = 0.004;//gluinos tttt
+  double zMin = 0.0004, zMax = 0.004;//gluinos tttt //appr
+  //   double zMin = 0.00001, zMax = 0.004;
   //  double zMin = 0.0006, zMax = 0.01;//stop
   int nDivAxis = 505;
   TString modelName=f1->GetName();
@@ -59,19 +80,29 @@ void getObsExpLimits(TString fName){
   TH2D *h2_rMedian=(TH2D*)f1->FindObjectAny("mGlmNLSP_median");//median exp 50%
   TH2D *h2_r16pc=(TH2D*)f1->FindObjectAny("mGlmNLSP_16pc");//median exp 16%
   TH2D *h2_r84pc=(TH2D*)f1->FindObjectAny("mGlmNLSP_84pc");//meadian exp 84%
+  TH2D *h2_XsecULexp=(TH2D*)f1->FindObjectAny("mGlmNLSP_XsecULexp");//exp limit
 
   TH2D *h2_rObs=(TH2D*)f1->FindObjectAny("mGlmNLSP_r");//obs limit
   TH2D *h2_rXsecUp=(TH2D*)f1->FindObjectAny("mGlmNLSP_r_XsecUp");//obs limit+theory xsec up
   TH2D *h2_rXsecDn=(TH2D*)f1->FindObjectAny("mGlmNLSP_r_XsecDn");//obs limit+theory xsec down
   TH2D *h2_XsecUL=(TH2D*)f1->FindObjectAny("mGlmNLSP_XsecUL");//UL on xsec based on obs limit
-  ////////  h2_XsecUL->Scale(1000);
-  TH2D *h2_temp=new TH2D("h2temp","h2temp",60,25,3025,300,5,3005);
+
+  cout<<"Z axis to fb? "<<xsecULinfb<<endl;
+  if(xsecULinfb){
+    h2_XsecUL->Scale(1000);
+    h2_XsecULexp->Scale(1000);
+    zMin = zMin*1000;
+    zMax = zMax*1000;
+  }
+
   gStyle->SetPadGridX(0);
   gStyle->SetPadGridY(0);
   //------------------------------------------------
   TGraph2D *gr2d_rMedian = new TGraph2D(h2_rMedian);
   TGraph2D *gr2d_16pc = new TGraph2D(h2_r16pc);
   TGraph2D *gr2d_84pc = new TGraph2D(h2_r84pc);  
+  TGraph2D *gr2dXsecExp = new TGraph2D(h2_XsecULexp);
+  gr2dXsecExp->SetNpx(250);  gr2dXsecExp->SetNpy(250);
 
   TGraph2D *gr2d_rObs = new TGraph2D(h2_rObs);
   TGraph2D *gr2d_rXsecUp = new TGraph2D(h2_rXsecUp);
@@ -132,18 +163,24 @@ void getObsExpLimits(TString fName){
   if(!modelName.Contains("T6ttZg")) gr2dXsec->GetYaxis()->SetNdivisions(505);
   h2_XsecUL->SetMinimum(zMin);
   h2_XsecUL->SetMaximum(zMax);
-  h2_XsecUL->Draw();
-  // h2_XsecUL->GetXaxis()->SetAxisColor(17);
-  // h2_XsecUL->GetYaxis()->SetAxisColor(17);
-  // c3->RedrawAxis();
-  cout<<modelName<<endl;
+  h2_XsecUL->GetZaxis()->SetMoreLogLabels();
   if(!(modelName.Contains("T6ttZg")))  h2_XsecUL->SetTitle(";m_{#tilde{g}} (GeV);m_{#tilde{#chi}_{1}^{0}} (GeV)");
   else                     h2_XsecUL->SetTitle(";m_{ #tilde{t} } (GeV);m_{#tilde{#chi}_{1}^{0}} (GeV)");
+  h2_XsecUL->GetYaxis()->SetTitleOffset(1.4);
 
   if(modelName.Contains("GGM_M1M3")) h2_XsecUL->SetTitle(";M3 (GeV);M1 (GeV)");
-  //  gr2dXsec->SetHistogram(h2_XsecUL);
+
+  TH2D *h2_temp=(TH2D*)h2_XsecUL->Clone("h2_temp"); // a dummy histogram with all axes settings, bin content = 0.
+  for(int i=0;i<=h2_temp->GetNbinsX();i++)
+    for(int j=0;j<=h2_temp->GetNbinsY();j++)
+      h2_temp->SetBinContent(i,j,0); 
+  if(xsecULinfb){
+    h2_temp->Draw();
+  }
+  else h2_XsecUL->Draw();
+  cout<<modelName<<endl;
   
-  gr2dXsec->Draw("same COLZ");
+  gr2dXsec->Draw("same COLZ"); 
   gr1d_Median->Draw("L"); 
   gr1d_16pc->Draw("L");   
   gr1d_84pc->Draw("L");
@@ -188,8 +225,15 @@ void getObsExpLimits(TString fName){
   // gr2dXsec->GetZaxis()->SetTitleOffset(1.25);
   gr2dXsec->SetMinimum(zMin);
   gr2dXsec->SetMaximum(zMax);
-  gr2dXsec->GetZaxis()->SetTitle("95% CL upper limit on cross section (pb)");
+  if(xsecULinfb) gr2dXsec->GetZaxis()->SetTitle("95% CL upper limit on cross section (fb)");
+  else gr2dXsec->GetZaxis()->SetTitle("95% CL upper limit on cross section (pb)");
   gr2dXsec->GetZaxis()->SetTitleOffset(1.2);
+  gr2dXsecExp->SetMinimum(zMin);
+  gr2dXsecExp->SetMaximum(zMax);
+  if(xsecULinfb) gr2dXsecExp->GetZaxis()->SetTitle("95% CL expected upper limit on cross section (fb)");
+  else gr2dXsecExp->GetZaxis()->SetTitle("95% CL expected upper limit on cross section (pb)");
+  gr2dXsecExp->GetZaxis()->SetTitleOffset(1.2);
+  //  gr2dXsec->GetZaxis()->SetMoreLogLabels(1);
   
  // TPaveText *pt = new TPaveText(.05,.1,.95,.8);
  //   pt->AddText("A TPaveText can contain severals line of text.");
@@ -197,19 +241,33 @@ void getObsExpLimits(TString fName){
   
   c3->Update();
   fout->cd();
-  gr2dXsec->Write();
+  // gr2dXsec->Write();
 
-  h2_XsecUL->Write();
+  TH2D *h2_XsecULdense = (TH2D*)gr2dXsec->GetHistogram();
+  h2_XsecULdense->SetTitle(0);
+  h2_XsecULdense->GetXaxis()->SetTitle(h2_XsecUL->GetXaxis()->GetTitle());
+  h2_XsecULdense->GetYaxis()->SetTitle(h2_XsecUL->GetYaxis()->GetTitle());
+  h2_XsecULdense->Write("obs_XsecLimit");
+
+  TH2D *h2_XsecULexpdense = (TH2D*)gr2dXsecExp->GetHistogram();
+  h2_XsecULexpdense->SetTitle(0);
+  h2_XsecULexpdense->GetXaxis()->SetTitle(h2_XsecUL->GetXaxis()->GetTitle());
+  h2_XsecULexpdense->GetYaxis()->SetTitle(h2_XsecUL->GetYaxis()->GetTitle());
+  h2_XsecULexpdense->Write("exp_XsecLimit");
+
+  //  h2_XsecUL->Write();
   TGraph *gr1d_Median_cp=(TGraph*)gr1d_Median->Clone("exp");  gr1d_Median_cp->Write();
-  TGraph *gr1d_16pccp=(TGraph*)gr1d_16pc->Clone("exp16pc");   gr1d_16pccp->Write();
-  TGraph *gr1d_84pccp=(TGraph*)gr1d_84pc->Clone("exp84pc");   gr1d_84pccp->Write();
+  TGraph *gr1d_16pccp=(TGraph*)gr1d_16pc->Clone("exp1dn");   gr1d_16pccp->Write();
+  TGraph *gr1d_84pccp=(TGraph*)gr1d_84pc->Clone("exp1up");   gr1d_84pccp->Write();
   TGraph *gr1d_Obs_cp=(TGraph*)gr1d_Obs->Clone("obs");    gr1d_Obs_cp->Write();
+  TGraph *gr1d_XsecUp_cp=(TGraph*)gr1d_XsecUp->Clone("obs_XsecUp");    gr1d_XsecUp_cp->Write();
+  TGraph *gr1d_XsecDn_cp=(TGraph*)gr1d_XsecDn->Clone("obs_XsecDn");    gr1d_XsecDn_cp->Write();
 
   char name3[100];
   textOnTop.SetTextSize(0.05);
   intLumiE.SetTextSize(0.05);
-  textOnTop.DrawLatexNDC(0.16,0.91,"CMS #it{#bf{Preliminary}}");
-  //textOnTop.DrawLatexNDC(0.16,0.91,"CMS");
+  //  textOnTop.DrawLatexNDC(0.16,0.91,"CMS #it{#bf{Preliminary}}");
+  textOnTop.DrawLatexNDC(0.16,0.91,"CMS");
   sprintf(name3,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.57,0.91,name3);
   c3->SaveAs(modelName+"_exclusion.pdf");

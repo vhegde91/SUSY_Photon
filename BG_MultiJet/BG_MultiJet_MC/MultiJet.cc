@@ -42,7 +42,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 
   Long64_t nbytes = 0, nb = 0;
   int decade = 0;
-  bool do_AB_reweighting=0;
+  bool do_AB_reweighting=0,do_dataBasedWt=0;
   int evtSurvived=0;
   TFile *f_HLR=TFile::Open("HLR_gjets_qcd.root");
   // TH1D *h_HLratio=(TH1D*)f_HLR->Get("HLratio_1D");
@@ -88,6 +88,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
   }
   //-------------------------------------------------------
   cout<<"************* Applying weights for AB? "<<do_AB_reweighting<<endl;
+  if(do_dataBasedWt) cout<<endl<<endl<<endl<<"!!!!!! doing MC reweightig based on data predictions."<<endl;
 
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
 
@@ -143,7 +144,6 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
       wt = wt*isrWt*isrWtCorr;
     }
     //--------------------------------------------------------
-
     if( (Electrons->size() !=0) || (Muons->size() !=0) ) continue;   
     if(isoElectronTracks!=0 || isoMuonTracks!=0 || isoPionTracks!=0) continue;
     
@@ -189,7 +189,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     TLorentzVector genPho;
     for(int i=0;i<GenParticles->size();i++){
       if((*GenParticles)[i].Pt()!=0 && (*GenParticles_PdgId)[i]==22 &&
-	 (abs((*GenParticles_ParentId)[i]) < 22 || (*GenParticles_PdgId)[i]==2212) && (*GenParticles_Status)[i]==1){
+	 (abs((*GenParticles_ParentId)[i]) < 22 || (*GenParticles_ParentId)[i]==2212) && (*GenParticles_Status)[i]==1){
 	if(bestPhoton.DeltaR((*GenParticles)[i]) < 0.2 && bestPhoton.DeltaR(genPho) > bestPhoton.DeltaR((*GenParticles)[i]))
 	  genPho = (*GenParticles)[i];
       }
@@ -255,6 +255,20 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     if( process && !eMatchedG && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && hadJetID && GenMET > 100 && dphi1_genMET > 0.3 && dphi2_genMET > 0.3) h_GenMETvBin_CD->Fill(GenMET,wt);
 
     process = process && !eMatchedG && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && MET > 100;
+
+    //------------------- !!!!! Be careful to remove it when not needed.
+    if(do_dataBasedWt){
+      if(BTags==0){
+	if(nHadJets>=2 && nHadJets<=4) wt=wt*1.36;
+	else if(nHadJets<=6) wt=wt*0.78;
+	else wt=wt*0.43;
+      }
+      else{
+	if(nHadJets>=2 && nHadJets<=4) wt=wt*1.4;
+	else if(nHadJets<=6) wt=wt*0.72;
+	else wt=wt*0.58;
+      }
+    }
 
     if(process){
       evtSurvived++;
