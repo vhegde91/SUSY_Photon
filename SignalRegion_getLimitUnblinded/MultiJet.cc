@@ -52,7 +52,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
   //choose central, up, or down
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
   //----------- btags SFs-----------------
-  bool applybTagSFs=1;
+  bool applybTagSFs=0;
   int fListIndxOld=-1;
   double prob0=-100,prob1=-100;
   vector<TString> inFileName;
@@ -78,15 +78,16 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     isrReweight = 1;//set here for doing ISR weighting. Reset for not applying.
     applybTagSFs = 1;
     cout<<"Applying ISR weights to these signal samples? "<<isrReweight<<endl;
-    cout<<"applying b-tag SFs for signal?(ignore last message on bTag SFs) "<<applybTagSFs<<endl;
     if(s_data.Contains("T5bbbb")) fISR = new TFile("T5bbbbZg_MassScan.root");
     else if(s_data.Contains("T5tttt")) fISR = new TFile("T5ttttZg_MassScan.root");
     else if(s_data.Contains("T5qqqq")) fISR = new TFile("T5qqqqHg_MassScan.root");
     else if(s_data.Contains("T6tt")) fISR = new TFile("T6ttZg_MassScan.root");
-    else if(s_data.Contains("TChiNG")) fISR = new TFile("TChiNG_MassScan.root");
-    else if(s_data.Contains("TChiWG")) fISR = new TFile("TChiWG_MassScan.root");
+    else if(s_data.Contains("TChiNG")){ fISR = new TFile("TChiNG_MassScan.root"); applybTagSFs = 0;}
+    else if(s_data.Contains("TChiWG")){ fISR = new TFile("TChiWG_MassScan.root"); applybTagSFs = 0;}
+    else if(s_data.Contains("GGM_M1M3")){ fISR = new TFile("GGM_M1M3_MassScan.root"); applybTagSFs = 1;}
     h2_isrWtCorr = (TH2D*)fISR->Get("Nevts_NoISRWt");
     h2_isrWtCorr->Divide((TH2D*)fISR->Get("Nevts_ISRWt"));
+    cout<<"applying b-tag SFs for signal?(ignore last message on bTag SFs) "<<applybTagSFs<<endl;
   }
   //-------------------------------------------------------
   cout<<"************* Applying weights for AB? "<<do_AB_reweighting<<endl;
@@ -145,33 +146,10 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
       wt = wt*isrWt*isrWtCorr;
     }
     //--------------------------------------------------------
-
-    if( (Electrons->size() !=0) || (Muons->size() !=0) ) continue;   
-    if(isoElectronTracks!=0 || isoMuonTracks!=0 || isoPionTracks!=0) continue;
-    
-    TLorentzVector bestPhoton=getBestPhoton();
-    bool eMatchedG=check_eMatchedtoGamma();//this may not be necessary since e veto is there.
-    if(bestPhoton.Pt()<0.1) continue;
     char regType='n';
     bool process=true;
     bool noFakeJet = true;
-    //    bool bestPromptPho=true;
-    if(s_data=="QCD"){
-      if(jentry==0){cout<<"**********processing "<<s_data<<endl;}
-      //      if(madMinPhotonDeltaR > 0.4 && madMinDeltaRStatus==1 && !((*Photons_nonPrompt)[bestPhotonIndxAmongPhotons]) ) continue;
-      if(madMinPhotonDeltaR > 0.4 && madMinDeltaRStatus==1 && hasGenPromptPhoton) continue;
-    }//QCD
-    else if(s_data=="GJets"){
-      if(jentry==0){cout<<"**********processing "<<s_data<<endl;}
-      //      if( ((*Photons_nonPrompt)[bestPhotonIndxAmongPhotons]) ) continue;
-      if(!hasGenPromptPhoton) continue;
-    }//GJets
-    else if(s_data=="DiPhoton"){
-      if(jentry==0){cout<<"**********processing "<<s_data<<endl;}
-      //      if( ((*Photons_nonPrompt)[bestPhotonIndxAmongPhotons]) ) continue;
-      if(allBestPhotons.size() < 2) continue;
-    }//GJets
-    else if(s_data.Contains("FastSim")){
+    if(s_data.Contains("FastSim")){
       //      //reject events with any jet pt>20, |eta|<2.5 NOT matched to a GenJet (w/in DeltaR<0.3) and chfrac < 0.1
       for(unsigned j = 0; j < Jets->size(); ++j){
       	if(Jets->at(j).Pt() <= 20 || fabs(Jets->at(j).Eta())>=2.5) continue;
@@ -188,7 +166,60 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
       	}
       }
     }
+    if(!noFakeJet) continue;
+    TLorentzVector bestPhoton=getBestPhoton();
+    vector<TLorentzVector> genPho;
+    for(int i=0;i<GenParticles->size();i++){
+      if((*GenParticles)[i].Pt()>15 && (*GenParticles_PdgId)[i]==22 &&
+         (abs((*GenParticles_ParentId)[i]) <= 25 || (*GenParticles_ParentId)[i]==2212 || abs((*GenParticles_ParentId)[i]) > 1000000) && 
+	 ((*GenParticles_Status)[i]==1 || (*GenParticles_Status)[i]==23)){
+	genPho.push_back((*GenParticles)[i]);
+      }
+    }
+    sortTLorVec(&genPho);
+    if(genPho.size()>0 && bestPhoton.Pt() < 1) h2_GenPhoPtEta->Fill(abs(genPho[0].Eta()),genPho[0].Pt(),wt);
+    else if(genPho.size()>0 && bestPhoton.Pt() > 1){
+      int matchIndexPho = -1;
+      double minDrPho=1000;
+      for(int i=0;i<genPho.size();i++){
+	if(minDrPho > bestPhoton.DeltaR(genPho[i])){
+	  matchIndexPho = i;
+	  minDrPho = bestPhoton.DeltaR(genPho[i]);
+	}
+      }
+      //      if(minDrPho > 0.2){ cout<<"!!!No matching for genPho and reco Pho within dR < 0.2. GenPho:"<<genPho.size()<<" "<<matchIndexPho<<" "<<genPho[matchIndexPho].Pt()<<" "<<genPho[matchIndexPho].Eta()<<" reco:"<<bestPhoton.Pt()<<" "<<bestPhoton.Eta()<<" dR:"<<minDrPho<<endl;print(jentry);}
+      if(minDrPho < 0.2){
+	h2_GenPhoPtEta->Fill(abs(genPho[matchIndexPho].Eta()),genPho[matchIndexPho].Pt(),wt);
+	h2_RecoPhoPtEta->Fill(abs(genPho[matchIndexPho].Eta()),genPho[matchIndexPho].Pt(),wt);
+	//	h2_RecoPhoPtEta->Fill(abs(bestPhoton.Eta()),bestPhoton.Pt(),wt);
+      }    
+    }
+    h_cutFlow->Fill("No cuts",wt);
+    bool eMatchedG=check_eMatchedtoGamma();//this may not be necessary since e veto is there.
+    if(bestPhoton.Pt()<0.1) continue;
+    else h_cutFlow->Fill("p_{T}^{#gamma} > 100",wt);
+    if( (Electrons->size() !=0) || (Muons->size() !=0) ) continue;
+    else h_cutFlow->Fill("e/#mu veto",wt);
+    if(isoElectronTracks!=0 || isoMuonTracks!=0 || isoPionTracks!=0) continue;
+    else h_cutFlow->Fill("IsoTrk veto",wt);
 
+    //    bool bestPromptPho=true;
+    if(s_data=="QCD"){
+      if(jentry==0){cout<<"**********processing "<<s_data<<endl;}
+      //      if(madMinPhotonDeltaR > 0.4 && madMinDeltaRStatus==1 && !((*Photons_nonPrompt)[bestPhotonIndxAmongPhotons]) ) continue;
+      if(madMinPhotonDeltaR > 0.4 && madMinDeltaRStatus==1 && hasGenPromptPhoton) continue;
+    }//QCD
+    else if(s_data=="GJets"){
+      if(jentry==0){cout<<"**********processing "<<s_data<<endl;}
+      //      if( ((*Photons_nonPrompt)[bestPhotonIndxAmongPhotons]) ) continue;
+      if(!hasGenPromptPhoton) continue;
+    }//GJets
+    else if(s_data=="DiPhoton"){
+      if(jentry==0){cout<<"**********processing "<<s_data<<endl;}
+      //      if( ((*Photons_nonPrompt)[bestPhotonIndxAmongPhotons]) ) continue;
+      if(allBestPhotons.size() < 2) continue;
+    }//GJets
+    
     bool hadJetID=true;
     int minDRindx=-100,photonMatchingJetIndx=-100,nHadJets=0;
     double minDR=99999,ST=0,myHT=0,mtPho=0;
@@ -219,7 +250,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     }
     else myHT=ST;
     sortTLorVec(&hadJets);
-
+    
     if(s_data.Contains("FastSim")){
       hadJetID = true;
       if(!noFakeJet) continue;
@@ -249,6 +280,11 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     if(photonMatchingJetIndx<0) continue;
     // int sBin4 = getBinNoV4(nHadJets),  sBin7 = getBinNoV7(nHadJets);
     // if(sBin7!=4) continue;
+    if(MET > 200) h_cutFlow->Fill("p_{T}^{miss} > 200",wt);
+    if(MET > 200 && nHadJets >=2 ) h_cutFlow->Fill("N_{jets} #geq 2",wt);
+    if(MET > 200 && nHadJets >=2 && ((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) && ST > 500 ) h_cutFlow->Fill("ST and p_{T}^{#gamma} cuts",wt);
+    if(MET > 200 && nHadJets >=2 && ((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) && ST > 500 && regType=='D') h_cutFlow->Fill("#Delta#Phi_{1}, #Delta#Phi_{2} > 0.3",wt);
+
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) ) continue;
     if( process && !eMatchedG && bestPhoton.Pt()>=100 && (Electrons->size()==0) && (Muons->size()==0) && ST>500 && nHadJets>=2 && hadJetID && GenMET > 100 && dphi1_genMET > 0.3 && dphi2_genMET > 0.3) h_GenMETvBin_CD->Fill(GenMET,wt);
 
@@ -294,7 +330,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	else if(regType=='C') r_i=3;
 	else if(regType=='D') r_i=4;
 	r_i=r_i-1;
-	
+
 	h_ST_[r_i]->Fill(ST,wt);
 	h_MET_[r_i]->Fill(MET,wt);
 	h_nHadJets_[r_i]->Fill(nHadJets,wt);
@@ -303,6 +339,8 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	  h_BTags_[r_i]->Fill(1.0,wt*prob[1]);
 	  h_BTags_[r_i]->Fill(2.0,wt*prob[2]);
 	  h_BTags_[r_i]->Fill(3.0,wt*prob[3]);
+	  if(regType=='D') h_cutFlow->Fill("0 b tags only",wt*prob[0]);
+	  if(regType=='D') h_cutFlow->Fill("#geq 1 b tags",wt*(1-prob[0]));
 	}
 	else{
 	  h_BTags_[r_i]->Fill(BTags,wt);
@@ -598,6 +636,7 @@ TLorentzVector MultiJet::getBestPhoton(){
   allBestPhotons.resize(0);
   for(int iPho=0;iPho<Photons->size();iPho++){
     if( (*Photons_fullID)[iPho] && ((*Photons_hasPixelSeed)[iPho]<0.001) ) {
+    //    if( (*Photons_fullID)[iPho] ) {
       goodPho.push_back( (*Photons)[iPho] );
       goodPhoIndx.push_back(iPho);
       allBestPhotons.push_back((*Photons)[iPho]);
@@ -718,8 +757,9 @@ void  MultiJet::findObjMatchedtoG(TLorentzVector bestPhoton){
 void MultiJet::print(Long64_t jentry){
   //cout<<endl;
   TLorentzVector v1,photo;
+  cout<<"SUSYMom:"<<SusyMotherMass<<" NLSPMass:"<<SusyLSPMass<<endl;
   for(int i=0;i<GenParticles->size();i++){
-    cout<<EvtNum<<" "<<jentry<<" "<<GenParticles->size()<<" "<<i<<" PdgId:"<<(*GenParticles_PdgId)[i]<<" parentId:"<<(*GenParticles_ParentId)[i]<<" parentIndx:"<<(*GenParticles_ParentIdx)[i]<<" Status:"<<(*GenParticles_Status)[i]<</*"\tPx:"<<(*GenParticles)[i].Px()<<" Py:"<<(*GenParticles)[i].Py()<<" Pz:"<<(*GenParticles)[i].Pz()<<*/"\tPt:"<<(*GenParticles)[i].Pt()<<" Eta:"<<(*GenParticles)[i].Eta()<<" Phi:"<<(*GenParticles)[i].Phi()<<" E:"<<(*GenParticles)[i].Energy()<<endl;
+    cout<<EvtNum<<" "<<jentry<<" "<<GenParticles->size()<<" "<<i<<" PdgId:"<<(*GenParticles_PdgId)[i]<<" parentId:"<<(*GenParticles_ParentId)[i]<<" parentIndx:"<<(*GenParticles_ParentIdx)[i]<<" Status:"<<(*GenParticles_Status)[i]<</*"\tPx:"<<(*GenParticles)[i].Px()<<" Py:"<<(*GenParticles)[i].Py()<<" Pz:"<<(*GenParticles)[i].Pz()<<*/"\tPt:"<<(*GenParticles)[i].Pt()<<" Eta:"<<(*GenParticles)[i].Eta()<<" Phi:"<<(*GenParticles)[i].Phi()<<" Mass:"<<(*GenParticles)[i].M()<<endl;
   }
 
   for(int i=0;i<GenJets->size();i++){

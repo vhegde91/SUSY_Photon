@@ -160,6 +160,7 @@ void PlotLimits::EventLoop(const char *data,const char *inputFileList) {
     }
     if(abs(quantileExpected - 0.5) <= 0.0001){
       h2_mGlmNLSP_median->Fill(mGl,mNLSP,limit);
+      h2_mGlmNLSP_XsecULexp->Fill(mGl,mNLSP,xsec*limit);
     }
     if(abs(quantileExpected - 0.025) <= 0.0001){
       h2_mGlmNLSP_2p5pc->Fill(mGl,mNLSP,limit);

@@ -10,9 +10,10 @@ void splitRunList(string infile,int nfPerJob){
   //------------ needed for condor files --------------
   string exeCondor  = "worker2.sh";
   string exeAna     = "pickMassPoint";
-  int mGl = 1150, mNLSP = 150;
+  int mGl = 1800, mNLSP = 1550;
   string datasetAna = "T5ttttZg_"+to_string(mGl)+"_"+to_string(mNLSP)+"_UnSkimmed";
-  string filesToTransfer = "T5bbbbZg_MassScan.root,T5qqqqHg_MassScan.root,T5ttttZg_MassScan.root";
+  //  string datasetAna = "GGM_M1M3_"+to_string(mGl)+"_"+to_string(mNLSP)+"_UnSkimmed";
+  string filesToTransfer = "T5bbbbZg_MassScan.root,T5qqqqHg_MassScan.root,T5ttttZg_MassScan.root,GGM_M1M3_MassScan.root";
   //---------------------------------------------------
   cout<<"executable at worker node : "<<exeCondor<<endl
       <<"Analysis executable : "<<exeAna<<endl

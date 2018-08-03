@@ -52,13 +52,23 @@ void PickMassPoint::EventLoop(const char *data,const char *inputFileList,const d
   if(s_data.Contains("T5bbbbZg")) f1 = new TFile("T5bbbbZg_MassScan.root");
   else if(s_data.Contains("T5ttttZg")) f1 = new TFile("T5ttttZg_MassScan.root");
   else if(s_data.Contains("T5qqqqHg")) f1 = new TFile("T5qqqqHg_MassScan.root");
+  else if(s_data.Contains("GGM_M1M3")) f1 = new TFile("GGM_M1M3_MassScan.root");
   else {cout<<"AHHHH:Hist for Nevents and Xsec not found."<<endl; return;}
 
-  TH1D *h1_xsechist = (TH1D*)f1->FindObjectAny("mGlXsec");
-  TH2D *h2_mass = (TH2D*)f1->FindObjectAny("MGlMNLSP");
-  if(!h1_xsechist){ cout<<"AHHHHH: could not find xsec hist"<<endl; return;}
+  TH1D *h1_xsechist;
+  TH2D *h2_mass,*h2_xsechist;
+  if(!(s_data.Contains("GGM_M1M3"))){
+    h1_xsechist = (TH1D*)f1->FindObjectAny("mGlXsec");
+  }
+  else{
+    h2_xsechist = (TH2D*)f1->FindObjectAny("GGM_M1M3_xsec");
+  }
+  h2_mass = (TH2D*)f1->FindObjectAny("MGlMNLSP");
+  if(!h1_xsechist && !h2_xsechist){ cout<<"AHHHHH: could not find xsec hist"<<endl; return;}
   if(!h2_mass){ cout<<"AHHHHH: could not find no. of events hist"<<endl; return;}
-  xsec1 = h1_xsechist->GetBinContent(h1_xsechist->FindBin(momMass));
+
+  if(!(s_data.Contains("GGM_M1M3"))) xsec1 = h1_xsechist->GetBinContent(h1_xsechist->FindBin(momMass));
+  else xsec1 = h2_xsechist->GetBinContent(h2_xsechist->GetXaxis()->FindBin(momMass),h2_xsechist->GetYaxis()->FindBin(nlspMass));
   //------------------------ for EW production models ------------------------
   //TFile *f1 = new TFile("TChiNG_MassScan.root");
   //  TH1D *h1_xsechist = (TH1D*)f1->FindObjectAny("mEWeakino_N2C1Xsec");//N2C1 for TChiWG
@@ -99,51 +109,51 @@ void PickMassPoint::EventLoop(const char *data,const char *inputFileList,const d
   //-------------------- for signal only ends ------------------
 
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
-    //    if(jentry>10) break;
+    //    if(jentry>1000) break;
     // ==============print number of events done == == == == == == == =
-    // double progress = 10.0 * jentry / (1.0 * nentries);
-    // int k = int (progress);
-    // if (k > decade)
-    //   cout << 10 * k << " %" <<endl;
-    // decade = k;
+    double progress = 10.0 * jentry / (1.0 * nentries);
+    int k = int (progress);
+    if (k > decade)
+      cout << 10 * k << " %" <<endl;
+    decade = k;
     //cout<<"j:"<<jentry<<" fcurrent:"<<fCurrent<<endl;
     // ===============read this entry == == == == == == == == == == == 
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
-      NumEvents = nevents;
-      CrossSection = xsec1;
-      Weight = CrossSection/NumEvents;
-      //---------------------------------------------------------
-      //      cout<<"SusyMotherMass:"<<SusyMotherMass<<" SusyLSPMass:"<<SusyLSPMass<<endl;
-      if(abs(SusyMotherMass-momMass) > 0.001 || abs(SusyLSPMass-nlspMass) > 0.001) continue;
-      //      cout<<"SusyMotherMass:"<<SusyMotherMass<<" SusyLSPMass:"<<SusyLSPMass<<endl;
-      //    }
-
-    h_selectBaselineYields_->Fill(0);
-    storeBTagEff();
-
-    h_met0->Fill(MET);
-    h_mht0->Fill(MHT);  
-    h_ht0->Fill(HT);
-    h_nj0->Fill(NJets);
+    //---------------------------------------------------------
+    //      cout<<"SusyMotherMass:"<<SusyMotherMass<<" SusyLSPMass:"<<SusyLSPMass<<endl;
+    if(abs(SusyMotherMass-momMass) > 0.001 || abs(SusyLSPMass-nlspMass) > 0.001) continue;
+    NumEvents = nevents;
+    CrossSection = xsec1;
+    Weight = CrossSection/NumEvents;
+    //      cout<<"SusyMotherMass:"<<SusyMotherMass<<" SusyLSPMass:"<<SusyLSPMass<<endl;
+    //    }
     
-    for(int ipho=0;ipho<Photons->size();ipho++){
-      h_phopt0->Fill((*Photons)[ipho].Pt());
-    }
+    //    h_selectBaselineYields_->Fill(0);
+    storeBTagEff();
+    
+    // h_met0->Fill(MET);
+    // h_mht0->Fill(MHT);  
+    // h_ht0->Fill(HT);
+    // h_nj0->Fill(NJets);
+    
+    // for(int ipho=0;ipho<Photons->size();ipho++){
+    //   h_phopt0->Fill((*Photons)[ipho].Pt());
+    // }
 
-    int nZbsn=0,nHbsn=0,nGamma=0;
-    for(int i=0;i<GenParticles->size();i++){
-      if( (abs((*GenParticles_PdgId)[i])==23) && (abs((*GenParticles_ParentId)[i])==1000023) ) {nZbsn++;}
-      if( (abs((*GenParticles_PdgId)[i])==25) && (abs((*GenParticles_ParentId)[i])==1000023) ) {nHbsn++;}
-      if( (abs((*GenParticles_PdgId)[i])==22) && (abs((*GenParticles_ParentId)[i])==1000023) ) {nGamma++;}
-    }
-    h_nZFmNLSP->Fill(nZbsn);
-    h_nHFmNLSP->Fill(nHbsn);
-    h_nGFmNLSP->Fill(nGamma);
+    // int nZbsn=0,nHbsn=0,nGamma=0;
+    // for(int i=0;i<GenParticles->size();i++){
+    //   if( (abs((*GenParticles_PdgId)[i])==23) && (abs((*GenParticles_ParentId)[i])==1000023) ) {nZbsn++;}
+    //   if( (abs((*GenParticles_PdgId)[i])==25) && (abs((*GenParticles_ParentId)[i])==1000023) ) {nHbsn++;}
+    //   if( (abs((*GenParticles_PdgId)[i])==22) && (abs((*GenParticles_ParentId)[i])==1000023) ) {nGamma++;}
+    // }
+    // h_nZFmNLSP->Fill(nZbsn);
+    // h_nHFmNLSP->Fill(nHbsn);
+    // h_nGFmNLSP->Fill(nGamma);
 
-    //end of select skimming parameters
-    evtLeftAfterSkim+=1;
+    // //end of select skimming parameters
+    // evtLeftAfterSkim+=1;
     newtree->Fill();
  
   } // loop over entries

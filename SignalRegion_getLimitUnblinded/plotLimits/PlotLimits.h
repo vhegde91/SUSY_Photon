@@ -25,7 +25,7 @@ class PlotLimits : public NtupleVariables{
 
   TH2D *h2_mGlmNLSP_r;
   TH2D *h2_mGlmNLSP_rUnc;
-  TH2D *h2_mGlmNLSP_XsecUL;
+  TH2D *h2_mGlmNLSP_XsecUL,*h2_mGlmNLSP_XsecULexp;
   TH2D *h2_mGlmNLSP_XsecUL_v1;
 
   TH2D *h2_mGlmNLSP_r_fb;
@@ -65,6 +65,7 @@ void PlotLimits::BookHistogram(const char *outFileName) {
   h2_mGlmNLSP_r_XsecUp = new TH2D("mGlmNLSP_r_XsecUp","x: mass of gluino, y: mass of neutralino, z: r-value with #sigma+#sigma_{up}(fb)",100,12.5,2512.5,350,5,3505);
   h2_mGlmNLSP_r_XsecDn = new TH2D("mGlmNLSP_r_XsecDn","x: mass of gluino, y: mass of neutralino, z: r-value with #sigma-#sigma_{down}(fb)",100,12.5,2512.5,350,5,3505);
 
+  h2_mGlmNLSP_XsecULexp = new TH2D("mGlmNLSP_XsecULexp","x: mass of gluino, y: mass of neutralino, z: Expected 95% CL UpLimit xsec(fb)",100,12.5,2512.5,350,5,3505);
   h2_mGlmNLSP_median = new TH2D("mGlmNLSP_median","x: mass of gluino, y: mass of neutralino, z: median exp limit xsec(fb)",100,12.5,2512.5,350,5,3505);
   h2_mGlmNLSP_16pc = new TH2D("mGlmNLSP_16pc","x: mass of gluino, y: mass of neutralino, z: 16pc exp limit xsec(fb)",100,12.5,2512.5,350,5,3505);
   h2_mGlmNLSP_84pc = new TH2D("mGlmNLSP_84pc","x: mass of gluino, y: mass of neutralino, z: 84pc exp limit xsec(fb)",100,12.5,2512.5,350,5,3505);

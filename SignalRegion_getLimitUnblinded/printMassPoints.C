@@ -4,6 +4,7 @@ void printMassPoints(TString fName){
   for(int nx=1;nx<=h2->GetNbinsX();nx++){
     for(int ny=1;ny<=h2->GetNbinsY();ny++){
       if(h2->GetBinContent(nx,ny) < 0.1) continue;
+      if(h2->GetYaxis()->GetBinCenter(ny) < 149) continue;
       cout<<h2->GetXaxis()->GetBinCenter(nx)<<" "<<h2->GetYaxis()->GetBinCenter(ny)<<endl;
     }
   }

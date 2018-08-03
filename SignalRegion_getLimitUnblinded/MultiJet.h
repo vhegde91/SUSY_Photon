@@ -52,6 +52,8 @@ class MultiJet : public NtupleVariables{
   vector<double> METBinLowEdgeV7={0,100,200,270,350,450,750};
 
   vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,180,200,220,250,280,320,380,450,550,650,750};
+  vector<double> phoEtaBins={0.0, 0.8, 1.4442, 1.566, 2.0, 2.5, 3.0};
+  vector<double> phoPtBins={100., 110., 200., 500., 10000};
   //vector<double> BestPhotonPtBinLowEdge={0,100,120,140,160,200,250,300,350,400,500,600};
   vector<double> METLowSimple={0,100,200,15000};
   //  vector<double> nJBinLow={0,1,2,3,4,5,6,7,20};
@@ -64,6 +66,9 @@ class MultiJet : public NtupleVariables{
   TH1I *h_RunNum;
   TH1D *h_intLumi;
   TH1D *h_madHT;
+  TH1D *h_cutFlow;
+  TH2D *h2_GenPhoPtEta;
+  TH2D *h2_RecoPhoPtEta;
 
   TH1D *h_ST_AB,*h_ST_CD,*h_ST_[4];
   TH1D *h_MET_AB,*h_MET_CD,*h_MET_[4];
@@ -165,6 +170,9 @@ void MultiJet::BookHistogram(const char *outFileName) {
   TH1::SetDefaultSumw2(1);
   h_RunNum=new TH1I("runs","Run nos.",300000,0,300000);
   h_intLumi=new TH1D("intLumi","integrated luminosity in /fb",2500,25,50); 
+  h_cutFlow=new TH1D("cutFlow","cut flow hist",15,0,15);
+  h2_GenPhoPtEta=new TH2D("GenPhoPtEta","x:GenPhotonEta vs GenPhotonPt",phoEtaBins.size()-1,&(phoEtaBins[0]),phoPtBins.size()-1,&(phoPtBins[0]));
+  h2_RecoPhoPtEta=new TH2D("RecoPhoPtEta","x:RecoPhotonEta vs RecoPhotonPt",phoEtaBins.size()-1,&(phoEtaBins[0]),phoPtBins.size()-1,&(phoPtBins[0]));
   h_mindPhi1dPhi2_ABCD=new TH1D("mindPhi1dPhi2","min(#Delta#Phi1,#Delta#Phi2) for ABCD",400,0,4);
 
   h_ST_AB=new TH1D("ST_AB","ST_AB",400,0,4000);
@@ -297,7 +305,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
     h_PhoPt_minNJ5_[i]=new TH1D("PhoPt_minNJ5_"+regName,"Photon Pt for nJ>=5_"+regName,150,0,1500);
 
     h_SBins_v1_[i] = new TH1D("AllSBins_v1_"+regName,"search bins:(NJ=2to4) (NJ:5or6) (NJ>=7)_"+regName,21,0.5,21.5);
-  
+
     h2_PtPhotonvsMET_[i]=new TH2D("BestPhotonPtvsMET_"+regName,"Best photon Pt vs MET_"+regName,150,0,1500,200,0,2000);
     h2_dPhi1dPhi2_[i]=new TH2D("dPhi1dPhi2_"+regName,"x:dPhi1 vs dPhi2_"+regName,40,0,4,40,0,4);
     h2_NJST_[i]=new TH2D("NJST_"+regName,"x:no. of hadJets vs ST_"+regName,nJBinLow.size()-1,&(nJBinLow[0]),STBinLow2.size()-1,&(STBinLow2[0]));
@@ -383,7 +391,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
 MultiJet::MultiJet(const TString &inputFileList, const char *outFileName, const char* dataset) {
   string nameData=dataset;//vvv
   TChain *tree = new TChain("PreSelection");
-  if(nameData=="signalH") tree = new TChain("TreeMaker2/PreSelection");//vvv
+  if(nameData=="Ra2Tree") tree = new TChain("TreeMaker2/PreSelection");//vvv
   if( ! FillChain(tree, inputFileList) ) {
     std::cerr << "Cannot get the tree " << std::endl;
   } else {

@@ -35,13 +35,14 @@ void makeDatacard_SBinsV7_v7(double mGl,double mNLSP,TString sigFile){
   bool useAllSigSyst = 1;
   if(!(sigFile.Contains("T5tttt") || sigFile.Contains("T6tt"))) sigCont=0;
   if(sigFile.Contains("TChi")) useAllSigSyst = 0;
+  if(sigFile.Contains("GGM")) useAllSigSyst = 0;
   //  int nFiles=nSig+1;
   double sigXsec = 0.0, sigXsecUnc = 0.0;
   TFile *fXsec = TFile::Open("mGl_Xsecpb_absUnc.root");
   TH1D *hXsec = (TH1D*)fXsec->Get("mGlXsec");
   sigXsec = hXsec->GetBinContent(hXsec->FindBin(mGl));
   sigXsecUnc = hXsec->GetBinError(hXsec->FindBin(mGl));
-  cout<<mGl<<" xsec: "<<sigXsec<<" unc: "<<sigXsecUnc<<endl;
+  cout<<mGl<<" (If SMS) Gluino xsec: "<<sigXsec<<" unc: "<<sigXsecUnc<<endl;
   f[0] = new TFile(sigFile);
   f[1] = new TFile("SBinHists.root");
 
@@ -116,7 +117,9 @@ void makeDatacard_SBinsV7_v7(double mGl,double mNLSP,TString sigFile){
     else if(i==5 || i==11 || i==16 || i==21 || i==26 || i==31) metCorr = "M5";
     else if(i==6)                                              metCorr = "M7";
 
-    string name2="dataCards/"+getfname(f[0]->GetName())+"_"+"bin"+to_string(i)+".txt";
+    string name2;
+    if(i<10) name2="dataCards/"+getfname(f[0]->GetName())+"_"+"bin0"+to_string(i)+".txt";
+    else name2="dataCards/"+getfname(f[0]->GetName())+"_"+"bin"+to_string(i)+".txt";
     //    cout<<name2;
     sprintf(name,"%s",name2.c_str());
     //    cout<<name<<endl;

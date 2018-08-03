@@ -8,6 +8,7 @@ anaArg=$4
 outName=$5
 currDir=$(pwd)
 
+echo "root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyPhotonMET/Run2ProductionV12/sorted_SMS/${anaArg}_FastSim_GGM_M1M3_${gluinoMass}_${nlspMass}.root" > runFileList.txt
 ######################################
 # SETUP CMSSW STUFF...
 ######################################
@@ -22,15 +23,30 @@ scram b clean
 scram b -j4
 
 cd $currDir
+tar -xf btagFiles.tar
 pwd
-#outRootFile="${anaArg}_${outName}_${gluinoMass}_${nlspMass}.root"
-outRootFile="SignalCont_GGM_M1M3_LostMu.root"
+outRootFile="${anaArg}_${outName}_${gluinoMass}_${nlspMass}.root"
+
+########### run with genMET #################
+./$executable runFileList.txt $outRootFile ${anaArg}_GenMET
+mv $outRootFile genMET.root
+########### run with recoMET #################
+./$executable runFileList.txt $outRootFile ${anaArg}
+cp $outRootFile recoMET.root
+
+hadd genRecoMET.root recoMET.root genMET.root
+rm recoMET.root genMET.root
+rm runFileList.txt
+
+echo "getting bTag SF up file"
+#xrdcp root://cmseos.fnal.gov//store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/signalSystematics/hists_${outName}/FastSim_${outName}_bTagSFup_${gluinoMass}_${nlspMass}.root .
+#mv FastSim_${outName}_bTagSFup_${gluinoMass}_${nlspMass}.root bTagSFupFile.root
 
 echo "ls"
 ls
 echo "making datacards"
 mkdir dataCards
-root -l -q -b 'makeDatacard_SBinsV7_GGM.C('${gluinoMass}','${nlspMass}',"'${outRootFile}'")'
+root -l -q -b 'makeDatacard_SBinsV7_v7.C('${gluinoMass}','${nlspMass}',"'${outRootFile}'")'
 
 echo "ls dataCards"
 ls dataCards
@@ -39,9 +55,10 @@ combineCards.py dataCards/*.txt > dataCard_${anaArg}_${outName}_${gluinoMass}_${
 echo "calculating limit"
 mH="$(echo "${gluinoMass}+${nlspMass}*0.0001" | bc)"
 echo $mH
+
 combine -M Asymptotic dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -n ${outName}_${gluinoMass}_${nlspMass} -m ${mH}
-#combine -M ProfileLikelihood --significance dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -n ObsSignif_${outName}_${gluinoMass}_${nlspMass} -m ${mH}
-#combine -M ProfileLikelihood --significance dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -t -1 --expectSignal=1 -n ExpSignif_${outName}_${gluinoMass}_${nlspMass} -m ${mH}
+combine -M ProfileLikelihood --significance dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -n ObsSignif_${outName}_${gluinoMass}_${nlspMass} -m ${mH}
+combine -M ProfileLikelihood --significance dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -t -1 --expectSignal=1 -n ExpSignif_${outName}_${gluinoMass}_${nlspMass} -m ${mH}
 ##### get photon+lepton ana limits
 tar xf M1M3_leppho.tar.gz
 ls
@@ -51,11 +68,11 @@ combine -M Asymptotic counting_GMSB_${nlspMass}_${gluinoMass}.txt -n PhoLep_${ou
 combineCards.py dataCard_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt counting_GMSB_${nlspMass}_${gluinoMass}.txt > dataCard_CombinedPhoLep_PhoJet_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt
 combine -M Asymptotic dataCard_CombinedPhoLep_PhoJet_${anaArg}_${outName}_${gluinoMass}_${nlspMass}.txt -n PhoLep_PhoJet_${outName}_${gluinoMass}_${nlspMass} -m ${mH}
 
-#counting_GMSB_100_1000.txt
 ##########################
 rm dataCard_*.txt
 rm ${outRootFile}
 rm FastSim_GGM_M1M3_*_.root
 rm *.txt
+rm genRecoMET.root
 #rm counting_*.txt
 #rm dataCard_CombinedPhoLep_PhoJet*.txt
