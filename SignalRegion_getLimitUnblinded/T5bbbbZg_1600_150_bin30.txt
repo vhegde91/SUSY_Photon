@@ -1,0 +1,41 @@
+Combination of FastSim_T5bbbbZg_1600_150_bin30.txt
+imax 1 number of bins
+jmax 5 number of processes minus 1
+kmax 28 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+bin          ch1        
+observation  1.0        
+----------------------------------------------------------------------------------------------------------------------------------
+bin                                   ch1               ch1               ch1               ch1               ch1               ch1             
+process                               T5b_1600_150_b30  ZG_bin30          MultiJ_bin30      Fake_bin30        LEle_bin30        LMuTau_bin30    
+process                               0                 1                 2                 3                 4                 5               
+rate                                  5.6971            0.0689            1e-06             0.4358            0.7229            1e-06           
+----------------------------------------------------------------------------------------------------------------------------------
+FakeRate_ISR_b          lnN           -                 -                 -                 1.02              -                 -               
+FakeRate_PU_b           lnN           -                 -                 -                 1.06              -                 -               
+FakeRate_SF_b           lnN           -                 -                 -                 1.14              -                 -               
+FakeUncRate_b30         lnN           -                 -                 -                 1.18075           -                 -               
+LEleDR_b                lnN           -                 -                 -                 -                 1.12              -               
+LEleJEC_b               lnN           -                 -                 -                 -                 1.02              -               
+LEleLeptSF_bM4          lnN           -                 -                 -                 -                 1.02              -               
+LEleTFUnc_b30           lnN           -                 -                 -                 -                 1.16923           -               
+LEle_b30                gmN  2        -                 -                 -                 -                 0.361453          -               
+LLeptPDF_b              lnN           -                 -                 -                 -                 1.05              1.015           
+LMuLeptSF_bM4           lnN           -                 -                 -                 -                 -                 1.03            
+LMuTauTFUnc_b30         lnN           -                 -                 -                 -                 -                 1.14674         
+LMuTau_b30              gmN  0        -                 -                 -                 -                 -                 0.664767        
+MultiJEW_b30            lnN           -                 -                 0.300/3.000       -                 -                 -               
+MultiJHL_bR6            lnN           -                 -                 1.2006            -                 -                 -               
+MultiJ_b30              gmN  0        -                 -                 0.617992          -                 -                 -               
+MultiJdR_bR6            lnN           -                 -                 1.71638           -                 -                 -               
+ZGTF_b                  gmN  36       -                 0.00191423        -                 -                 -                 -               
+ZGTFpurity_b            lnN           -                 1.03608           -                 -                 -                 -               
+ZG_bTagSF_b             lnN           -                 0.94              -                 -                 -                 -               
+ZG_highOrdCorr_bR6      lnN           -                 1.25              -                 -                 -                 -               
+ZG_mcStat_b30           lnN           -                 1.40328           -                 -                 -                 -               
+sigGenMET_bM4           lnN           1.00327           -                 -                 -                 -                 -               
+sigISR_bHJ              lnN           1.15552           -                 -                 -                 -                 -               
+sigLumiTrig             lnN           1.032             -                 -                 -                 -                 -               
+sigOther_b30            lnN           1.058             -                 -                 -                 -                 -               
+sigStat_b30             lnN           1.02949           -                 -                 -                 -                 -               
+sigbTag_b               lnN           0.983856          -                 -                 -                 -                 -               
