@@ -63,8 +63,10 @@ void dataPred_SBinsOnly(TString iFname){
   f[0] = new TFile(iFname);
   // f[1] = new TFile("FastSim_T5bbbbZG_1600_150.root");
   // f[2] = new TFile("FastSim_T5bbbbZG_1600_1550.root");
-  f[1] = new TFile("FastSim_T5bbbbZG_1800_150.root");
-  f[2] = new TFile("FastSim_T5bbbbZG_1800_1750.root");
+  // f[1] = new TFile("FastSim_T5bbbbZG_1800_150.root");
+  // f[2] = new TFile("FastSim_T5bbbbZG_1800_1750.root");
+  f[1] = new TFile("FastSim_TChiWG_0_800.root");
+  f[2] = new TFile("FastSim_TChiNG_0_800.root");
   
   TFile *fout;
   vector<string> name1;
@@ -204,8 +206,8 @@ void dataPred_SBinsOnly(TString iFname){
   char name2[100];
   textOnTop.SetTextSize(0.07);
   intLumiE.SetTextSize(0.07);
-  //textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
-  textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
+  textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
+  //textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
   intLumiE.SetTextSize(0.07);
   sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.72,0.91,name2);
@@ -252,6 +254,8 @@ TString getLegName(TString fname){
   else if(fname.Contains("T5bbbbZG_1800_150")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
   else if(fname.Contains("T5bbbbZG_1800_1750")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 1750 GeV)";}
   else if(fname.Contains("v7_Obs") ){return "Data";}
+  else if(fname.Contains("TChiNG_0_800.root") ){return "TChiNG (m_{#chi_{1}^{0, #pm}} = 800 GeV)";}
+  else if(fname.Contains("TChiWG_0_800.root") ){return "TChiWG (m_{#chi_{1}^{0, #pm}} = 800 GeV)";}
   else return fname;
 }
 TString getXaxisName(TString axname){

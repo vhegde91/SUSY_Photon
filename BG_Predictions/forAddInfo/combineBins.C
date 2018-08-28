@@ -55,11 +55,11 @@ void combineBins(){
   // f[2] = new TFile("FastSim_T5qqqqHg_1800_1750.root");
   // f[1] = new TFile("FastSim_T5ttttZg_1800_150.root");
   // f[2] = new TFile("FastSim_T5ttttZg_1800_1550.root");
-  f[1] = new TFile("FastSim_T6ttZg_1000_100.root");
-  f[2] = new TFile("FastSim_T6ttZg_1000_900.root");
+  // f[1] = new TFile("FastSim_T6ttZg_1000_100.root");
+  // f[2] = new TFile("FastSim_T6ttZg_1000_900.root");
 
-  // f[1] = new TFile("FastSim_T5qqqqHg_1700_150.root");
-  // f[2] = new TFile("FastSim_T5qqqqHg_1700_1650.root");
+  f[1] = new TFile("FastSim_T5qqqqHg_1700_150.root");
+  f[2] = new TFile("FastSim_T5qqqqHg_1700_1650.root");
 
   fout = new TFile("binsCombined.root","recreate");
   vector<string> name1;
@@ -107,7 +107,7 @@ void combineBins(){
   //  getMETincl();
   //  getMET0b();
   //getMET1b();
-  //  getMET0bLJ();
+  getMET0bLJ();
   //  getNJ();
   //  getNJ0b();
   getNJ1b();
@@ -223,7 +223,7 @@ void drawPlots(TH1D* h1[],TString varName){
   textOnTop.SetTextSize(0.06);
   intLumiE.SetTextSize(0.06);
   textOnTop.DrawLatexNDC(0.15,0.91,"CMS #it{#bf{Supplementary}}");
-  sprintf(name2,"#bf{%0.1f fb^{-1} (13TeV)}",intLumi);
+  sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.68,0.91,name2);
   TLatex Tl;  Tl.SetTextSize(0.05);
   Tl.DrawLatexNDC(0.45,0.91,"#bf{arXiv:xxxx.xxxxx}");
@@ -554,7 +554,7 @@ TString getLegName(TString fname){
   else return fname;
 }
 TString getXaxisName(TString axname){
-  if(axname.Contains("nHadJets") || axname.Contains("NJ")) return "N_{ Jets}";
+  if(axname.Contains("nHadJets") || axname.Contains("NJ")) return "N_{ jets}";
   else if(axname.Contains("ST")) return "ST (GeV)";
   else if(axname.Contains("BTags") || axname.Contains("bTags")) return "N_{ b tags}";
   else if(axname.Contains("ElePt")) return "e pT (GeV)";

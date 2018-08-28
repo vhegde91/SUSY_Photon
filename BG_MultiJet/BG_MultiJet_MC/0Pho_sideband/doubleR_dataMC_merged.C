@@ -94,7 +94,7 @@ void doubleR_dataMC_merged(){
 
   name2.push_back("Region");  rebin.push_back(5);
   TString nameN="Data";
-  TString nameD="MC";
+  TString nameD="Sim.";
   TLegend *legend[name2.size()];
   gStyle->SetOptStat(0);
   gStyle->SetLegendBorderSize(0);
@@ -169,8 +169,8 @@ void doubleR_dataMC_merged(){
       h_den->Draw("E1X0 same");
 
       legend[i]=new TLegend(0.74, 0.64,  0.94, 0.89);
-      legend[i]->AddEntry(h_num,nameN,"elp");
-      legend[i]->AddEntry(h_den,nameD,"elp");
+      legend[i]->AddEntry(h_num,nameN,"ep");
+      legend[i]->AddEntry(h_den,nameD,"ep");
       legend[i]->Draw();
       gPad->RedrawAxis();
       //---------------- for ratio ------------------
@@ -192,8 +192,8 @@ void doubleR_dataMC_merged(){
       for(int j=1;j<=h_numCp->GetNbinsX();j++){
       	h_numCp->GetXaxis()->SetBinLabel(j,binLabel[j-1]);
       }
-      h_numCp->GetYaxis()->SetTitle("#frac{Data}{MC}");
-      h_numCp->GetYaxis()->SetTitle("Data / MC");
+      //      h_numCp->GetYaxis()->SetTitle("#frac{Data}{MC}");
+      h_numCp->GetYaxis()->SetTitle("Data / Sim.");
       h_numCp->GetYaxis()->CenterTitle(1);
       h_numCp->GetYaxis()->SetTitleOffset(0.35);
       h_numCp->GetYaxis()->SetTitleSize(0.13);
@@ -212,8 +212,8 @@ void doubleR_dataMC_merged(){
       char name3[100];
       textOnTop.SetTextSize(0.07);
       intLumiE.SetTextSize(0.07);
-      //textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
-      textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
+      textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
+      //textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
       sprintf(name3,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
       intLumiE.DrawLatexNDC(0.71,0.91,name3);
 

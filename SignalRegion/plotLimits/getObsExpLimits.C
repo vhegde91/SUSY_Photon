@@ -184,9 +184,9 @@ void getObsExpLimits(TString fName){
   gr1d_Median->Draw("L"); 
   gr1d_16pc->Draw("L");   
   gr1d_84pc->Draw("L");
-  gr1d_Obs->Draw("L");
-  gr1d_XsecUp->Draw("L");
-  gr1d_XsecDn->Draw("L");
+  // gr1d_Obs->Draw("L");
+  //  gr1d_XsecUp->Draw("L");
+  //  gr1d_XsecDn->Draw("L");
   gPad->RedrawAxis();
   //-----------------------------------------------
   if(modelName.Contains("T5qqqqHg")){
@@ -266,8 +266,8 @@ void getObsExpLimits(TString fName){
   char name3[100];
   textOnTop.SetTextSize(0.05);
   intLumiE.SetTextSize(0.05);
-  //  textOnTop.DrawLatexNDC(0.16,0.91,"CMS #it{#bf{Preliminary}}");
-  textOnTop.DrawLatexNDC(0.16,0.91,"CMS");
+  textOnTop.DrawLatexNDC(0.16,0.91,"CMS #it{#bf{Preliminary}}");
+  //textOnTop.DrawLatexNDC(0.16,0.91,"CMS");
   sprintf(name3,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.57,0.91,name3);
   c3->SaveAs(modelName+"_exclusion.pdf");

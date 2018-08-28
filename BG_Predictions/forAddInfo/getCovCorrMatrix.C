@@ -94,7 +94,7 @@ void getCovCorrMatrix(){
   textOnTop.SetTextSize(0.04);
   intLumiE.SetTextSize(0.04);
   textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Supplementary}}");
-  sprintf(name2,"#bf{%0.1f fb^{-1} (13TeV)}",intLumi);
+  sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.64,0.91,name2);
   TLatex Tl;
   Tl.SetTextSize(0.04);

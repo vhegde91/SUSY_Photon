@@ -17,7 +17,9 @@
 
 TLatex textOnTop,intLumiE;
 double intLumi = 35.9;
-void overlayExcl(){
+
+TGraph *flipAxes(TGraph*);
+void flippedOverlay(){
   const int nFiles=3;
   int col[7]={kRed,kBlue,kTeal+9,kBlack,kOrange,kCyan,kMagenta};
   gStyle->SetOptStat(0);
@@ -74,13 +76,14 @@ void overlayExcl(){
   else if(modelName.Contains("T5ttttZg")) modelName="T5ttttZg";
   else if(modelName.Contains("T5bbbbZg")) modelName="T5bbbbZg";
   if(!modelName.Contains("GGM_M1M3")) h2->SetTitle(";m_{#tilde{g}} (GeV);m_{#tilde{#chi}_{1}^{0}} (GeV)");
-  else if(modelName.Contains("GGM_M1M3")) h2->SetTitle(";M3 (GeV);M1 (GeV)");
+  else if(modelName.Contains("GGM_M1M3")) h2->SetTitle(";M1 (GeV);M3 (GeV)");
   if(modelName.Contains("T6tt")) h2->SetTitle(";m_{ #tilde{t}} (GeV);m_{#tilde{#chi}_{1}^{0}} (GeV)");
   h2->SetTitle(modelName);
   h2->Draw();
-  TGraph *gr[nFiles];
+  TGraph *gr[nFiles],*grTemp;
   for(int i=0;i<nFiles;i++){
-    gr[i]=(TGraph*)f[i]->FindObjectAny("exp");
+    grTemp=(TGraph*)f[i]->FindObjectAny("exp");
+    gr[i]=flipAxes(grTemp);
     gr[i]->SetLineColor(col[i]);
     gr[i]->Draw("same");
     TString fName=f[i]->GetName();
@@ -125,42 +128,10 @@ void overlayExcl(){
 
 }
 
-// void overlayExcl(){
-//   const int nFiles=5;
-//   int col[5]={kRed,kBlue,kMagenta,kTeal+9,kBlack};
-//   gStyle->SetOptStat(0);
-//   TCanvas *c1=new TCanvas("c1","c1",1200,1000);
-//   c1->SetLogz();
-//   TFile *f[nFiles];
-//   f[0]=new TFile("EMHT_Limits_Knut/T5qqqqHg_v20/saved_graphs1d_limit.root");
-//   f[1]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV3.root");
-//   f[2]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV4.root");
-//   f[3]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV5.root");
-//   f[4]=new TFile("Excl_T5qqqqHg_LimitPlots_SbinV6.root");
-//   //  f[1]=new TFile("a.root");
-//   // f[1]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV4.root");
-//   // f[2]=new TFile("Excl_T5ttttZg_LimitPlots_SbinV4.root");
-
-//   //  TFile *f1=new TFile("EMHT_Limits_Knut/T5ttttZg_v20/saved_graphs1d_limit.root");
-//   TLegend *leg = new TLegend(0.8,0.6,0.9,0.9);
-//   TH2D *h2=(TH2D*)f[0]->FindObjectAny("obs_hist");
-//   h2->Draw();
-//   TGraph *gr[nFiles];
-//   for(int i=0;i<nFiles;i++){
-//     gr[i]=(TGraph*)f[i]->FindObjectAny("exp");
-//     gr[i]->SetLineColor(col[i]);
-//     gr[i]->Draw("same");
-//     TString fName=f[i]->GetName();
-//     if(fName.Contains("EMHT")) fName = "HT#gamma";
-//     if(fName.Contains("SbinV1")) fName = "V1";
-//     if(fName.Contains("SbinV2")) fName = "V2";
-//     if(fName.Contains("SbinV3")) fName = "V3";
-//     if(fName.Contains("SbinV4")) fName = "V4";
-//     if(fName.Contains("SbinV5")) fName = "V5";
-//     if(fName.Contains("SbinV6")) fName = "V6";
-//     leg->AddEntry(gr[i],fName,"l");
-//   }
-
-//   leg->Draw();
-
-// }
+TGraph *flipAxes(TGraph* gr0){
+  double *xArr=gr0->GetX();
+  double *yArr=gr0->GetY();
+  int nP=gr0->GetN();
+  TGraph *grFlip = new TGraph(nP,yArr,xArr);
+  return grFlip;
+}
