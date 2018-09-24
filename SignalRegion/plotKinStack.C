@@ -25,6 +25,7 @@ TLatex textOnTop,intLumiE;
 const int nfiles=8,nBG=6;    //Specify no. of files
 TFile *f[nfiles];
 bool savePlots=1;
+bool isPaper=0;
 //int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kMagenta+2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
 ////int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kPink-2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
 //int col[11]={kPink-2,kTeal+9,kGreen,kYellow,kOrange,kBlue,kCyan,kRed,kBlue+2,kMagenta,kPink+1};  //Specify Colors b's
@@ -54,14 +55,14 @@ void plotKinStack(){
   gStyle->SetTitle(0);
   double yMin=0.1,yMax = 1000;
   double xMin=0.0,xMax = 2000;
-  //TString varName = "ST"; TString xLabel = "H_{T}^{#gamma} (GeV)";   int rebin=25; yMin=0.5,yMax = 1100; xMin=300.0,xMax = 3000;
-  //TString varName = "MET"; TString xLabel = "p_{T}^{miss} (GeV)";   int rebin=10; yMin=0.1,yMax = 1500; xMin=200.0,xMax = 1400;
-  //TString varName = "BestPhotonPt"; TString xLabel = "p_{T}^{#gamma} (GeV)";   int rebin=10; yMin=0.4,yMax = 1000; xMin=100.0,xMax = 1200;
+  //  TString varName = "ST"; TString xLabel = "H_{T}^{#gamma} (GeV)";   int rebin=25; yMin=0.5,yMax = 1100; xMin=300.0,xMax = 3000;
+  //  TString varName = "MET"; TString xLabel = "p_{T}^{miss} (GeV)";   int rebin=10; yMin=0.1,yMax = 1500; xMin=200.0,xMax = 1400;
+  TString varName = "BestPhotonPt"; TString xLabel = "p_{T}^{#gamma} (GeV)";   int rebin=10; yMin=0.4,yMax = 1000; xMin=100.0,xMax = 1200;
   //  TString varName = "nHadJets"; TString xLabel = "N_{ jets}";   int rebin=1; yMin=0.1,yMax = 1000; xMin=2.0,xMax = 15;
   //  TString varName = "nBTags"; TString xLabel = "N_{ b-jets}";   int rebin=1; yMin=0.1,yMax = 3000; xMin=1.0,xMax = 5;
   //  TString varName = "mindPhi1dPhi2"; TString xLabel = "min(#Delta#phi_{1}, #Delta#phi_{2})";   int rebin=10; yMin=0.3,yMax = 1500; xMin=-100000.0,xMax = 100000;
   //"mindPhi1dPhi2";//"AllSBins_v7_CD";
-  TString varName = "AllSBins_v7_CD"; TString xLabel = "Bin no.";   int rebin=1; yMin=0.5,yMax = 11000; xMin=-100000,xMax = 100000;
+  //  TString varName = "AllSBins_v7_CD"; TString xLabel = "Bin no.";   int rebin=1; yMin=0.5,yMax = 11000; xMin=-100000,xMax = 100000;
   //TString varName = "METvarBin";
   //  TString xLabel = "p_{T}^{miss} (GeV)";//min(#Delta#Phi_{1},#Delta#Phi_{2})
   
@@ -95,10 +96,10 @@ void plotKinStack(){
   //  f[7] = new TFile("DCS_LDP_Run2016_Multijet_v2.root");
   //  f[8] = new TFile("T5qqqqHg_1600_1000_FastSim.root");
 
-  //  f[6] = new TFile("T5bbbbZg_1800_150_FastSim.root");
-  //f[7] = new TFile("T5bbbbZg_1800_1750_FastSim.root");
-  f[6] = new TFile("GGM_M1M3_1100_1000_FastSim.root");
-  f[7] = new TFile("GGM_M1M3_1100_200_FastSim.root");
+  f[6] = new TFile("T5bbbbZg_1800_150_FastSim.root");
+  f[7] = new TFile("T5bbbbZg_1800_1750_FastSim.root");
+  // f[6] = new TFile("GGM_M1M3_1100_1000_FastSim.root");
+  // f[7] = new TFile("GGM_M1M3_1100_200_FastSim.root");
 
   gStyle->SetTextSize(2);
   THStack *hs_var=new THStack("var_Stack","MET Stacked");
@@ -187,12 +188,13 @@ void plotKinStack(){
  
   textOnTop.SetTextSize(0.04);
   intLumiE.SetTextSize(0.04);
-  textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Supplementary}}");
+  if(isPaper) textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Supplementary}}");
+  else textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Preliminary}}");
   sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.7,0.91,name2);
   TLatex Tl;
   Tl.SetTextSize(0.04);
-  Tl.DrawLatexNDC(0.48,0.91,"#bf{arXiv:xxxx.xxxxx}");
+  if(isPaper) Tl.DrawLatexNDC(0.48,0.91,"#bf{arXiv:xxxx.xxxxx}");
 
   if(varName == "mindPhi1dPhi2"){
     TLine *line1=new TLine( 0.3,0.11,  0.3,yMax);

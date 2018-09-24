@@ -25,9 +25,9 @@ void purityCalc(){
   hDen->SetBinContent(8,5);
   // //  hDen->SetBinError(1,sqrt(36));
 
-  TGraphAsymmErrors *gr = new TGraphAsymmErrors(hNum,hDen);
+  TGraphAsymmErrors *gr = new TGraphAsymmErrors(hNum,hDen,"cp");
   //  TGraphAsymmErrors *gr = new TGraphAsymmErrors(den.size(),&(den[0]),&(num[0]),&(numErr[0]),&(numErr[0]),&(denErr[0]),&(denErr[0]));
-  gr->Draw();
+  gr->Draw("text");
   gr->Print("ALL");
   cout<<"================"<<endl;
   // double x1[]=gr->GetX();

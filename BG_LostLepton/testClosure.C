@@ -159,9 +159,9 @@ void testClosure(){
 	setLastBinAsOverFlow(h_histG);
 	setLastBinAsOverFlow(h_histE);
 
-	h_histG->SetLineColor(kRed);
-	h_histG->SetLineWidth(2);
-	h_histG->SetMarkerStyle(21);
+	h_histG->SetLineColor(kAzure+10);
+	h_histG->SetLineWidth(3);
+	h_histG->SetMarkerStyle(20);
 	h_histG->SetMarkerColor(h_histG->GetLineColor());
 	h_histG->SetTitle(";;Events");
 	h_histG->GetYaxis()->SetLabelSize(0.09);
@@ -170,9 +170,9 @@ void testClosure(){
 	h_histG->GetYaxis()->SetNdivisions(10);
 	
 	//	h_histE->SetLineColor(kGreen+2);
-	h_histE->SetLineColor(kBlue);
-	h_histE->SetLineWidth(2);
-	h_histE->SetMarkerStyle(20);
+	h_histE->SetLineColor(kRed+1);
+	h_histE->SetLineWidth(3);
+	h_histE->SetMarkerStyle(24);
 	h_histE->SetMarkerColor(h_histE->GetLineColor());
 
 	c_cA[i]->cd();p_top[i]->cd();
@@ -194,7 +194,7 @@ void testClosure(){
 	name=name1[i];
 	legend[i]->AddEntry(h_histG,"Expected","lep");
 	name=name2[i];
-	legend[i]->AddEntry(h_histE,"Prediction","lep");
+	legend[i]->AddEntry(h_histE,"Predicted","lep");
 	legend[i]->Draw();
 	
 	TString name = h_histG->GetName();
@@ -217,6 +217,7 @@ void testClosure(){
 
     h_numr->SetLineColor(kBlack);
     h_numr->SetMarkerColor(kBlack);
+    h_numr->SetLineWidth(2);
     //    h_numr->SetTitle(";;#frac{Exp}{Pred }");
     h_numr->SetTitle(";;Exp. / Pred.");
     h_numr->GetXaxis()->SetLabelSize(0.13);

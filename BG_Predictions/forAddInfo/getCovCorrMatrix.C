@@ -24,7 +24,8 @@ void getCovCorrMatrix(){
   gStyle->SetOptStat(0);
   const Int_t NRGBs = 5;
   const Int_t NCont = 255;
- 
+  bool isPaper = 0; 
+
   Double_t stops[NRGBs] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
   // Double_t red[NRGBs]   = { 0.50, 0.50, 1.00, 1.00, 1.00 };
   Double_t red[NRGBs]   = { 0.0, 0.0, 1.00, 1.00, 1.00 };
@@ -93,12 +94,13 @@ void getCovCorrMatrix(){
   char name2[100];
   textOnTop.SetTextSize(0.04);
   intLumiE.SetTextSize(0.04);
-  textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Supplementary}}");
+  if(isPaper) textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Supplementary}}");
+  else textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
   sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.64,0.91,name2);
   TLatex Tl;
   Tl.SetTextSize(0.04);
-  Tl.DrawLatexNDC(0.4,0.91,"#bf{arXiv:xxxx.xxxxx}");
+  if(isPaper) Tl.DrawLatexNDC(0.4,0.91,"#bf{arXiv:xxxx.xxxxx}");
 
   TCanvas *cov = new TCanvas("CovariancenMatrix","Cov",1300,1000);
   cov->SetRightMargin(0.18);
@@ -109,14 +111,15 @@ void getCovCorrMatrix(){
   h2_cov2->GetXaxis()->SetTitle("Bin number");
   h2_cov2->GetYaxis()->SetTitle("Bin number");
   h2_cov2->GetYaxis()->SetTitleOffset(0.9);
-  textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Supplementary}}");
+  if(isPaper) textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Supplementary}}");
+  else textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
   intLumiE.DrawLatexNDC(0.64,0.91,name2);
-  Tl.DrawLatexNDC(0.4,0.91,"#bf{arXiv:xxxx.xxxxx}");
+  if(isPaper) Tl.DrawLatexNDC(0.4,0.91,"#bf{arXiv:xxxx.xxxxx}");
 
   corr->SaveAs("CorrelationMatrix.pdf");
   h2_corr2->SaveAs("CorrelationMatrix.root");
 
   cov->SaveAs("CovarianceMatrix.pdf");
   h2_cov2->SaveAs("CovarianceMatrix.root");
-
+  
 }

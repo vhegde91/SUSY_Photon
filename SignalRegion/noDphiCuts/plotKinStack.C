@@ -25,6 +25,7 @@ TLatex textOnTop,intLumiE;
 const int nfiles=8,nBG=6;    //Specify no. of files
 TFile *f[nfiles];
 bool savePlots=1;
+bool isPaper=0;
 //int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kMagenta+2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
 ////int col[11]={kTeal+9,kGreen,kYellow,kOrange,kPink+1,kPink-2,kBlue,kCyan,kRed,kBlue+2,kMagenta};  //Specify Colors b's
 //int col[11]={kPink-2,kTeal+9,kGreen,kYellow,kOrange,kBlue,kCyan,kRed,kBlue+2,kMagenta,kPink+1};  //Specify Colors b's
@@ -183,12 +184,13 @@ void plotKinStack(){
  
   textOnTop.SetTextSize(0.04);
   intLumiE.SetTextSize(0.04);
-  textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Supplementary}}");
+  if(isPaper) textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Supplementary}}");
+  else textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Preliminary}}");
   sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.7,0.91,name2);
   TLatex Tl;
   Tl.SetTextSize(0.04);
-  Tl.DrawLatexNDC(0.48,0.91,"#bf{arXiv:xxxx.xxxxx}");
+  if(isPaper) Tl.DrawLatexNDC(0.48,0.91,"#bf{arXiv:xxxx.xxxxx}");
 
   if(varName == "mindPhi1dPhi2"){
     TLine *line1=new TLine( 0.3,0.11,  0.3,yMax);

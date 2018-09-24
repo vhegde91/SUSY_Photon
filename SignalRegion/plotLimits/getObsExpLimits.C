@@ -143,14 +143,14 @@ void getObsExpLimits(TString fName){
   //------------------------------------------------
   //  gr1d_Median->Print("all");
   gr1d_Median->SetLineColor(kRed);
-  gr1d_Median->SetLineWidth(3);gr1d_Median->SetLineStyle(7);
+  gr1d_Median->SetLineWidth(5);gr1d_Median->SetLineStyle(7);
   gr1d_16pc->SetLineColor(kRed);
   gr1d_16pc->SetLineWidth(2);gr1d_16pc->SetLineStyle(7);
   gr1d_84pc->SetLineColor(kRed);
   gr1d_84pc->SetLineWidth(2);gr1d_84pc->SetLineStyle(7);
 
   gr1d_Obs->SetLineColor(kBlack); //gr1d_Obs->SetLineStyle(2);
-  gr1d_Obs->SetLineWidth(3);
+  gr1d_Obs->SetLineWidth(5);
   gr1d_XsecUp->SetLineColor(kBlack);
   gr1d_XsecUp->SetLineWidth(2);//gr1d_XsecUp->SetLineStyle(2);
   gr1d_XsecDn->SetLineColor(kBlack);
@@ -166,7 +166,7 @@ void getObsExpLimits(TString fName){
   h2_XsecUL->GetZaxis()->SetMoreLogLabels();
   if(!(modelName.Contains("T6ttZg")))  h2_XsecUL->SetTitle(";m_{#tilde{g}} (GeV);m_{#tilde{#chi}_{1}^{0}} (GeV)");
   else                     h2_XsecUL->SetTitle(";m_{ #tilde{t} } (GeV);m_{#tilde{#chi}_{1}^{0}} (GeV)");
-  h2_XsecUL->GetYaxis()->SetTitleOffset(1.4);
+  h2_XsecUL->GetYaxis()->SetTitleOffset(1.5);
 
   if(modelName.Contains("GGM_M1M3")) h2_XsecUL->SetTitle(";M3 (GeV);M1 (GeV)");
 
@@ -184,9 +184,9 @@ void getObsExpLimits(TString fName){
   gr1d_Median->Draw("L"); 
   gr1d_16pc->Draw("L");   
   gr1d_84pc->Draw("L");
-  // gr1d_Obs->Draw("L");
-  //  gr1d_XsecUp->Draw("L");
-  //  gr1d_XsecDn->Draw("L");
+  gr1d_Obs->Draw("L");
+  gr1d_XsecUp->Draw("L");
+  gr1d_XsecDn->Draw("L");
   gPad->RedrawAxis();
   //-----------------------------------------------
   if(modelName.Contains("T5qqqqHg")){
@@ -266,8 +266,8 @@ void getObsExpLimits(TString fName){
   char name3[100];
   textOnTop.SetTextSize(0.05);
   intLumiE.SetTextSize(0.05);
-  textOnTop.DrawLatexNDC(0.16,0.91,"CMS #it{#bf{Preliminary}}");
-  //textOnTop.DrawLatexNDC(0.16,0.91,"CMS");
+  //  textOnTop.DrawLatexNDC(0.16,0.91,"CMS #it{#bf{Preliminary}}");
+  textOnTop.DrawLatexNDC(0.16,0.91,"CMS");
   sprintf(name3,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.57,0.91,name3);
   c3->SaveAs(modelName+"_exclusion.pdf");

@@ -27,6 +27,7 @@ TLatex textOnTop,intLumiE;
 char name2[100];
 double intLumi=35.9;
 TString getLegName(TString);
+bool isPaper=0;
 void PieChartSbinV7_v2(){
   TFile *f[6];
   // gStyle->SetPadColor(kBlack);
@@ -91,26 +92,27 @@ void PieChartSbinV7_v2(){
       intgrlRange6[i]=err; temp=h_hist[i]->IntegralAndError(31-nLastBins,31,err);
     }
     else{
-      // intgrlRange1[i]=h_hist[i]->Integral(6-nLastBins-1,6); //include one extra bin here
-      // intgrlRange2[i]=h_hist[i]->Integral(11-nLastBins,11);
-      // intgrlRange3[i]=h_hist[i]->Integral(16-nLastBins,16);
-      // intgrlRange4[i]=h_hist[i]->Integral(21-nLastBins,21);
-      // intgrlRange5[i]=h_hist[i]->Integral(26-nLastBins,26);
-      // intgrlRange6[i]=h_hist[i]->Integral(31-nLastBins,31);
-
-      // intgrlrange1[i]=h_hist[i]->Integral(4,6); //include one extra bin here
+      intgrlRange1[i]=h_hist[i]->Integral(6-nLastBins-1,6); //include one extra bin here
+      intgrlRange2[i]=h_hist[i]->Integral(11-nLastBins,11);
+      intgrlRange3[i]=h_hist[i]->Integral(16-nLastBins,16);
+      intgrlRange4[i]=h_hist[i]->Integral(21-nLastBins,21);
+      intgrlRange5[i]=h_hist[i]->Integral(26-nLastBins,26);
+      intgrlRange6[i]=h_hist[i]->Integral(31-nLastBins,31);
+      
+      // intgrlRange1[i]=h_hist[i]->Integral(4,6); //include one extra bin here
       // intgrlRange2[i]=h_hist[i]->Integral(10,11);
       // intgrlRange3[i]=h_hist[i]->Integral(15,16);
       // intgrlRange4[i]=h_hist[i]->Integral(20,21);
       // intgrlRange5[i]=h_hist[i]->Integral(25,26);
       // intgrlRange6[i]=h_hist[i]->Integral(30,31);
 
-      intgrlRange1[i]=h_hist[i]->Integral(2,3);
-      intgrlRange2[i]=h_hist[i]->Integral(8,9);
-      intgrlRange3[i]=h_hist[i]->Integral(12,13);
-      intgrlRange4[i]=h_hist[i]->Integral(18,19);
-      intgrlRange5[i]=h_hist[i]->Integral(23,24);
-      intgrlRange6[i]=h_hist[i]->Integral(28,29);
+      //for low MET (first 2 SR MET bins)
+      // intgrlRange1[i]=h_hist[i]->Integral(2,3);
+      // intgrlRange2[i]=h_hist[i]->Integral(8,9);
+      // intgrlRange3[i]=h_hist[i]->Integral(12,13);
+      // intgrlRange4[i]=h_hist[i]->Integral(18,19);
+      // intgrlRange5[i]=h_hist[i]->Integral(23,24);
+      // intgrlRange6[i]=h_hist[i]->Integral(28,29);
       // cout<<f[i]->GetName()<<" "<<intgrlRange1[i]<<endl;
       // cout<<f[i]->GetName()<<" "<<intgrlRange2[i]<<endl;
     }
@@ -161,12 +163,13 @@ void PieChartSbinV7_v2(){
 
   textOnTop.SetTextSize(0.035);
   intLumiE.SetTextSize(0.035);
-  textOnTop.DrawLatexNDC(0.19,0.825,"CMS #it{#bf{Simulation Supplementary}}");
+  if(isPaper)  textOnTop.DrawLatexNDC(0.19,0.825,"CMS #it{#bf{Simulation Supplementary}}");
+  else   textOnTop.DrawLatexNDC(0.19,0.825,"CMS #it{#bf{Simulation Preliminary}}");
   sprintf(name2,"#bf{(13 TeV)}");
   intLumiE.DrawLatexNDC(0.8,0.825,name2);
   TLatex Tl;
   Tl.SetTextSize(0.03);
-  Tl.DrawLatexNDC(0.6,0.825,"#bf{arXiv:xxxx.xxxxx}");
+  if(isPaper) Tl.DrawLatexNDC(0.6,0.825,"#bf{arXiv:xxxx.xxxxx}");
   //    if( i==1 || i==7 || i==12 || i==17 || i==22 || i==27 )
 
    //  c_cA->SaveAs(histName+name);

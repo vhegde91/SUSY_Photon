@@ -24,6 +24,7 @@ TFile *f[nfiles];
 int col[10]={kOrange,kTeal+9,kBlue,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
 TString name;
 bool saveCanvas=0;
+bool isPaper=0;
 void setLastBinAsOverFlow(TH1D*);
 TString getXaxisName(TString);
 TLatex textOnTop,intLumiE;
@@ -201,7 +202,8 @@ void testClosure_SBins(){
     char name2[100];
     textOnTop.SetTextSize(0.07);
     intLumiE.SetTextSize(0.07);
-    textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Supplementary}}");
+    if(isPaper) textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Supplementary}}");
+    else textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Preliminary}}");
     sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
     intLumiE.DrawLatexNDC(0.72,0.91,name2);
    
@@ -224,7 +226,7 @@ void testClosure_SBins(){
     Tl.DrawLatex(28.5,90,"N^{ #geq1}_{ #geq7}");
 
     Tl.SetTextSize(0.06);
-    Tl.DrawLatexNDC(0.48,0.91,"#bf{arXiv:xxxx.xxxxx}");
+    if(isPaper) Tl.DrawLatexNDC(0.48,0.91,"#bf{arXiv:xxxx.xxxxx}");
     
     if(saveCanvas){name="c_"+name1[i]+name2[i]+".png";c_cA[i]->SaveAs(name);}
   }

@@ -63,10 +63,10 @@ void dataPred_SBinsOnly(TString iFname){
   f[0] = new TFile(iFname);
   // f[1] = new TFile("FastSim_T5bbbbZG_1600_150.root");
   // f[2] = new TFile("FastSim_T5bbbbZG_1600_1550.root");
-  // f[1] = new TFile("FastSim_T5bbbbZG_1800_150.root");
-  // f[2] = new TFile("FastSim_T5bbbbZG_1800_1750.root");
-  f[1] = new TFile("FastSim_TChiWG_0_800.root");
-  f[2] = new TFile("FastSim_TChiNG_0_800.root");
+  f[1] = new TFile("FastSim_T5bbbbZG_1800_150.root");
+  f[2] = new TFile("FastSim_T5bbbbZG_1800_1750.root");
+  // f[1] = new TFile("FastSim_TChiWG_0_800.root");
+  // f[2] = new TFile("FastSim_TChiNG_0_800.root");
   
   TFile *fout;
   vector<string> name1;
@@ -148,6 +148,7 @@ void dataPred_SBinsOnly(TString iFname){
       h_hist[i]->SetLineWidth(2);
       //     h_hist[i]->GetXAxis()->SetErrorX(0);
       h_hist[i]->Draw("E1X0 same");
+      h_hist[i]->Draw("e0X0 same");
     }
     else{ 
       h_hist[i]->Draw("hist same");
@@ -206,8 +207,8 @@ void dataPred_SBinsOnly(TString iFname){
   char name2[100];
   textOnTop.SetTextSize(0.07);
   intLumiE.SetTextSize(0.07);
-  textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
-  //textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
+  //textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
+  textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
   intLumiE.SetTextSize(0.07);
   sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.72,0.91,name2);

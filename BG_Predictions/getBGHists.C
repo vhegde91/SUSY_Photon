@@ -656,6 +656,8 @@ void c_getBGHists::getTotalBG(int i_f){
   
   hTemp = (TH1D*)fl->Get("AllSBins_v7_CD");
   TH1D *hData = (TH1D*)hTemp->Clone("AllSBins_v7_Obs");
+  for(int i=1;i<=hData->GetNbinsX();i++)
+    if(hData->GetBinContent(i) < 0.0001) hData->SetBinError(i,1.8);
   TH1D *hDataVsBG = (TH1D*)hData->Clone("DataOverBG");
   hDataVsBG->Divide(hTot);
 

@@ -109,11 +109,11 @@ void doubleR_dataMC_merged(){
     c_cA[i] = new TCanvas(name,name,1000,600);
     p_top[i] =new TPad(name+"top",name+"top",0,0.4,1,1);
     p_bot[i] =new TPad(name+"bot",name+"bot",0,0.0,1,0.4);
-    p_top[i]->Draw();p_top[i]->SetGridx();p_top[i]->SetGridy(0);//p_top[i]->SetLogy();
+    p_top[i]->Draw();p_top[i]->SetGridx(0);p_top[i]->SetGridy(0);//p_top[i]->SetLogy();
     p_top[i]->SetBottomMargin(0);
     p_bot[i]->SetTopMargin(0);
     p_bot[i]->SetBottomMargin(0.35);
-    p_bot[i]->Draw();p_bot[i]->SetGridx();p_bot[i]->SetGridy(0);
+    p_bot[i]->Draw();p_bot[i]->SetGridx(0);p_bot[i]->SetGridy(0);
     //    textOnTop.DrawLatexNDC(0.1,0.91,"CMS #it{#bf{Simulation}}");
   }
 
@@ -124,12 +124,13 @@ void doubleR_dataMC_merged(){
       if(nameN.Contains("Data")){
 	h_num->SetLineColor(kBlack);
 	h_num->SetMarkerStyle(20);
+	h_num->SetMarkerSize(1.4);
       }
       else{
 	h_num->SetLineColor(kRed);
 	h_num->SetMarkerStyle(21);
       }
-      h_num->SetLineWidth(2);
+      h_num->SetLineWidth(3);
       h_num->SetMarkerColor(h_num->GetLineColor());
       h_num->SetTitle(";;Double Ratio (#kappa)");
       h_num->GetYaxis()->SetLabelSize(0.09);
@@ -138,9 +139,9 @@ void doubleR_dataMC_merged(){
 
       h_den->SetLineColor(kBlue);//kMagenta+2
       //      h_den->SetLineColor(kMagenta+2);//MC
-      h_den->SetLineWidth(2);
+      h_den->SetLineWidth(3);
       h_den->SetMarkerStyle(4);
-      h_den->SetMarkerSize(1.12);
+      h_den->SetMarkerSize(1.4);
       h_den->SetMarkerColor(h_den->GetLineColor());
       h_num->GetYaxis()->SetNdivisions(5);
       h_num->GetYaxis()->SetNdivisions(505);
@@ -203,17 +204,20 @@ void doubleR_dataMC_merged(){
       c_cA[i]->cd();    p_bot[i]->cd();
       p_bot[i]->SetTickx();p_bot[i]->SetTicky();
       h_numCp->Draw("e1X0");
-      h_DratioUnc->SetFillStyle(3013);
-      h_DratioUnc->SetFillColor(1);
+      //h_DratioUnc->SetFillStyle(3013);
+      h_DratioUnc->SetFillStyle(1001);
+      h_DratioUnc->SetFillColor(kGray);
       h_DratioUnc->Draw("E2same");
+      h_numCp->Draw("e1X0same");
+      gPad->RedrawAxis();
       line1->Draw();
 
       c_cA[i]->cd();    p_top[i]->cd();       gPad->RedrawAxis();
       char name3[100];
       textOnTop.SetTextSize(0.07);
       intLumiE.SetTextSize(0.07);
-      textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
-      //textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
+      //      textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
+      textOnTop.DrawLatexNDC(0.12,0.91,"CMS");
       sprintf(name3,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
       intLumiE.DrawLatexNDC(0.71,0.91,name3);
 

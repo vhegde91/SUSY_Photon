@@ -22,6 +22,7 @@ TLatex textOnTop,intLumiE;
 double intLumi=35.9;
 const int nfiles=3,nBGs=5,nHists=8,nSig=nHists-nBGs-1;
 bool savePlots=1;
+bool isPaper=0;
 TFile *f[nfiles];
 TFile *fout;
 TH1D *h_hist[nHists];
@@ -55,11 +56,11 @@ void combineBins(){
   // f[2] = new TFile("FastSim_T5qqqqHg_1800_1750.root");
   // f[1] = new TFile("FastSim_T5ttttZg_1800_150.root");
   // f[2] = new TFile("FastSim_T5ttttZg_1800_1550.root");
-  // f[1] = new TFile("FastSim_T6ttZg_1000_100.root");
-  // f[2] = new TFile("FastSim_T6ttZg_1000_900.root");
+  f[1] = new TFile("FastSim_T6ttZg_1000_100.root");
+  f[2] = new TFile("FastSim_T6ttZg_1000_900.root");
 
-  f[1] = new TFile("FastSim_T5qqqqHg_1700_150.root");
-  f[2] = new TFile("FastSim_T5qqqqHg_1700_1650.root");
+  // f[1] = new TFile("FastSim_T5qqqqHg_1700_150.root");
+  // f[2] = new TFile("FastSim_T5qqqqHg_1700_1650.root");
 
   fout = new TFile("binsCombined.root","recreate");
   vector<string> name1;
@@ -107,7 +108,7 @@ void combineBins(){
   //  getMETincl();
   //  getMET0b();
   //getMET1b();
-  getMET0bLJ();
+  //  getMET0bLJ();
   //  getNJ();
   //  getNJ0b();
   getNJ1b();
@@ -222,11 +223,12 @@ void drawPlots(TH1D* h1[],TString varName){
   char name2[100];
   textOnTop.SetTextSize(0.06);
   intLumiE.SetTextSize(0.06);
-  textOnTop.DrawLatexNDC(0.15,0.91,"CMS #it{#bf{Supplementary}}");
+  if(isPaper) textOnTop.DrawLatexNDC(0.15,0.91,"CMS #it{#bf{Supplementary}}");
+  else  textOnTop.DrawLatexNDC(0.15,0.91,"CMS #it{#bf{Preliminary}}");
   sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
   intLumiE.DrawLatexNDC(0.68,0.91,name2);
   TLatex Tl;  Tl.SetTextSize(0.05);
-  Tl.DrawLatexNDC(0.45,0.91,"#bf{arXiv:xxxx.xxxxx}");
+  if(isPaper) Tl.DrawLatexNDC(0.45,0.91,"#bf{arXiv:xxxx.xxxxx}");
 
   if(savePlots){
     TString saveName = "supp_predData_"+varName;
