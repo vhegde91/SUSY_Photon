@@ -8,6 +8,7 @@
 #include <cstring>
 #include <string>
 #include <fstream>
+#include <TRandom.h>
 
 using namespace std;
 
@@ -43,6 +44,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
   int decade = 0;
   
   int evtSurvived=0,minbtags=0;
+  double GravitinoMass=1.0;
   
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
    
@@ -57,21 +59,124 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
-    print(jentry);    
+    //    print(jentry);    
     wt=Weight*1000.0*lumiInfb;
     h2_mGlmNLSP->Fill(SusyMotherMass,SusyLSPMass);
-    cout<<"Mom:"<<SusyMotherMass<<" LSP:"<<SusyLSPMass<<endl;
+    //    cout<<"Mom:"<<SusyMotherMass<<" LSP:"<<SusyLSPMass<<endl;
     //    continue;
     //===============================================================
     int gl1Idx=-100,gl2Idx=-100,nGl=0,nPhoFmLSP=0,nZFmLSP=0,nZKids=0;
-    TLorentzVector gl1,gl2,pholsp1,pholsp2,zlsp1,zlsp2;
+    TLorentzVector gl1,gl2,pholsp1,pholsp2,zlsp1,zlsp2,gravitinos,genphotons;
     double nlsp1M=-100,nlsp2M=-100;
+    vector<TLorentzVector> NLSPs, NLSPkids;
+    vector<int> NLSPindx,NLSPkidId;
+
     for(int i=0;i<GenParticles->size();i++){
       if(abs((*GenParticles_PdgId)[i]) == 1000021){
 	nGl++;
 	if(gl1Idx < 0 ) gl1Idx = i;
 	if(gl2Idx < 0 && gl1Idx != i ) gl2Idx = i;
       }
+      if(abs((*GenParticles_PdgId)[i])==1000022) gravitinos = gravitinos + (*GenParticles)[i];
+      if(abs((*GenParticles_PdgId)[i])==22 && abs((*GenParticles_ParentId)[i])==1000023) genphotons = genphotons+(*GenParticles)[i];
+      if(abs((*GenParticles_PdgId)[i])==1000023) h_pNLSP->Fill((*GenParticles)[i].P(),wt);
+      //---------------------------------
+      if(abs((*GenParticles_PdgId)[i])==1000023) NLSPs.push_back((*GenParticles)[i]);
+      if(abs((*GenParticles_ParentId)[i])==1000023){
+	NLSPkids.push_back((*GenParticles)[i]);
+	NLSPindx.push_back((*GenParticles_ParentIdx)[i]);
+	NLSPkidId.push_back((*GenParticles_PdgId)[i]);
+      }
+    }
+    h_METGravitino->Fill(gravitinos.Pt(),wt);
+    h_GenphoPt->Fill(genphotons.Pt(),wt);
+
+    if(NLSPs.size()!=2) cout<<"!!!! no. of NLSPs is "<<NLSPs.size()<<endl;
+    //    cout<<"-----------------------"<<endl;
+    TLorentzVector vec;
+    TVector3 vec3,boostToNLSPframe[NLSPs.size()];
+    for(int i=0;i<NLSPs.size();i++){
+      h2_pNLSP->Fill(NLSPs[i].P(),"Default",wt);
+      h2_pxNLSP->Fill(NLSPs[i].Px(),"Default",wt);
+      h2_pyNLSP->Fill(NLSPs[i].Py(),"Default",wt);
+      h2_pzNLSP->Fill(NLSPs[i].Pz(),"Default",wt);
+      h2_ENLSP->Fill(NLSPs[i].E(),"Default",wt);
+      h2_MNLSP->Fill(NLSPs[i].M(),"Default",wt);
+      //      cout<<"NLSP"<<i+1<<" Px:"<<NLSPs[i].Px()<<" Py:"<<NLSPs[i].Py()<<" Pz:"<<NLSPs[i].Pz()<<" E:"<<NLSPs[i].E()<<" M:"<<NLSPs[i].M()<<endl;
+      boostToNLSPframe[i] = NLSPs[i].BoostVector();
+      vec = NLSPs[i];
+      vec.Boost(-boostToNLSPframe[i]);
+
+      h2_pNLSP->Fill(vec.P(),"In NLSP frame",wt);
+      h2_pxNLSP->Fill(vec.Px(),"In NLSP frame",wt);
+      h2_pyNLSP->Fill(vec.Py(),"In NLSP frame",wt);
+      h2_pzNLSP->Fill(vec.Pz(),"In NLSP frame",wt);
+      h2_ENLSP->Fill(vec.E(),"In NLSP frame",wt);
+      h2_MNLSP->Fill(vec.M(),"In NLSP frame",wt);
+    }
+    double px=0,py=0,pz=0,momentum=0, Ephoton=-1,Egravitino=-1;
+    TLorentzVector newGravitino,newPhotonBoson;
+    TRandom randNum;
+    for(int i=0;i<NLSPkids.size();i++){
+      vec = NLSPkids[i];
+      vec.Boost(-((*GenParticles)[NLSPindx[i]].BoostVector()));
+      
+      newGravitino.SetE( (((NLSPs[0].M())*(NLSPs[0].M()))-((NLSPkids[i].M())*(NLSPkids[i].M()))+(GravitinoMass*GravitinoMass))/(2.0*(NLSPs[0].M())));
+      momentum = sqrt( (newGravitino.E()*newGravitino.E()) - (GravitinoMass*GravitinoMass));
+      randNum.Sphere(px,py,pz,momentum);
+      newGravitino.SetPx(px); newGravitino.SetPy(py); newGravitino.SetPz(pz);
+      
+      newPhotonBoson.SetE(sqrt((newGravitino.E()*newGravitino.E()) - (GravitinoMass*GravitinoMass) + (NLSPkids[i].M()*NLSPkids[i].M())));
+      newPhotonBoson.SetPx(-px); newPhotonBoson.SetPy(-py); newPhotonBoson.SetPz(-pz);
+      
+      //      cout<<"radius: "<<sqrt((px*px)+(py*py)+(pz*pz))<<endl;
+      if(NLSPkidId[i]==22){
+	h2_pPhoton->Fill(NLSPkids[i].P(),"Default",wt);
+	h2_pxPhoton->Fill(NLSPkids[i].Px(),"Default",wt);
+	h2_pyPhoton->Fill(NLSPkids[i].Py(),"Default",wt);
+	h2_pzPhoton->Fill(NLSPkids[i].Pz(),"Default",wt);
+	h2_EPhoton->Fill(NLSPkids[i].E(),"Default",wt);
+	h2_MPhoton->Fill(NLSPkids[i].M(),"Default",wt);
+
+	h2_pPhoton->Fill(vec.P(),"In NLSP frame",wt);
+	h2_pxPhoton->Fill(vec.Px(),"In NLSP frame",wt);
+	h2_pyPhoton->Fill(vec.Py(),"In NLSP frame",wt);
+	h2_pzPhoton->Fill(vec.Pz(),"In NLSP frame",wt);
+	h2_EPhoton->Fill(vec.E(),"In NLSP frame",wt);
+	h2_MPhoton->Fill(vec.M(),"In NLSP frame",wt);
+      }
+      if(abs(NLSPkidId[i])==23){
+	h2_pBoson->Fill(NLSPkids[i].P(),"Default",wt);
+	h2_pxBoson->Fill(NLSPkids[i].Px(),"Default",wt);
+	h2_pyBoson->Fill(NLSPkids[i].Py(),"Default",wt);
+	h2_pzBoson->Fill(NLSPkids[i].Pz(),"Default",wt);
+	h2_EBoson->Fill(NLSPkids[i].E(),"Default",wt);
+	h2_MBoson->Fill(NLSPkids[i].M(),"Default",wt);
+
+	h2_pBoson->Fill(vec.P(),"In NLSP frame",wt);
+	h2_pxBoson->Fill(vec.Px(),"In NLSP frame",wt);
+	h2_pyBoson->Fill(vec.Py(),"In NLSP frame",wt);
+	h2_pzBoson->Fill(vec.Pz(),"In NLSP frame",wt);
+	h2_EBoson->Fill(vec.E(),"In NLSP frame",wt);
+	h2_MBoson->Fill(vec.M(),"In NLSP frame",wt);
+      }
+      if(abs(NLSPkidId[i])==1000022){
+	h2_pLSP->Fill(NLSPkids[i].P(),"Default",wt);
+	h2_pxLSP->Fill(NLSPkids[i].Px(),"Default",wt);
+	h2_pyLSP->Fill(NLSPkids[i].Py(),"Default",wt);
+	h2_pzLSP->Fill(NLSPkids[i].Pz(),"Default",wt);
+	h2_ELSP->Fill(NLSPkids[i].E(),"Default",wt);
+	h2_MLSP->Fill(NLSPkids[i].M(),"Default",wt);
+
+	h2_pLSP->Fill(vec.P(),"In NLSP frame",wt);
+	h2_pxLSP->Fill(vec.Px(),"In NLSP frame",wt);
+	h2_pyLSP->Fill(vec.Py(),"In NLSP frame",wt);
+	h2_pzLSP->Fill(vec.Pz(),"In NLSP frame",wt);
+	h2_ELSP->Fill(vec.E(),"In NLSP frame",wt);
+	h2_MLSP->Fill(vec.M(),"In NLSP frame",wt);
+      }    
+      //      cout<<"NLSPkid"<<i+1<<" PdgId:"<<NLSPkidId[i]<<" Px:"<<NLSPkids[i].Px()<<" Py:"<<NLSPkids[i].Py()<<" Pz:"<<NLSPkids[i].Pz()<<" E:"<<NLSPkids[i].E()<<" M:"<<NLSPkids[i].M()<<" ParentIdx: "<<NLSPindx[i]<<endl;
+      //      cout<<"In NLSP frame, PdgId:"<<NLSPkidId[i]<<" Px:"<<vec.Px()<<" Py:"<<vec.Py()<<" Pz:"<<vec.Pz()<<" P:"<<vec.P()<<" E:"<<vec.E()<<" M:"<<vec.M()<<" ParentIdx: "<<NLSPindx[i]<<endl;
     }
     if(nGl!=2) cout<<"!!!!!!!!!! nGl !!!!!!!!!!!"<<nGl<<endl;
     else{
@@ -132,6 +237,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     h_xsec->Fill(1.,CrossSection);
     h_NumEvt->Fill(1.,NumEvents);
     h_Wt->Fill(1.,Weight);
+    h_GenMET->Fill(GenMET,wt);
 
     for(int i=0;i<GenParticles->size();i++){
       if(abs((*GenParticles_ParentId)[i])==23) h_ZKids->Fill(abs((*GenParticles_PdgId)[i]));
@@ -380,7 +486,6 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
 	}			
       }	
       
-      h_GenMET->Fill(GenMET,wt);
       
     }//process
     //}

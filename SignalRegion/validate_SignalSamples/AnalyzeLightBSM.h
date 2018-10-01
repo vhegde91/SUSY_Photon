@@ -65,6 +65,38 @@ class AnalyzeLightBSM : public NtupleVariables{
 
   TH2D *h2_mGlmNLSP;
 
+  TH1D *h_METGravitino;
+  TH1D *h_GenphoPt;
+  TH1D *h_pNLSP;
+  
+  TH2D *h2_pNLSP;
+  TH2D *h2_pxNLSP;
+  TH2D *h2_pyNLSP;
+  TH2D *h2_pzNLSP;
+  TH2D *h2_ENLSP;
+  TH2D *h2_MNLSP;
+
+  TH2D *h2_pPhoton;
+  TH2D *h2_pxPhoton;
+  TH2D *h2_pyPhoton;
+  TH2D *h2_pzPhoton;
+  TH2D *h2_EPhoton;
+  TH2D *h2_MPhoton;
+
+  TH2D *h2_pBoson;
+  TH2D *h2_pxBoson;
+  TH2D *h2_pyBoson;
+  TH2D *h2_pzBoson;
+  TH2D *h2_EBoson;
+  TH2D *h2_MBoson;
+
+  TH2D *h2_pLSP;
+  TH2D *h2_pxLSP;
+  TH2D *h2_pyLSP;
+  TH2D *h2_pzLSP;
+  TH2D *h2_ELSP;
+  TH2D *h2_MLSP;
+
   TH1I *h_RunNum;
   TH1D *h_intLumi;
   TH1D *h_ST;
@@ -211,6 +243,38 @@ void AnalyzeLightBSM::BookHistogram(const char *outFileName) {
 
   h2_mGlmNLSP = new TH2D("mGlmNLSP","x:mass of gluino vs mass of NLSP",2001,-0.5,2000.5,2001,-0.5,2000.5);
 
+  h_METGravitino = new TH1D("METGravitino","vector sum of gravitinos, taking Pt component",200,0,2000);
+  h_GenphoPt = new TH1D("GenphoPt","Pt of GenPhoton coming from NLSP",200,0,2000);
+  h_pNLSP = new TH1D("pNLSP0","momentum of NLSP",200,0,2000);
+
+  h2_pNLSP  = new TH2D("pNLSP","momentum of NLSP for diff steps",200,0,2000,10,0,10);
+  h2_pxNLSP = new TH2D("pxNLSP","Px of NLSP for diff steps",400,-2000,2000,10,0,10);
+  h2_pyNLSP = new TH2D("pyNLSP","Py of NLSP for diff steps",400,-2000,2000,10,0,10);
+  h2_pzNLSP = new TH2D("pzNLSP","Pz of NLSP for diff steps",400,-2000,2000,10,0,10);
+  h2_ENLSP  = new TH2D("ENLSP", "Energy of NLSP for diff steps",200,0,2000,10,0,10);
+  h2_MNLSP  = new TH2D("MNLSP", "Mass of NLSP for diff steps",200,0,2000,10,0,10);
+
+  h2_pPhoton  = new TH2D("pPhoton","momentum of Photon for diff steps",200,0,2000,10,0,10);
+  h2_pxPhoton = new TH2D("pxPhoton","Px of Photon for diff steps",400,-2000,2000,10,0,10);
+  h2_pyPhoton = new TH2D("pyPhoton","Py of Photon for diff steps",400,-2000,2000,10,0,10);
+  h2_pzPhoton = new TH2D("pzPhoton","Pz of Photon for diff steps",400,-2000,2000,10,0,10);
+  h2_EPhoton  = new TH2D("EPhoton", "Energy of Photon for diff steps",200,0,2000,10,0,10);
+  h2_MPhoton  = new TH2D("MPhoton", "Mass of Photon for diff steps",200,0,2000,10,0,10);
+
+  h2_pBoson  = new TH2D("pBoson","momentum of Boson (H/Z) for diff steps",200,0,2000,10,0,10);
+  h2_pxBoson = new TH2D("pxBoson","Px of Boson (H/Z) for diff steps",400,-2000,2000,10,0,10);
+  h2_pyBoson = new TH2D("pyBoson","Py of Boson (H/Z) for diff steps",400,-2000,2000,10,0,10);
+  h2_pzBoson = new TH2D("pzBoson","Pz of Boson (H/Z) for diff steps",400,-2000,2000,10,0,10);
+  h2_EBoson  = new TH2D("EBoson", "Energy of Boson (H/Z) for diff steps",200,0,2000,10,0,10);
+  h2_MBoson  = new TH2D("MBoson", "Mass of Boson (H/Z) for diff steps",200,0,2000,10,0,10);
+
+  h2_pLSP  = new TH2D("pLSP","momentum of LSP for diff steps",200,0,2000,10,0,10);
+  h2_pxLSP = new TH2D("pxLSP","Px of LSP for diff steps",400,-2000,2000,10,0,10);
+  h2_pyLSP = new TH2D("pyLSP","Py of LSP for diff steps",400,-2000,2000,10,0,10);
+  h2_pzLSP = new TH2D("pzLSP","Pz of LSP for diff steps",400,-2000,2000,10,0,10);
+  h2_ELSP  = new TH2D("ELSP", "Energy of LSP for diff steps",200,0,2000,10,0,10);
+  h2_MLSP  = new TH2D("MLSP", "Mass of LSP for diff steps",500,0,5,10,0,10);
+
   h_RunNum=new TH1I("runs","Run nos.",300000,0,300000);
   h_intLumi=new TH1D("intLumi","integrated luminosity in /fb",2500,25,50); 
   h_ST=new TH1D("ST","ST",400,0,4000);
@@ -331,7 +395,7 @@ void AnalyzeLightBSM::BookHistogram(const char *outFileName) {
 AnalyzeLightBSM::AnalyzeLightBSM(const TString &inputFileList, const char *outFileName, const char* dataset) {
   string nameData=dataset;//vvv
   TChain *tree = new TChain("PreSelection");
-  tree = new TChain("TreeMaker2/PreSelection");//vvv
+  //  tree = new TChain("TreeMaker2/PreSelection");//vvv
   if(nameData=="signalH") tree = new TChain("PreSelection");//vvv
   if( ! FillChain(tree, inputFileList) ) {
     std::cerr << "Cannot get the tree " << std::endl;

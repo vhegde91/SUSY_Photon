@@ -8,8 +8,8 @@ void GausPoissonToyRatio(){
   TRandom r;
   Long64_t nToys = 30000000,poisMean=-1;
   vector<double> x,y;
-  for(int ip=85;ip<=95;ip++){// for many poisson
-    //for(int ip=91;ip==91;ip++){//for poisson mean 91
+  for(int ip=70;ip<=95;ip++){// for many poisson
+  //  for(int ip=91;ip==91;ip++){//for poisson mean 91
     poisMean=ip;
     x.push_back(poisMean);
     for(int i=0;i<nToys;i++){
@@ -20,7 +20,7 @@ void GausPoissonToyRatio(){
       ratio1->Fill(p1/g1);//take ratio of poisson to gauss
     }
     y.push_back(ratio1->Integral(1,ratio1->FindBin(0.56))/nToys);
-    ratio1->Reset();//comment if only one poisson
+    //  ratio1->Reset();//comment if only one poisson
   }
   g->SetLineColor(kRed);
   // p->SetLineColor(kBlack);
@@ -30,7 +30,7 @@ void GausPoissonToyRatio(){
   ratio1->Draw();
   gr=new TGraph(x.size(),&(x[0]),&(y[0]));
   gr->SetMarkerStyle(20);
-  gr->Draw("ap");//draw p-value vs poisson mean
+  //  gr->Draw("ap");//draw p-value vs poisson mean
   gr->Print("all");
   
   // cout<<"---------------------------------"<<endl;
