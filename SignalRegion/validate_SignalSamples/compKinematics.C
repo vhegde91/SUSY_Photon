@@ -23,7 +23,7 @@ TFile *f[nfiles];
 //int col[10]={kOrange,kBlue,kTeal+9,kGray+1,kCyan,kOrange-9,kYellow+2,kRed,kMagenta+2,kMagenta};  //Specify Colors
 int col[10]={kOrange,kTeal+9,kBlue,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
 TString name;
-bool saveCanvas=0;
+bool saveCanvas=1,save2D=0;
 void setLastBinAsOverFlow(TH1D*);
 TString getXaxisName(TString);
 TLatex textOnTop,intLumiE;
@@ -31,59 +31,49 @@ double intLumi=35.9;
 
 double sr_Integral=0,cr_Integral=0;
 
-void testClosure(TString iFname){
+void compKinematics(TString iFname){
   TH1::SetDefaultSumw2(1);
   gStyle->SetOptStat(0);
  
+  TString saveName = iFname;
+  saveName.ReplaceAll(".root","");
+  saveName.ReplaceAll("t5","_t5");
+
   f[0] = new TFile(iFname);
-  TFile *fout = new TFile("forPull.root","recreate");
   //  gStyle->SetOptStat("nemri");
   
-  vector<string> name1,name2;
+  vector<string> name1;
   vector<int> rebin;
-  name1.push_back("ST_Mu0");          name2.push_back("ST_Mu1");      rebin.push_back(25);
-  name1.push_back("MET_Mu0");         name2.push_back("MET_Mu1");     rebin.push_back(5);
-  name1.push_back("nBTags_Mu0");       name2.push_back("nBTags_Mu1");     rebin.push_back(1);
-  name1.push_back("nHadJets_Mu0");    name2.push_back("nHadJets_Mu1");rebin.push_back(1);
-  name1.push_back("BestPhotonPt_Mu0");    name2.push_back("BestPhotonPt_Mu1");       rebin.push_back(10);
-  //  name1.push_back("BestPhotonEta_Mu0");   name2.push_back("BestPhotonEta_Mu1");  rebin.push_back(10);
-  name1.push_back("METvarBin_Mu0");   name2.push_back("METvarBin_Mu1");  rebin.push_back(1);
-  name1.push_back("METvarBin_Mu0_0b");   name2.push_back("METvarBin_Mu1_0b");  rebin.push_back(1);
-  name1.push_back("METvarBin_Mu0_min1b");   name2.push_back("METvarBin_Mu1_min1b");  rebin.push_back(1);
-  name1.push_back("dPhi_METjet1_Pho_Mu0");   name2.push_back("dPhi_METjet1_Pho_Mu1");  rebin.push_back(4);
-  name1.push_back("dPhi_METjet2_Pho_Mu0");   name2.push_back("dPhi_METjet2_Pho_Mu1");  rebin.push_back(4);
-  name1.push_back("dPhi_METBestPhoton_Mu0");   name2.push_back("dPhi_METBestPhoton_Mu1");  rebin.push_back(4);
-  name1.push_back("mTPho_Mu0");   name2.push_back("mTPho_Mu1");  rebin.push_back(10);
-  // name1.push_back("MET_R1_v2_Mu0");   name2.push_back("MET_R1_v2_Mu1");  rebin.push_back(1);
-  // name1.push_back("MET_R2_v2_Mu0");   name2.push_back("MET_R2_v2_Mu1");  rebin.push_back(1);
-  // name1.push_back("MET_R3_v2_Mu0");   name2.push_back("MET_R3_v2_Mu1");  rebin.push_back(1);
-  // name1.push_back("MET_R4_v2_Mu0");   name2.push_back("MET_R4_v2_Mu1");  rebin.push_back(1);
-  // name1.push_back("MET_R5_v2_Mu0");   name2.push_back("MET_R5_v2_Mu1");  rebin.push_back(1);
-  name1.push_back("AllSBins_v7_Mu0");    name2.push_back("AllSBins_v7_Mu1");  rebin.push_back(1);
-  name1.push_back("AllSBins_v4_Mu0");    name2.push_back("AllSBins_v4_Mu1");  rebin.push_back(1);
-  // name1.push_back("MET_Mu0_R1");         name2.push_back("MET_Mu1_R1");rebin.push_back(1);
-  // name1.push_back("MET_Mu0_R2");         name2.push_back("MET_Mu1_R2");rebin.push_back(1);
-  // name1.push_back("MET_Mu0_R3");         name2.push_back("MET_Mu1_R3");rebin.push_back(1);
+  name1.push_back("pPhoton"); rebin.push_back(2);
+  name1.push_back("pLSP"); rebin.push_back(2);
+  name1.push_back("ptPhoton"); rebin.push_back(2);
+  name1.push_back("ptLSP"); rebin.push_back(2);
+  name1.push_back("pBoson"); rebin.push_back(2);
+  name1.push_back("ptBoson"); rebin.push_back(2);
+  
+  // name1.push_back("pxLSP"); rebin.push_back(2);
+  // name1.push_back("ELSP"); rebin.push_back(2);
+  // name1.push_back("MLSP"); rebin.push_back(2);
+
+  // name1.push_back("pxPhoton"); rebin.push_back(2);
+  // name1.push_back("EPhoton"); rebin.push_back(2);
+  // name1.push_back("MPhoton"); rebin.push_back(2);
+
+  // name1.push_back("pxBoson"); rebin.push_back(2);
+  // name1.push_back("EBoson"); rebin.push_back(2);
+  // name1.push_back("MBoson"); rebin.push_back(2);
+
+  TString gravMassName;// = "m_{#tilde{G}} = 1 MeV";
 
   TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
   TCanvas *c_cA[name1.size()];
-  TLine *line1=new TLine( 8.5,0.05,  8.5,100);
-  TLine *line2=new TLine(15.5,0.05, 15.5,100);
-  TLine *line3=new TLine(22.5,0.05, 22.5,100);
-  TLine *line4=new TLine(29.5,0.05, 29.5,100);
-  TLine *line5=new TLine(36.5,0.05, 36.5,10 );
-  TLine *line1V7=new TLine( 6.5,0.05,  6.5,300);
-  TLine *line2V7=new TLine(11.5,0.05, 11.5,300);
-  TLine *line3V7=new TLine(16.5,0.05, 16.5,300);
-  TLine *line4V7=new TLine(21.5,0.05, 21.5,300);
-  TLine *line5V7=new TLine(26.5,0.05, 26.5,30 );
-  
+  TCanvas *c_cB[name1.size()];
   //  TCanvas *c_cB=new TCanvas("closure_test","closure test",1500,800); c_cB->Divide(4,2);
   TPad *p_top[name1.size()];
   TPad *p_bot[name1.size()];
 
   for(int i=0;i<name1.size();i++){
-    name=name1[i]+name2[i];
+    name=name1[i];
     c_cA[i]=new TCanvas(name,name,1500,800);//c_cA[i]->Divide(4,2);
     p_top[i]=new TPad(name+"_top",name+"_top",0,0.4,1,1);
     p_bot[i]=new TPad(name+"_bot",name+"_bot",0,0.0,1,0.4);
@@ -92,28 +82,28 @@ void testClosure(TString iFname){
     p_bot[i]->SetTopMargin(0);
     p_bot[i]->SetBottomMargin(0.3);
     p_bot[i]->Draw();p_bot[i]->SetGridx();p_bot[i]->SetGridy();    
-
+    //c_cB[i]=new TCanvas(name+"_2D",name+"_2D",1500,800);
     
     TH1D *h_histG,*h_histE,*h_histGcopy;
-    
+    TH2D *h2;
     for(int j=0;j<nfiles;j++){
       c_cA[i]->cd();
       //c_cB->cd(i+1);
       name=name1[i];
-      h_histG=(TH1D*)f[j]->FindObjectAny(name);//h_histG->Rebin(2);
-      h_histG->Rebin(rebin[i]);//h_histG->Scale(1.0/h_histG->Integral());
+      h2=(TH2D*)f[j]->Get(name);
+
+      h_histG=(TH1D*)h2->ProjectionX(name+"_Org",1,1);
+      h_histG->Rebin(rebin[i]);
           
-      name=name2[i];
-      h_histE=(TH1D*)f[j]->FindObjectAny(name);//h_histE->Scale(150.9/481.6);
-      h_histE->Rebin(rebin[i]);//h_histE->Scale(1.0/h_histE->Integral());
-      // for(int m=1;m<=h_histE->GetNbinsX();m++){
-      // 	h_histE->SetBinError(m,sqrt((h_histE->GetBinError(m)*h_histE->GetBinError(m))+(0.1*h_histE->GetBinContent(m))*(0.1*h_histE->GetBinContent(m)) ));
-      // }     
+      h_histE=(TH1D*)h2->ProjectionX(name+"_New",4,4);
+      h_histE->Rebin(rebin[i]);
+
+      gravMassName = h2->GetYaxis()->GetBinLabel(4);
+
       if(h_histG && h_histE){
-	if(name1[i]=="nHadJets_Mu0"){
-	  sr_Integral=h_histG->Integral();
-	  cr_Integral=h_histE->Integral();
-	}
+	sr_Integral=h_histG->Integral();
+	cr_Integral=h_histE->Integral();
+	
 	setLastBinAsOverFlow(h_histG);
 	setLastBinAsOverFlow(h_histE);
 
@@ -140,22 +130,14 @@ void testClosure(TString iFname){
  	h_histE->Draw("e1same");
 	//	h_histE->Draw("L same");
 
-	legend[i]=new TLegend(0.65, 0.85,  0.87, 0.67);
+	legend[i]=new TLegend(0.55, 0.85,  0.82, 0.67);
+	legend[i]->SetBorderSize(0);
 	name=name1[i];
-	legend[i]->AddEntry(h_histG,"Exp(0#mu,#tau_{had}+#gamma)","lp");
-	name=name2[i];
-	legend[i]->AddEntry(h_histE,"Pred(1#mu+#gamma)","lp");
+	legend[i]->AddEntry(h_histG,"Default, m(#tilde{G} = 1 GeV)","lp");
+	legend[i]->AddEntry(h_histE,gravMassName,"lp");
 	legend[i]->Draw();
 	
 	TString name = h_histG->GetName();
-	if(name.Contains("SBins_v4")){ 
-	  line1->Draw();	line2->Draw();	line3->Draw();	line4->Draw();	line5->Draw();
-	  p_top[i]->SetGridx(0);
-	}
-	else if(name.Contains("SBins_v7")){ 
-	  line1V7->Draw();	line2V7->Draw();	line3V7->Draw();	line4V7->Draw();	line5V7->Draw();
-	  p_top[i]->SetGridx(0);
-	}
 	
       }
     }
@@ -168,16 +150,17 @@ void testClosure(TString iFname){
     h_numr->SetLineColor(kBlack);
     h_numr->SetMarkerColor(kBlack);
     //    h_numr->SetTitle(";;#frac{0#mu,Had#tau+#gamma}{1#mu+#gamma}");
-    h_numr->SetTitle(";;#frac{Exp}{Pred }");
+    h_numr->SetTitle(0);
     h_numr->GetXaxis()->SetLabelSize(0.13);
     h_numr->GetXaxis()->SetTitle(xaxisName);
     h_numr->GetXaxis()->SetTitleSize(0.13);
-    h_numr->GetXaxis()->SetTitleOffset(0.9);
+    h_numr->GetXaxis()->SetTitleOffset(1.0);
 
     h_numr->GetYaxis()->SetTitleOffset(0.29);
     h_numr->GetYaxis()->SetTitleSize(0.13);
     h_numr->GetYaxis()->SetLabelSize(0.13);
     h_numr->GetYaxis()->SetNdivisions(505);
+    h_numr->GetYaxis()->SetTitle("#frac{NewMass}{1GeV}");
     h_numr->SetMaximum(1.90);
     h_numr->SetMinimum(0.01);
     c_cA[i]->cd();    p_bot[i]->cd();
@@ -186,32 +169,24 @@ void testClosure(TString iFname){
     h_numr->Draw("e0same");
 
     TString name = h_histG->GetName();
-    if(name.Contains("SBins_v7")){ 
-      line1V7->Draw();	line2V7->Draw();	line3V7->Draw();	line4V7->Draw();	line5V7->Draw();
-      fout->cd();
-      h_numr->Write();
-      TH1D *h_pullHist = new TH1D("pull_lostMuHadTau","1D pull for lost Mu+hadTau",50,-2.5,7.5);
-      //      TH1D *h_pullHist = new TH1D("pull_lostMuHadTau","1D pull for lost Mu+hadTau",43,0.5,43.5);
-      for(int p=1;p<=h_numr->GetNbinsX();p++){
-	h_pullHist->Fill( (1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));
-	//h_pullHist->Fill( p,(1.0-h_numr->GetBinContent(p))/h_numr->GetBinError(p));
-      }
-      h_pullHist->Write();
-      //      p_bot[i]->SetGridx(0);
-    }
-    else if(name.Contains("SBins_v7")){
-      line1V7->Draw();	line2V7->Draw();	line3V7->Draw();	line4V7->Draw();	line5V7->Draw();
-    }
+   
     c_cA[i]->cd();    p_top[i]->cd();
     char name2[100];
     textOnTop.SetTextSize(0.06);
     intLumiE.SetTextSize(0.06);
     textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation}}");
     intLumiE.SetTextSize(0.06);
-    sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
+    sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
     intLumiE.DrawLatexNDC(0.73,0.91,name2);
 
-    if(saveCanvas){name="c_"+name1[i]+name2[i]+".png";c_cA[i]->SaveAs(name);}
+    if(saveCanvas){name=h2->GetName()+saveName+"_1D.png";c_cA[i]->SaveAs(name);}
+    // c_cB[i]->cd();
+    // c_cB[i]->SetLeftMargin(0.2);
+    // //    h2->RebinX(rebin[i]);
+    // h2->GetXaxis()->SetTitle(h2->GetName());
+    // c_cB[i]->SetLogz();
+    // h2->Draw("colz");
+    // if(save2D){name = h2->GetName()+saveName+".png";c_cB[i]->SaveAs(name);}
   }
   gStyle->SetTextSize(2);
   //fout->cd();
@@ -226,7 +201,12 @@ TString getXaxisName(TString axname){
   else if(axname.Contains("ST")) return "ST(GeV)";
   else if(axname.Contains("BTags")) return "b-Tags";
   else if(axname.Contains("ElePt")) return "e pT(GeV)";
-  else if(axname.Contains("PhotonPt")) return "#gamma pT(GeV)";
+  else if(axname.Contains("pPhoton")) return "p^{#gamma} (GeV)";
+  else if(axname.Contains("pLSP")) return " p^{#tilde{G}} (GeV)";
+  else if(axname.Contains("ptPhoton")) return "p^{#gamma}_{T} (GeV)";
+  else if(axname.Contains("ptLSP")) return " p^{#tilde{G}}_{T} (GeV)";
+  else if(axname.Contains("pBoson")) return " p^{Z} (GeV)";
+  else if(axname.Contains("ptBoson")) return "p^{Z}_{T} (GeV)";
   else if(axname.Contains("mT_")) return "mT(GeV)";
   else if(axname.Contains("AllSBin")) return "Bin Number";
   else if(axname.Contains("dPhi_METjet1") || axname.Contains("dphi1_METjet1")) return "#Delta#Phi_{1}";

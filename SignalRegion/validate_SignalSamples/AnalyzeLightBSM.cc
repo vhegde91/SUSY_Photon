@@ -44,8 +44,12 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
   int decade = 0;
   
   int evtSurvived=0,minbtags=0;
-  double GravitinoMass=1.0;
-  
+  double GravitinoMass=0.000001;
+  TString textMass="m(#tilde{G})"+to_string(GravitinoMass)+"GeV";
+  if(GravitinoMass==1)  textMass= "m(#tilde{G})=1GeV";
+  else if(GravitinoMass==0.001)  textMass= "m(#tilde{G})=1MeV";
+  else if(GravitinoMass==0.000001)  textMass= "m(#tilde{G})=1keV";
+
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
    
     // ==============print number of events done == == == == == == == =
@@ -70,7 +74,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     double nlsp1M=-100,nlsp2M=-100;
     vector<TLorentzVector> NLSPs, NLSPkids;
     vector<int> NLSPindx,NLSPkidId;
-
+    
     for(int i=0;i<GenParticles->size();i++){
       if(abs((*GenParticles_PdgId)[i]) == 1000021){
 	nGl++;
@@ -81,7 +85,11 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
       if(abs((*GenParticles_PdgId)[i])==22 && abs((*GenParticles_ParentId)[i])==1000023) genphotons = genphotons+(*GenParticles)[i];
       if(abs((*GenParticles_PdgId)[i])==1000023) h_pNLSP->Fill((*GenParticles)[i].P(),wt);
       //---------------------------------
-      if(abs((*GenParticles_PdgId)[i])==1000023) NLSPs.push_back((*GenParticles)[i]);
+      if(abs((*GenParticles_PdgId)[i])==1000023){
+	NLSPs.push_back((*GenParticles)[i]);
+	if(NLSPs.size()==1){ dchain[0].idxGen_ = i; dchain[0].NLSPs_ = (*GenParticles)[i];}
+	if(NLSPs.size()==2){ dchain[1].idxGen_ = i; dchain[1].NLSPs_ = (*GenParticles)[i];}
+      }
       if(abs((*GenParticles_ParentId)[i])==1000023){
 	NLSPkids.push_back((*GenParticles)[i]);
 	NLSPindx.push_back((*GenParticles_ParentIdx)[i]);
@@ -91,93 +99,186 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     h_METGravitino->Fill(gravitinos.Pt(),wt);
     h_GenphoPt->Fill(genphotons.Pt(),wt);
 
-    if(NLSPs.size()!=2) cout<<"!!!! no. of NLSPs is "<<NLSPs.size()<<endl;
-    //    cout<<"-----------------------"<<endl;
+    if(NLSPs.size()!=2) cout<<"!!!! no. of NLSPs is not 2. Go ahead at your own risk!!!!"<<NLSPs.size()<<endl;
+    for(int i=0;i<NLSPkids.size();i++){
+      if(dchain[0].idxGen_ == NLSPindx[i]){
+	if(NLSPkidId[i]==1000022) dchain[0].grav_ = NLSPkids[i];
+	else{
+	  dchain[0].bosonId_ = NLSPkidId[i];
+	  dchain[0].boson_ = NLSPkids[i];
+	}
+      }
+      else if(dchain[1].idxGen_ == NLSPindx[i]){
+	if(NLSPkidId[i]==1000022) dchain[1].grav_ = NLSPkids[i];
+	else{
+	  dchain[1].bosonId_ = NLSPkidId[i];
+	  dchain[1].boson_ = NLSPkids[i];
+	}
+      }
+    }//got a struct for decay chain. Each element of struct is one decay chain.
+    //   cout<<"-----------------------"<<endl;
+    TString massFrameType;
+    calKinWithDiffGravitinoMass(GravitinoMass);
     TLorentzVector vec;
+    for(int i=0;i<2;i++){
+      h2_pNLSP->Fill(dchain[i].NLSPs_.P(),"Default",wt);
+      h2_pxNLSP->Fill(dchain[i].NLSPs_.Px(),"Default",wt);
+      h2_pyNLSP->Fill(dchain[i].NLSPs_.Py(),"Default",wt);
+      h2_pzNLSP->Fill(dchain[i].NLSPs_.Pz(),"Default",wt);
+      h2_ENLSP->Fill(dchain[i].NLSPs_.E(),"Default",wt);
+      h2_MNLSP->Fill(dchain[i].NLSPs_.M(),"Default",wt);
+
+      vec = dchain[i].NLSPs_; 
+      vec.Boost(-dchain[i].boost_);
+      h2_pNLSP->Fill(vec.P(),"NLSP frame",wt);
+      h2_pxNLSP->Fill(vec.Px(),"NLSP frame",wt);
+      h2_pyNLSP->Fill(vec.Py(),"NLSP frame",wt);
+      h2_pzNLSP->Fill(vec.Pz(),"NLSP frame",wt);
+      h2_ENLSP->Fill(vec.E(),"NLSP frame",wt);
+      h2_MNLSP->Fill(vec.M(),"NLSP frame",wt);
+      //.................Photon.....................
+      if(abs(dchain[i].bosonId_) == 22){
+	h2_pPhoton->Fill(dchain[i].boson_.P(),"Default",wt);
+	h2_pxPhoton->Fill(dchain[i].boson_.Px(),"Default",wt);
+	h2_pyPhoton->Fill(dchain[i].boson_.Py(),"Default",wt);
+	h2_pzPhoton->Fill(dchain[i].boson_.Pz(),"Default",wt);
+	h2_EPhoton->Fill(dchain[i].boson_.E(),"Default",wt);
+	h2_MPhoton->Fill(dchain[i].boson_.M(),"Default",wt);
+	h2_ptPhoton->Fill(dchain[i].boson_.Pt(),"Default",wt);
+
+	vec = dchain[i].boson_; 
+	vec.Boost(-dchain[i].boost_);
+	h2_pPhoton->Fill(vec.P(),"NLSP frame",wt);
+	h2_pxPhoton->Fill(vec.Px(),"NLSP frame",wt);
+	h2_pyPhoton->Fill(vec.Py(),"NLSP frame",wt);
+	h2_pzPhoton->Fill(vec.Pz(),"NLSP frame",wt);
+	h2_EPhoton->Fill(vec.E(),"NLSP frame",wt);
+	h2_MPhoton->Fill(vec.M(),"NLSP frame",wt);
+	h2_ptPhoton->Fill(vec.Pt(),"NLSP frame",wt);
+	
+	massFrameType = "NLSP frame, "+textMass;
+	h2_pPhoton->Fill(dchain[i].newBoson_.P(),massFrameType,wt);
+	h2_pxPhoton->Fill(dchain[i].newBoson_.Px(),massFrameType,wt);
+	h2_pyPhoton->Fill(dchain[i].newBoson_.Py(),massFrameType,wt);
+	h2_pzPhoton->Fill(dchain[i].newBoson_.Pz(),massFrameType,wt);
+	h2_EPhoton->Fill(dchain[i].newBoson_.E(),massFrameType,wt);
+	h2_MPhoton->Fill(dchain[i].newBoson_.M(),massFrameType,wt);
+	h2_ptPhoton->Fill(dchain[i].newBoson_.Pt(),massFrameType,wt);
+
+	vec = dchain[i].newBoson_; 
+	vec.Boost(dchain[i].boost_);
+	massFrameType = "Lab frame, "+textMass;
+	h2_pPhoton->Fill(vec.P(),massFrameType,wt);
+	h2_pxPhoton->Fill(vec.Px(),massFrameType,wt);
+	h2_pyPhoton->Fill(vec.Py(),massFrameType,wt);
+	h2_pzPhoton->Fill(vec.Pz(),massFrameType,wt);
+	h2_EPhoton->Fill(vec.E(),massFrameType,wt);
+	h2_MPhoton->Fill(vec.M(),massFrameType,wt);	
+	h2_ptPhoton->Fill(vec.Pt(),massFrameType,wt);	
+      }
+      //................H/Z......................
+      if(abs(dchain[i].bosonId_) == 23 || abs(dchain[i].bosonId_) == 25){
+	h2_pBoson->Fill(dchain[i].boson_.P(),"Default",wt);
+	h2_pxBoson->Fill(dchain[i].boson_.Px(),"Default",wt);
+	h2_pyBoson->Fill(dchain[i].boson_.Py(),"Default",wt);
+	h2_pzBoson->Fill(dchain[i].boson_.Pz(),"Default",wt);
+	h2_EBoson->Fill(dchain[i].boson_.E(),"Default",wt);
+	h2_MBoson->Fill(dchain[i].boson_.M(),"Default",wt);
+	h2_ptBoson->Fill(dchain[i].boson_.Pt(),"Default",wt);
+
+	vec = dchain[i].boson_; 
+	vec.Boost(-dchain[i].boost_);
+	h2_pBoson->Fill(vec.P(),"NLSP frame",wt);
+	h2_pxBoson->Fill(vec.Px(),"NLSP frame",wt);
+	h2_pyBoson->Fill(vec.Py(),"NLSP frame",wt);
+	h2_pzBoson->Fill(vec.Pz(),"NLSP frame",wt);
+	h2_EBoson->Fill(vec.E(),"NLSP frame",wt);
+	h2_MBoson->Fill(vec.M(),"NLSP frame",wt);
+	h2_ptBoson->Fill(vec.Pt(),"NLSP frame",wt);
+	
+	massFrameType = "NLSP frame, "+textMass;
+	h2_pBoson->Fill(dchain[i].newBoson_.P(),massFrameType,wt);
+	h2_pxBoson->Fill(dchain[i].newBoson_.Px(),massFrameType,wt);
+	h2_pyBoson->Fill(dchain[i].newBoson_.Py(),massFrameType,wt);
+	h2_pzBoson->Fill(dchain[i].newBoson_.Pz(),massFrameType,wt);
+	h2_EBoson->Fill(dchain[i].newBoson_.E(),massFrameType,wt);
+	h2_MBoson->Fill(dchain[i].newBoson_.M(),massFrameType,wt);
+	h2_ptBoson->Fill(dchain[i].newBoson_.Pt(),massFrameType,wt);
+
+	vec = dchain[i].newBoson_; 
+	vec.Boost(dchain[i].boost_);
+	massFrameType = "Lab frame, "+textMass;
+	h2_pBoson->Fill(vec.P(),massFrameType,wt);
+	h2_pxBoson->Fill(vec.Px(),massFrameType,wt);
+	h2_pyBoson->Fill(vec.Py(),massFrameType,wt);
+	h2_pzBoson->Fill(vec.Pz(),massFrameType,wt);
+	h2_EBoson->Fill(vec.E(),massFrameType,wt);
+	h2_MBoson->Fill(vec.M(),massFrameType,wt);	
+	h2_ptBoson->Fill(vec.Pt(),massFrameType,wt);	
+      }
+      //................Gravitino......................
+      if(abs(dchain[i].bosonId_) == 23 || abs(dchain[i].bosonId_) == 25){
+	h2_pLSP->Fill(dchain[i].grav_.P(),"Default",wt);
+	h2_pxLSP->Fill(dchain[i].grav_.Px(),"Default",wt);
+	h2_pyLSP->Fill(dchain[i].grav_.Py(),"Default",wt);
+	h2_pzLSP->Fill(dchain[i].grav_.Pz(),"Default",wt);
+	h2_ELSP->Fill(dchain[i].grav_.E(),"Default",wt);
+	h2_MLSP->Fill(dchain[i].grav_.M(),"Default",wt);
+	h2_ptLSP->Fill(dchain[i].grav_.Pt(),"Default",wt);
+
+	vec = dchain[i].grav_; 
+	vec.Boost(-dchain[i].boost_);
+	h2_pLSP->Fill(vec.P(),"NLSP frame",wt);
+	h2_pxLSP->Fill(vec.Px(),"NLSP frame",wt);
+	h2_pyLSP->Fill(vec.Py(),"NLSP frame",wt);
+	h2_pzLSP->Fill(vec.Pz(),"NLSP frame",wt);
+	h2_ELSP->Fill(vec.E(),"NLSP frame",wt);
+	h2_MLSP->Fill(vec.M(),"NLSP frame",wt);
+	h2_ptLSP->Fill(vec.Pt(),"NLSP frame",wt);
+	
+	massFrameType = "NLSP frame, "+textMass;
+	h2_pLSP->Fill(dchain[i].newGrav_.P(),massFrameType,wt);
+	h2_pxLSP->Fill(dchain[i].newGrav_.Px(),massFrameType,wt);
+	h2_pyLSP->Fill(dchain[i].newGrav_.Py(),massFrameType,wt);
+	h2_pzLSP->Fill(dchain[i].newGrav_.Pz(),massFrameType,wt);
+	h2_ELSP->Fill(dchain[i].newGrav_.E(),massFrameType,wt);
+	h2_MLSP->Fill(dchain[i].newGrav_.M(),massFrameType,wt);
+	h2_ptLSP->Fill(dchain[i].newGrav_.Pt(),massFrameType,wt);
+
+	vec = dchain[i].newGrav_; 
+	vec.Boost(dchain[i].boost_);
+	massFrameType = "Lab frame, "+textMass;
+	h2_pLSP->Fill(vec.P(),massFrameType,wt);
+	h2_pxLSP->Fill(vec.Px(),massFrameType,wt);
+	h2_pyLSP->Fill(vec.Py(),massFrameType,wt);
+	h2_pzLSP->Fill(vec.Pz(),massFrameType,wt);
+	h2_ELSP->Fill(vec.E(),massFrameType,wt);
+	h2_MLSP->Fill(vec.M(),massFrameType,wt);	
+	h2_ptLSP->Fill(vec.Pt(),massFrameType,wt);	
+      }
+
+    }
+    /*
     TVector3 vec3,boostToNLSPframe[NLSPs.size()];
     for(int i=0;i<NLSPs.size();i++){
-      h2_pNLSP->Fill(NLSPs[i].P(),"Default",wt);
-      h2_pxNLSP->Fill(NLSPs[i].Px(),"Default",wt);
-      h2_pyNLSP->Fill(NLSPs[i].Py(),"Default",wt);
-      h2_pzNLSP->Fill(NLSPs[i].Pz(),"Default",wt);
-      h2_ENLSP->Fill(NLSPs[i].E(),"Default",wt);
-      h2_MNLSP->Fill(NLSPs[i].M(),"Default",wt);
-      //      cout<<"NLSP"<<i+1<<" Px:"<<NLSPs[i].Px()<<" Py:"<<NLSPs[i].Py()<<" Pz:"<<NLSPs[i].Pz()<<" E:"<<NLSPs[i].E()<<" M:"<<NLSPs[i].M()<<endl;
+      cout<<"NLSP"<<i+1<<" Px:"<<NLSPs[i].Px()<<" Py:"<<NLSPs[i].Py()<<" Pz:"<<NLSPs[i].Pz()<<" E:"<<NLSPs[i].E()<<" M:"<<NLSPs[i].M()<<endl;
       boostToNLSPframe[i] = NLSPs[i].BoostVector();
       vec = NLSPs[i];
       vec.Boost(-boostToNLSPframe[i]);
-
-      h2_pNLSP->Fill(vec.P(),"In NLSP frame",wt);
-      h2_pxNLSP->Fill(vec.Px(),"In NLSP frame",wt);
-      h2_pyNLSP->Fill(vec.Py(),"In NLSP frame",wt);
-      h2_pzNLSP->Fill(vec.Pz(),"In NLSP frame",wt);
-      h2_ENLSP->Fill(vec.E(),"In NLSP frame",wt);
-      h2_MNLSP->Fill(vec.M(),"In NLSP frame",wt);
     }
     double px=0,py=0,pz=0,momentum=0, Ephoton=-1,Egravitino=-1;
-    TLorentzVector newGravitino,newPhotonBoson;
+    TLorentzVector newGravitino[NLSPs.size()],newPhotonBoson[NLSPs.size()];
+    int NLSPindxnew[NLSPs.size()];
     TRandom randNum;
     for(int i=0;i<NLSPkids.size();i++){
       vec = NLSPkids[i];
       vec.Boost(-((*GenParticles)[NLSPindx[i]].BoostVector()));
       
-      newGravitino.SetE( (((NLSPs[0].M())*(NLSPs[0].M()))-((NLSPkids[i].M())*(NLSPkids[i].M()))+(GravitinoMass*GravitinoMass))/(2.0*(NLSPs[0].M())));
-      momentum = sqrt( (newGravitino.E()*newGravitino.E()) - (GravitinoMass*GravitinoMass));
-      randNum.Sphere(px,py,pz,momentum);
-      newGravitino.SetPx(px); newGravitino.SetPy(py); newGravitino.SetPz(pz);
-      
-      newPhotonBoson.SetE(sqrt((newGravitino.E()*newGravitino.E()) - (GravitinoMass*GravitinoMass) + (NLSPkids[i].M()*NLSPkids[i].M())));
-      newPhotonBoson.SetPx(-px); newPhotonBoson.SetPy(-py); newPhotonBoson.SetPz(-pz);
-      
-      //      cout<<"radius: "<<sqrt((px*px)+(py*py)+(pz*pz))<<endl;
-      if(NLSPkidId[i]==22){
-	h2_pPhoton->Fill(NLSPkids[i].P(),"Default",wt);
-	h2_pxPhoton->Fill(NLSPkids[i].Px(),"Default",wt);
-	h2_pyPhoton->Fill(NLSPkids[i].Py(),"Default",wt);
-	h2_pzPhoton->Fill(NLSPkids[i].Pz(),"Default",wt);
-	h2_EPhoton->Fill(NLSPkids[i].E(),"Default",wt);
-	h2_MPhoton->Fill(NLSPkids[i].M(),"Default",wt);
-
-	h2_pPhoton->Fill(vec.P(),"In NLSP frame",wt);
-	h2_pxPhoton->Fill(vec.Px(),"In NLSP frame",wt);
-	h2_pyPhoton->Fill(vec.Py(),"In NLSP frame",wt);
-	h2_pzPhoton->Fill(vec.Pz(),"In NLSP frame",wt);
-	h2_EPhoton->Fill(vec.E(),"In NLSP frame",wt);
-	h2_MPhoton->Fill(vec.M(),"In NLSP frame",wt);
-      }
-      if(abs(NLSPkidId[i])==23){
-	h2_pBoson->Fill(NLSPkids[i].P(),"Default",wt);
-	h2_pxBoson->Fill(NLSPkids[i].Px(),"Default",wt);
-	h2_pyBoson->Fill(NLSPkids[i].Py(),"Default",wt);
-	h2_pzBoson->Fill(NLSPkids[i].Pz(),"Default",wt);
-	h2_EBoson->Fill(NLSPkids[i].E(),"Default",wt);
-	h2_MBoson->Fill(NLSPkids[i].M(),"Default",wt);
-
-	h2_pBoson->Fill(vec.P(),"In NLSP frame",wt);
-	h2_pxBoson->Fill(vec.Px(),"In NLSP frame",wt);
-	h2_pyBoson->Fill(vec.Py(),"In NLSP frame",wt);
-	h2_pzBoson->Fill(vec.Pz(),"In NLSP frame",wt);
-	h2_EBoson->Fill(vec.E(),"In NLSP frame",wt);
-	h2_MBoson->Fill(vec.M(),"In NLSP frame",wt);
-      }
-      if(abs(NLSPkidId[i])==1000022){
-	h2_pLSP->Fill(NLSPkids[i].P(),"Default",wt);
-	h2_pxLSP->Fill(NLSPkids[i].Px(),"Default",wt);
-	h2_pyLSP->Fill(NLSPkids[i].Py(),"Default",wt);
-	h2_pzLSP->Fill(NLSPkids[i].Pz(),"Default",wt);
-	h2_ELSP->Fill(NLSPkids[i].E(),"Default",wt);
-	h2_MLSP->Fill(NLSPkids[i].M(),"Default",wt);
-
-	h2_pLSP->Fill(vec.P(),"In NLSP frame",wt);
-	h2_pxLSP->Fill(vec.Px(),"In NLSP frame",wt);
-	h2_pyLSP->Fill(vec.Py(),"In NLSP frame",wt);
-	h2_pzLSP->Fill(vec.Pz(),"In NLSP frame",wt);
-	h2_ELSP->Fill(vec.E(),"In NLSP frame",wt);
-	h2_MLSP->Fill(vec.M(),"In NLSP frame",wt);
-      }    
-      //      cout<<"NLSPkid"<<i+1<<" PdgId:"<<NLSPkidId[i]<<" Px:"<<NLSPkids[i].Px()<<" Py:"<<NLSPkids[i].Py()<<" Pz:"<<NLSPkids[i].Pz()<<" E:"<<NLSPkids[i].E()<<" M:"<<NLSPkids[i].M()<<" ParentIdx: "<<NLSPindx[i]<<endl;
-      //      cout<<"In NLSP frame, PdgId:"<<NLSPkidId[i]<<" Px:"<<vec.Px()<<" Py:"<<vec.Py()<<" Pz:"<<vec.Pz()<<" P:"<<vec.P()<<" E:"<<vec.E()<<" M:"<<vec.M()<<" ParentIdx: "<<NLSPindx[i]<<endl;
+      cout<<"NLSPkid"<<i+1<<" PdgId:"<<NLSPkidId[i]<<" Px:"<<NLSPkids[i].Px()<<" Py:"<<NLSPkids[i].Py()<<" Pz:"<<NLSPkids[i].Pz()<<" E:"<<NLSPkids[i].E()<<" M:"<<NLSPkids[i].M()<<" ParentIdx: "<<NLSPindx[i]<<endl;
+      cout<<"NLSP frame, PdgId:"<<NLSPkidId[i]<<" Px:"<<vec.Px()<<" Py:"<<vec.Py()<<" Pz:"<<vec.Pz()<<" P:"<<vec.P()<<" E:"<<vec.E()<<" M:"<<vec.M()<<" ParentIdx: "<<NLSPindx[i]<<endl;
     }
+    */
+    //-------------------------------------------
     if(nGl!=2) cout<<"!!!!!!!!!! nGl !!!!!!!!!!!"<<nGl<<endl;
     else{
       h_mGl->Fill((*GenParticles)[gl1Idx].M());
@@ -582,6 +683,46 @@ void AnalyzeLightBSM::print(Long64_t jentry){
   }
 }
 
+void AnalyzeLightBSM::calKinWithDiffGravitinoMass(double newMass){
+  TRandom *r1 = new TRandom(EvtNum);
+  for(int i=0;i<2;i++){
+    dchain[i].boost_ = (dchain[i].NLSPs_).BoostVector();
+    dchain[i].newGrav_.SetE( ((pow((dchain[i].NLSPs_).M(),2)) - (pow((dchain[i].boson_).M(),2)) + (pow(newMass,2)) )/(2.0*(dchain[i].NLSPs_).M()) );
+    dchain[i].newBoson_.SetE(sqrt( (pow((dchain[i].newGrav_).E(),2)) - (newMass*newMass) + (pow((dchain[i].boson_).M(),2)) ));
+    dchain[i].p_ = sqrt( pow((dchain[i].newGrav_).E(),2) - (newMass*newMass));
+    r1->Sphere(dchain[i].px_,dchain[i].py_,dchain[i].pz_,dchain[i].p_);
+
+    dchain[i].newGrav_.SetPx(dchain[i].px_); dchain[i].newGrav_.SetPy(dchain[i].py_); dchain[i].newGrav_.SetPz(dchain[i].pz_);
+    dchain[i].newBoson_.SetPx(-dchain[i].px_); dchain[i].newBoson_.SetPy(-dchain[i].py_); dchain[i].newBoson_.SetPz(-dchain[i].pz_);
+  }
+  for(int i=0;i<2&&0;i++){
+    cout<<"NLSPs_:"<<" Px:"<<dchain[i].NLSPs_.Px()<<" Py:"<<dchain[i].NLSPs_.Py()<<" Pz:"<<dchain[i].NLSPs_.Pz()<<" P:"<<dchain[i].NLSPs_.P()<<" E:"<<dchain[i].NLSPs_.E()<<" M:"<<dchain[i].NLSPs_.M()<<endl;
+    cout<<"boson_:"<<dchain[i].bosonId_<<" Px:"<<dchain[i].boson_.Px()<<" Py:"<<dchain[i].boson_.Py()<<" Pz:"<<dchain[i].boson_.Pz()<<" P:"<<dchain[i].boson_.P()<<" E:"<<dchain[i].boson_.E()<<" M:"<<dchain[i].boson_.M()<<endl;
+    cout<<"grav_:"<<" Px:"<<dchain[i].grav_.Px()<<" Py:"<<dchain[i].grav_.Py()<<" Pz:"<<dchain[i].grav_.Pz()<<" P:"<<dchain[i].grav_.P()<<" E:"<<dchain[i].grav_.E()<<" M:"<<dchain[i].grav_.M()<<endl;
+    cout<<"Radius:"<<dchain[i].p_<<" "<<sqrt(dchain[i].px_*dchain[i].px_+dchain[i].py_*dchain[i].py_+dchain[i].pz_*dchain[i].pz_)<<" "<<dchain[i].px_<<" "<<dchain[i].py_<<" "<<dchain[i].pz_<<endl;
+    cout<<"newBoson_:"<<" Px:"<<dchain[i].newBoson_.Px()<<" Py:"<<dchain[i].newBoson_.Py()<<" Pz:"<<dchain[i].newBoson_.Pz()<<" P:"<<dchain[i].newBoson_.P()<<" E:"<<dchain[i].newBoson_.E()<<" M:"<<dchain[i].newBoson_.M()<<endl;
+    cout<<"newGrav_:"<<" Px:"<<dchain[i].newGrav_.Px()<<" Py:"<<dchain[i].newGrav_.Py()<<" Pz:"<<dchain[i].newGrav_.Pz()<<" P:"<<dchain[i].newGrav_.P()<<" E:"<<dchain[i].newGrav_.E()<<" M:"<<dchain[i].newGrav_.M()<<endl;
+
+    // TLorentzVector boson_,newBoson_;
+    // int bosonId_,idxGen_;
+    // TLorentzVector grav_, newGrav_;
+    // TVector3 vec3_;
+    // double px_,py_,pz_,p_;
+
+  }
+
+      // newGravitino.SetE( (((NLSPs[0].M())*(NLSPs[0].M()))-((NLSPkids[i].M())*(NLSPkids[i].M()))+(GravitinoMass*GravitinoMass))/(2.0*(NLSPs[0].M())));
+      // momentum = sqrt( (newGravitino.E()*newGravitino.E()) - (GravitinoMass*GravitinoMass));
+      // randNum.Sphere(px,py,pz,momentum);
+      // newGravitino.SetPx(px); newGravitino.SetPy(py); newGravitino.SetPz(pz);
+      
+      // newPhotonBoson.SetE(sqrt((newGravitino.E()*newGravitino.E()) - (GravitinoMass*GravitinoMass) + (NLSPkids[i].M()*NLSPkids[i].M())));
+      // newPhotonBoson.SetPx(-px); newPhotonBoson.SetPy(-py); newPhotonBoson.SetPz(-pz);
+      
+      // cout<<"radius: "<<sqrt((px*px)+(py*py)+(pz*pz))<<endl;
+      // cout<<"After mass change, Gra Px:"<<newGravitino.Px()<<" Py:"<<newGravitino.Py()<<" Pz:"<<newGravitino.Pz()<<" E:"<<newGravitino.E()<<" M:"<<newGravitino.M()<<endl;
+      // cout<<"After mass change,"<<NLSPkidId[i]<<" Px:"<<newPhotonBoson.Px()<<" Py:"<<newPhotonBoson.Py()<<" Pz:"<<newPhotonBoson.Pz()<<" E:"<<newPhotonBoson.E()<<" M:"<<newPhotonBoson.M()<<endl;    
+}
 
 /*
 if(s_data=="TTJets_Tune" || s_data=="TTJets_HT" || s_data=="WJetsToLNu"){
