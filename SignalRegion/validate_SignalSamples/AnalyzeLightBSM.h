@@ -110,6 +110,7 @@ class AnalyzeLightBSM : public NtupleVariables{
   TH2D *h2_ELSP;
   TH2D *h2_MLSP;
   TH2D *h2_ptLSP;
+  TH2D *h2_METLSP;
 
   TH1I *h_RunNum;
   TH1D *h_intLumi;
@@ -292,6 +293,7 @@ void AnalyzeLightBSM::BookHistogram(const char *outFileName) {
   h2_ELSP  = new TH2D("ELSP", "Energy of LSP for diff steps",80,0,800,5,0,5);
   h2_MLSP  = new TH2D("MLSP", "Mass of LSP for diff steps",500,0,5,5,0,5);
   h2_ptLSP  = new TH2D("ptLSP", "pt of LSP for diff steps",80,0,800,5,0,5);
+  h2_METLSP = new TH2D("METLSP", "MET:using vec sum of gravitino",80,0,800,5,0,5);
 
   h_RunNum=new TH1I("runs","Run nos.",300000,0,300000);
   h_intLumi=new TH1D("intLumi","integrated luminosity in /fb",2500,25,50); 

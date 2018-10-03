@@ -119,7 +119,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     //   cout<<"-----------------------"<<endl;
     TString massFrameType;
     calKinWithDiffGravitinoMass(GravitinoMass);
-    TLorentzVector vec;
+    TLorentzVector vec,newGravMET;
     for(int i=0;i<2;i++){
       h2_pNLSP->Fill(dchain[i].NLSPs_.P(),"Default",wt);
       h2_pxNLSP->Fill(dchain[i].NLSPs_.Px(),"Default",wt);
@@ -217,47 +217,51 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
 	h2_ptBoson->Fill(vec.Pt(),massFrameType,wt);	
       }
       //................Gravitino......................
-      if(abs(dchain[i].bosonId_) == 23 || abs(dchain[i].bosonId_) == 25){
-	h2_pLSP->Fill(dchain[i].grav_.P(),"Default",wt);
-	h2_pxLSP->Fill(dchain[i].grav_.Px(),"Default",wt);
-	h2_pyLSP->Fill(dchain[i].grav_.Py(),"Default",wt);
-	h2_pzLSP->Fill(dchain[i].grav_.Pz(),"Default",wt);
-	h2_ELSP->Fill(dchain[i].grav_.E(),"Default",wt);
-	h2_MLSP->Fill(dchain[i].grav_.M(),"Default",wt);
-	h2_ptLSP->Fill(dchain[i].grav_.Pt(),"Default",wt);
+      h2_pLSP->Fill(dchain[i].grav_.P(),"Default",wt);
+      h2_pxLSP->Fill(dchain[i].grav_.Px(),"Default",wt);
+      h2_pyLSP->Fill(dchain[i].grav_.Py(),"Default",wt);
+      h2_pzLSP->Fill(dchain[i].grav_.Pz(),"Default",wt);
+      h2_ELSP->Fill(dchain[i].grav_.E(),"Default",wt);
+      h2_MLSP->Fill(dchain[i].grav_.M(),"Default",wt);
+      h2_ptLSP->Fill(dchain[i].grav_.Pt(),"Default",wt);
 
-	vec = dchain[i].grav_; 
-	vec.Boost(-dchain[i].boost_);
-	h2_pLSP->Fill(vec.P(),"NLSP frame",wt);
-	h2_pxLSP->Fill(vec.Px(),"NLSP frame",wt);
-	h2_pyLSP->Fill(vec.Py(),"NLSP frame",wt);
-	h2_pzLSP->Fill(vec.Pz(),"NLSP frame",wt);
-	h2_ELSP->Fill(vec.E(),"NLSP frame",wt);
-	h2_MLSP->Fill(vec.M(),"NLSP frame",wt);
-	h2_ptLSP->Fill(vec.Pt(),"NLSP frame",wt);
+      vec = dchain[i].grav_; 
+      vec.Boost(-dchain[i].boost_);
+      h2_pLSP->Fill(vec.P(),"NLSP frame",wt);
+      h2_pxLSP->Fill(vec.Px(),"NLSP frame",wt);
+      h2_pyLSP->Fill(vec.Py(),"NLSP frame",wt);
+      h2_pzLSP->Fill(vec.Pz(),"NLSP frame",wt);
+      h2_ELSP->Fill(vec.E(),"NLSP frame",wt);
+      h2_MLSP->Fill(vec.M(),"NLSP frame",wt);
+      h2_ptLSP->Fill(vec.Pt(),"NLSP frame",wt);
 	
-	massFrameType = "NLSP frame, "+textMass;
-	h2_pLSP->Fill(dchain[i].newGrav_.P(),massFrameType,wt);
-	h2_pxLSP->Fill(dchain[i].newGrav_.Px(),massFrameType,wt);
-	h2_pyLSP->Fill(dchain[i].newGrav_.Py(),massFrameType,wt);
-	h2_pzLSP->Fill(dchain[i].newGrav_.Pz(),massFrameType,wt);
-	h2_ELSP->Fill(dchain[i].newGrav_.E(),massFrameType,wt);
-	h2_MLSP->Fill(dchain[i].newGrav_.M(),massFrameType,wt);
-	h2_ptLSP->Fill(dchain[i].newGrav_.Pt(),massFrameType,wt);
+      massFrameType = "NLSP frame, "+textMass;
+      h2_pLSP->Fill(dchain[i].newGrav_.P(),massFrameType,wt);
+      h2_pxLSP->Fill(dchain[i].newGrav_.Px(),massFrameType,wt);
+      h2_pyLSP->Fill(dchain[i].newGrav_.Py(),massFrameType,wt);
+      h2_pzLSP->Fill(dchain[i].newGrav_.Pz(),massFrameType,wt);
+      h2_ELSP->Fill(dchain[i].newGrav_.E(),massFrameType,wt);
+      h2_MLSP->Fill(dchain[i].newGrav_.M(),massFrameType,wt);
+      h2_ptLSP->Fill(dchain[i].newGrav_.Pt(),massFrameType,wt);
 
-	vec = dchain[i].newGrav_; 
-	vec.Boost(dchain[i].boost_);
-	massFrameType = "Lab frame, "+textMass;
-	h2_pLSP->Fill(vec.P(),massFrameType,wt);
-	h2_pxLSP->Fill(vec.Px(),massFrameType,wt);
-	h2_pyLSP->Fill(vec.Py(),massFrameType,wt);
-	h2_pzLSP->Fill(vec.Pz(),massFrameType,wt);
-	h2_ELSP->Fill(vec.E(),massFrameType,wt);
-	h2_MLSP->Fill(vec.M(),massFrameType,wt);	
-	h2_ptLSP->Fill(vec.Pt(),massFrameType,wt);	
-      }
-
+      vec = dchain[i].newGrav_; 
+      vec.Boost(dchain[i].boost_);
+      massFrameType = "Lab frame, "+textMass;
+      h2_pLSP->Fill(vec.P(),massFrameType,wt);
+      h2_pxLSP->Fill(vec.Px(),massFrameType,wt);
+      h2_pyLSP->Fill(vec.Py(),massFrameType,wt);
+      h2_pzLSP->Fill(vec.Pz(),massFrameType,wt);
+      h2_ELSP->Fill(vec.E(),massFrameType,wt);
+      h2_MLSP->Fill(vec.M(),massFrameType,wt);	
+      h2_ptLSP->Fill(vec.Pt(),massFrameType,wt);
+      // cout<<"vec: px:"<<vec.Px()<<" py:"<<vec.Py()<<" pz:"<<vec.Pz()<<" M:"<<vec.M()<<endl;
+      // cout<<"newGravMET: px:"<<newGravMET.Px()<<" py:"<<newGravMET.Py()<<" pz:"<<newGravMET.Pz()<<" M:"<<newGravMET.M()<<endl;
+      newGravMET = newGravMET + vec;
     }
+    h2_METLSP->Fill( (dchain[0].grav_+dchain[1].grav_).Pt(),"Default",wt);
+    h2_METLSP->Fill(0.," ",0.);     h2_METLSP->Fill(0.,"  ",0.);
+    h2_METLSP->Fill(newGravMET.Pt(),"Lab frame, "+textMass,wt);
+    // cout<<"GravMET vec, px:"<<newGravMET.Px()<<" py:"<<newGravMET.Py()<<" pz:"<<newGravMET.Pz()<<endl;
     /*
     TVector3 vec3,boostToNLSPframe[NLSPs.size()];
     for(int i=0;i<NLSPs.size();i++){

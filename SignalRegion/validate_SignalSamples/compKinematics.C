@@ -23,7 +23,7 @@ TFile *f[nfiles];
 //int col[10]={kOrange,kBlue,kTeal+9,kGray+1,kCyan,kOrange-9,kYellow+2,kRed,kMagenta+2,kMagenta};  //Specify Colors
 int col[10]={kOrange,kTeal+9,kBlue,kGray+1,kCyan,kMagenta+2,kYellow+2,kRed,kMagenta,kOrange-9};  //Specify Colors
 TString name;
-bool saveCanvas=1,save2D=0;
+bool saveCanvas=0,save2D=0;
 void setLastBinAsOverFlow(TH1D*);
 TString getXaxisName(TString);
 TLatex textOnTop,intLumiE;
@@ -44,16 +44,18 @@ void compKinematics(TString iFname){
   
   vector<string> name1;
   vector<int> rebin;
-  name1.push_back("pPhoton"); rebin.push_back(2);
+  // name1.push_back("pPhoton"); rebin.push_back(2);
   name1.push_back("pLSP"); rebin.push_back(2);
-  name1.push_back("ptPhoton"); rebin.push_back(2);
   name1.push_back("ptLSP"); rebin.push_back(2);
-  name1.push_back("pBoson"); rebin.push_back(2);
-  name1.push_back("ptBoson"); rebin.push_back(2);
+  //name1.push_back("ptPhoton"); rebin.push_back(2);
+  name1.push_back("METLSP"); rebin.push_back(2);
+
+  // name1.push_back("pBoson"); rebin.push_back(2);
+  // name1.push_back("ptBoson"); rebin.push_back(2);
   
-  // name1.push_back("pxLSP"); rebin.push_back(2);
-  // name1.push_back("ELSP"); rebin.push_back(2);
-  // name1.push_back("MLSP"); rebin.push_back(2);
+  name1.push_back("pxLSP"); rebin.push_back(2);
+  name1.push_back("ELSP"); rebin.push_back(2);
+  name1.push_back("MLSP"); rebin.push_back(2);
 
   // name1.push_back("pxPhoton"); rebin.push_back(2);
   // name1.push_back("EPhoton"); rebin.push_back(2);
@@ -82,7 +84,7 @@ void compKinematics(TString iFname){
     p_bot[i]->SetTopMargin(0);
     p_bot[i]->SetBottomMargin(0.3);
     p_bot[i]->Draw();p_bot[i]->SetGridx();p_bot[i]->SetGridy();    
-    //c_cB[i]=new TCanvas(name+"_2D",name+"_2D",1500,800);
+    //   c_cB[i]=new TCanvas(name+"_2D",name+"_2D",1500,800);
     
     TH1D *h_histG,*h_histE,*h_histGcopy;
     TH2D *h2;
@@ -179,7 +181,7 @@ void compKinematics(TString iFname){
     sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
     intLumiE.DrawLatexNDC(0.73,0.91,name2);
 
-    if(saveCanvas){name=h2->GetName()+saveName+"_1D.png";c_cA[i]->SaveAs(name);}
+    // if(saveCanvas){name=h2->GetName()+saveName+"_1D.png";c_cA[i]->SaveAs(name);}
     // c_cB[i]->cd();
     // c_cB[i]->SetLeftMargin(0.2);
     // //    h2->RebinX(rebin[i]);
