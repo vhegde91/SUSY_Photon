@@ -13,7 +13,8 @@ void findFailedJobs(string arg){
   char jdlStart[200];
   sprintf(jdlStart,"%s",arg.c_str());
   //  sprintf(jdlStart,"signalRegionSkim_%s_",dataset);
-  char ofileStart[300]="/eos/uscms/store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/T5ttttZg_1800_1550_UnSkimmed_";
+  //  char ofileStart[300]="/eos/uscms/store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/T5qqqqHg_1800_127_UnSkimmed_";
+  char ofileStart[300]="/eos/uscms/store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/TChiWg_0_800_UnSkimmed_";
   //  char ofileStart[300]="/eos/uscms/store/user/vhegde/GMSB_skims_ST_RA2b_TreesV12/SignalRegion_v1/GGM_M1M3_1000_50_UnSkimmed_";
   //char ofileStart[300]="T5ttttZg_1800_150_UnSkimmed_1800_150_";
   char ofileEnd[200]="_RA2AnalysisTree.root";

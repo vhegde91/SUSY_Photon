@@ -67,6 +67,7 @@ class MultiJet : public NtupleVariables{
   TH1D *h_intLumi;
   TH1D *h_madHT;
   TH1D *h_cutFlow;
+  TH2D *h2_SusyMass;
   TH2D *h2_GenPhoPtEta;
   TH2D *h2_RecoPhoPtEta;
 
@@ -173,6 +174,7 @@ void MultiJet::BookHistogram(const char *outFileName) {
   h_cutFlow=new TH1D("cutFlow","cut flow hist",15,0,15);
   h2_GenPhoPtEta=new TH2D("GenPhoPtEta","x:GenPhotonEta vs GenPhotonPt",phoEtaBins.size()-1,&(phoEtaBins[0]),phoPtBins.size()-1,&(phoPtBins[0]));
   h2_RecoPhoPtEta=new TH2D("RecoPhoPtEta","x:RecoPhotonEta vs RecoPhotonPt",phoEtaBins.size()-1,&(phoEtaBins[0]),phoPtBins.size()-1,&(phoPtBins[0]));
+  h2_SusyMass=new TH2D("SusyMass","x: SUSY mother mass (gluino/stop/M3), y: SUSY NLSP mass (NLSP/M1)",3001,-0.5,3000.5,3001,-0.5,3000.5);
   h_mindPhi1dPhi2_ABCD=new TH1D("mindPhi1dPhi2","min(#Delta#Phi1,#Delta#Phi2) for ABCD",400,0,4);
 
   h_ST_AB=new TH1D("ST_AB","ST_AB",400,0,4000);

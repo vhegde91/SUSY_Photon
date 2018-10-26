@@ -10,10 +10,11 @@ void splitRunList(string infile,int nfPerJob){
   //------------ needed for condor files --------------
   string exeCondor  = "worker2.sh";
   string exeAna     = "pickMassPoint";
-  int mGl = 1800, mNLSP = 1550;
-  string datasetAna = "T5ttttZg_"+to_string(mGl)+"_"+to_string(mNLSP)+"_UnSkimmed";
+  int mGl = 0, mNLSP = 800;
+  //  string datasetAna = "T5qqqqHg_"+to_string(mGl)+"_"+to_string(mNLSP)+"_UnSkimmed";
   //  string datasetAna = "GGM_M1M3_"+to_string(mGl)+"_"+to_string(mNLSP)+"_UnSkimmed";
-  string filesToTransfer = "T5bbbbZg_MassScan.root,T5qqqqHg_MassScan.root,T5ttttZg_MassScan.root,GGM_M1M3_MassScan.root";
+  string datasetAna = "TChiWg_"+to_string(mGl)+"_"+to_string(mNLSP)+"_UnSkimmed";
+  string filesToTransfer = "T5bbbbZg_MassScan.root,T5qqqqHg_MassScan.root,T5ttttZg_MassScan.root,GGM_M1M3_MassScan.root,TChiWG_MassScan.root,TChiNG_MassScan.root";
   //---------------------------------------------------
   cout<<"executable at worker node : "<<exeCondor<<endl
       <<"Analysis executable : "<<exeAna<<endl
@@ -65,7 +66,7 @@ void splitRunList(string infile,int nfPerJob){
 	<<"Error = "<<logFile<<".stderr"<<endl
 	<<"Log = "<<logFile<<".condor"<<endl
 	<<"notification = Error"<<endl
-	<<"notify_user = vhegde@FNAL.GOV"<<endl
+      	<<"notify_user = vhegde@FNAL.GOV"<<endl
       //	<<"x509userproxy = $ENV(X509_USER_PROXY)"<<endl
 	<<"Arguments = "<<exeAna<<" "<<fileListName<<" "<<logFile<<".root "<<datasetAna<<" "<<mGl<<" "<<mNLSP<<endl
 	<<"+LENGTH=\"SHORT\""<<endl

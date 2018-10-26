@@ -42,17 +42,17 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 
   Long64_t nbytes = 0, nb = 0;
   int decade = 0;
-  bool do_AB_reweighting=0;
+  bool do_AB_reweighting=0,vetoDiphoton=1;
   int evtSurvived=0;
   TFile *f_HLR=TFile::Open("HLR_gjets_qcd.root");
   // TH1D *h_HLratio=(TH1D*)f_HLR->Get("HLratio_1D");
   TH2D *h2_HLRatio;
-
+  if(vetoDiphoton) cout<<"!!!!! vetoing diphoton events. Veto: 2 photons with each having Pt > 40 GeV!!!!"<<endl;
   TFile* pufile = TFile::Open("PileupHistograms_0121_69p2mb_pm4p6.root","READ");
   //choose central, up, or down
   TH1* puhist = (TH1*)pufile->Get("pu_weights_down");
   //----------- btags SFs-----------------
-  bool applybTagSFs=0;
+  bool applybTagSFs=1;
   int fListIndxOld=-1;
   double prob0=-100,prob1=-100;
   vector<TString> inFileName;
@@ -198,6 +198,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
     bool eMatchedG=check_eMatchedtoGamma();//this may not be necessary since e veto is there.
     if(bestPhoton.Pt()<0.1) continue;
     else h_cutFlow->Fill("p_{T}^{#gamma} > 100",wt);
+    if(vetoDiphoton && allBestPhotons.size() > 1 && allBestPhotons[0].Pt() > 40 && allBestPhotons[1].Pt() > 40) continue;
     if( (Electrons->size() !=0) || (Muons->size() !=0) ) continue;
     else h_cutFlow->Fill("e/#mu veto",wt);
     if(isoElectronTracks!=0 || isoMuonTracks!=0 || isoPionTracks!=0) continue;
@@ -295,6 +296,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
       evtSurvived++;
       h_RunNum->Fill(RunNum);
       h_intLumi->Fill(lumiInfb,wt);
+      h2_SusyMass->Fill(SusyMotherMass,SusyLSPMass,wt);
       //------------------------ Sbins----------------------------
       int searchRegion=0,sBin1=-100,m_i1=0;
       if     (nHadJets >= 2 && nHadJets <= 4 ){ searchRegion=1; sBin1 = 0;}

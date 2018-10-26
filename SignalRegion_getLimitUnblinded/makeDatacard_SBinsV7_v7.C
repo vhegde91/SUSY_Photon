@@ -102,6 +102,7 @@ void makeDatacard_SBinsV7_v7(double mGl,double mNLSP,TString sigFile){
   ofstream outf;
   for(int i=1;i<=imax;i++){
     if( i==1 || i==7 || i==12 || i==17 || i==22 || i==27 ) continue;
+    //    if( i==2 || i==8 || i==13 || i==18 || i==23 || i==28 ){cout<<"Skipping Search bin "<<i<<endl; continue;}
     string bTagCorr, njbjCorr,nJCorr,metCorr;
     if(i<=16) bTagCorr = "";
     else bTagCorr = "";
@@ -122,7 +123,7 @@ void makeDatacard_SBinsV7_v7(double mGl,double mNLSP,TString sigFile){
     else name2="dataCards/"+getfname(f[0]->GetName())+"_"+"bin"+to_string(i)+".txt";
     //    cout<<name2;
     sprintf(name,"%s",name2.c_str());
-    //    cout<<name<<endl;
+    cout<<name<<endl;
     outf.open(name);
     outf<<"# - - - - - - - - - - - - - - - - - - -"<<endl<< 
       "# Datacard for mGl= "<<mGl<<" mNLSP= "<<mNLSP<<" with model "<<getfname(f[0]->GetName())<<endl<<
@@ -216,7 +217,7 @@ void makeDatacard_SBinsV7_v7(double mGl,double mNLSP,TString sigFile){
     outf<<"MultiJdR_b"<<njbjCorr<<" lnN "<<"     -       -          -          -         -       "<<1+(h_doubleR->GetBinError(i)/h_doubleR->GetBinContent(i))<<endl;
     if(h_MultiJPurity->GetBinContent(i) < 0.0001){
       outf<<"MultiJEW_b"<<i<<"  lnN "<<"     -       -          -          -         -        0.3/3.0"<<endl;
-      cout<<i<<" 0.3/3.0"<<endl;
+      //      cout<<i<<" 0.3/3.0"<<endl;
     }
     else{
       double uncUp = h_MultiJPurity->GetBinContent(i)+h_MultiJPurity->GetBinError(i);
@@ -230,7 +231,7 @@ void makeDatacard_SBinsV7_v7(double mGl,double mNLSP,TString sigFile){
       if(asymErrNum < 0.01) asymErrNum = 0.3;
       if(asymErrDen > 3.0) asymErrDen = 3.0;
       outf<<"MultiJEW_b"<<i<<"  lnN "<<"     -       -          -          -         -        "<<asymErrNum<<"/"<<asymErrDen<<endl;
-      cout<<i<<" "<<asymErrNum<<"/"<<asymErrDen<<endl;
+      //      cout<<i<<" "<<asymErrNum<<"/"<<asymErrDen<<endl;
       // else{
       // 	if(uncUp > 1.0) uncUp = 0.9999/h_MultiJPurity->GetBinContent(i);
       // 	if(uncDn < 0.0) uncDn = h_MultiJPurity->GetBinContent(i);

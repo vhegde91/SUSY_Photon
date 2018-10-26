@@ -48,35 +48,35 @@ void PickMassPoint::EventLoop(const char *data,const char *inputFileList,const d
   //-------------------- for signal only ---------------
   double momMass = mGl, nlspMass = mNLSP, nevents=0, xsec1=1.0, evtLeftAfterSkim=0;
   //------------------------ for strong production models ------------------------
-  TFile *f1;
-  if(s_data.Contains("T5bbbbZg")) f1 = new TFile("T5bbbbZg_MassScan.root");
-  else if(s_data.Contains("T5ttttZg")) f1 = new TFile("T5ttttZg_MassScan.root");
-  else if(s_data.Contains("T5qqqqHg")) f1 = new TFile("T5qqqqHg_MassScan.root");
-  else if(s_data.Contains("GGM_M1M3")) f1 = new TFile("GGM_M1M3_MassScan.root");
-  else {cout<<"AHHHH:Hist for Nevents and Xsec not found."<<endl; return;}
+  // TFile *f1;
+  // if(s_data.Contains("T5bbbbZg")) f1 = new TFile("T5bbbbZg_MassScan.root");
+  // else if(s_data.Contains("T5ttttZg")) f1 = new TFile("T5ttttZg_MassScan.root");
+  // else if(s_data.Contains("T5qqqqHg")) f1 = new TFile("T5qqqqHg_MassScan.root");
+  // else if(s_data.Contains("GGM_M1M3")) f1 = new TFile("GGM_M1M3_MassScan.root");
+  // else {cout<<"AHHHH:Hist for Nevents and Xsec not found."<<endl; return;}
 
-  TH1D *h1_xsechist;
-  TH2D *h2_mass,*h2_xsechist;
-  if(!(s_data.Contains("GGM_M1M3"))){
-    h1_xsechist = (TH1D*)f1->FindObjectAny("mGlXsec");
-  }
-  else{
-    h2_xsechist = (TH2D*)f1->FindObjectAny("GGM_M1M3_xsec");
-  }
-  h2_mass = (TH2D*)f1->FindObjectAny("MGlMNLSP");
-  if(!h1_xsechist && !h2_xsechist){ cout<<"AHHHHH: could not find xsec hist"<<endl; return;}
-  if(!h2_mass){ cout<<"AHHHHH: could not find no. of events hist"<<endl; return;}
-
-  if(!(s_data.Contains("GGM_M1M3"))) xsec1 = h1_xsechist->GetBinContent(h1_xsechist->FindBin(momMass));
-  else xsec1 = h2_xsechist->GetBinContent(h2_xsechist->GetXaxis()->FindBin(momMass),h2_xsechist->GetYaxis()->FindBin(nlspMass));
-  //------------------------ for EW production models ------------------------
-  //TFile *f1 = new TFile("TChiNG_MassScan.root");
-  //  TH1D *h1_xsechist = (TH1D*)f1->FindObjectAny("mEWeakino_N2C1Xsec");//N2C1 for TChiWG
-  // TH1D *h1_xsechist = (TH1D*)f1->FindObjectAny("mEWeakino_SumN2C1_C1C1Xsec");//N2C1 for TChiNG
-  // TH2D *h2_mass = (TH2D*)f1->FindObjectAny("MGlMNLSP");
-  // if(!h1_xsechist){ cout<<"AHHHHH: could not find xsec hist"<<endl; return;}
+  // TH1D *h1_xsechist;
+  // TH2D *h2_mass,*h2_xsechist;
+  // if(!(s_data.Contains("GGM_M1M3"))){
+  //   h1_xsechist = (TH1D*)f1->FindObjectAny("mGlXsec");
+  // }
+  // else{
+  //   h2_xsechist = (TH2D*)f1->FindObjectAny("GGM_M1M3_xsec");
+  // }
+  // h2_mass = (TH2D*)f1->FindObjectAny("MGlMNLSP");
+  // if(!h1_xsechist && !h2_xsechist){ cout<<"AHHHHH: could not find xsec hist"<<endl; return;}
   // if(!h2_mass){ cout<<"AHHHHH: could not find no. of events hist"<<endl; return;}
-  // xsec1 = h1_xsechist->GetBinContent(h1_xsechist->FindBin(nlspMass));
+
+  // if(!(s_data.Contains("GGM_M1M3"))) xsec1 = h1_xsechist->GetBinContent(h1_xsechist->FindBin(momMass));
+  // else xsec1 = h2_xsechist->GetBinContent(h2_xsechist->GetXaxis()->FindBin(momMass),h2_xsechist->GetYaxis()->FindBin(nlspMass));
+  //------------------------ for EW production models ------------------------
+  TFile *f1 = new TFile("TChiWG_MassScan.root");
+  TH1D *h1_xsechist = (TH1D*)f1->FindObjectAny("mEWeakino_N2C1Xsec");//N2C1 for TChiWG
+  //  TH1D *h1_xsechist = (TH1D*)f1->FindObjectAny("mEWeakino_SumN2C1_C1C1Xsec");//N2C1 for TChiNG
+  TH2D *h2_mass = (TH2D*)f1->FindObjectAny("MGlMNLSP");
+  if(!h1_xsechist){ cout<<"AHHHHH: could not find xsec hist"<<endl; return;}
+  if(!h2_mass){ cout<<"AHHHHH: could not find no. of events hist"<<endl; return;}
+  xsec1 = h1_xsechist->GetBinContent(h1_xsechist->FindBin(nlspMass));
   //----------------------- for Stop models ----------------------------------
   // TFile *f1 = new TFile("T6ttZg_MassScan.root");
   // TH1D *h1_xsechist = (TH1D*)f1->FindObjectAny("mStopXsec");
