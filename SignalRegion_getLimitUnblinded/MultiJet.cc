@@ -42,7 +42,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 
   Long64_t nbytes = 0, nb = 0;
   int decade = 0;
-  bool do_AB_reweighting=0,vetoDiphoton=1;
+  bool do_AB_reweighting=0,vetoDiphoton=0;
   int evtSurvived=0;
   TFile *f_HLR=TFile::Open("HLR_gjets_qcd.root");
   // TH1D *h_HLratio=(TH1D*)f_HLR->Get("HLratio_1D");
