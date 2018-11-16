@@ -23,7 +23,7 @@ python limitPlotToYaml.py config.cfg
 
 ## TH1 Histograms to TAML
 
-Using histToYaml.C you can convert some of the TH1D histograms in SBinHists.root to YAML a file.
+Using [histToYaml.C](./histToYaml.C) you can convert some of the TH1D histograms in SBinHists.root to YAML a file.
 
 ```
 root -l -q histToYaml.C
@@ -43,5 +43,11 @@ root -l -q 'mySubmission_gen.C("fileNames.txt")'
 ./generateYAMLtar.sh
 ```
 
+## References
 
+https://github.com/kkiesel/root-to-yaml
+
+https://github.com/hatakeyamak/misc/tree/master/HEPData
+
+Check your YAML file online: http://www.yamllint.com before uploading to HEPdata sandbox.
 
