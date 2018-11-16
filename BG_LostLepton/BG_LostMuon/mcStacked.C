@@ -18,15 +18,18 @@
 #include"THStack.h"
 #include"TStyle.h"
 
-const int nfiles=5;    //Specify no. of files
+const int nfiles=7, nBG=5;    //Specify no. of files
 TFile *f[nfiles];
 //int col[10]={kBlack,kPink-2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed};  //Specify Colors
-int col[10]={kMagenta+2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed,kBlack};  //Specify Colors
+//int col[10]={kMagenta+2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed,kBlack};  //Specify Colors
+//vector<int> col={kGray,kTeal+9,kOrange,kRed,kCyan-1,kCyan,kBlue,kMagenta+2,kPink+1,kMagenta,kBlack};
+vector<int> col={kOrange,kCyan-1,kTeal+9,kGray,kRed,kBlue,kMagenta+2,kPink+1,kMagenta,kBlack};
 
 //int col[10]={kBlack,kBlue,kOrange,kYellow,kGreen,kCyan,kPink+1,kTeal+9,kBlue,kRed};  //Specify Colors
 //int col[10]={kBlack,kPink-2,kGreen,kYellow,kBlue,kCyan,kPink+1,kCyan,kBlue,kRed};  //Specify Colors
 
 TString name;
+int scaleSignal=10;
 bool saveCanvas=0;
 void setLastBinAsOverFlow(TH1D*);
 void setMyRange(TH1D*,double,double);
@@ -45,36 +48,42 @@ void mcStacked(){
   f[2] = new TFile("CS_TTJets_LostMuHadTau_v2.root");
   f[3] = new TFile("CS_TTG_LostMuHadTau_v2.root");
   f[4] = new TFile("CS_WG_LostMuHadTau_v2.root");
+  f[5] = new TFile("T5ttttZg_LostMu_1800_150.root");
+  f[6] = new TFile("T5ttttZg_LostMu_1800_1550.root");
   
   vector<string> name1;
   vector<int> rebin;
   vector<double> xLow,xHigh;
   //  name1.push_back("ST_Mu1");  rebin.push_back(10);   xLow.push_back(0); xHigh.push_back(3000); 
   name1.push_back("MET_Mu1");    rebin.push_back(2);    xLow.push_back(0); xHigh.push_back(800); 
-  name1.push_back("nBTags_Mu1");   rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(8);  
-  name1.push_back("nHadJets_Mu0");  rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(12);
-  name1.push_back("nHadJets_Mu1");  rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(12);
+  // name1.push_back("nBTags_Mu1");   rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(8);  
+
+  //name1.push_back("nHadJets_Mu0");  rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(12);
+  // name1.push_back("nHadJets_Mu1");  rebin.push_back(1);  xLow.push_back(0); xHigh.push_back(12);
   // name1.push_back("BestPhotonPt_Mu1");   rebin.push_back(5); xLow.push_back(0); xHigh.push_back(1000);
   // name1.push_back("METvarBin_Mu1");  rebin.push_back(1); xLow.push_back(-100000); xHigh.push_back(1000000);
-  // name1.push_back("dR_MuPho");   rebin.push_back(2);     xLow.push_back(0); xHigh.push_back(6);
-  // name1.push_back("MuPt");   rebin.push_back(5);         xLow.push_back(0); xHigh.push_back(500);
-  // name1.push_back("MT_Mu");   rebin.push_back(10);       xLow.push_back(0); xHigh.push_back(300);
+  //name1.push_back("dR_MuPho");   rebin.push_back(2);     xLow.push_back(0); xHigh.push_back(6);
+  //name1.push_back("MuPt");   rebin.push_back(5);         xLow.push_back(0); xHigh.push_back(500);
+  name1.push_back("MT_Mu");   rebin.push_back(10);       xLow.push_back(0); xHigh.push_back(199.9999);
   // name1.push_back("AllSBins_v7_Mu1");   rebin.push_back(1);   xLow.push_back(-10000); xHigh.push_back(300000);
 
-  TLegend *legend[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
+  TLegend *legend[name1.size()],*legendSig[name1.size()];//=new TLegend(0.6, 0.90,  0.98, 0.45);
   TCanvas *c_cA[name1.size()];
   THStack *hs_hist[name1.size()];
-  TH1D *h_sum[name1.size()];
+  TH1D *h_sum[name1.size()],*h_sig[name1.size()][nfiles-nBG];
   // gStyle->SetTitleYSize(0.08);
   // gStyle->SetTitleYOffset(0.68);
   for(int i=0;i<name1.size();i++){
     name=name1[i];//+name2[i];
     c_cA[i]=new TCanvas(name,name,1500,800);//c_cA[i]->Divide(4,2);
-    c_cA[i]->Draw();c_cA[i]->SetGridx();c_cA[i]->SetGridy();c_cA[i]->SetLogy();
+    c_cA[i]->SetBottomMargin(0.15);
+    c_cA[i]->Draw();c_cA[i]->SetGridx(0);c_cA[i]->SetGridy(0);c_cA[i]->SetLogy();
     //   c_cA[i]->SetBottomMargin(0);
     name=name1[i]+"_Stack";
     hs_hist[i] = new THStack(name,name);
-    legend[i]=new TLegend(0.7, 0.87,  0.85, 0.65);
+    legend[i]=new TLegend(0.4, 0.87,  0.8, 0.78);  legend[i]->SetBorderSize(0);
+    legendSig[i]=new TLegend(0.2029372,0.6303502,0.8030708,0.769131); legendSig[i]->SetBorderSize(0);
+    legendSig[i]->SetMargin(0.12);
     //    legend[i]=new TLegend(0.55, 0.88,  0.85, 0.7);
     //legend[i]->SetBorderSize(0);
   }
@@ -98,49 +107,66 @@ void mcStacked(){
 
       h_histE->SetMarkerColor(col[p]);
       h_histE->SetFillColor(col[p]);
-
-      hs_hist[i]->Add(h_histE);
-      if(p==0){
-	name=name1[i]+"_Sum";
-	h_sum[i] = (TH1D*)h_histE->Clone(name);
+      
+      if(p<nBG){
+	hs_hist[i]->Add(h_histE);
+	if(p==0){
+	  name=name1[i]+"_Sum";
+	  h_sum[i] = (TH1D*)h_histE->Clone(name);
+	}
+	else h_sum[i]->Add(h_histE);
+	legend[i]->AddEntry(h_histE,getLegName(f[p]->GetName()),"f");
       }
-      else h_sum[i]->Add(h_histE);
-      legend[i]->AddEntry(h_histE,getLegName(f[p]->GetName()),"f");
+      else{
+      	name=name1[i]+to_string(p);
+      	h_sig[i][p-nBG]=(TH1D*)h_histE->Clone(name);
+      	h_sig[i][p-nBG]->SetLineColor(col[p]);
+      	h_sig[i][p-nBG]->SetLineWidth(3);
+      	h_sig[i][p-nBG]->SetFillColor(0);
+	h_sig[i][p-nBG]->Scale(scaleSignal);
+	legendSig[i]->AddEntry(h_sig[i][p-nBG],getLegName(f[p]->GetName()),"l");
+      }
     }
     c_cA[i]->cd();    c_cA[i]->cd();
     hs_hist[i]->SetMinimum(0.8);
-    hs_hist[i]->SetMaximum(5*hs_hist[i]->GetMaximum());
+    hs_hist[i]->SetMaximum(10*hs_hist[i]->GetMaximum());
     hs_hist[i]->Draw("HIST");
     
     h_sum[i]->SetFillColor(1);
     h_sum[i]->SetFillStyle(3013);
-    h_sum[i]->Draw("e2 same");
+    //    h_sum[i]->Draw("e2 same");
+    for(int p=nBG;p<nfiles;p++){
+      h_sig[i][p-nBG]->Draw("HIST same");
+    }
 
     if(xLow[i] > -5000 && xHigh[i] < 5000) hs_hist[i]->GetXaxis()->SetRangeUser(xLow[i],xHigh[i]);
     hs_hist[i]->SetTitle(0);
     hs_hist[i]->GetYaxis()->SetNdivisions(5);
     hs_hist[i]->GetYaxis()->SetTitle("Events");
-    hs_hist[i]->GetYaxis()->SetTitleOffset(0.75);    
+    hs_hist[i]->GetYaxis()->SetTitleOffset(0.9);    
     hs_hist[i]->GetYaxis()->SetTitleSize(0.06);
     hs_hist[i]->GetYaxis()->SetLabelSize(0.06);
     
     hs_hist[i]->GetXaxis()->SetTitle(getXaxisName(name));
-    hs_hist[i]->GetXaxis()->SetTitleOffset(0.9);
+    hs_hist[i]->GetXaxis()->SetTitleOffset(1.05);
     hs_hist[i]->GetXaxis()->SetTitleSize(0.06);
     hs_hist[i]->GetXaxis()->SetLabelSize(0.06);
 
     c_cA[i]->Modified();
     c_cA[i]->Update();
-    //    legend[i]->SetNColumns(3);
+    legend[i]->SetNColumns(3);
     legend[i]->Draw();
+    legendSig[i]->Draw();
 
     c_cA[i]->cd();    c_cA[i]->cd(); gPad->RedrawAxis();
     char name2[100];
-    textOnTop.SetTextSize(0.05);
-    intLumiE.SetTextSize(0.05);
-    textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Preliminary}}");
-    sprintf(name2,"#bf{%0.1f fb^{-1}(13TeV)}",intLumi);
+    textOnTop.SetTextSize(0.04);
+    intLumiE.SetTextSize(0.04);
+    textOnTop.DrawLatexNDC(0.12,0.91,"CMS #it{#bf{Simulation Supplementary}}");
+    sprintf(name2,"#bf{%0.1f fb^{-1} (13 TeV)}",intLumi);
     intLumiE.DrawLatexNDC(0.7,0.91,name2);
+    TLatex Tl;  Tl.SetTextSize(0.03);
+    Tl.DrawLatexNDC(0.45,0.91,"#bf{arXiv:xxxx.xxxxx}");
     if(saveCanvas){name=name1[i]+".pdf";c_cA[i]->SaveAs(name);}
     
   }
@@ -150,12 +176,21 @@ void mcStacked(){
 }
 
 TString getLegName(TString fname){
-  if(fname=="CS_TTG_LostMuHadTau_v2.root") return "t#bar{t}+#gamma";
-  else if(fname=="CS_TTJets_LostMuHadTau_v2.root") return "t#bar{t}";
-  else if(fname=="CS_WG_LostMuHadTau_v2.root") return "W#gamma";
-  else if(fname=="CS_WJets_LostMuHadTau_v2.root") return "W+Jets";
+  if(fname=="CS_TTG_LostMuHadTau_v2.root") return "t #bar{t} + #gamma";
+  else if(fname=="CS_TTJets_LostMuHadTau_v2.root") return "t #bar{t}";
+  else if(fname=="CS_WG_LostMuHadTau_v2.root") return "W(l#nu) + #gamma";
+  else if(fname=="CS_WJets_LostMuHadTau_v2.root") return "W(l#nu) + jets";
   else if(fname=="CS_TG_LostMuHadTau_v2.root") return "t+#gamma";
-  else if(fname=="CS_TGZGDY_LostMuHadTau_v2.root") return "t#gamma+Z#gamma+DY";
+  //  else if(fname=="CS_TGZGDY_LostMuHadTau_v2.root") return "t#gamma + Z(ll)#gamma + DY";
+  else if(fname=="CS_TGZGDY_LostMuHadTau_v2.root") return "Rare";
+  else if(fname.Contains("T5ttttZg") && fname.Contains("1800_150")){
+    if(scaleSignal==1) return "#tilde{g} #rightarrow t #bar{t} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";
+    else return "(#tilde{g} #rightarrow t #bar{t} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)) x "+to_string(scaleSignal);
+  }
+  else if(fname.Contains("T5ttttZg")&& fname.Contains("1800_1550")){
+    if(scaleSignal==1) return "#tilde{g} #rightarrow t #bar{t} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 1550 GeV)";
+    else return "(#tilde{g} #rightarrow t #bar{t} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 1550 GeV)) x "+to_string(scaleSignal);
+  }
   else return fname;
 }
 TString getXaxisName(TString axname){
@@ -177,7 +212,7 @@ TString getXaxisName(TString axname){
   else if(axname.Contains("dPhi_METBestPhoton") ) return "#Delta#Phi(MET,#gamma)";
   else if(axname.Contains("dPhi_Muon_Photon") ) return "#Delta#Phi(#mu,#gamma)";
   else if(axname.Contains("QMut") || axname.Contains("Qmut")) return "QMult";
-  else if(axname.Contains("MT_Mu")) return "mT(#mu,p_{T}^{miss})(GeV)";
+  else if(axname.Contains("MT_Mu")) return "m_{T}(#mu, p_{T}^{miss}) (GeV)";
   else if(axname.Contains("MET")) return "p_{T}^{miss}(GeV)";
   else return axname;
 
@@ -186,7 +221,7 @@ TString getXaxisName(TString axname){
 void setMyRange(TH1D *h1,double xLow,double xHigh){
   double err=0;
   if(xHigh > 13000) return;
-  if(xLow < 13000) return;
+  if(xLow < -13000) return;
   int nMax=h1->FindBin(xHigh);
   h1->SetBinContent(nMax,h1->IntegralAndError(nMax,h1->GetNbinsX(),err));
   h1->SetBinError(nMax,err);

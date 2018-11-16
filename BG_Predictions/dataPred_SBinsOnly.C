@@ -79,7 +79,7 @@ void dataPred_SBinsOnly(TString iFname){
   //  TLegend *legend=new TLegend(0.15, 0.88,  0.86, 0.70);
   //TLegend *legend=new TLegend(0.15, 0.88,  0.5, 0.6);
   TLegend *legend=new TLegend(0.15, 0.88,  0.78, 0.72);
-  TLegend *legendSig=new TLegend(0.3, 0.73,  0.84, 0.53);
+  TLegend *legendSig=new TLegend(0.3, 0.73,  0.84, 0.52);
   for(int i=0;i<nHists;i++){
     //    cout<<i<<" "<<i-nBGs<<" "<<histName[i]<<endl;
     name = histName[i]+to_string(i);
@@ -247,7 +247,7 @@ void dataPred_SBinsOnly(TString iFname){
 TString getLegName(TString fname){
   if(fname.Contains("ZGPred")){return "Z(#nu#bar{#nu}) + #gamma";}
   else if(fname.Contains("LEle")){return "Lost e";}
-  else if(fname.Contains("LMu")){return "Lost #mu + #tau_{had}";}
+  else if(fname.Contains("LMu")){return "Lost #mu + #tau_{h}";}
   else if(fname.Contains("FR")){return "Misidentified #gamma";}
   else if(fname.Contains("MultiJ") || fname.Contains("gjets")  ){return "#gamma + jets";}
   else if(fname.Contains("T5bbbbZG_1600_150")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1600 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}

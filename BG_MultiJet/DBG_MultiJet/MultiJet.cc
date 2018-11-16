@@ -310,7 +310,7 @@ void MultiJet::EventLoop(const char *data,const char *inputFileList) {
 	}
 	if(regType=='C' || regType=='D'){
 	  //	  print(jentry);
-	  //	  if(regType=='D'){print(jentry); cout<<RunNum<<":"<<LumiBlockNum<<":"<<EvtNum<<endl;}
+	  //	  if(regType=='D'){cout<<RunNum<<":"<<LumiBlockNum<<":"<<EvtNum<<endl; print(jentry); }
 	  h_ST_CD->Fill(ST,wt);
 	  h_MET_CD->Fill(MET,wt);
 	  h_METclean_CD->Fill(METclean,wt);
@@ -527,7 +527,7 @@ void MultiJet::print(Long64_t jentry){
     if(i==0) cout<<"-------------------------------- Photons -------------------------------------------"<<endl;
     double dR=0;//DeltaR( bestPhoton.Eta(),bestPhoton.Phi(),(*Photons)[i].Eta(),(*Photons)[i].Phi() );
     //    cout<<jentry<<" i:"<<i<<" phoSize:"<<Photons->size()<<" Pt:"<<bestPhoton.Pt()<<" eta:"<<bestPhoton.Eta()<<" phi:"<<bestPhoton.Phi()<<" otherP:"<<(*Photons)[i].Pt()<<" eta:"<<(*Photons)[i].Eta()<<" phi:"<<(*Photons)[i].Phi()<<" dR:"<<dR<<endl;
-    cout<<"Photon Pt:"<<(*Photons)[i].Pt()<<" eta:"<<(*Photons)[i].Eta()<<" phi:"<<(*Photons)[i].Phi()<<" E:"<<(*Photons)[i].Energy()<<" FullID:"<<(*Photons_fullID)[i]<<" Pixel Seed:"<<(*Photons_hasPixelSeed)[i]<<endl;
+    cout<<"Photon Pt:"<<(*Photons)[i].Pt()<<" eta:"<<(*Photons)[i].Eta()<<" phi:"<<(*Photons)[i].Phi()<<" E:"<<(*Photons)[i].Energy()<<" FullID:"<<(*Photons_fullID)[i]<<" Pixel Seed:"<<(*Photons_hasPixelSeed)[i]<<" mT(photon,MET)"<<sqrt(2*(*Photons)[i].Pt()*MET*(1-cos(DeltaPhi(METPhi,(*Photons)[i].Phi()))))<<endl;
   }
   
   // for(int i=0;i<TAPElectronTracks->size();i++){

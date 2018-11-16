@@ -44,7 +44,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
   int decade = 0;
   
   int evtSurvived=0,minbtags=0;
-  double GravitinoMass=0.000001;
+  double GravitinoMass=1.0;
   TString textMass="m(#tilde{G})"+to_string(GravitinoMass)+"GeV";
   if(GravitinoMass==1)  textMass= "m(#tilde{G})=1GeV";
   else if(GravitinoMass==0.001)  textMass= "m(#tilde{G})=1MeV";
@@ -69,10 +69,10 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     //    cout<<"Mom:"<<SusyMotherMass<<" LSP:"<<SusyLSPMass<<endl;
     //    continue;
     //===============================================================
-    int gl1Idx=-100,gl2Idx=-100,nGl=0,nPhoFmLSP=0,nZFmLSP=0,nZKids=0;
-    TLorentzVector gl1,gl2,pholsp1,pholsp2,zlsp1,zlsp2,gravitinos,genphotons;
-    double nlsp1M=-100,nlsp2M=-100;
-    vector<TLorentzVector> NLSPs, NLSPkids;
+    int gl1Idx=-100,gl2Idx=-100,nGl=0,nPhoFmLSP=0,nZFmLSP=0,nZKids=0,nGenJets=0;
+    TLorentzVector gl1,gl2,pholsp1,pholsp2,zlsp1,zlsp2,gravitinos;
+    double nlsp1M=-100,nlsp2M=-100,genHT=0;
+    vector<TLorentzVector> NLSPs, NLSPkids,genPhotons;
     vector<int> NLSPindx,NLSPkidId;
     
     for(int i=0;i<GenParticles->size();i++){
@@ -82,7 +82,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
 	if(gl2Idx < 0 && gl1Idx != i ) gl2Idx = i;
       }
       if(abs((*GenParticles_PdgId)[i])==1000022) gravitinos = gravitinos + (*GenParticles)[i];
-      if(abs((*GenParticles_PdgId)[i])==22 && abs((*GenParticles_ParentId)[i])==1000023) genphotons = genphotons+(*GenParticles)[i];
+      if(abs((*GenParticles_PdgId)[i])==22 && abs((*GenParticles_ParentId)[i])==1000023) genPhotons.push_back((*GenParticles)[i]);
       if(abs((*GenParticles_PdgId)[i])==1000023) h_pNLSP->Fill((*GenParticles)[i].P(),wt);
       //---------------------------------
       if(abs((*GenParticles_PdgId)[i])==1000023){
@@ -97,7 +97,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
       }
     }
     h_METGravitino->Fill(gravitinos.Pt(),wt);
-    h_GenphoPt->Fill(genphotons.Pt(),wt);
+    for(int i=0;i<genPhotons.size();i++) h_GenphoPt->Fill(genPhotons[i].Pt(),wt);
 
     if(NLSPs.size()!=2) cout<<"!!!! no. of NLSPs is not 2. Go ahead at your own risk!!!!"<<NLSPs.size()<<endl;
     for(int i=0;i<NLSPkids.size();i++){
@@ -262,26 +262,7 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     h2_METLSP->Fill(0.," ",0.);     h2_METLSP->Fill(0.,"  ",0.);
     h2_METLSP->Fill(newGravMET.Pt(),"Lab frame, "+textMass,wt);
     // cout<<"GravMET vec, px:"<<newGravMET.Px()<<" py:"<<newGravMET.Py()<<" pz:"<<newGravMET.Pz()<<endl;
-    /*
-    TVector3 vec3,boostToNLSPframe[NLSPs.size()];
-    for(int i=0;i<NLSPs.size();i++){
-      cout<<"NLSP"<<i+1<<" Px:"<<NLSPs[i].Px()<<" Py:"<<NLSPs[i].Py()<<" Pz:"<<NLSPs[i].Pz()<<" E:"<<NLSPs[i].E()<<" M:"<<NLSPs[i].M()<<endl;
-      boostToNLSPframe[i] = NLSPs[i].BoostVector();
-      vec = NLSPs[i];
-      vec.Boost(-boostToNLSPframe[i]);
-    }
-    double px=0,py=0,pz=0,momentum=0, Ephoton=-1,Egravitino=-1;
-    TLorentzVector newGravitino[NLSPs.size()],newPhotonBoson[NLSPs.size()];
-    int NLSPindxnew[NLSPs.size()];
-    TRandom randNum;
-    for(int i=0;i<NLSPkids.size();i++){
-      vec = NLSPkids[i];
-      vec.Boost(-((*GenParticles)[NLSPindx[i]].BoostVector()));
-      
-      cout<<"NLSPkid"<<i+1<<" PdgId:"<<NLSPkidId[i]<<" Px:"<<NLSPkids[i].Px()<<" Py:"<<NLSPkids[i].Py()<<" Pz:"<<NLSPkids[i].Pz()<<" E:"<<NLSPkids[i].E()<<" M:"<<NLSPkids[i].M()<<" ParentIdx: "<<NLSPindx[i]<<endl;
-      cout<<"NLSP frame, PdgId:"<<NLSPkidId[i]<<" Px:"<<vec.Px()<<" Py:"<<vec.Py()<<" Pz:"<<vec.Pz()<<" P:"<<vec.P()<<" E:"<<vec.E()<<" M:"<<vec.M()<<" ParentIdx: "<<NLSPindx[i]<<endl;
-    }
-    */
+    
     //-------------------------------------------
     if(nGl!=2) cout<<"!!!!!!!!!! nGl !!!!!!!!!!!"<<nGl<<endl;
     else{
@@ -338,17 +319,43 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     h_invMassZLSP->Fill(zlsp2.M());
     // h2_mGlmNLSP->Fill((*GenParticles)[gl1Idx].M(),nlsp1M);
     // h2_mGlmNLSP->Fill((*GenParticles)[gl2Idx].M(),nlsp2M);
-
+    
+    if((dchain[0].bosonId_==22) && (dchain[1].bosonId_==22)){
+      h2_dPhiPhosGenMET->Fill(abs((dchain[0].boson_).DeltaPhi((dchain[1].boson_))),GenMET,wt);
+      if((dchain[0].boson_).Pt() > (dchain[1].boson_).Pt()){
+	h2_dPhiPho1GenMET->Fill(abs(DeltaPhi((dchain[0].boson_).Phi(),GenMETPhi)),GenMET,wt);
+	h2_dPhiPho2GenMET->Fill(abs(DeltaPhi((dchain[1].boson_).Phi(),GenMETPhi)),GenMET,wt);
+	h2_Pho1PtGenMET->Fill((dchain[0].boson_).Pt(),GenMET,wt);
+	h2_Pho2PtGenMET->Fill((dchain[1].boson_).Pt(),GenMET,wt);
+	h2_PhoPtRatioGenMET->Fill( ((dchain[1].boson_).Pt())/((dchain[0].boson_).Pt()), GenMET,wt);
+      }
+      else{
+	h2_dPhiPho1GenMET->Fill(abs(DeltaPhi((dchain[1].boson_).Phi(),GenMETPhi)),GenMET,wt);
+	h2_dPhiPho2GenMET->Fill(abs(DeltaPhi((dchain[0].boson_).Phi(),GenMETPhi)),GenMET,wt);
+	h2_Pho1PtGenMET->Fill((dchain[1].boson_).Pt(),GenMET,wt);
+	h2_Pho2PtGenMET->Fill((dchain[0].boson_).Pt(),GenMET,wt);
+	h2_PhoPtRatioGenMET->Fill( ((dchain[0].boson_).Pt())/((dchain[1].boson_).Pt()), GenMET,wt);
+      }
+    }
     h_xsec->Fill(1.,CrossSection);
     h_NumEvt->Fill(1.,NumEvents);
     h_Wt->Fill(1.,Weight);
     h_GenMET->Fill(GenMET,wt);
+    if(genPhotons.size()>=2 && genPhotons[0].Pt() > genPhotons[1].Pt() ) h_LeadgenPhoPt->Fill(genPhotons[0].Pt(),wt);
+    else if(genPhotons.size()>=2 && genPhotons[1].Pt() > genPhotons[0].Pt() ) h_LeadgenPhoPt->Fill(genPhotons[1].Pt(),wt);
+    else if(genPhotons.size()==1) h_LeadgenPhoPt->Fill(genPhotons[0].Pt(),wt);
 
     for(int i=0;i<GenParticles->size();i++){
       if(abs((*GenParticles_ParentId)[i])==23) h_ZKids->Fill(abs((*GenParticles_PdgId)[i]));
     }
-
-    
+    for(int i=0;i<GenJets->size();i++){
+      if((*GenJets)[i].Pt()>30 && abs((*GenJets)[i].Eta()) < 2.4){
+	nGenJets++;
+	genHT = genHT+(*GenJets)[i].Pt();
+      }
+    }
+    h_nGenJets->Fill(nGenJets,wt);
+    h_genHT->Fill(genHT,wt);
 
     //===============================================================
 

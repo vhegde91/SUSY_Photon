@@ -21,7 +21,7 @@
 const int nfiles=6;    //Specify no. of files
 TFile *f[nfiles];
 //int col[10]={kBlack,kPink-2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed};  //Specify Colors
-int col[10]={kBlack,kMagenta+2,kOrange,kYellow,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed};  //Specify Colors
+int col[10]={kBlack,kAzure+1,kYellow,kRed,kGreen,kTeal+9,kPink+1,kCyan,kBlue,kRed};  //Specify Colors
 
 //int col[10]={kBlack,kBlue,kOrange,kYellow,kGreen,kCyan,kPink+1,kTeal+9,kBlue,kRed};  //Specify Colors
 //int col[10]={kBlack,kPink-2,kGreen,kYellow,kBlue,kCyan,kPink+1,kCyan,kBlue,kRed};  //Specify Colors

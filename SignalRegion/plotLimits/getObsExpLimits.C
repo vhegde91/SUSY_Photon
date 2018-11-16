@@ -46,6 +46,7 @@ void getObsExpLimits(TString fName){
   const Int_t NCont = 255;
   bool cleanDiagnl = 1;
   bool xsecULinfb = 1;
+  int reslOfPlot = 100; //50 min, 250 max
 
   Double_t stops[NRGBs] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
   Double_t red[NRGBs]   = { 0.50, 0.50, 1.00, 1.00, 1.00 };
@@ -102,13 +103,13 @@ void getObsExpLimits(TString fName){
   TGraph2D *gr2d_16pc = new TGraph2D(h2_r16pc);
   TGraph2D *gr2d_84pc = new TGraph2D(h2_r84pc);  
   TGraph2D *gr2dXsecExp = new TGraph2D(h2_XsecULexp);
-  gr2dXsecExp->SetNpx(250);  gr2dXsecExp->SetNpy(250);
+  gr2dXsecExp->SetNpx(reslOfPlot);  gr2dXsecExp->SetNpy(reslOfPlot);
 
   TGraph2D *gr2d_rObs = new TGraph2D(h2_rObs);
   TGraph2D *gr2d_rXsecUp = new TGraph2D(h2_rXsecUp);
   TGraph2D *gr2d_rXsecDn = new TGraph2D(h2_rXsecDn);  
   TGraph2D *gr2dXsec = new TGraph2D(h2_XsecUL);
-  gr2dXsec->SetNpx(250);  gr2dXsec->SetNpy(250);
+  gr2dXsec->SetNpx(reslOfPlot);  gr2dXsec->SetNpy(reslOfPlot);
   //------------------------------------------------
   TList *listMedian =gr2d_rMedian->GetContourList(1.0);
   TList *list16pc =gr2d_16pc->GetContourList(1.0);

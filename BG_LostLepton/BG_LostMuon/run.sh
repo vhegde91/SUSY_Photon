@@ -17,3 +17,7 @@ hadd -f CS_TTWZ_LostMuHadTau_v2.root CS_WG_LostMuHadTau_v2.root CS_TTG_LostMuHad
 #hadd -f CS_TTWZ_LostMuHadTau_odd.root CS_WG_LostMuHadTau_v2.root CS_TTG_LostMuHadTau_v2.root CS_WJets_LostMuHadTau_v2.root CS_TTJets_LostMuHadTau_v2.root CS_TGZGDY_LostMuHadTau_v2.root
 
 #./lostMuon CS_runList_TTW_LostMu_v2.txt CS_TTW_LostMuHadTau_v2.root CS_TTW_LostMu
+
+
+./lostMuon runList_T5ttttZg_1800_150.txt T5ttttZg_LostMu_1800_150.root FastSim
+./lostMuon runList_T5ttttZg_1800_1550.txt T5ttttZg_LostMu_1800_1550.root FastSim

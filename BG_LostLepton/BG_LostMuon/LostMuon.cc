@@ -237,6 +237,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     if( !((ST>800 && bestPhoton.Pt()>100) || (bestPhoton.Pt()>190)) )  continue;
     wt=wt*0.98;
     //done with trigger efficiencies
+    bool noFakeJet = true;
     TLorentzVector genPho1,genMu1,neutr;
     int leadGenPhoIdx=-100;
     for(int i=0;i<GenParticles->size();i++){
@@ -271,6 +272,23 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     else if( (s_data=="TTJets") || (s_data=="SingleTop") || (s_data=="ZJets") ){
       if(hasGenPromptPhoton && gendRLepPho > 0.3 && madMinPhotonDeltaR > 0.3) continue;
       if(jentry<3) cout<<"Non-Prompt, dR(pho,q/g/lep) < 0.3 ";
+    }
+    else if(s_data==("FastSim")){
+      //      //reject events with any jet pt>20, |eta|<2.5 NOT matched to a GenJet (w/in DeltaR<0.3) and chfrac < 0.1
+      for(unsigned j = 0; j < Jets->size(); ++j){
+	if(Jets->at(j).Pt() <= 20 || fabs(Jets->at(j).Eta())>=2.5) continue;
+        bool genMatched = false;
+        for(unsigned g = 0; g < GenJets->size(); ++g){
+          if(GenJets->at(g).DeltaR(Jets->at(j)) < 0.3) {
+            genMatched = true;
+            break;
+          }
+        }
+        if(!genMatched && Jets_chargedHadronEnergyFraction->at(j) < 0.1){
+          noFakeJet = false;
+          break;
+        }
+      }
     }
     
     //    if(madMinPhotonDeltaR < 0.5 || gendRLepPho < 0.5) continue;    
@@ -349,6 +367,7 @@ void LostMuon::EventLoop(const char *data,const char *inputFileList) {
     if(Muons->size()==0){
       if(matche==1 && matchp==0 && s_data!="FastSim") continue;//if reco photon matched to gen e and not matched to gen photon, it is fake.
     }//photon has been identified. It is a real photon and it is matched to gen photon with dR(genPho,RecoPho) < 0.1 and Pts are within 10%.
+    if((s_data=="FastSim") && (!noFakeJet)) continue;
     //---------------------- MC only ends-------------------------
     if(phoMatchingJetIndx>=0 && (jets[phoMatchingJetIndx].Pt())/(bestPhoton.Pt()) < 1.0) continue;
     if(phoMatchingJetIndx<0) continue;

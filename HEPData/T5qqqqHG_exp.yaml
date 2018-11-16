@@ -1,0 +1,115 @@
+dependent_variables:
+- header: {name: '$m_{\tilde{\chi}_{1}^{0}}$', units: GeV}
+  qualifiers:
+  - {name: Process, value: '$pp \rightarrow \tilde{g} \tilde{g}, \tilde{g} \rightarrow
+      q \bar{q} \tilde{\chi}_{1}^{0}, \tilde{\chi}_{1}^{0} \rightarrow \gamma/H\ \tilde{G}$'}
+  - {name: $\sqrt s$, units: GeV, value: 13000.0}
+  - {name: Integrated luminosity, units: '$fb^{-1}$', value: 35.9}
+  values:
+  - {value: 130.0}
+  - {value: 150.0}
+  - {value: 165.0}
+  - {value: 180.0}
+  - {value: 195.83}
+  - {value: 200.0}
+  - {value: 262.5}
+  - {value: 300.0}
+  - {value: 310.0}
+  - {value: 374.04}
+  - {value: 400.0}
+  - {value: 438.25}
+  - {value: 500.0}
+  - {value: 511.92}
+  - {value: 540.91}
+  - {value: 587.25}
+  - {value: 600.0}
+  - {value: 627.08}
+  - {value: 700.0}
+  - {value: 750.0}
+  - {value: 800.0}
+  - {value: 826.56}
+  - {value: 900.0}
+  - {value: 900.0}
+  - {value: 996.15}
+  - {value: 1000.0}
+  - {value: 1093.06}
+  - {value: 1100.0}
+  - {value: 1181.94}
+  - {value: 1200.0}
+  - {value: 1291.38}
+  - {value: 1300.0}
+  - {value: 1308.33}
+  - {value: 1400.0}
+  - {value: 1500.0}
+  - {value: 1598.44}
+  - {value: 1600.0}
+  - {value: 1605.0}
+  - {value: 1700.0}
+  - {value: 1719.0}
+  - {value: 1773.48}
+  - {value: 1800.0}
+  - {value: 1813.19}
+  - {value: 1843.18}
+  - {value: 1850.0}
+  - {value: 1862.5}
+  - {value: 1900.0}
+  - {value: 1905.92}
+  - {value: 1911.84}
+  - {value: 1916.88}
+  - {value: 1924.75}
+  - {value: 1925.0}
+independent_variables:
+- header: {name: '$m_{\tilde{g}}$', units: GeV}
+  values:
+  - {value: 1911.36}
+  - {value: 1916.38}
+  - {value: 1925.0}
+  - {value: 1933.62}
+  - {value: 1950.0}
+  - {value: 1953.73}
+  - {value: 1981.25}
+  - {value: 1996.74}
+  - {value: 2000.0}
+  - {value: 2012.98}
+  - {value: 2021.77}
+  - {value: 2030.87}
+  - {value: 2043.13}
+  - {value: 2044.04}
+  - {value: 2050.0}
+  - {value: 2056.37}
+  - {value: 2060.83}
+  - {value: 2063.54}
+  - {value: 2071.77}
+  - {value: 2075.0}
+  - {value: 2083.65}
+  - {value: 2086.72}
+  - {value: 2100.0}
+  - {value: 2100.0}
+  - {value: 2101.92}
+  - {value: 2102.14}
+  - {value: 2103.47}
+  - {value: 2103.91}
+  - {value: 2109.03}
+  - {value: 2109.85}
+  - {value: 2104.31}
+  - {value: 2104.17}
+  - {value: 2104.17}
+  - {value: 2108.33}
+  - {value: 2100.0}
+  - {value: 2100.78}
+  - {value: 2100.72}
+  - {value: 2100.0}
+  - {value: 2083.04}
+  - {value: 2081.0}
+  - {value: 2073.48}
+  - {value: 2067.59}
+  - {value: 2063.19}
+  - {value: 2050.0}
+  - {value: 2045.71}
+  - {value: 2037.5}
+  - {value: 2011.84}
+  - {value: 2005.92}
+  - {value: 2000.0}
+  - {value: 1971.88}
+  - {value: 1950.0}
+  - {value: 1943.75}

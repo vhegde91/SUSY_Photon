@@ -72,12 +72,15 @@ class AnalyzeLightBSM : public NtupleVariables{
   TH1D *h_invMassGl;
   TH1D *h_invMassPhoLSP;
   TH1D *h_invMassZLSP;
+  TH1D *h_nGenJets;
+  TH1D *h_genHT;
 
   TH2D *h2_mGlmNLSP;
 
   TH1D *h_METGravitino;
   TH1D *h_GenphoPt;
   TH1D *h_pNLSP;
+  TH1D *h_LeadgenPhoPt;
   
   TH2D *h2_pNLSP;
   TH2D *h2_pxNLSP;
@@ -128,7 +131,14 @@ class AnalyzeLightBSM : public NtupleVariables{
   TH2D *h2_PtPhotonvsMET;
   TH2D *h2_1G_PtPhotonvsMET;
   TH2D *h2_More2G_PtPhotonvsMET;
-  
+
+  TH2D *h2_dPhiPhosGenMET;
+  TH2D *h2_dPhiPho1GenMET;
+  TH2D *h2_dPhiPho2GenMET;
+  TH2D *h2_Pho1PtGenMET;
+  TH2D *h2_Pho2PtGenMET;
+  TH2D *h2_PhoPtRatioGenMET;
+
   TH1D *h_STvBin;
   TH1D *h_METvBin;
   TH1D *h_BestPhotonPtvBin;
@@ -255,12 +265,15 @@ void AnalyzeLightBSM::BookHistogram(const char *outFileName) {
   h_invMassGl = new TH1D("invMassGl","Invariant mass of gluino: calculated from its daughters",200,0,2000);
   h_invMassPhoLSP = new TH1D("invMassPhoLSP","Invariant mass of Photon and LSP",200,0,2000);
   h_invMassZLSP = new TH1D("invMassZLSP","Invariant mass of Z and LSP",200,0,2000);
+  h_nGenJets = new TH1D("nGenJets","no. of gen jets with Pt > 30 and |#eta| < 2.4",25,0,25);
+  h_genHT = new TH1D("genHT","genHT obtained from gen jets with Pt > 30 and |#eta| < 2.4",500,0,5000);
 
   h2_mGlmNLSP = new TH2D("mGlmNLSP","x:mass of gluino vs mass of NLSP",2001,-0.5,2000.5,2001,-0.5,2000.5);
 
   h_METGravitino = new TH1D("METGravitino","vector sum of gravitinos, taking Pt component",200,0,2000);
   h_GenphoPt = new TH1D("GenphoPt","Pt of GenPhoton coming from NLSP",200,0,2000);
   h_pNLSP = new TH1D("pNLSP0","momentum of NLSP",200,0,2000);
+  h_LeadgenPhoPt = new TH1D("LeadgenPhoPt","Leading gen photon from NLSP decay",200,0,2000);
 
   h2_pNLSP  = new TH2D("pNLSP","momentum of NLSP for diff steps",80,0,800,5,0,5);
   h2_pxNLSP = new TH2D("pxNLSP","Px of NLSP for diff steps",160,-2000,2000,5,0,5);
@@ -312,6 +325,13 @@ void AnalyzeLightBSM::BookHistogram(const char *outFileName) {
   h2_1G_PtPhotonvsMET=new TH2D("1G_PtPhotonvsMET","Best photon Pt vs MET for 1Photon events Only",150,0,1500,200,0,2000);
   h2_More2G_PtPhotonvsMET=new TH2D("More2G_PtPhotonvsMET","Best photon Pt vs MET for More than 1 Photons events",150,0,1500,200,0,2000);
   h2_mH_HKids=new TH2D("mH_HKids","mH and Higgs Kids",2000,0,200,10,0,10);  
+
+  h2_dPhiPhosGenMET=new TH2D("dPhiPhosGenMET","x:#Delta#Phi(#gamma1,#gamma2), y:GenMET",40,0,4,200,0,2000);
+  h2_dPhiPho1GenMET=new TH2D("dPhiPho1GenMET","x:#Delta#Phi(#gamma1,GenMET), y:GenMET",40,0,4,200,0,2000);
+  h2_dPhiPho2GenMET=new TH2D("dPhiPho2GenMET","x:#Delta#Phi(#gamma2,GenMET), y:GenMET",40,0,4,200,0,2000);
+  h2_Pho1PtGenMET=new TH2D("Pho1PtGenMET","x:#gamma1 Pt, y:GenMET",200,0,2000,200,0,2000);
+  h2_Pho2PtGenMET=new TH2D("Pho2PtGenMET","x:#gamma2 Pt, y:GenMET",200,0,2000,200,0,2000);
+  h2_PhoPtRatioGenMET=new TH2D("PhoPtRatioGenMET","x:#gamma2Pt/#gamma1Pt, y:GenMET",101,0,1.01,200,0,2000);
 
   h_STvBin = new TH1D("STvarBin","STvarBin",STBinLowEdge.size()-1,&(STBinLowEdge[0]));
   h_METvBin=new TH1D("METvarBin","MET with variable bin size",METBinLowEdge.size()-1,&(METBinLowEdge[0]));

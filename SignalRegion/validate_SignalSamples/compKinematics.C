@@ -50,8 +50,8 @@ void compKinematics(TString iFname){
   //name1.push_back("ptPhoton"); rebin.push_back(2);
   name1.push_back("METLSP"); rebin.push_back(2);
 
-  // name1.push_back("pBoson"); rebin.push_back(2);
-  // name1.push_back("ptBoson"); rebin.push_back(2);
+  name1.push_back("pBoson"); rebin.push_back(2);
+  name1.push_back("ptBoson"); rebin.push_back(2);
   
   name1.push_back("pxLSP"); rebin.push_back(2);
   name1.push_back("ELSP"); rebin.push_back(2);

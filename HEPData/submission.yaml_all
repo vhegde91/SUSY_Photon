@@ -1,0 +1,222 @@
+additional_resources:
+- {description: web page with auxiliary material, location: 'http://cms-results.web.cern.ch/cms-results/public-results/preliminary-results/SUS-18-002/index.html'}
+comment: |
+  CERN-LHC. CMS. A search for supersymmetry is presented based on events with at least one photon, multiple jets, and large missing transverse momentum produced in proton-proton collisions at a center-of-mass energy of sqrt(s) = 13 TeV. The data correspond to an integrated luminosity of 35.9 1/fb and were recorded by the CMS detector in 2016 at the LHC. The analysis characterizes signal-like events by categorizing the data into various signal regions based on the number of jets, the number of b-tagged jets, and missing transverse momentum. No significant excess of events is observed with respect to expectations from standard model processes. Limits are placed on gluino, top squark, and neutralino masses using several simplified models of pair production of supersymmetric particles with gauge-mediated supersymmetry breaking. Depending on the model and the mass of the next-to-lightest supersymmetric particle, gluino masses as large as 2120 GeV and top squark masses as large as 1230 GeV are excluded.
+---
+
+name: '17. Figure 4'
+location: Data in figure 4 of the paper.
+description: Pred vs Obs in 25 sbins
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [predObs]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: bgPred.yaml
+
+---
+
+name: '1. Figure 5 (top left)'
+location: Data in figure 5 (top left) of the paper.
+description: Observed $95\%$ CL upper limit on the production cross section of gluinos in T5qqqqHG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T5qqqqHG_obs_XsecLimit.yaml
+
+
+---
+
+name: '2. Figure 5 (top left)'
+location: Data in figure 5 (top left) of the paper.
+description: Expected $95\%$ CL upper limit on the production cross section of gluinos in T5qqqqHG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T5qqqqHG_exp_XsecLimit.yaml
+
+
+---
+
+name: '3. Figure 5 (top left)'
+location: Data in figure 5 (top left) of the paper.
+description: Glunio - neutralino mass points lying on the observed exclusion contour of T5qqqqHG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T5qqqqHG_obs.yaml
+
+
+---
+
+name: '4. Figure 5 (top left)'
+location: Data in figure 5 (top left) of the paper.
+description: Glunio - neutralino mass points lying on the expected exclusion contour of T5qqqqHG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T5qqqqHG_exp.yaml
+
+
+---
+
+name: '5. Figure 5 (top right)'
+location: Data in figure 5 (top right) of the paper.
+description: Observed $95\%$ CL upper limit on the production cross section of gluinos in T5bbbbZG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T5bbbbZG_obs_XsecLimit.yaml
+
+
+---
+
+name: '6. Figure 5 (top right)'
+location: Data in figure 5 (top right) of the paper.
+description: Expected $95\%$ CL upper limit on the production cross section of gluinos in T5bbbbZG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T5bbbbZG_exp_XsecLimit.yaml
+
+
+---
+
+name: '7. Figure 5 (top right)'
+location: Data in figure 5 (top right) of the paper.
+description: Glunio - neutralino mass points lying on the observed exclusion contour of T5qqqqHG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T5bbbbZG_obs.yaml
+
+
+---
+
+name: '8. Figure 5 (top right)'
+location: Data in figure 5 (top right) of the paper.
+description: Glunio - neutralino mass points lying on the expected exclusion contour of T5qqqqHG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T5bbbbZG_exp.yaml
+
+
+---
+
+name: '9. Figure 5 (bottom left)'
+location: Data in figure 5 (bottom left) of the paper.
+description: Observed $95\%$ CL upper limit on the production cross section of gluinos in T5ttttZG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T5ttttZG_obs_XsecLimit.yaml
+
+
+---
+
+name: '10. Figure 5 (bottom left)'
+location: Data in figure 5 (bottom left) of the paper.
+description: Expected $95\%$ CL upper limit on the production cross section of gluinos in T5ttttZG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T5ttttZG_exp_XsecLimit.yaml
+
+
+---
+
+name: '11. Figure 5 (bottom left)'
+location: Data in figure 5 (bottom left) of the paper.
+description: Glunio - neutralino mass points lying on the observed exclusion contour of T5qqqqHG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T5ttttZG_obs.yaml
+
+
+---
+
+name: '12. Figure 5 (bottom left)'
+location: Data in figure 5 (bottom left) of the paper.
+description: Glunio - neutralino mass points lying on the expected exclusion contour of T5qqqqHG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T5ttttZG_exp.yaml
+
+
+---
+
+name: '13. Figure 5 (bottom right)'
+location: Data in figure 5 (bottom right) of the paper.
+description: Observed $95\%$ CL upper limit on the production cross section of gluinos in T6ttZG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T6ttZG_obs_XsecLimit.yaml
+
+
+---
+
+name: '14. Figure 5 (bottom right)'
+location: Data in figure 5 (bottom right) of the paper.
+description: Expected $95\%$ CL upper limit on the production cross section of gluinos in T6ttZG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T6ttZG_exp_XsecLimit.yaml
+
+
+---
+
+name: '15. Figure 5 (bottom right)'
+location: Data in figure 5 (bottom right) of the paper.
+description: Stop - neutralino mass points lying on the observed exclusion contour of T5qqqqHG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T6ttZG_obs.yaml
+
+
+---
+
+name: '16. Figure 5 (bottom right)'
+location: Data in figure 5 (bottom right) of the paper.
+description: Stop - neutralino mass points lying on the expected exclusion contour of T5qqqqHG model.
+keywords: 
+ - { name: reactions, values: []}
+ - { name: observables, values: [Signal]}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: T6ttZG_exp.yaml
