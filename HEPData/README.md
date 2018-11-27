@@ -21,12 +21,20 @@ Run the example:
 python limitPlotToYaml.py config.cfg
 ```
 
-## TH1 Histograms to TAML
+## TH1 Histograms to YAML
 
 Using [histToYaml.C](./histToYaml.C) you can convert some of the TH1D histograms in SBinHists.root to YAML a file.
 
 ```
 root -l -q histToYaml.C
+```
+
+## Latex table to YAML
+
+Use [latexTableToyaml.sh](./latexTableToyaml.sh) for converting a LateX table to YAML file. Only simple tables (no multi-row or multi-column) can be handled. Assumes first row in [cutFlowTable.txt](./cutFlowTable.txt) is table header and first column is independent variable. IMP: do not give Latex line breaks (\\ given at the end of a row in Latex).
+
+```
+./latexTableToyaml.sh > CutflowTable.yaml
 ```
 
 ## Making submission.yaml file
