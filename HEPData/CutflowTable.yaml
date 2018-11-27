@@ -1,0 +1,78 @@
+dependent_variables:
+- header: {name: '  Description  '}
+  qualifiers:
+  - {name: '$\sqrt s$', units: GeV, value: 13000.0}
+  - {name: Integrated luminosity, units: '$fb^{-1}$', value: 35.9}
+  - {name: '$m_{\tilde{g}}$', units: 'GeV', value: 1800}
+  values:
+  - {value: '  Initial  '}
+  - {value: '  $p_{T}^{\gamma} > 100$ GeV  '}
+  - {value: '  veto $e, \mu$   '}
+  - {value: '  veto isolated tracks  '}
+  - {value: '  $p_{T}^{miss} > 200$ GeV  '}
+  - {value: '  $N_{jets} \geq 2$    '}
+  - {value: '  $H_{T}^{\gamma}$ and $p_{T}^{\gamma}$ selection  '}
+  - {value: '  $\Delta\phi_{1},~\Delta\phi_{2} > 0.3$  '}
+  - {value: '  $N_{b-jets} = 0$  '}
+  - {value: '  $N_{b-jets} \geq 1$  '}
+- header: {name: '  T5bbbbZG, $m_{\chi_{1}^0} = 150$  '}
+  values:
+  - {value: '  97.8  '}
+  - {value: '  40.2  '}
+  - {value: '  37.2  '}
+  - {value: '  35.5  '}
+  - {value: '  26.0  '}
+  - {value: '  26.0  '}
+  - {value: '  26.0  '}
+  - {value: '  23.0  '}
+  - {value: '  1.6  '}
+  - {value: '  21.3  '}
+- header: {name: '  T5bbbbZG, $m_{\chi_{1}^0} = 1750$  '}
+  values:
+  - {value: '  97.7  '}
+  - {value: '  52.8  '}
+  - {value: '  47.4  '}
+  - {value: '  45.0  '}
+  - {value: '  43.0  '}
+  - {value: '  33.4  '}
+  - {value: '  33.2  '}
+  - {value: '  29.5  '}
+  - {value: '  11.2  '}
+  - {value: '  18.3  '}
+- header: {name: '  T5ttttZG, $m_{\chi_{1}^0} = 150$  '}
+  values:
+  - {value: '   97.6  '}
+  - {value: '  37.0  '}
+  - {value: '  13.7  '}
+  - {value: '  11.4  '}
+  - {value: '  8.6   '}
+  - {value: '  8.6   '}
+  - {value: '  8.6  '}
+  - {value: '  7.6  '}
+  - {value: '  0.32  '}
+  - {value: '  7.3  '}
+- header: {name: '  T5ttttZG, $m_{\chi_{1}^0} = 1550$ '}
+  values:
+  - {value: '  97.9 '}
+  - {value: '  45.4 '}
+  - {value: '  18.7 '}
+  - {value: '  16.5 '}
+  - {value: '  15.7 '}
+  - {value: '  15.6 '}
+  - {value: '   15.6 '}
+  - {value: '  13.8 '}
+  - {value: '  3.4  '}
+  - {value: '  10.3 '}
+independent_variables:
+- header: {name: ' Cut no.  '}
+  values:
+  - {value:  1  }
+  - {value:  2  }
+  - {value:  3  }
+  - {value:  4  }
+  - {value:  5  }
+  - {value:  6  }
+  - {value:  7  }
+  - {value:  8  }
+  - {value:  9  }
+  - {value:  10  }

@@ -63,11 +63,13 @@ void dataPred_SBinsOnly(TString iFname){
   f[0] = new TFile(iFname);
   // f[1] = new TFile("FastSim_T5bbbbZG_1600_150.root");
   // f[2] = new TFile("FastSim_T5bbbbZG_1600_1550.root");
-  f[1] = new TFile("FastSim_T5bbbbZG_1800_150.root");
-  f[2] = new TFile("FastSim_T5bbbbZG_1800_1750.root");
+  // f[1] = new TFile("FastSim_T5bbbbZG_1800_150.root");
+  // f[2] = new TFile("FastSim_T5bbbbZG_1800_1750.root");
   // f[1] = new TFile("FastSim_TChiWG_0_800.root");
   // f[2] = new TFile("FastSim_TChiNG_0_800.root");
-  
+
+  f[1] = new TFile("FastSim_T5bbbbZg_1800_150_GenRecoMET.root");
+  f[2] = new TFile("FastSim_T5bbbbZg_1800_1750_GenRecoMET.root");
   TFile *fout;
   vector<string> name1;
   vector<int> rebin;
@@ -95,6 +97,11 @@ void dataPred_SBinsOnly(TString iFname){
       h_histOrg[i] = (TH1D*)f[i-nBGs]->Get(histName[i]);
       setSBinHist(h_histOrg[i],h_hist[i]);
       h_hist[i]->SetLineColor(col[i]);
+      TString temp = (f[i-nBGs]->GetName());
+      if(temp.Contains("GenRecoMET")){
+	cout<<" Scaling signal hist from "<<(f[i-nBGs]->GetName())<<" for trig eff and Gen-reco MET diff"<<endl;
+	h_hist[i]->Scale(0.98*0.5);
+      }
     }
     //    else h_hist[i] = (TH1D*)f[0]->Get(histName[i]);
     if(i<nBGs) {
@@ -254,6 +261,8 @@ TString getLegName(TString fname){
   else if(fname.Contains("T5bbbbZG_1600_1550")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1600 GeV, m_{#tilde{#chi}_{1}^{0}} = 1550 GeV)";}
   else if(fname.Contains("T5bbbbZG_1800_150")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
   else if(fname.Contains("T5bbbbZG_1800_1750")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 1750 GeV)";}
+  else if(fname.Contains("T5bbbbZg_1800_150")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 150 GeV)";}
+  else if(fname.Contains("T5bbbbZg_1800_1750")){return "#tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G} (m_{#tilde{g}} = 1800 GeV, m_{#tilde{#chi}_{1}^{0}} = 1750 GeV)";}
   else if(fname.Contains("v7_Obs") ){return "Data";}
   else if(fname.Contains("TChiNG_0_800.root") ){return "TChiNG (m_{#chi_{1}^{0, #pm}} = 800 GeV)";}
   else if(fname.Contains("TChiWG_0_800.root") ){return "TChiWG (m_{#chi_{1}^{0, #pm}} = 800 GeV)";}

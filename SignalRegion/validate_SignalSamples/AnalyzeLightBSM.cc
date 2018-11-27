@@ -341,9 +341,12 @@ void AnalyzeLightBSM::EventLoop(const char *data,const char *inputFileList) {
     h_NumEvt->Fill(1.,NumEvents);
     h_Wt->Fill(1.,Weight);
     h_GenMET->Fill(GenMET,wt);
-    if(genPhotons.size()>=2 && genPhotons[0].Pt() > genPhotons[1].Pt() ) h_LeadgenPhoPt->Fill(genPhotons[0].Pt(),wt);
-    else if(genPhotons.size()>=2 && genPhotons[1].Pt() > genPhotons[0].Pt() ) h_LeadgenPhoPt->Fill(genPhotons[1].Pt(),wt);
-    else if(genPhotons.size()==1) h_LeadgenPhoPt->Fill(genPhotons[0].Pt(),wt);
+    // if(genPhotons.size()>=2 && genPhotons[0].Pt() > genPhotons[1].Pt() ) h_LeadgenPhoPt->Fill(genPhotons[0].Pt(),wt);
+    // else if(genPhotons.size()>=2 && genPhotons[1].Pt() > genPhotons[0].Pt() ) h_LeadgenPhoPt->Fill(genPhotons[1].Pt(),wt);
+    // else if(genPhotons.size()==1) h_LeadgenPhoPt->Fill(genPhotons[0].Pt(),wt);
+    sortTLorVec(&genPhotons);
+    if(genPhotons.size()!=0)
+      h_LeadgenPhoPt->Fill(genPhotons[0].Pt(),wt);
 
     for(int i=0;i<GenParticles->size();i++){
       if(abs((*GenParticles_ParentId)[i])==23) h_ZKids->Fill(abs((*GenParticles_PdgId)[i]));

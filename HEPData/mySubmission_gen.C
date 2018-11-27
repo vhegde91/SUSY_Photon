@@ -43,16 +43,17 @@ void mySubmission_gen(string fName){
 	
     //--- assign location, description in paper
     if(!isLimitPlot){
-      if(!(filename.find("Matrix")!=string::npos)){
+      if( (!(filename.find("Matrix")!=string::npos)) && (!(filename.find("Cutflow")!=string::npos)) ){
 	figInPaper = 4; subFigInPaper = "";
 	locStr = "Values from figure " + std::to_string(figInPaper) + " of the paper.";
 	desStr = "Values of the predicted SM background events from various sources and observed events in each of the 25 signal regions.";
       }
       else{
 	figInPaper = 0; subFigInPaper = "";
-	locStr = "Not is paper, additional material.";
+	locStr = "Not in paper, additional material.";
 	if((filename.find("Corr")!=string::npos)) desStr = " Correlation among different search bins.";
-	else desStr = " Covariance among different search bins.";
+	else if((filename.find("Cov")!=string::npos)) desStr = " Covariance among different search bins.";
+	else if((filename.find("Cutflow")!=string::npos)) desStr = " Cutflow table for a few signal models. Yields are normalized to integrated luminosity.";
       }
     }
     else {

@@ -8,6 +8,17 @@ void plotCutFlow(TString name){
   TLegend *leg = new TLegend(0.2,0.8,0.82,0.87); leg->SetBorderSize(0); leg->SetMargin(0.);
   TFile *f = new TFile(name);
   TH1D *h1 = (TH1D*)f->Get("cutFlow");
+
+  TString name3 = name; name3.ReplaceAll("withCutFlow","genMET");
+  TFile *fg = new TFile(name3);
+  TH1D *h2 = (TH1D*)fg->Get("cutFlow");
+  h1->Add(h2); h1->Scale(0.5);
+  double N0 = h1->GetBinContent(1);
+  double N0Err = h1->GetBinError(1);
+  h1->Scale(0.98);
+  h1->SetBinContent(1,N0);
+  h1->SetBinError(1,N0Err);
+
   TString modelName;
   if(name.Contains("T5bbbbZg_1800_150")) modelName = "CutFlow_T5bbbbZg_1800_150";
   else if(name.Contains("T5bbbbZg_1800_1750")) modelName = "CutFlow_T5bbbbZg_1800_1750";

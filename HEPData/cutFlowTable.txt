@@ -1,0 +1,11 @@
+Cut no. & Description & T5bbbbZG, $m_{\chi_{1}^0} = 150$ & T5bbbbZG, $m_{\chi_{1}^0} = 1750$ & T5ttttZG, $m_{\chi_{1}^0} = 150$ & T5ttttZG, $m_{\chi_{1}^0} = 1550$
+1 & Initial & 97.8 & 97.7 &  97.6 & 97.9
+2 & $p_{T}^{\gamma} > 100$ GeV & 40.2 & 52.8 & 37.0 & 45.4
+3 & veto $e, \mu$  & 37.2 & 47.4 & 13.7 & 18.7
+4 & veto isolated tracks & 35.5 & 45.0 & 11.4 & 16.5
+5 & $p_{T}^{miss} > 200$ GeV & 26.0 & 43.0 & 8.6  & 15.7
+6 & $N_{jets} \geq 2$   & 26.0 & 33.4 & 8.6  & 15.6
+7 & $H_{T}^{\gamma}$ and $p_{T}^{\gamma}$ selection & 26.0 & 33.2 & 8.6 &  15.6
+8 & $\Delta\phi_{1},~\Delta\phi_{2} > 0.3$ & 23.0 & 29.5 & 7.6 & 13.8
+9 & $N_{b-jets} = 0$ & 1.6 & 11.2 & 0.32 & 3.4 
+10 & $N_{b-jets} \geq 1$ & 21.3 & 18.3 & 7.3 & 10.3

@@ -249,3 +249,16 @@ keywords:
 data_file: Matrix_Correlation.yaml
 
 
+---
+
+name: '20. Additional material.'
+location: Not is paper, additional material.
+description:  Cutflow table for a few signal models. Yields are normalized to integrated luminosity.
+keywords: 
+ - { name: reactions, values: [pp]}
+ - { name: observables, values: []}
+ - { name: cmenergies, values: [13000]}
+ - { name: phrases, values: [SUSY, Supersymmetry, GMSB, Proton-Proton Scattering, Photon, b-jet, Gravitino]}
+data_file: CutflowTable.yaml
+
+
