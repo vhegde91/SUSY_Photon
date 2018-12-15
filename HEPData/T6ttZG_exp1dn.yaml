@@ -1,0 +1,81 @@
+dependent_variables:
+- header: {name: '$m_{\tilde{\chi}_{1}^{0}}$', units: GeV}
+  qualifiers:
+  - {name: Process, value: '$pp \rightarrow \tilde{t} \tilde{t}, \tilde{t} \rightarrow
+      t \tilde{\chi}_{1}^{0}, \tilde{\chi}_{1}^{0} \rightarrow \gamma/Z\ \tilde{G}$'}
+  - {name: $\sqrt s$, units: GeV, value: 13000.0}
+  - {name: Integrated luminosity, units: '$fb^{-1}$', value: 35.9}
+  values:
+  - {value: 10.0}
+  - {value: 20.0}
+  - {value: 25.08}
+  - {value: 50.0}
+  - {value: 54.24}
+  - {value: 70.0}
+  - {value: 78.56}
+  - {value: 100.0}
+  - {value: 123.92}
+  - {value: 167.06}
+  - {value: 200.0}
+  - {value: 279.09}
+  - {value: 300.0}
+  - {value: 363.41}
+  - {value: 400.0}
+  - {value: 442.61}
+  - {value: 500.0}
+  - {value: 526.99}
+  - {value: 600.0}
+  - {value: 611.24}
+  - {value: 679.46}
+  - {value: 700.0}
+  - {value: 786.8}
+  - {value: 800.0}
+  - {value: 883.35}
+  - {value: 900.0}
+  - {value: 979.41}
+  - {value: 1000.0}
+  - {value: 1087.74}
+  - {value: 1100.0}
+  - {value: 1111.48}
+  - {value: 1114.81}
+  - {value: 1150.0}
+  - {value: 1185.63}
+  - {value: 1178.45}
+independent_variables:
+- header: {name: '$m_{\tilde{t}}$', units: GeV}
+  values:
+  - {value: 1191.28}
+  - {value: 1182.92}
+  - {value: 1183.08}
+  - {value: 1179.08}
+  - {value: 1178.82}
+  - {value: 1171.82}
+  - {value: 1171.45}
+  - {value: 1171.45}
+  - {value: 1176.08}
+  - {value: 1200.0}
+  - {value: 1209.68}
+  - {value: 1220.91}
+  - {value: 1226.7}
+  - {value: 1236.59}
+  - {value: 1250.56}
+  - {value: 1257.39}
+  - {value: 1268.32}
+  - {value: 1273.01}
+  - {value: 1287.88}
+  - {value: 1288.76}
+  - {value: 1300.0}
+  - {value: 1302.16}
+  - {value: 1313.2}
+  - {value: 1314.25}
+  - {value: 1316.65}
+  - {value: 1320.63}
+  - {value: 1320.59}
+  - {value: 1319.06}
+  - {value: 1312.26}
+  - {value: 1312.88}
+  - {value: 1311.48}
+  - {value: 1300.0}
+  - {value: 1275.35}
+  - {value: 1285.63}
+  - {value: 1278.45}

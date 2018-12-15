@@ -1,0 +1,111 @@
+dependent_variables:
+- header: {name: '$m_{\tilde{\chi}_{1}^{0}}$', units: GeV}
+  qualifiers:
+  - {name: Process, value: '$pp \rightarrow \tilde{g} \tilde{g}, \tilde{g} \rightarrow
+      t \bar{t} \tilde{\chi}_{1}^{0}, \tilde{\chi}_{1}^{0} \rightarrow \gamma/Z\ \tilde{G}$'}
+  - {name: $\sqrt s$, units: GeV, value: 13000.0}
+  - {name: Integrated luminosity, units: '$fb^{-1}$', value: 35.9}
+  values:
+  - {value: 10.0}
+  - {value: 20.0}
+  - {value: 28.88}
+  - {value: 50.0}
+  - {value: 79.13}
+  - {value: 100.0}
+  - {value: 120.74}
+  - {value: 150.0}
+  - {value: 156.22}
+  - {value: 173.95}
+  - {value: 194.71}
+  - {value: 200.0}
+  - {value: 255.36}
+  - {value: 292.59}
+  - {value: 300.0}
+  - {value: 310.68}
+  - {value: 400.0}
+  - {value: 442.64}
+  - {value: 500.0}
+  - {value: 509.76}
+  - {value: 558.6}
+  - {value: 600.0}
+  - {value: 611.93}
+  - {value: 700.0}
+  - {value: 746.32}
+  - {value: 800.0}
+  - {value: 833.12}
+  - {value: 900.0}
+  - {value: 917.33}
+  - {value: 987.91}
+  - {value: 1000.0}
+  - {value: 1099.03}
+  - {value: 1100.0}
+  - {value: 1189.84}
+  - {value: 1200.0}
+  - {value: 1210.75}
+  - {value: 1300.0}
+  - {value: 1390.32}
+  - {value: 1400.0}
+  - {value: 1490.41}
+  - {value: 1500.0}
+  - {value: 1508.66}
+  - {value: 1514.4}
+  - {value: 1565.17}
+  - {value: 1571.85}
+  - {value: 1579.74}
+  - {value: 1579.88}
+  - {value: 1579.85}
+  - {value: 1571.66}
+  - {value: 1512.27}
+independent_variables:
+- header: {name: '$m_{\tilde{g}}$', units: GeV}
+  values:
+  - {value: 1725.91}
+  - {value: 1734.25}
+  - {value: 1735.2}
+  - {value: 1727.17}
+  - {value: 1720.87}
+  - {value: 1718.92}
+  - {value: 1729.26}
+  - {value: 1743.01}
+  - {value: 1743.78}
+  - {value: 1750.0}
+  - {value: 1755.29}
+  - {value: 1756.4}
+  - {value: 1772.32}
+  - {value: 1800.0}
+  - {value: 1802.87}
+  - {value: 1805.34}
+  - {value: 1821.55}
+  - {value: 1828.68}
+  - {value: 1843.92}
+  - {value: 1845.12}
+  - {value: 1850.0}
+  - {value: 1855.2}
+  - {value: 1855.97}
+  - {value: 1870.49}
+  - {value: 1876.84}
+  - {value: 1882.86}
+  - {value: 1883.44}
+  - {value: 1889.84}
+  - {value: 1891.33}
+  - {value: 1900.0}
+  - {value: 1901.08}
+  - {value: 1900.48}
+  - {value: 1900.53}
+  - {value: 1905.08}
+  - {value: 1905.47}
+  - {value: 1905.37}
+  - {value: 1908.99}
+  - {value: 1904.84}
+  - {value: 1904.42}
+  - {value: 1904.79}
+  - {value: 1904.91}
+  - {value: 1904.33}
+  - {value: 1900.0}
+  - {value: 1865.17}
+  - {value: 1850.0}
+  - {value: 1800.43}
+  - {value: 1800.0}
+  - {value: 1799.85}
+  - {value: 1791.66}
+  - {value: 1732.27}

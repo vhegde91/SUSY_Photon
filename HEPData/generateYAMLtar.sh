@@ -7,3 +7,4 @@ echo "Not generating cov/corr matrix yaml files"
 ./latexTableToyaml.sh > CutflowTable.yaml
 root -l -q 'mySubmission_gen.C("fileNames.txt")'
 tar cf submitYAML.tar submission.yaml allBGpredObs.yaml T*.yaml Matrix_Co*.yaml CutflowTable.yaml
+gzip submitYAML.tar 

@@ -1,0 +1,115 @@
+dependent_variables:
+- header: {name: '$m_{\tilde{\chi}_{1}^{0}}$', units: GeV}
+  qualifiers:
+  - {name: Process, value: '$pp \rightarrow \tilde{g} \tilde{g}, \tilde{g} \rightarrow
+      q \bar{q} \tilde{\chi}_{1}^{0}, \tilde{\chi}_{1}^{0} \rightarrow \gamma/H\ \tilde{G}$'}
+  - {name: $\sqrt s$, units: GeV, value: 13000.0}
+  - {name: Integrated luminosity, units: '$fb^{-1}$', value: 35.9}
+  values:
+  - {value: 130.0}
+  - {value: 150.0}
+  - {value: 165.08}
+  - {value: 180.0}
+  - {value: 184.94}
+  - {value: 200.0}
+  - {value: 201.05}
+  - {value: 202.13}
+  - {value: 300.0}
+  - {value: 306.62}
+  - {value: 316.19}
+  - {value: 373.7}
+  - {value: 400.0}
+  - {value: 438.49}
+  - {value: 500.0}
+  - {value: 504.82}
+  - {value: 516.19}
+  - {value: 576.05}
+  - {value: 600.0}
+  - {value: 640.46}
+  - {value: 700.0}
+  - {value: 736.74}
+  - {value: 800.0}
+  - {value: 823.52}
+  - {value: 893.34}
+  - {value: 898.74}
+  - {value: 900.0}
+  - {value: 990.62}
+  - {value: 1000.0}
+  - {value: 1082.42}
+  - {value: 1100.0}
+  - {value: 1172.51}
+  - {value: 1200.0}
+  - {value: 1274.85}
+  - {value: 1300.0}
+  - {value: 1373.32}
+  - {value: 1400.0}
+  - {value: 1487.17}
+  - {value: 1500.0}
+  - {value: 1598.11}
+  - {value: 1600.0}
+  - {value: 1606.42}
+  - {value: 1686.49}
+  - {value: 1700.0}
+  - {value: 1720.92}
+  - {value: 1750.0}
+  - {value: 1791.94}
+  - {value: 1800.0}
+  - {value: 1847.91}
+  - {value: 1848.86}
+  - {value: 1849.3}
+  - {value: 1850.88}
+independent_variables:
+- header: {name: '$m_{\tilde{g}}$', units: GeV}
+  values:
+  - {value: 1809.9}
+  - {value: 1818.21}
+  - {value: 1824.86}
+  - {value: 1834.4}
+  - {value: 1837.66}
+  - {value: 1849.07}
+  - {value: 1849.48}
+  - {value: 1850.0}
+  - {value: 1894.51}
+  - {value: 1896.69}
+  - {value: 1900.0}
+  - {value: 1913.15}
+  - {value: 1923.33}
+  - {value: 1930.76}
+  - {value: 1946.73}
+  - {value: 1947.59}
+  - {value: 1950.0}
+  - {value: 1961.97}
+  - {value: 1964.68}
+  - {value: 1970.23}
+  - {value: 1978.42}
+  - {value: 1981.63}
+  - {value: 1987.17}
+  - {value: 1988.24}
+  - {value: 2000.0}
+  - {value: 2000.63}
+  - {value: 2000.79}
+  - {value: 2004.69}
+  - {value: 2005.77}
+  - {value: 2008.79}
+  - {value: 2009.67}
+  - {value: 2013.75}
+  - {value: 2014.06}
+  - {value: 2012.57}
+  - {value: 2013.55}
+  - {value: 2013.34}
+  - {value: 2013.33}
+  - {value: 2006.42}
+  - {value: 2005.56}
+  - {value: 2000.95}
+  - {value: 2000.86}
+  - {value: 2000.0}
+  - {value: 1986.49}
+  - {value: 1984.65}
+  - {value: 1979.08}
+  - {value: 1969.97}
+  - {value: 1950.0}
+  - {value: 1944.34}
+  - {value: 1900.0}
+  - {value: 1897.15}
+  - {value: 1896.5}
+  - {value: 1863.6}

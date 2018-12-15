@@ -12,7 +12,7 @@ void mySubmission_gen(string fName){
   submission << "additional_resources:"<<endl;
   submission << "- {description: web page with auxiliary material, location: 'http://cms-results.web.cern.ch/cms-results/public-results/preliminary-results/SUS-18-002/index.html'}"<<endl;
   submission << "comment: |"<<endl;
-  submission << "  CERN-LHC. CMS. A search for supersymmetry is presented based on events with at least one photon, multiple jets, and large missing transverse momentum produced in proton-proton collisions at a center-of-mass energy of sqrt(s) = 13 TeV. The data correspond to an integrated luminosity of 35.9 1/fb and were recorded by the CMS detector in 2016 at the LHC. The analysis characterizes signal-like events by categorizing the data into various signal regions based on the number of jets, the number of b-tagged jets, and missing transverse momentum. No significant excess of events is observed with respect to expectations from standard model processes. Limits are placed on gluino, top squark, and neutralino masses using several simplified models of pair production of supersymmetric particles with gauge-mediated supersymmetry breaking. Depending on the model and the mass of the next-to-lightest supersymmetric particle, gluino masses as large as 2120 GeV and top squark masses as large as 1230 GeV are excluded."<<endl;
+  submission << "  CERN-LHC. CMS. A search for supersymmetry is presented based on events with at least one photon, multiple jets, and large missing transverse momentum produced in proton-proton collisions at a center-of-mass energy of  sqrt(s) = 13 TeV. The data correspond to an integrated luminosity of 35.9 1/fb and were recorded with the CMS detector in 2016 at the LHC. The analysis characterizes signal-like events by categorizing the data into various signal regions based on the number of jets, the number of b-tagged jets, and the missing transverse momentum. No significant excess of events is observed with respect to the expectations from standard model processes. Limits are placed on gluino, top squark, and neutralino masses using several simplified models of pair production of supersymmetric particles with gauge-mediated supersymmetry breaking. Depending on the model and the mass of the next-to-lightest supersymmetric particle, gluino masses as large as 2120 GeV and top squark masses as large as 1230 GeV are excluded at 95% confidence level."<<endl;
   // submission << "hepdata_doi: XYZ"<<endl;
 
   int i=1;
@@ -29,6 +29,7 @@ void mySubmission_gen(string fName){
         
     if(table_files.eof()) break;
 
+    //obs_XsecLimit, exp_XsecLimit, obs, obs_XsecUp, obs_XsecDn, exp, exp1up, exp1dn
     //--- check if it is limit plot or exp vs obs comparison plot
     if( (filename.find("_XsecLimit.yaml")!=string::npos) || 
 	(filename.find("_obs.yaml")!=string::npos) || (filename.find("_exp.yaml")!=string::npos) ||
@@ -40,7 +41,11 @@ void mySubmission_gen(string fName){
     else if( (filename.find("exp_XsecLimit.yaml")!=string::npos)) desStr = "Expected $95\\%$ CL upper limit on the production cross section of ";
     else if( (filename.find("_obs.yaml")!=string::npos)) desStr = "observed exclusion contour";
     else if( (filename.find("_exp.yaml")!=string::npos)) desStr = "expected exclusion contour";
-	
+    else if( (filename.find("exp1up.yaml")!=string::npos)) desStr = "expected $+1\\sigma_{exp}$ exclusion contour";
+    else if( (filename.find("exp1dn.yaml")!=string::npos)) desStr = "expected $-1\\sigma_{exp}$ exclusion contour";
+    else if( (filename.find("obs_XsecUp")!=string::npos)) desStr = "observed $+1\\sigma_{theory}$ exclusion contour";
+    else if( (filename.find("obs_XsecDn")!=string::npos)) desStr = "observed $-1\\sigma_{theory}$ exclusion contour";
+    
     //--- assign location, description in paper
     if(!isLimitPlot){
       if( (!(filename.find("Matrix")!=string::npos)) && (!(filename.find("Cutflow")!=string::npos)) ){
