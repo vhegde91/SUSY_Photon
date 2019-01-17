@@ -124,7 +124,7 @@ void doubleR_dataMC_merged(){
       if(nameN.Contains("Data")){
 	h_num->SetLineColor(kBlack);
 	h_num->SetMarkerStyle(20);
-	h_num->SetMarkerSize(1.4);
+	h_num->SetMarkerSize(1.2);
       }
       else{
 	h_num->SetLineColor(kRed);
@@ -132,7 +132,7 @@ void doubleR_dataMC_merged(){
       }
       h_num->SetLineWidth(3);
       h_num->SetMarkerColor(h_num->GetLineColor());
-      h_num->SetTitle(";;Double Ratio (#kappa)");
+      h_num->SetTitle(";;Double ratio (#kappa)");
       h_num->GetYaxis()->SetLabelSize(0.09);
       h_num->GetYaxis()->SetTitleSize(0.09);
       h_num->GetYaxis()->SetTitleOffset(0.53);
@@ -140,8 +140,8 @@ void doubleR_dataMC_merged(){
       h_den->SetLineColor(kBlue);//kMagenta+2
       //      h_den->SetLineColor(kMagenta+2);//MC
       h_den->SetLineWidth(3);
-      h_den->SetMarkerStyle(4);
-      h_den->SetMarkerSize(1.4);
+      h_den->SetMarkerStyle(25);
+      h_den->SetMarkerSize(1.5);
       h_den->SetMarkerColor(h_den->GetLineColor());
       h_num->GetYaxis()->SetNdivisions(5);
       h_num->GetYaxis()->SetNdivisions(505);

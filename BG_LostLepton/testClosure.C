@@ -313,7 +313,7 @@ TString getXaxisName(TString axname){
   else if(axname.Contains("ElePt")) return "e pT(GeV)";
   else if(axname.Contains("PhotonPt")) return "#gamma pT(GeV)";
   else if(axname.Contains("mT_")) return "mT(GeV)";
-  else if(axname.Contains("AllSBin")) return "Bin Number";
+  else if(axname.Contains("AllSBin")) return "Bin number";
   else if(axname.Contains("dPhi_METjet1") || axname.Contains("dphi1_METjet1")) return "#Delta#Phi_{1}";
   else if(axname.Contains("dPhi_METjet2") || axname.Contains("dphi2_METjet2")) return "#Delta#Phi_{2}";
   else if(axname.Contains("dPhi_METBestPhoton") ) return "#Delta#Phi(MET,#gamma)";

@@ -191,16 +191,16 @@ void getObsExpLimits(TString fName){
   gPad->RedrawAxis();
   //-----------------------------------------------
   if(modelName.Contains("T5qqqqHg")){
-    decayMode->AddText("#bf{pp #rightarrow #tilde{g} #tilde{g}, #tilde{g} #rightarrow q #bar{q} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/H #tilde{G}  NLO+NLL Exclusion}");
+    decayMode->AddText("#bf{pp #rightarrow #tilde{g} #tilde{g}, #tilde{g} #rightarrow q #bar{q} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/H #tilde{G}  NLO+NLL exclusion}");
     modelName="T5qqqqHg";}
   else if(modelName.Contains("T5ttttZg")){
-    decayMode->AddText("#bf{pp #rightarrow #tilde{g} #tilde{g}, #tilde{g} #rightarrow t #bar{t} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G}  NLO+NLL Exclusion}");
+    decayMode->AddText("#bf{pp #rightarrow #tilde{g} #tilde{g}, #tilde{g} #rightarrow t #bar{t} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G}  NLO+NLL exclusion}");
   modelName="T5ttttZg";}
   else if(modelName.Contains("T5bbbbZg")){
-    decayMode->AddText("#bf{pp #rightarrow #tilde{g} #tilde{g}, #tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G}  NLO+NLL Exclusion}");
+    decayMode->AddText("#bf{pp #rightarrow #tilde{g} #tilde{g}, #tilde{g} #rightarrow b #bar{b} #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G}  NLO+NLL exclusion}");
   modelName="T5bbbbZg";}
   else if(modelName.Contains("T6ttZg")){
-    decayMode->AddText("#bf{pp #rightarrow #tilde{t} #tilde{t}, #tilde{t} #rightarrow t #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G}  NLO+NLL Exclusion}");
+    decayMode->AddText("#bf{pp #rightarrow #tilde{t} #tilde{t}, #tilde{t} #rightarrow t #tilde{#chi}_{1}^{0}, #tilde{#chi}_{1}^{0} #rightarrow #gamma/Z #tilde{G}  NLO+NLL exclusion}");
   modelName="T6ttZg";}
   else if(modelName.Contains("GGM_M1M3")){
     decayMode->AddText("#bf{GGM M1M3}");

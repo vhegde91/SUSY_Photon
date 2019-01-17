@@ -81,7 +81,9 @@ void dataPred_SBinsOnly(TString iFname){
   //  TLegend *legend=new TLegend(0.15, 0.88,  0.86, 0.70);
   //TLegend *legend=new TLegend(0.15, 0.88,  0.5, 0.6);
   TLegend *legend=new TLegend(0.15, 0.88,  0.78, 0.72);
-  TLegend *legendSig=new TLegend(0.3, 0.73,  0.84, 0.52);
+  //  TLegend *legendSig=new TLegend(0.3, 0.73,  0.84, 0.52);
+  TLegend *legendSig=new TLegend(0.299733,0.5201038,0.8397864,0.7233031);
+  
   for(int i=0;i<nHists;i++){
     //    cout<<i<<" "<<i-nBGs<<" "<<histName[i]<<endl;
     name = histName[i]+to_string(i);
@@ -164,11 +166,13 @@ void dataPred_SBinsOnly(TString iFname){
   TH1D *h_totBGorg = (TH1D*)f[0]->Get("AllSBins_v7_TotalBG");
   TH1D *h_totBG = new TH1D("totBG","totBG",25,0.5,25.5);
   setSBinHist(h_totBGorg,h_totBG);
+  h_totBG->SetLineColor(0);
   h_totBG->SetFillStyle(3013);//3013);
   h_totBG->SetFillColor(kGray+3);
   h_totBG->Draw("E2SAME");
   //h_totBG->Draw("e0 histe same");
-  
+  legend->AddEntry(h_totBG,"Total uncertainty","f");
+
   gPad->RedrawAxis();
   legend->Draw();  
   legendSig->Draw();
@@ -180,7 +184,7 @@ void dataPred_SBinsOnly(TString iFname){
   h_ratio->SetLineColor(kBlack);
   h_ratio->SetMarkerColor(kBlack);
   h_ratio->SetTitle(0);
-  h_ratio->GetXaxis()->SetTitle("Bin Number");
+  h_ratio->GetXaxis()->SetTitle("Bin number");
   h_ratio->GetXaxis()->SetTitleOffset(0.87);
   h_ratio->GetXaxis()->SetTitleSize(0.13);
   h_ratio->GetXaxis()->SetLabelSize(0.14);
