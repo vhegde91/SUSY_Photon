@@ -22,16 +22,17 @@ TLatex textOnTop,intLumiE;
 double intLumi=35.9;
 const int nfiles=3,nBGs=5,nHists=8,nSig=nHists-nBGs-1;
 bool savePlots=1;
-bool isPaper=0;
+bool isPaper=1;
+bool useAvgGenRecoMET=0;
 TFile *f[nfiles];
 TFile *fout;
 TH1D *h_hist[nHists];
 //int col[11]={kPink-2,kTeal+9,kGreen,kOrange,kCyan,kYellow,kBlue,kMagenta+2,kPink+1,kMagenta,kBlack};  //Specify Colors   
 int col[11]={kOrange,kGray,kRed,kTeal+9,kCyan,kYellow,kBlue,kMagenta+2,kPink+1,kMagenta,kBlack};
-TLegend *legend1=new TLegend(0.2, 0.87,  0.86, 0.74);
-TLegend *legend2=new TLegend(0.18, 0.71,  0.86, 0.52);
+TLegend *legend1=new TLegend(0.2, 0.87,  0.86, 0.675);
+TLegend *legend2=new TLegend(0.18, 0.68,  0.86, 0.49);
 TString name;
-double yMin=8,yMax=2000;
+double yMin=8,yMax=2000,scaleSig=1;
 int nDivXaxis=10;
 TString getXaxisName(TString);
 TString getLegName(TString);
@@ -50,17 +51,20 @@ void drawPlots(TH1D* h[],TString);
 void combineBins(){
   gStyle->SetOptStat(0);
   f[0] = new TFile("SBinHists.root");
-  // f[1] = new TFile("FastSim_T5bbbbZg_1800_150.root");
-  // f[2] = new TFile("FastSim_T5bbbbZg_1800_1750.root");
-  // f[1] = new TFile("FastSim_T5qqqqHg_1800_150.root");
-  // f[2] = new TFile("FastSim_T5qqqqHg_1800_1750.root");
-  // f[1] = new TFile("FastSim_T5ttttZg_1800_150.root");
-  // f[2] = new TFile("FastSim_T5ttttZg_1800_1550.root");
-  f[1] = new TFile("FastSim_T6ttZg_1000_100.root");
-  f[2] = new TFile("FastSim_T6ttZg_1000_900.root");
+  // f[1] = new TFile("FastSim_T5bbbbZg_1800_150_GenRecoMET.root");
+  // f[2] = new TFile("FastSim_T5bbbbZg_1800_1750_GenRecoMET.root");
+  // f[1] = new TFile("FastSim_T5qqqqHg_1700_150_GenRecoMET.root");
+  // f[2] = new TFile("FastSim_T5qqqqHg_1700_1650_GenRecoMET.root");
+  // f[1] = new TFile("FastSim_T5ttttZg_1800_150_GenRecoMET.root");
+  // f[2] = new TFile("FastSim_T5ttttZg_1800_1550_GenRecoMET.root");
+  f[1] = new TFile("FastSim_T6ttZg_1000_100_GenRecoMET.root");
+  f[2] = new TFile("FastSim_T6ttZg_1000_900_GenRecoMET.root");
 
   // f[1] = new TFile("FastSim_T5qqqqHg_1700_150.root");
   // f[2] = new TFile("FastSim_T5qqqqHg_1700_1650.root");
+  name = f[1]->GetName(); if(name.Contains("GenRecoMET")){ useAvgGenRecoMET = 1; scaleSig = 0.98;}
+  name = f[2]->GetName(); if(name.Contains("GenRecoMET")){ useAvgGenRecoMET = 1; scaleSig = 0.98;}
+  cout<<"Using avg of genMET and reco MET? "<<useAvgGenRecoMET<<endl;
 
   fout = new TFile("binsCombined.root","recreate");
   vector<string> name1;
@@ -70,6 +74,7 @@ void combineBins(){
   TH1D *h_totBG = (TH1D*)f[0]->Get("AllSBins_v7_TotalBG");
   h_totBG->SetFillStyle(3013);
   h_totBG->SetFillColor(1);
+  h_totBG->SetLineColor(0);
   // h_totBG->Draw("E2SAME");
 
   THStack *hs_BG = new THStack("predVsData","predVsData");
@@ -105,10 +110,11 @@ void combineBins(){
       }
     }
   }
+  legend1->AddEntry(h_totBG,"Total uncertainty","f");
   //  getMETincl();
   //  getMET0b();
   //getMET1b();
-  //  getMET0bLJ();
+  // getMET0bLJ();
   //  getNJ();
   //  getNJ0b();
   getNJ1b();
@@ -160,6 +166,7 @@ void drawPlots(TH1D* h1[],TString varName){
       h1[i]->Draw("E1X0 same");
     }
     else{
+      if(useAvgGenRecoMET) h1[i]->Scale(0.5*scaleSig);
       h1[i]->Draw("hist same");
     }
     h1[i]->GetXaxis()->SetNdivisions(nDivXaxis);
