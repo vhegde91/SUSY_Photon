@@ -1,0 +1,2 @@
+root://cmseos.fnal.gov//store/user/lpcsusyhad/SusyRA2Analysis2015/Run2ProductionV16/RunIISummer16MiniAODv3.WGJets_MonoPhoton_PtG-40to130_TuneCUETP8M1_13TeV-madgraph_0_RA2AnalysisTree.root
+
