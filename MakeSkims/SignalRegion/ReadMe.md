@@ -1,4 +1,4 @@
-B1;3409;0c## Skimming ntuples
+## Skimming ntuples
 
 Recommended to use CMSSW_10_1_7 for using root.
 Skimming variables and cuts are defined in SkimmingSR.cc
